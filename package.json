@@ -1,0 +1,27 @@
+{
+  "name": "kanna_v4",
+  "version": "4.0.0-dev",
+  "description": "Kanna The Discord Bot v4 re-write",
+  "main": "core.js",
+  "dependencies": {
+    "color-convert": "^1.9.0",
+    "discord.js": "^11.2.0",
+    "moment": "^2.18.1",
+    "superagent": "^3.5.2",
+    "rethinkdb": "^2.3.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WizardLink/kanna_v4.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WizardLink/kanna_v4/issues"
+  },
+  "homepage": "https://github.com/WizardLink/kanna_v4#readme"
+}

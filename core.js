@@ -1,14 +1,14 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const settings = require('./util/settings.js');
-const { bot } = require('./util/log.js');
+const settings = require('./util/settings');
+const { bot } = require('./util/log');
 const r = require('rethinkdb');
 
-require('./engine/events.js')(client);
-require('./engine/readdir.js')(client);
-require('./engine/clientSpecifics.js')(client);
-require('./engine/postGuildCount.js')(client);
-require('./util/connectDb.js').start();
+require('./engine/events')(client);
+require('./engine/readdir')(client);
+require('./engine/clientSpecifics')(client);
+require('./engine/postGuildCount')(client);
+require('./util/Database').start();
 
 bot('Logging in...');
 

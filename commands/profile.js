@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const Command = require('../engine/commandClass.js');
 const r = require('rethinkdb');
-const db = require('../util/connectDb').connection;
+const Database = require('../util/Database');
 
 module.exports = class Profile extends Command {
   constructor(client) {
@@ -15,8 +15,7 @@ module.exports = class Profile extends Command {
   }
 
   async run(client, message, pinku, args) {
-    console.log(db);
-    r.db('users').table('stats').insert([
+    const result = await r.db('users').table('stats').insert([
       {
         id: message.author.id,
         level: 0,
@@ -25,11 +24,8 @@ module.exports = class Profile extends Command {
         items: [],
         badges: []
       }
-    ]).run(db, function(err, result) {
-      if (err) throw err;
-      console.log(JSON.stringify(result, null, 2));
-    }).then(() => {
-      message.channel.send('wew');
-    });
+    ]);
+    console.log(JSON.stringify(result, null, 2));
+    message.channel.send('wew');
   }
 }
