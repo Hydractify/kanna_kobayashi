@@ -28,11 +28,9 @@ module.exports = class Reload extends Command {
           await client.reload(command)
             .then(async () => {
               await m.edit(`Successfully reloaded: ${command}`);
-              load(`Successfully reloaded ${command}`);
             })
             .catch(async e => {
               await m.edit(`Command reload failed: ${command}\n\`\`\`${e.stack}\`\`\``);
-              load(`Failed reloading ${command}`);
             });
         });
     }

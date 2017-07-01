@@ -1,56 +1,70 @@
 const sendErr = require('./err').user;
 
 module.exports = class get {
-  constructor(client, message, id, args)
+
+  static async memberu(client, message, args)
+    {
+      if(typeof client !== 'object') throw new Error('Client isn\'t correctly defined!');
+      if(typeof message !== 'object') throw new Error('Message isn\'t correctly defined!');
+      if(!Array.isArray(args)) throw new Error('Arguments must be an Array!');
+
+      let resolvable = args[0];
+
+      if(message.mentions.users.size >= 1)
+      {
+        resolvable = message.mentions.users.first();
+      }
+      else if(message.guild.members.find(m => m.user.tag.toLowerCase().includes(args[0].toLowerCase())))
+      {
+        resolvable = message.guild.members.find(m => m.user.tag.toLowerCase().includes(args[0].toLowerCase()));
+      }
+      else if(message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase())))
+      {
+        resolvable = message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase()));
+      }
+
+    return message.guild.fetchMember(resolvable)
+      .catch(e =>
+        {
+          sendErr(resolvable);
+        });
+  }
+
+  static user(client, message, args)
   {
     if(typeof client !== 'object') throw new Error('Client isn\'t correctly defined!');
     if(typeof message !== 'object') throw new Error('Message isn\'t correctly defined!');
     if(!Array.isArray(args)) throw new Error('Arguments must be an Array!');
-    if(!parseInt(id) || typeof id !== 'string') throw new Error('ID must be a string! (Example: 132879728132183)');
-  }
 
-  static get memberu()
+    let resolvable = args[0];
+
+    if(message.mentions.users.size >= 1)
     {
-      if(message.mentions.users.size >= 1)
-    {
-      let resolvable = message.mentions.users.first();
+      resolvable = message.mentions.users.first().id;
     }
-    else if(args[0].size === 18 && typeof parseInt(args[0]) === 'number')
+    else if(message.guild.members.find(m => m.user.tag.toLowerCase().includes(args[0].toLowerCase())))
     {
-      let resolvable = client.fetchUser(args[0]);
+      resolvable = message.guild.members.find(m => m.user.tag.toLowerCase().includes(args[0].toLowerCase())).user.id;
     }
-    message.guild.fetchMember(resolvable).then(m =>
-      {
-      const memberu = m;
-      })
-      .catch(e =>
-        {
-          return sendErr(args[0] || id);
-        })
-    return memberu;
+    else if(message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase())))
+    {
+      resolvable = message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase())).user.id;
+    }
+
+    return client.fetchUser(resolvable)
+    .catch(e =>
+    {
+      sendErr(resolvable);
+    });
   }
 
-  static get user()
-  {
-    client.fetchUser(id).then(u =>
-      {
-        const user = u;
-      })
-      .catch(e =>
-        {
-          return sendErr(id);
-        })
-      return user;
-  }
+  static members(message) {
+    if(typeof message !== 'object') throw new Error('Message isn\'t correctly defined!');
 
-  static get members() {
-    message.guild.fetchMembers().then(m =>
+    return message.guild.fetchMembers()
+    .catch(e =>
       {
-        const members = m;
-      }).catch(e =>
-        {
-          return require('./err').stack(e);
-        })
-      return members;
+        return require('./err').stack(e);
+      });
   }
 }
