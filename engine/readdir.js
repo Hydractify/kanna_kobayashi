@@ -1,10 +1,10 @@
-const log = require('../util/log.js');
+const { load } = require('../util/log.js');
 const fs = require('fs');
 
 module.exports = client => {
   fs.readdir('./commands/', (err, files) => {
     if (err) console.error(err);
-    log.load(`Loading ${files.length} commands.`);
+    load(`Loading ${files.length} commands.`);
     files.forEach(f => {
       let cmdFile = require(`../commands/${f}`);
       let cmd = new cmdFile(client);

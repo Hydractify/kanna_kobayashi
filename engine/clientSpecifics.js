@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const settings = require('../util/settings.js');
+const settings = require('../util/settings.json');
 const { load } = require('../util/log.js');
 
 module.exports = client => {

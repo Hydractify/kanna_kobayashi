@@ -1,5 +1,4 @@
-const settings = require('../../util/settings.js');
-const fs = require("fs");
+const settings = require('../../util/settings.json');
 
 module.exports = async message => {
   try{
@@ -52,7 +51,7 @@ module.exports = async message => {
       permError = 'to be the owner'
     }
     if (perms < cmd.options.permLevel) return await message.channel.send(`${message.author} you don't have enough permission to use that command. You need ${permError} to use that command!`);
-    await cmd.run(client, message, pinku, args, rest, perms);
+    await cmd.run(client, message, pinku, args, perms, rest);
   }
 }catch(err) {
   console.log(err.stack);

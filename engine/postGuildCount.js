@@ -3,7 +3,7 @@ const superagent = require('superagent');
 
 module.exports = async(client) => {
   setTimeout(() => {
-    log.bot(`Posting guild Count...`);
+    bot(`Posting guild Count...`);
 
     superagent
     .post(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)

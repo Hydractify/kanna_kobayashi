@@ -8,7 +8,7 @@ require('./engine/events')(client);
 require('./engine/readdir')(client);
 require('./engine/clientSpecifics')(client);
 require('./engine/postGuildCount')(client);
-require('./util/Database').start();
+require('./engine/Database').start();
 
 bot('Logging in...');
 

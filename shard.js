@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
-const settings = require("./util/settings.js");
-const log = require('./util/log.js');
 
 let kanna = new Discord.ShardingManager("./core.js" , {
-  token: settings.client.token
+  token: require("./util/settings.json").client.token
 });
+
 kanna.spawn();
+
 kanna.on("launch" , s => {
-    log.bot(`Launched Shard ${s.id}!`);
+    require('./util/log.js').shard(`Launched Shard ${s.id}!`);
 });

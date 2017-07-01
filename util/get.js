@@ -1,29 +1,56 @@
-const err = require('./err.js');
+const sendErr = require('./err').user;
 
-let get = {
-  member: async(client, message, args, resolve) => {
-    if(message.mentions.users.size >= 1) {
-      resolvable = message.mentions.users.first();
-    } else if(message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase()))) {
-      resolvable = await client.fetchUser(message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase())).user.id);
+module.exports = class get {
+  constructor(client, message, id, args)
+  {
+    if(typeof client !== 'object') throw new Error('Client isn\'t correctly defined!');
+    if(typeof message !== 'object') throw new Error('Message isn\'t correctly defined!');
+    if(!Array.isArray(args)) throw new Error('Arguments must be an Array!');
+    if(!parseInt(id) || typeof id !== 'string') throw new Error('ID must be a string! (Example: 132879728132183)');
+  }
+
+  static get memberu()
+    {
+      if(message.mentions.users.size >= 1)
+    {
+      let resolvable = message.mentions.users.first();
     }
-    console.log(resolvable);
-     return message.guild.fetchMember(resolvable).then(resolve => {
-       resolve;
-     }).catch(e => {
-       message.channel.send(err.user(args[0]));
-     });
-  },
-  user: async(client, args, resolve) => {
-    return client.fetchUser(args[0]).catch(e => {
-      message.channel.send(err.user(args[0]));
-    });
-  },
-  members: async(message, resolve) => {
-    return message.guild.fetchMembers().then(resolve => {
-      resolve;
-    });
+    else if(args[0].size === 18 && typeof parseInt(args[0]) === 'number')
+    {
+      let resolvable = client.fetchUser(args[0]);
+    }
+    message.guild.fetchMember(resolvable).then(m =>
+      {
+      const memberu = m;
+      })
+      .catch(e =>
+        {
+          return sendErr(args[0] || id);
+        })
+    return memberu;
+  }
+
+  static get user()
+  {
+    client.fetchUser(id).then(u =>
+      {
+        const user = u;
+      })
+      .catch(e =>
+        {
+          return sendErr(id);
+        })
+      return user;
+  }
+
+  static get members() {
+    message.guild.fetchMembers().then(m =>
+      {
+        const members = m;
+      }).catch(e =>
+        {
+          return require('./err').stack(e);
+        })
+      return members;
   }
 }
-
-module.exports = get;

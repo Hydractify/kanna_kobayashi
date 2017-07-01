@@ -19,7 +19,7 @@ module.exports = class Eval extends Command {
       category: 'unique'
     })
   }
-  async run(client, message, pinku, args) {
+  async run(client, message, pinku, args, perms, rest) {
     try{
                    var code = args.join(" ");
                    var evaled = eval(code);
