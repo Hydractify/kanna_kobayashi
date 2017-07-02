@@ -1,8 +1,7 @@
 const Discord = require('discord.js');
 const Command = require('../engine/commandClass.js');
-const r = require('rethinkdb');
-const Database = require('../engine/Database');
 const table = require('../engine/db/tables');
+const Users = require('../engine/User');
 const get = require('../util/get');
 
 module.exports = class Profile extends Command {
@@ -22,23 +21,24 @@ module.exports = class Profile extends Command {
   async run(client, message, pinku, args)
   {
     let user = message.author
+    let memberu = 'Oh fuck.'
     if(args[0] || message.mentions.size >= 1)
     {
-      let fetch = await get.user(client, message, args);
-      if(fetch !== undefined)
+      user = await get.user(client, message, args);
+      if(typeof user === 'object')
       {
-        user = fetch;
+        if(user.bot) return message.channel.send(`Bots don't have profiles!`);
       }
     }
-    if(user.bot) return message.channel.send(`Bots don't have profiles!`);
 
-    const member = await message.guild.fetchMember(user);
-    const result = await table.stats(Database.connection, 'stats', user.id);
-    const uInfo = table.userStat(result);
+    if(!user) return;
 
-    if(!result.length)
+    const member = await message.guild.member(user);
+    const result = await table.stats('stats', user.id);
+
+    if(result.length < 1)
     {
-      await table.insert(Database.connection, 'stats',
+      await table.insert('stats',
     {
       id: user.id,
       level: 1,
@@ -49,6 +49,8 @@ module.exports = class Profile extends Command {
       baseExp: 100
     });
 
+    let uInfo = await Users.stats(user);
+
     const embed = new Discord.RichEmbed()
     .setColor(pinku)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL)
@@ -56,7 +58,7 @@ module.exports = class Profile extends Command {
     .setDescription('\u200b')
     .setThumbnail(user.displayAvatarURL)
     .addField('Level', uInfo.level + ' (' + uInfo.exp + ' xp)', true)
-    .addField('Kanna Coins', uInfo.coins, true)
+    .addField('Kanna Coins', uInfo.coins + ' <:coin:330926092703498240>', true)
     .addField('Items', uInfo.items, true)
     .addField('Badges', uInfo.badges, true);
 
@@ -64,6 +66,8 @@ module.exports = class Profile extends Command {
     }
     else
     {
+      let uInfo = await Users.stats(user);
+
       const embed = new Discord.RichEmbed()
       .setColor(pinku)
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL)
@@ -71,7 +75,7 @@ module.exports = class Profile extends Command {
       .setDescription('\u200b')
       .setThumbnail(user.displayAvatarURL)
       .addField('Level', uInfo.level + ' (' + uInfo.exp + ' xp)', true)
-      .addField('Kanna Coins', uInfo.coins, true)
+      .addField('Kanna Coins <:coin:330926092703498240>',  uInfo.coins, true)
       .addField('Items', uInfo.items, true)
       .addField('Badges', uInfo.badges, true);
       await message.channel.send({embed});

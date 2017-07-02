@@ -1,11 +1,40 @@
 const settings = require('../../util/settings.json');
+const gg = require('../Guild');
+const table = require('../db/tables');
 
 module.exports = async message => {
   try{
   let client = message.client;
   if (message.author.bot) return;
-  const checkPrefix = (message) => settings.prefix.some(p=>message.content.startsWith(p)) || new RegExp(settings.prefix[settings.prefix.length-1]).test(message.content);
+
+  const result = await table.stats('guilds', message.guild.id);
+
+  if(result.length < 1)
+  {
+    await table.insert('guilds',
+  {
+    id: message.guild.id,
+    prefix: 'kanna pls ',
+    levelUpMessages: true,
+    modrole: 'Dragon Tamer'
+  });
+
+  console.log('wew')
+  }
+
+  await table.insert('guilds',
+  {
+    levelUpMessages: true
+  });
+
+  let gInfo = await gg.stats(message.guild);
+
+  settings.prefix.push(gInfo.prefix);
+
+  const checkPrefix = (message) => settings.prefix.some(p=> message.content.startsWith(p)) || new RegExp(settings.prefix[1]).test(message.content);
+
   if(!checkPrefix(message)) return;
+
   const tingle = (message) => {
     for (let p of settings.prefix) {
         let regex = new RegExp(`^${p}([^]*)`);

@@ -26,7 +26,7 @@ module.exports = class get {
     return message.guild.fetchMember(resolvable)
       .catch(e =>
         {
-          sendErr(resolvable);
+          sendErr(resolvable, message);
         });
   }
 
@@ -54,7 +54,7 @@ module.exports = class get {
     return client.fetchUser(resolvable)
     .catch(e =>
     {
-      sendErr(resolvable);
+      sendErr(resolvable, message);
     });
   }
 
@@ -64,7 +64,7 @@ module.exports = class get {
     return message.guild.fetchMembers()
     .catch(e =>
       {
-        return require('./err').stack(e);
+        return require('./err').stack(e, message);
       });
   }
 }

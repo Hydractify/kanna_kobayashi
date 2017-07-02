@@ -1,21 +1,25 @@
 const Discord = require('discord.js');
-const Command = require('../engine/commandClass.js');
+const Command = require('../engine/commandClass');
 
-module.exports = class ForEver extends Command {
-  constructor(client) {
-    super(client, {
+module.exports = class ForEver extends Command
+{
+  constructor(client)
+  {
+    super(client,
+    {
       alias: ['forever'],
-      name: '4ever',
-      usage: '4ever',
-      category: 'gen3'
-    })
+      category: 'gen3',
+      name: '4ever'
+    });
   }
 
-  async run(client, message, pinku) {
-    const mforever = new Discord.RichEmbed();
-    mforever.setImage('https://cdn.discordapp.com/attachments/299632702087495680/303298736765796372/FOREVER.png');
-    mforever.setColor(pink);
+  async run(client, message, pinku)
+  {
+    let image = require('../util/links.json').memes.forever;
+    const embed = new Discord.RichEmbed()
+    .setImage(image)
+    .setColor(pinku);
 
-    await message.channel.send({embed : mforever});
+    await message.channel.send({embed});
   }
 }

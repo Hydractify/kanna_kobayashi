@@ -14,7 +14,7 @@ module.exports = class system
     xp = uInfo.exp;
     xpNeeded  = uInfo.baseExp;
 
-    table.update(Database.connection, 'stats', {xp: xp + amount});
+    table.update(Database.connection, 'stats', {xp: xp + amount}, user.id);
 
     if(xp > xpNeeded)
     {
@@ -23,14 +23,14 @@ module.exports = class system
         level: ++level,
         baseExp: xpNeeded * 1.2,
         exp: 0
-      });
+      }, user.id);
       message.channel.send(`You've reached Level **${level}**, congratulations ${member.displayName.toString()}! <:oh:315264555859181568>`);
     }
 
     if(xp % 10)
     {
       let newBadge = uInfo.badges.push(`Level ${level} badge`);
-      table.update(Database.connection, 'stats', {badges: newBadge});
+      table.update(Database.connection, 'stats', {badges: newBadge}, user.id);
       message.channel.send(`You've got the \`Level ${level} badge\``);
     }
 }
