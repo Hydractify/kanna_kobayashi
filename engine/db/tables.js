@@ -90,6 +90,9 @@ module.exports = class Table
     let levelUpMessages = result.levelUpMessages;
     let modrole = result.modrole;
 
+    if(result.levelUpMessages) levelUpMessages = 'Enabled'
+    if(!result.levelUpMessages) levelUpMessages = 'Disabled'
+
     return {
       id,
       prefix,
