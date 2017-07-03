@@ -1,15 +1,13 @@
 {
   "name": "kanna",
-  "version": "4.0.0",
-  "description": "",
-  "main": "core.js",
+  "version": "4.0.0-dev",
+  "description": "Wew",
+  "main": "shard.js",
   "dependencies": {
     "color-convert": "^1.9.0",
     "discord.js": "^11.1.0",
     "moment": "^2.18.1",
-    "redis": "^2.7.1",
     "rethinkdb": "^2.3.3",
-    "sequelize": "^4.1.0",
     "superagent": "^3.5.2"
   },
   "repository" : {
