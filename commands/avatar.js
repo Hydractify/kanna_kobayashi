@@ -31,6 +31,7 @@ module.exports = class Avatar extends Command
     .setColor(color)
     .setFooter(`Requested by ${message.author.tag}`)
     .setAuthor(`${user.tag} Avatar (${user.id})`, user.displayAvatarURL);
+    .setURL(user.displayAvatarURL);
 
     await message.channel.send({embed});
   }

@@ -79,38 +79,6 @@ module.exports = class Options extends Command
       if(!options.includes(key.toLowerCase())) return message.channel.send(`Hey ${message.author}! \n\nYou've input an option that doesn't exist! The available options are\n\n\`${options.join('` | `')}\``);
 
       if(!value) return message.channel.send(`${message.author} the option **${key}** must have a value!\n\nUsage:\n\`${this.usage}\``);
-
-      console.log(result);
-
-      await Guild.modify(guild,
-      {
-        key: value
-      });
-
     }
-    /*
-    if (args.length !== 2) return message.channel.send(`Proper usage of command: \`${this.usage}\``);
-    const options = ["list", "prefix" , "disableLeveling" , "modrole"];
-    if (!options.has(args[0])) return message.channel.send(`Option \`${args[0]}\` doesn't exist, avaliable options are ${options.slice(1).join("-")} \n If you want to list the current options for your guild, do \`k!options list\``);
-    let option = args[0];
-
-    if (option === "list") {
-      let stats = await Guild.stats(message.guild);
-      const embed = new Discord.RichEmbed()
-      .setAuthor(message.guild.name)
-      .addField("Prefix" , stats.prefix || "k!", true)
-      .addField("Modrole" , stats.modrole || 'Dragon Tamer', true)
-      .addField("DisableLeveling" , stats.disableLeveling || "Enabled")
-      .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL)
-      .setTimestamp();
-      await message.channel.send({embed});
-    }
-
-    let argument = args[1];
-    let boo = Guild.check(option , argument)
-    if (!boo) return message.channel.send(`Couldn't modify blah blah blah i'll add something here later`);
-    await Guild.modify(option, argument, message.guild);
-    await message.channel.send(`Successfully changed option \`${args[0]}\` to \`${args[1]}\``)
-    */
   }
 }
