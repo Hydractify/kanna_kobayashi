@@ -15,7 +15,9 @@ module.exports = class Options extends Command
       usage: 'options <option> <value>',
       category: 'mod',
       description: 'Change the options for your guild!',
-      permLevel: 2
+      permLevel: 2,
+      exp: 0,
+      coins: 0 
     });
   }
 
@@ -33,7 +35,8 @@ module.exports = class Options extends Command
       id: message.guild.id,
       prefix: ["kanna pls ", "<@!?299284740127588353> ", 'k!'],
       levelUpMessages: true,
-      modrole: 'Human Tamer'
+      modrole: 'Human Tamer',
+      welcomeMessages: false
     });
 
     let gInfo = await Guild.stats(guild);
@@ -44,10 +47,10 @@ module.exports = class Options extends Command
     .setAuthor(`${guild.name} Options`, guild.iconURL)
     .setDescription('\u200b')
     .setThumbnail(guild.iconURL)
-    .addField('ID', gInfo.id, true)
     .addField('Prefix', gInfo.prefix[2], true)
+    .addField('Mod Role', gInfo.modrole, true)
     .addField('Level Up Messages', gInfo.levelUpMessages, true)
-    .addField('Mod Role', gInfo.modrole, true);
+    .addField('Welcome Messages', gInfo.welcomeMessages, true);
 
     await message.channel.send({embed});
     }
@@ -61,10 +64,10 @@ module.exports = class Options extends Command
       .setAuthor(`${guild.name} Options`, guild.iconURL)
       .setDescription('\u200b')
       .setThumbnail(guild.iconURL)
-      .addField('ID', gInfo.id, true)
       .addField('Prefix', gInfo.prefix[2], true)
+      .addField('Mod Role', gInfo.modrole, true)
       .addField('Level Up Messages', gInfo.levelUpMessages, true)
-      .addField('Mod Role', gInfo.modrole, true);
+      .addField('Welcome Messages', gInfo.welcomeMessages, true);
 
 
       await message.channel.send({embed});

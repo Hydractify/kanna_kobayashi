@@ -10,7 +10,9 @@ module.exports = class Avatar extends Command
       name: 'avatar',
       alias: ['av'],
       category: 'common',
-      example: 'avatar @Wizardλ#5679'
+      example: 'avatar @Wizardλ#5679',
+      exp: 0,
+      coins: 0 
     });
   }
 

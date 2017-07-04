@@ -9,7 +9,9 @@ module.exports = class Reload extends Command {
       name: 'reload',
       description: 'Reloads the command file, if it\'s been updated or modified.',
       usage: 'reload <commandname>',
-      category: 'unique'
+      category: 'unique',
+      exp: 0,
+      coins: 0 
     })
   }
   async run(client, message, pink, args) {

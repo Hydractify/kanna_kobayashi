@@ -14,7 +14,9 @@ module.exports = class Profile extends Command {
         usage: 'profile <user>',
         category: '',
         description: 'Look your own profile or of your friends!',
-        permLevel: 2
+        permLevel: 2,
+        exp: 25,
+        coins: 0 
       })
   }
 

@@ -14,7 +14,9 @@ module.exports = class Ban extends Command
       name: 'ban',
       category: 'mod',
       usage: 'ban <user>',
-      permLevel: 2
+      permLevel: 2,
+      exp: 0,
+      coins: 0 
     });
   }
 

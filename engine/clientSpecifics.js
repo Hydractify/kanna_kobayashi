@@ -30,7 +30,7 @@ module.exports = client => {
   };
 
   client.userPerms = message => {
-      if (settings.client.owner.includes(message.author.id)) return 4;
+      if (settings.client.devs.includes(message.author.id)) return 4;
 
       const member = client.guilds.get('298969150133370880').members.has(message.author.id);
       if (member && (message.member.roles.has('299655329791213569')

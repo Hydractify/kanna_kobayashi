@@ -16,7 +16,9 @@ module.exports = class Eval extends Command {
       name: 'eval',
       description: 'Ayy lmao',
       usage: 'eval <code>',
-      category: 'unique'
+      category: 'unique',
+      exp: 0,
+      coins: 0 
     })
   }
   async run(client, message, pinku, args, perms, rest) {

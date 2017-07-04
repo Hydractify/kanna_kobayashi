@@ -12,10 +12,13 @@ class Command {
     this.alias = options.alias;
     this.name = options.name;
     this.category = options.category;
-    this.permLevel = options.permLevel || 0;
+    this.permLevel = options.permLevel || 0; // 0 = Everyone, 1 = Dragon Tamer (Event Role), 2 = Permission biased and Mod Role, 3 = Support on official guild, 4 = Devs
     this.enabled = options.enabled || true;
     this.usage = options.usage;
-    this.example = options.example;
+    this.example = options.example || 'No example given'; // Only if the command haves a lot of args, can be array
+    this.exp = options.exp || 75; // 100 is base EXP
+    this.coins = options.coins || 50; // 100 is Coin start
+    this.cooldown = options.cooldown || 100; // Miliseconds
   }
 }
 

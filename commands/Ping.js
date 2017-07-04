@@ -8,7 +8,9 @@ module.exports = class Ping extends Command
     {
       alias: ['pong'],
       category: 'common',
-      name: 'ping'
+      name: 'ping',
+      exp: 0,
+      coins: 0 
     });
   }
 
