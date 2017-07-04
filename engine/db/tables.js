@@ -89,7 +89,6 @@ module.exports = class Table
     let prefix = result.prefix;
     let levelUpMessages = result.levelUpMessages ? 'Enabled' : 'Disabled';
     let modrole = result.modrole;
-    let welcomeMessages = result.welcomeMessages ? 'Enabled' : 'Disabled';
 
     return {
       id,
