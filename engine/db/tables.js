@@ -97,6 +97,5 @@ module.exports = class Table
       modrole,
       welcomeMessages
     }
-
   }
 }
