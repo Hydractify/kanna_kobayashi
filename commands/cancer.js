@@ -1,22 +1,21 @@
 const Command = require('../engine/commandClass');
 const embed = require('../util/embeds');
 
-module.exports = class Autist extends Command
+module.exports = class Cancer extends Command
 {
   constructor(client)
   {
     super(client,
     {
-      alias: ['autistic'],
-      category: 'gen2',
-      name: 'autist'
+      name: 'cancer',
+      category: 'gen3',
+      alias: ['whykannahavesacancercommand'],
     });
   }
 
   async run(client, message, color)
   {
-    let autist = require('../util/links').memes.autist;
-    let img = autist[Math.floor(Math.random() * autist.length)];
+    let img = require('../util/links').memes.cancer;
 
     await message.channel.send({embed : embed.meme(img, color, message)});
   }

@@ -1,5 +1,5 @@
-const Discord = require('discord.js');
 const Command = require('../engine/commandClass');
+const embed = require('../util/embeds');
 
 module.exports = class ForEver extends Command
 {
@@ -16,10 +16,7 @@ module.exports = class ForEver extends Command
   async run(client, message, pinku)
   {
     let image = require('../util/links.json').memes.forever;
-    const embed = new Discord.RichEmbed()
-    .setImage(image)
-    .setColor(pinku);
 
-    await message.channel.send({embed});
+    await message.channel.send({embed : embed.meme(image, pinku, message)});
   }
 }

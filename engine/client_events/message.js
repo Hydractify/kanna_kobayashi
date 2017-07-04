@@ -3,7 +3,7 @@ const gg = require('../Guild');
 const table = require('../db/tables');
 
 module.exports = async message => {
-  try{    
+  try{
   let client = message.client;
 
   if (message.author.bot) return;
@@ -34,8 +34,8 @@ module.exports = async message => {
   let args = rest.split(' ').slice(1);
   let perms = client.userPerms(message);
   let pinku = require('color-convert').hsv.hex(Math.random()*(350 - 250)+250, Math.random()*(100 - 50)+50, Math.random()*(100 - 50)+50);
-  if(perms = 4) pinku = '#5f67c2';
-  if(perms = 3) pinku = '#c353b2';
+  if(perms === 4) pinku = '#5f67c2';
+  if(perms === 3) pinku = '#c353b2';
   let cmd;
   if (client.commands.has(command)) {
     cmd = client.commands.get(command);
@@ -56,7 +56,7 @@ module.exports = async message => {
     } else if(cmd.permLevel === 4){
       permError = 'to be the owner'
     }
-    if (perms < cmd.options.permLevel) return await message.channel.send(`${message.author} you don't have enough permission to use that command. You need ${permError} to use that command!`);
+    if (perms < cmd.permLevel) return await message.channel.send(`${message.author} you don't have enough permission to use that command. You need ${permError} to use that command!`);
     await cmd.run(client, message, pinku, args, perms, rest);
   }
 }catch(err) {
