@@ -23,7 +23,7 @@ module.exports = client => {
         load(`Sucessfully reloaded ${command}`);
         resolve();
       } catch (e){
-        log.load(`Failed to reload ${command}`)
+        load(`Failed to reload ${command}`)
         reject(e);
       }
     })
