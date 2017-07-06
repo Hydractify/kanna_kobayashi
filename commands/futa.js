@@ -7,10 +7,10 @@ module.exports = class Cuterate extends Command
   {
     super(client,
     {
-      alias: ['kawaiirate', 'cuteness', 'kawaiiness'],
-      name: 'cuterate',
-      example: ['cutemeter @Wizardλ#4559'],
-      usage: 'cutemeter <user>',
+      alias: ['trap'],
+      name: 'futa',
+      example: ['futa @Wizardλ#4559'],
+      usage: 'futa <user>',
       category: 'int'
     });
   }
@@ -26,25 +26,25 @@ module.exports = class Cuterate extends Command
       if(!member) return;
     }
 
-    let msg = rest.startsWith('cute') ? 'cute' : 'kawaii';
+    let msg = rest.startsWith('futa') ? 'futa' : 'trap';
 
     let range = Math.floor(Math.random() * 100);
 
     if(!args[0] || member.user.id === message.author.id)
     {
-      await message.channel.send(`${message.author} you are \`${range}%\` ${msg} <:ayy:315270615844126720>`);
+      await message.channel.send(`${message.author} there's a \`${range}%\` chance of you being a ${msg} <:lewd:320406420824653825> `);
     }
     else if(member.user.id === client.user.id)
     {
-      await message.channel.send(`I am really ${msg} ${message.author} <:omfg:315264558279426048>`);
+      await message.channel.send(`How dare you ${message.author}! <:omfg:315264558279426048>`);
     }
     else if(require('../util/settings').client.devs.includes(member.user.id))
     {
-      await message.channel.send(`${member.toString()} is \`100%\` ${msg} <:ayy:315270615844126720>`);
+      await message.channel.send(`No one knows ${message.author} 👀`);
     }
     else
     {
-      await message.channel.send(`${member.toString()} is \`${range}%\` ${msg} <:ayy:315270615844126720>`);
+      await message.channel.send(`${member.toString()} there's a \`${range}%\` chance of you being a ${msg} <:lewd:320406420824653825>`);
     }
   }
 }
