@@ -43,19 +43,28 @@ module.exports = async message => {
     cmd = client.commands.get(client.aliases.get(command));
   }
   if (cmd) {
-    if(!cmd.enabled){
-      await message.channel.send(`${message.member.toString()}, **${cmd.name}** is disabled at this moment.`);
-      return;
-    }
-    if(cmd.permLevel === 1){
+    
+    if(!cmd.enabled) return message.channel.send(`${message.member.toString()}, **${cmd.name}** is disabled at this moment.`);
+    
+    let permError;
+    
+    if(cmd.permLevel === 1)
+    {
       permError = 'the Dragon Tamer role assigned to yourself'
-    } else if(cmd.permLevel === 2){
+    } 
+    else if(cmd.permLevel === 2)
+    {
       permError = 'to have enough permissions on the roles assigned to you'
-    }else if(cmd.permLevel === 3){
+    }
+    else if(cmd.permLevel === 3)
+    {
       permError = 'to be on a high rank role on the official guild'
-    } else if(cmd.permLevel === 4){
+    } 
+    else if(cmd.permLevel === 4)
+    {
       permError = 'to be the owner'
     }
+    
     if (perms < cmd.permLevel) return await message.channel.send(`${message.author} you don't have enough permission to use that command. You need ${permError} to use that command!`);
     await cmd.run(client, message, pinku, args, perms, rest);
   }
