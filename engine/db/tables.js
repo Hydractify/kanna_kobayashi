@@ -98,4 +98,22 @@ module.exports = class Table
       welcomeMessages
     }
   }
+
+  static logCommand(id, command){
+    return r
+        .table('command_log')
+        .insert({id, command, timeUsed: Date.now()},
+            {conflict: 'replace'})
+        .run(connection);
+  }
+
+  static commandLastUsed(id, command){
+    return r
+        .table('command_log')
+        .pluck('timeUsed')
+        .filter({id, command})
+        .run(connection)
+        .then(cursor=>cursor.toArray()[0].timeUsed);
+  }
+
 }
