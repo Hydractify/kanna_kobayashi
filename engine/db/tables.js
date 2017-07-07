@@ -112,6 +112,9 @@ module.exports = class Table
         .table('command_log')
         .pluck('timeUsed')
         .filter({id, command})
+        .max('timeUsed')
+        .default(null)
+        .map(doc => { return {timeUsed: r.branch(doc('timeUsed').eq(null), 0, doc('timeUsed'))} })
         .run(connection)
         .then(cursor=>cursor.toArray()[0].timeUsed);
   }
