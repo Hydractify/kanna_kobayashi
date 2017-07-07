@@ -100,6 +100,7 @@ module.exports = class Table
   }
 
   static logCommand(id, command){
+    let connection = require('../Database').connection;
     return r
         .table('command_log')
         .insert({id, command, timeUsed: Date.now()},
@@ -108,6 +109,7 @@ module.exports = class Table
   }
 
   static commandLastUsed(id, command){
+    let connection = require('../Database').connection;
     return r
         .table('command_log')
         .pluck('timeUsed')
