@@ -90,10 +90,6 @@ module.exports = class Table
     let levelUpMessages = result.levelUpMessages ? 'Enabled' : 'Disabled';
     let modrole = result.modrole;
     let welcomeMessages = result.welcomeMessages ? 'Enabled' : 'Disabled';
-    let eventRole = result.eventRole;
-    let firstName = result.firstName;
-    let lastName = result.lastName;
-    let quizPhoto = result.quizPhoto;
 
     return {
       id,
@@ -110,6 +106,7 @@ module.exports = class Table
 
   static logCommand(id, command){
     let connection = require('../Database').connection;
+<<<<<<< HEAD
      return r
          .table('command_log')
          .insert({id, command, timeUsed: Date.now()},
@@ -129,4 +126,26 @@ module.exports = class Table
          .run(connection)
          .then(cursor=>cursor.toArray()[0].timeUsed);
    }
+=======
+    return r
+        .table('command_log')
+        .insert({id, command, timeUsed: Date.now()},
+            {conflict: 'replace'})
+        .run(connection);
+  }
+
+  static commandLastUsed(id, command){
+    let connection = require('../Database').connection;
+    return r
+        .table('command_log')
+        .pluck('timeUsed')
+        .filter({id, command})
+        .max('timeUsed')
+        .default(null)
+        .map(doc => { return {timeUsed: r.branch(doc('timeUsed').eq(null), 0, doc('timeUsed'))} })
+        .run(connection)
+        .then(cursor=>cursor.toArray()[0].timeUsed);
+  }
+
+>>>>>>> ddfb8e1d565ca16ddf2f3e75c9016af96ed0d4ff
 }
