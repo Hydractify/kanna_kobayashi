@@ -37,7 +37,7 @@ module.exports = class HelpUtil
     {
       let command = this.client.commands.get(this.args[0]);
 
-      let example = Array.isArray(command.example) ? 'kanna pls' + command.example.join('\nkanna pls ') : command.example;
+      let example = Array.isArray(command.example) ? 'kanna pls ' + command.example.join('\nkanna pls ') : command.example;
 
       const embed = new Discord.RichEmbed()
       .setAuthor(`${this.args[0].toUpperCase()} Info`, this.client.user.displayAvatarURL)

@@ -1,7 +1,7 @@
 const Command = require('../engine/commandClass');
 const get = require('../util/get');
 
-module.exports = class Cuterate extends Command
+module.exports = class FutaMeter extends Command
 {
   constructor(client)
   {

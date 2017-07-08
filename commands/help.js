@@ -74,6 +74,7 @@ module.exports = class Help extends Command
         }
         if(c.emoji.name === '❎')
         {
+          await message.delete();
           await msg.delete();
         }
       });

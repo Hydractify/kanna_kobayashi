@@ -17,7 +17,7 @@ module.exports = class Options extends Command
       description: 'Change the options for your guild!',
       permLevel: 2,
       exp: 0,
-      coins: 0 
+      coins: 0
     });
   }
 

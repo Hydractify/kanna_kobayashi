@@ -2,17 +2,17 @@ const embeds = require('../util/embeds');
 const Command = require('../engine/commandClass');
 const get = require('../util/get');
 
-module.exports = class Cuddle extends Command
+module.exports = class Kiss extends Command
 {
   constructor(client)
   {
     super(client,
     {
-      alias: ['cud'],
-      name: 'cuddle',
-      description: 'Cuddle Someone!',
-      usage: 'cuddle <user>',
-      example: ['cuddle @Wizardλ#4559'],
+      alias: ['ks'],
+      name: 'kiss',
+      description: 'Kiss Someone! 👀',
+      usage: 'kiss <user>',
+      example: ['kiss @Wizardλ#4559'],
       category: 'int',
       coins: 75,
       exp: 125
@@ -21,7 +21,7 @@ module.exports = class Cuddle extends Command
 
   async run(client, message, color, args)
   {
-    const embed = await embeds.wolke('cuddle', color, message);
+    const embed = await embeds.wolke('kiss', color, message);
 
     let nandayo;
 
@@ -33,20 +33,20 @@ module.exports = class Cuddle extends Command
 
       if (member.user.id === message.author.id)
       {
-        nandayo = `Nya~`;
+        return message.channel.send(`You can't kiss yourself O///O`);
       }
       else if(require('../util/settings').client.devs.includes(member.user.id))
       {
-        nandayo = `**${member.displayName}** you got cuddled by **${message.member.displayName}**!`;
-        embed.setDescription(`**_ENTERING TSUNDERE MODE_**`);
+        nandayo = `**${memberu.displayName}** you got kissed by **${message.member.displayName}**`;
+        embed.setDescription(`That's lewd o o`);
       }
       else if(member.user.id === client.user.id)
       {
-        nandayo = `Awww... _cuddles ${member.displayName}_`;
+        nandayo = `T-that's... LEWD`;
       }
       else
       {
-        nandayo = `**${member.displayName}** you got cuddled by **${message.member.displayName}**!`;
+        nandayo = `**${memberu.displayName}** you got kissed by **${message.member.displayName}**`;
       }
     }
     else
@@ -54,6 +54,6 @@ module.exports = class Cuddle extends Command
       nandayo = `_cuddles ${message.member.toString()}_`;
     }
 
-    await message.channel.send('<:ayy:315270615844126720> | ' + nandayo, {embed})
+    await message.channel.send('<:lewd:320406420824653825> | ' + nandayo, {embed})
   }
 }
