@@ -13,7 +13,8 @@
   {
     "guilds":
     {
-      "options": ["levelup", "prefix", "modrole"]
+      "options": ["levelup", "prefix", "modrole"],
+      "quizOptions": ["name", "quizphoto"]
     }
   }
 }

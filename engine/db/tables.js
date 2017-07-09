@@ -104,48 +104,33 @@ module.exports = class Table
     }
   }
 
-  static logCommand(id, command){
-    let connection = require('../Database').connection;
-<<<<<<< HEAD
-     return r
-         .table('command_log')
-         .insert({id, command, timeUsed: Date.now()},
-             {conflict: 'replace'})
-         .run(connection);
-   }
+  static async logCommand(userID, command)
+   {
+     let connection = require('../Database').connection;
+     let cnt = await r.table('command_log').filter({userID, command}).count().run(connection);
 
-   static commandLastUsed(id, command){
+     if(cnt === 0)
+     {
+       return r
+         .table('command_log')
+         .insert({userID, command, timeUsed: Date.now()})
+         .run(connection);
+     }
+     return r
+       .table('command_log')
+       .filter({userID, command})
+       .update({timeUsed: Date.now()})
+       .run(connection);
+    }
+
+   static commandLastUsed(userID, command)
+   {
      let connection = require('../Database').connection;
      return r
-         .table('command_log')
-         .pluck('timeUsed')
-         .filter({id, command})
-         .max('timeUsed')
-         .default(null)
-         .map(doc => { return {timeUsed: r.branch(doc('timeUsed').eq(null), 0, doc('timeUsed'))} })
-         .run(connection)
-         .then(cursor=>cursor.toArray()[0].timeUsed);
+       .table('command_log')
+       .filter({userID, command})
+       .max('timeUsed')('timeUsed')
+       .default(0)
+       .run(connection);
    }
-=======
-    return r
-        .table('command_log')
-        .insert({id, command, timeUsed: Date.now()},
-            {conflict: 'replace'})
-        .run(connection);
-  }
-
-  static commandLastUsed(id, command){
-    let connection = require('../Database').connection;
-    return r
-        .table('command_log')
-        .pluck('timeUsed')
-        .filter({id, command})
-        .max('timeUsed')
-        .default(null)
-        .map(doc => { return {timeUsed: r.branch(doc('timeUsed').eq(null), 0, doc('timeUsed'))} })
-        .run(connection)
-        .then(cursor=>cursor.toArray()[0].timeUsed);
-  }
-
->>>>>>> ddfb8e1d565ca16ddf2f3e75c9016af96ed0d4ff
-}
+ }

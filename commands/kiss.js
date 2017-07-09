@@ -51,7 +51,7 @@ module.exports = class Kiss extends Command
     }
     else
     {
-      nandayo = `_cuddles ${message.member.toString()}_`;
+      return message.channel.send(`${message.author} you must tell me who you want to kiss O///O`);
     }
 
     await message.channel.send('<:lewd:320406420824653825> | ' + nandayo, {embed})

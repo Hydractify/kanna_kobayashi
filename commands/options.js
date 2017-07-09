@@ -36,7 +36,8 @@ module.exports = class Options extends Command
       prefix: ["kanna pls ", "<@!?299284740127588353> ", 'k!'],
       levelUpMessages: true,
       modrole: 'Human Tamer',
-      welcomeMessages: false
+      welcomeMessages: false,
+      quizrole: 'Dragon Tamer'
     });
 
     let gInfo = await Guild.stats(guild);

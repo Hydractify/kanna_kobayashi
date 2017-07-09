@@ -19,6 +19,8 @@ module.exports = class Help extends Command
 
   async run(client, message, color, args, perms)
   {
+    if(!message.guild.me.permissions.has('ADD_REACTIONS')) return message.channel.send(`I don't have permission to add reactions!`);
+
     let util = new Util(client, message, args, color);
 
     if(!args[0])

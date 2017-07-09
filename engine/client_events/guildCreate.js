@@ -1,10 +1,22 @@
 const Discord = require('discord.js');
+const table = require('../engine/db/tables');
 
 module.exports = async (client, guild) => {
 
   await guild.defaultChannel.send(`Thanks for adding me on **${guild.name}**! If you want to see a quick start just type \`k!quickstart\`! If you have any problems with the bot join the official guild and ask for help! http://kannathebot.me/guild`);
 
-      let members = await guild.fetchMembers();
+      let guildFetch = await guild.fetchMembers();
+
+      await table.insert('guilds',
+      {
+        id: guild.id,
+        prefix: ["kanna pls ", "<@!?299284740127588353> ", 'k!'],
+        levelUpMessages: true,
+        modrole: 'Human Tamer',
+        welcomeMessages: false,
+        quizrole: 'Dragon Tamer'
+      });
+
 
       const pinku = require('color-convert').hsv.hex(Math.random()*(350 - 250)+280, Math.random()*(100 - 50)+50, Math.random()*(100 - 50)+50);
 
@@ -17,9 +29,9 @@ module.exports = async (client, guild) => {
       .addField('Owner', `${guild.owner.user.tag}`, true)
       .addField('Owner ID', guild.ownerID)
       .addField('Total Members', `${guild.memberCount}`, true)
-      .addField('Humans', `${members.filter(g => !g.user.bot).size}`, true)
+      .addField('Humans', `${guildFetch.members.filter(g => !g.user.bot).size}`, true)
       .setColor(pinku)
-      .addField('Bots', `${members.filter(g => g.user.bot).size}`, true);
+      .addField('Bots', `${guildFetch.members.filter(g => g.user.bot).size}`, true);
       if(guild.iconURL) {
          embed.setThumbnail(guild.iconURL);
        }
