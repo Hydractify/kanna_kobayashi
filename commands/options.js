@@ -37,7 +37,10 @@ module.exports = class Options extends Command
       levelUpMessages: true,
       modrole: 'Human Tamer',
       welcomeMessages: false,
-      quizrole: 'Dragon Tamer'
+      quizrole: 'Dragon Tamer',
+      quizPhoto: 'http://pm1.narvii.com/6366/2c35594538206f7f598be792bf203b6b638e9c07_hq.jpg',
+      firstName: 'Kanna',
+      lastName: 'Kobayashi'
     });
 
     let gInfo = await Guild.stats(guild);

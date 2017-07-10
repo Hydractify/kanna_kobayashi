@@ -90,6 +90,10 @@ module.exports = class Table
     let levelUpMessages = result.levelUpMessages ? 'Enabled' : 'Disabled';
     let modrole = result.modrole;
     let welcomeMessages = result.welcomeMessages ? 'Enabled' : 'Disabled';
+    let eventRole = result.eventRole;
+    let firstName = result.firstName;
+    let lastName = result.lastName;
+    let quizPhoto = result.quizPhoto;
 
     return {
       id,

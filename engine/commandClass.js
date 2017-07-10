@@ -20,7 +20,7 @@ class Command {
     this.example = options.example || 'No example given.';
     this.exp = options.exp || 75; // 100 is base EXP
     this.coins = options.coins || 50; // 100 is Coin start
-    this.cooldown = options.cooldown || 10000; // Miliseconds
+    this.cooldown = options.cooldown || 5000; // Miliseconds
   }
 }
 

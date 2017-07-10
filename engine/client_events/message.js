@@ -35,8 +35,8 @@ module.exports = async message => {
       let args = rest.split(' ').slice(1);
       let perms = client.userPerms(message);
       let pinku = require('color-convert').hsv.hex(Math.random()*(350 - 250)+250, Math.random()*(100 - 50)+50, Math.random()*(100 - 50)+50);
-      if(perms === 4) pinku = '#5f67c2';
-      if(perms === 3) pinku = '#c353b2';
+      if(perms === 4) pinku = '#00000f';
+      if(perms === 3) pinku = '#ffffff';
       let cmd;
       if (client.commands.has(command)) {
         cmd = client.commands.get(command);
@@ -47,13 +47,13 @@ module.exports = async message => {
 
       if(!cmd.enabled) return message.channel.send(`${message.member.toString()}, **${cmd.name}** is disabled at this moment.`);
 
-      if (perms < cmd.permLevel) return await message.channel.send(`${message.author} you don't have enough permission to use that command.`);
+      if (perms < cmd.permLevel) return message.channel.send(`${message.author} you don't have enough permission to use that command.`);
 
       let lastUsed = await table.commandLastUsed(message.author.id, cmd.name);
 
       let timeLeft = lastUsed + cmd.cooldown - Date.now();
 
-      if(timeLeft > 0) return await message.channel.send(`${message.author}, please wait ${timeLeft/1000|0} seconds before using ${command} again.`);
+      if(timeLeft > 0 && !settings.client.devs.includes(message.author.id)) return message.channel.send(`${message.author}, please wait ${timeLeft/1000|0} seconds before using ${command} again.`);
 
       table.logCommand(message.author.id, cmd.name);
 

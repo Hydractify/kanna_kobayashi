@@ -67,4 +67,16 @@ module.exports = class get {
         return require('./err').stack(e, message);
       });
   }
+
+  static message(id, message)
+  {
+    if(typeof id !== 'string') throw new Error('ID must be a String!');
+    if(typeof message !== 'object') throw new Error('Message isn\'t correctly defined!');
+
+    return message.channel.fetchMessage(id)
+    .catch(e =>
+    {
+      return message.channel.send(`${message.author} you have input an invalid message ID!`);
+    });
+  }
 }

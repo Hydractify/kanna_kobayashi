@@ -14,7 +14,7 @@
     "guilds":
     {
       "options": ["levelup", "prefix", "modrole"],
-      "quizOptions": ["name", "quizphoto"]
+      "quizOptions": ["name", "quizphoto", "start", "premade"]
     }
   }
 }
