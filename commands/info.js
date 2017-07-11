@@ -9,7 +9,8 @@ module.exports = class Info extends Command
     {
       name: 'info',
       description: 'All the useful links you need!',
-      alias: ['invite', 'patreon', 'guild', 'ghearts']
+      alias: ['invite', 'patreon', 'guild', 'ghearts'],
+      enabled: true
     });
   }
 

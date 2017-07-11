@@ -9,7 +9,8 @@ module.exports = class Dab extends Command
     {
       alias: ['dabu'],
       name: 'dab',
-      category: 'gen1'
+      category: 'gen1',
+      enabled: true
     });
   }
 

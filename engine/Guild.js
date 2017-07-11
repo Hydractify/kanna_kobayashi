@@ -21,6 +21,7 @@ module.exports = class Guild {
 				firstName: 'Kanna',
 				lastName: 'Kobayashi'
 			});
+			await table.update('guilds', options, guild.id);
 		}
 		else
 		{

@@ -9,7 +9,8 @@ module.exports = class Hungry extends Command
     {
       alias: ['itadakimasu'],
       name: 'hungry',
-      category: 'gen1'
+      category: 'gen1',
+      enabled: true
     });
   }
 

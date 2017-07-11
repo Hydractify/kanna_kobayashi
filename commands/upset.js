@@ -15,7 +15,8 @@ module.exports = class Upset extends Command
       example: ['cry @Wizardλ#4559', 'cry'],
       category: 'int',
       coins: 75,
-      exp: 125
+      exp: 125,
+      enabled: true
     });
   }
 

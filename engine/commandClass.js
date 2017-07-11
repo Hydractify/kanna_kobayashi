@@ -15,9 +15,9 @@ class Command {
     this.name = options.name;
     this.category = options.category || 'common'; // This will be used on -kanna pls help-
     this.permLevel = options.permLevel || 0; // 0 = Everyone, 1 = Dragon Tamer (Event Role), 2 = Permission biased and Mod Role, 3 = Support on official guild, 4 = Devs
-    this.enabled = options.enabled || true;
+    this.enabled = options.enabled;
     this.usage = options.usage || options.name;
-    this.example = options.example || 'No example given.';
+    this.example = options.example || 'No example provided.';
     this.exp = options.exp || 75; // 100 is base EXP
     this.coins = options.coins || 50; // 100 is Coin start
     this.cooldown = options.cooldown || 5000; // Miliseconds

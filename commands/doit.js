@@ -9,7 +9,8 @@ module.exports = class DoIt extends Command
     {
       alias: ['worship'],
       name: 'doit',
-      category: 'gen2'
+      category: 'gen2',
+      enabled: true
     });
   }
 

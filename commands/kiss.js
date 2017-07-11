@@ -15,7 +15,8 @@ module.exports = class Kiss extends Command
       example: ['kiss @Wizardλ#4559'],
       category: 'int',
       coins: 75,
-      exp: 125
+      exp: 125,
+      enabled: true
     });
   }
 

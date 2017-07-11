@@ -9,7 +9,8 @@ module.exports = class Nya extends Command
     {
       alias: ['nyan'],
       name: 'nya',
-      cateogry: 'weeb'
+      category: 'easter_egg',
+      enabled: true
     });
   }
 

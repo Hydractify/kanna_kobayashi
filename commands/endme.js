@@ -9,7 +9,8 @@ module.exports = class EndMe extends Command
     {
       alias: ['plsendmylifeijustwanttostopfeelingthepainthatisbeinglonely'],
       name: 'endme',
-      category: 'gen1'
+      category: 'gen1',
+      enabled: true
     });
   }
 

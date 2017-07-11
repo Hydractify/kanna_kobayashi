@@ -9,7 +9,8 @@ module.exports = class Rem extends Command
     {
       alias: ['reimu'],
       category: 'gen4',
-      name: 'rem'
+      name: 'rem',
+      enabled: true
     });
   }
 

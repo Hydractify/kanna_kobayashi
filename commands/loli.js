@@ -9,7 +9,8 @@ module.exports = class Loli extends Command
     {
       alias: ['callpoliceplscuziamalolicon'],
       category: 'gen1',
-      name: 'loli'
+      name: 'loli',
+      enabled: true
     });
   }
 

@@ -10,7 +10,8 @@ module.exports = class BOOBS extends Command
     {
       alias: ['bubs', 'b00bs'],
       name: 'boobs',
-      category: 'gen4'
+      category: 'gen4',
+      enabled: true
     })
   }
 

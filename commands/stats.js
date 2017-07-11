@@ -12,6 +12,7 @@ module.exports = class StAtUs extends Command
       coins: 0,
       exp: 0,
       name: 'stats',
+      enabled: true
     });
   }
 

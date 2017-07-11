@@ -9,7 +9,8 @@ module.exports = class Ravioli extends Command
     {
       alias: ['praise'],
       category: 'gen4',
-      name: 'ravioli'
+      name: 'ravioli',
+      enabled: true
     });
   }
 

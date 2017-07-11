@@ -15,7 +15,8 @@ module.exports = class Profile extends Command {
         category: '',
         description: 'Look your own profile or of your friends!',
         exp: 25,
-        coins: 0
+        coins: 0,
+        enabled: true
       })
   }
 

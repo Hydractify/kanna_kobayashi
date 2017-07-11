@@ -9,7 +9,8 @@ module.exports = class Rain extends Command
     {
       alias: ['droplets'],
       category: 'gen2',
-      name: 'rain'
+      name: 'rain',
+      enabled: true
     });
   }
 

@@ -9,7 +9,8 @@ module.exports = class FlatIsJustice extends Command
     {
       alias: ['flat'],
       name: 'flatisjustice',
-      category: 'gen3'
+      category: 'gen3',
+      enabled: true
     })
   }
 

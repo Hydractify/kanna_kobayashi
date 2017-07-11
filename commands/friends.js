@@ -9,7 +9,8 @@ module.exports = class Friends extends Command
     {
       alias: ['tomodachi'],
       name: 'friends',
-      category: 'gen2'
+      category: 'gen2',
+      enabled: true
     });
   }
 

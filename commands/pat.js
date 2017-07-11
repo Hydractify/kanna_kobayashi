@@ -15,7 +15,8 @@ module.exports = class Pat extends Command
       example: ['pat @Wizardλ#4559'],
       category: 'int',
       coins: 75,
-      exp: 125
+      exp: 125,
+      enabled: true
     });
   }
 

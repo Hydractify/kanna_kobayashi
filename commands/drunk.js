@@ -9,7 +9,8 @@ module.exports = class Drunk extends Command
     {
       alias: ['sake'],
       name: 'drunk',
-      category: 'gen1'
+      category: 'gen1',
+      enabled: true
     })
   }
 

@@ -20,9 +20,10 @@ module.exports = class Embed {
 
     let image = await wolke.picture(type);
 
+
     return new Discord.RichEmbed()
     .setColor(color)
-    .setFooter(`Requested by ${message.author.tag} | Provided by Wolke#6746`, message.author.displayAvatarURL)
+    .setFooter(`Requested by ${message.author.tag} | Powered by ram.moe`, message.author.displayAvatarURL)
     .setImage('https://rra.ram.moe' + image.body.path);
   }
 

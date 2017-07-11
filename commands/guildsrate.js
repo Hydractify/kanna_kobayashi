@@ -11,7 +11,8 @@ module.exports = class GuildsRate extends Command
       permLevel: 3,
       name: 'guildsrate',
       coins: 0,
-      exp: 0
+      exp: 0,
+      enabled: true
     });
   }
 

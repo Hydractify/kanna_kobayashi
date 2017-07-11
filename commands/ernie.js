@@ -9,7 +9,8 @@ module.exports = class Ernie extends Command
     {
       alias: ['puppet'],
       category: 'gen3',
-      name: 'ernie'
+      name: 'ernie',
+      enabled: true
     })
   }
 

@@ -13,7 +13,8 @@ module.exports = class Delete extends Command
       category: 'mod',
       usage: 'delete <number>',
       coins: 0,
-      exp: 0
+      exp: 0,
+      enabled: true
     })
   }
 

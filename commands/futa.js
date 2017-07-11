@@ -11,7 +11,8 @@ module.exports = class FutaMeter extends Command
       name: 'futa',
       example: ['futa @Wizardλ#4559'],
       usage: 'futa <user>',
-      category: 'int'
+      category: 'int',
+      enabled: true
     });
   }
 

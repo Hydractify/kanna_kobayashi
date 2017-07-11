@@ -9,7 +9,8 @@ module.exports = class BrAiNe extends Command
     {
       alias: ['braine'],
       name: 'brain',
-      category: 'gen3'
+      category: 'gen3',
+      enabled: true
     });
   }
 

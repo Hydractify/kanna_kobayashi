@@ -8,7 +8,8 @@ module.exports = class Choose extends Command
     {
       alias: ['choice'],
       name: 'choose',
-      example: ['choose Tohru|Kanna', 'choose Tohru Kanna']
+      example: ['choose Tohru|Kanna', 'choose Tohru Kanna'],
+      enabled: true
     });
   }
 

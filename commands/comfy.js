@@ -8,7 +8,9 @@ module.exports = class Comfy extends Command
     super(client,
     {
       name: 'comfy',
-      alias: ['comfu']
+      alias: ['comfu'],
+      category: 'gen4',
+      enabled: true
     });
   }
 

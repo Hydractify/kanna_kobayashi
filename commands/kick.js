@@ -16,7 +16,8 @@ module.exports = class Kick extends Command
       usage: 'kick <user>',
       permLevel: 2,
       exp: 0,
-      coins: 0
+      coins: 0,
+      enabled: true
     });
   }
 

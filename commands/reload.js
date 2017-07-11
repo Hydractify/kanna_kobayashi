@@ -11,7 +11,8 @@ module.exports = class Reload extends Command {
       usage: 'reload <commandname>',
       category: 'unique',
       exp: 0,
-      coins: 0 
+      coins: 0,
+      enabled: true
     })
   }
   async run(client, message, pink, args) {

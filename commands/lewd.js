@@ -9,7 +9,8 @@ module.exports = class Lewd extends Command
     {
       alias: ['l00d'],
       name: 'lewd',
-      category: 'int'
+      category: 'int',
+      enabled: true
     });
   }
 

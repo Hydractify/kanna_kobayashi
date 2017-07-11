@@ -19,7 +19,8 @@ module.exports = class Eval extends Command {
       category: 'unique',
       exp: 0,
       coins: 0,
-      cooldown: 1
+      cooldown: 1,
+      enabled: true
     })
   }
   async run(client, message, pinku, args, perms, rest) {

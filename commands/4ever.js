@@ -9,7 +9,8 @@ module.exports = class ForEver extends Command
     {
       alias: ['forever'],
       category: 'gen3',
-      name: '4ever'
+      name: '4ever',
+      enabled: true
     });
   }
 

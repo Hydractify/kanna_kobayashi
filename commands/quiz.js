@@ -10,12 +10,13 @@ module.exports = class Quiz extends Command
     {
       alias: ['qinfo'],
       name: 'quiz',
-      category: 'quiz',
+      category: 'event',
       usage: 'quiz <option> <value>',
       exp: 0,
       coins: 0,
       cooldown: 30000,
-      permLevel: 1
+      permLevel: 1,
+      enabled: true
     })
   }
 

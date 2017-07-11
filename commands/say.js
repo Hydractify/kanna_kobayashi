@@ -11,7 +11,9 @@ module.exports = class Say extends Command
       exp: 0,
       coins: 0,
       example: ['say hi!'],
-      description: 'Tell me something to say!'
+      usage: 'say <message>',
+      description: 'Tell me something to say!',
+      enabled: true
     });
   }
 

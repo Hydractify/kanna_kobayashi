@@ -9,7 +9,8 @@ module.exports = class Listen extends Command
     {
       alias: ['heylisten'],
       category: 'gen2',
-      name: 'listen'
+      name: 'listen',
+      enabled: true
     });
   }
 

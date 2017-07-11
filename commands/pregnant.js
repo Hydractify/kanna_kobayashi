@@ -9,7 +9,8 @@ module.exports = class Pregnant extends Command
     {
       alias: ['fbi'],
       name: 'pregnant',
-      category: 'gen1'
+      category: 'gen1',
+      enabled: true
     });
   }
 

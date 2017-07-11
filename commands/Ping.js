@@ -9,7 +9,8 @@ module.exports = class Ping extends Command
       alias: ['pong'],
       name: 'ping',
       exp: 0,
-      coins: 0
+      coins: 0,
+      enabled: true
     });
   }
 

@@ -9,7 +9,8 @@ module.exports = class Joke extends Command
     {
       alias: ['jk'],
       name: 'joke',
-      category: 'gen3'
+      category: 'gen3',
+      enabled: true
     });
   }
 

@@ -2,7 +2,8 @@ const Discord = require("discord.js");
 
 let kanna = new Discord.ShardingManager("./core.js",
 {
-  token: require("./util/settings.json").client.token
+  token: require("./util/settings.json").client.token,
+  totalShards: 2
 });
 
 kanna.spawn();

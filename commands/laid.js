@@ -9,7 +9,8 @@ module.exports = class Laid extends Command
     {
       alias: ['paid', 'dragonmaid'],
       category: 'gen3',
-      name: 'laid'
+      name: 'laid',
+      enabled: true
     });
   }
 

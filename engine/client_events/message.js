@@ -1,6 +1,7 @@
 const settings = require('../../util/settings.json');
-const gg = require('../Guild');
 const table = require('../db/tables');
+const gg = require('../Guild');
+const Guild = require('../Guild');
 
 module.exports = async message => {
   try{
@@ -8,12 +9,16 @@ module.exports = async message => {
 
     if (message.author.bot) return;
 
-    const checkPrefix = (message) => settings.prefix.some(p=> message.content.startsWith(p)) || new RegExp(settings.prefix[1]).test(message.content);
+    const GuildStats = await Guild.stats(message.guild);
+
+    const prefix = GuildStats.prefix;
+
+    const checkPrefix = (message) => prefix.some(p=> message.content.startsWith(p)) || new RegExp(prefix[1]).test(message.content);
 
     if(!checkPrefix(message)) return;
 
     const tingle = (message) => {
-      for (let p of settings.prefix) {
+      for (let p of prefix) {
           let regex = new RegExp(`^${p}([^]*)`);
           let match = message.content.match(regex);
           if(match) return match[1];
@@ -53,7 +58,7 @@ module.exports = async message => {
 
       let timeLeft = lastUsed + cmd.cooldown - Date.now();
 
-      if(timeLeft > 0 && !settings.client.devs.includes(message.author.id)) return message.channel.send(`${message.author}, please wait ${timeLeft/1000|0} seconds before using ${command} again.`);
+      if(timeLeft > 0 && !settings.client.devs.includes(message.author.id)) return message.channel.send(`${message.author}, please wait **${require('moment').duration(timeLeft).humanize()}** before using ${command} again.`);
 
       table.logCommand(message.author.id, cmd.name);
 

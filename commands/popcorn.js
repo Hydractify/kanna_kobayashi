@@ -9,7 +9,8 @@ module.exports = class Popcorn extends Command
     {
       alias: ['dreck'],
       name: 'popcorn',
-      category: 'gen4'
+      category: 'gen4',
+      enabled: true
     });
   }
 

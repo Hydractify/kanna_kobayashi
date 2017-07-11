@@ -11,7 +11,8 @@ module.exports = class QuickStart extends Command
       name: 'quickstart',
       description: 'Quickstart on using my features!',
       coins: 0,
-      exp: 0
+      exp: 0,
+      enabled: true
     });
   }
 

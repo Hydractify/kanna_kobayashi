@@ -9,7 +9,8 @@ module.exports = class JoJoke extends Command
     {
       alias: ['jjk'],
       name: 'jojoke',
-      category: 'gen3'
+      category: 'gen3',
+      enabled: true
     });
   }
 

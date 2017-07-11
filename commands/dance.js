@@ -9,7 +9,8 @@ module.exports = class Dance extends Command
     {
       alias: ['flop'],
       name: 'dance',
-      category: 'gen2'
+      category: 'gen2',
+      enabled: true
     });
   }
 

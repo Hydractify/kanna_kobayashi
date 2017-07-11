@@ -9,7 +9,8 @@ module.exports = class Capit extends Command
     {
       alias: ['capit'],
       name: 'capitalism',
-      category: 'gen3'
+      category: 'gen3',
+      enabled: true
     });
   }
 

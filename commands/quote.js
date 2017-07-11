@@ -12,7 +12,8 @@ module.exports = class Quote extends Command
       name: 'quote',
       exp: 0,
       coins: 0,
-      usage: 'quote <messageID>'
+      usage: 'quote <messageID>',
+      enabled: true
     });
   }
 

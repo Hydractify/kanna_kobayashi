@@ -10,7 +10,8 @@ module.exports = class NoLewding extends Command
     {
       alias: ['nlewd'],
       name: 'nolewding',
-      category: 'int'
+      category: 'int',
+      enabled: true
     });
   }
 

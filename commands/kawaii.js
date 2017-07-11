@@ -9,7 +9,8 @@ module.exports = class Kawaii extends Command
       {
         alias: ['cute'],
         name: 'kawaii',
-        category: 'int'
+        category: 'int',
+        enabled: true
       });
   }
 

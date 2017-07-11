@@ -10,6 +10,7 @@ module.exports = class Cancer extends Command
       name: 'cancer',
       category: 'gen3',
       alias: ['whykannahavesacancercommand'],
+      enabled: true
     });
   }
 

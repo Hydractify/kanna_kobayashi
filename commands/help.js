@@ -13,7 +13,8 @@ module.exports = class Help extends Command
       example: ['help', 'help ping'],
       name: 'help',
       exp: 0,
-      coins: 0
+      coins: 0,
+      enabled: true
     });
   }
 
@@ -33,8 +34,9 @@ module.exports = class Help extends Command
         ['4']: util.categoryMap('gen2', 'Memes Generation 2'),
         ['5']: util.categoryMap('gen3', 'Memes Generation 3'),
         ['6']: util.categoryMap('gen4', 'Memes Generation 4'),
-        ['7']: util.categoryMap('mod', 'Moderation'),
-        ['8']: util.categoryMap('unique', 'Unique Commands')
+        ['7']: util.categoryMap('event', 'Event'),
+        ['8']: util.categoryMap('mod', 'Moderation'),
+        ['9']: util.categoryMap('unique', 'Unique Commands')
       }
 
       let msg = await message.channel.send({embed : embeds['1']});
@@ -51,10 +53,11 @@ module.exports = class Help extends Command
       function selectEmbed(choose)
       {
         choose === '➡' ? number++ : number--;
-        if(number > 8) number = 0;
+        if(number > 9) number = 0;
         if(number < 0) number = 8;
-        if(number === 7 && perms < 2) number = 1;
-        if(number === 8 && perms < 3) number = 2;
+        if(number === 7 && perms < 1) number = 1;
+        if(number === 8 && perms < 2) number = 2;
+        if(number === 9 && perms < 3) number = 3;
         return embeds[number.toString()];
       }
 

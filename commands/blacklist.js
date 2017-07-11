@@ -14,7 +14,8 @@ module.exports = class Blacklist extends Command
       alias: ['exile'],
       category: 'unique',
       usage: 'blacklist <key> <value>',
-      example: ['blacklist id 279018121099214848', 'blacklist name TESTING']
+      example: ['blacklist id 279018121099214848', 'blacklist name TESTING'],
+      enabled: true
     });
   }
 

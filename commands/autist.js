@@ -9,7 +9,8 @@ module.exports = class Autist extends Command
     {
       alias: ['autistic'],
       category: 'gen2',
-      name: 'autist'
+      name: 'autist',
+      enabled: true
     });
   }
 

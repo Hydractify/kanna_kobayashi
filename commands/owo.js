@@ -9,7 +9,8 @@ module.exports = class OwO extends Command
     {
       alias: ['whatsthis'],
       name: 'owo',
-      cateogry: 'gen4'
+      category: 'gen4',
+      enabled: true
     });
   }
 

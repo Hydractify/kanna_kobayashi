@@ -11,7 +11,8 @@ module.exports = class Cuterate extends Command
       name: 'cuterate',
       example: ['cutemeter @Wizardλ#4559'],
       usage: 'cutemeter <user>',
-      category: 'int'
+      category: 'int',
+      enabled: true
     });
   }
 

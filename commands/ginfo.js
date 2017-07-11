@@ -11,7 +11,8 @@ module.exports = class GuildInfo extends Command
       coins: 0,
       exp: 0,
       name: 'ginfo',
-      description: 'Look a guild info! It\'s ID, who owns it... and more!'
+      description: 'Look a guild info! It\'s ID, who owns it... and more!',
+      enabled: true
     });
   }
 

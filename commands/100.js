@@ -9,7 +9,8 @@ module.exports = class OneHundred extends Command
     {
       alias: ['onehundred'],
       category: 'gen3',
-      name: '100'
+      name: '100',
+      enabled: true
     });
   }
 

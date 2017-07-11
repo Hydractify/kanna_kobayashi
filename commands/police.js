@@ -9,7 +9,8 @@ module.exports = class Police extends Command
     {
       alias: ['policepls'],
       category: 'gen2',
-      name: 'police'
+      name: 'police',
+      enabled: true
     });
   }
 
