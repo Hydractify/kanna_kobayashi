@@ -36,9 +36,9 @@ module.exports = class WhoIs extends Command
       .addField('Status', user.presence.status, true)
       .addField('Playing', user.presence.game ? user.presence.game.name : 'Nothing', true)
       .addField('Total Shared Guilds', client.guilds.filter(g=>g.members.find(m=>m.user.id === message.author.id)).size, true)
-      .addField('Date of Creation', moment(user.createdTimestamp).format('MM/DD/YYYY (HH:mm)') + ' [' + moment.duration(user.createdTimestamp).humanize() + ']', true)
+      .addField('Date of Creation', moment(user.createdTimestamp).format('MM/DD/YYYY (HH:mm)') + ' [' + moment.duration(user.createdTimestamp - message.createdTimestamp).humanize() + ']', true)
       // Need be fixed /\
-      .addField('Join Date', moment(member.joinedTimestamp).format('MM//DD/YYYY (HH:mm)') + ' [' + moment.duration(member.joinedTimestamp).humanize() + ']', true)
+      .addField('Join Date', moment(member.joinedTimestamp).format('MM//DD/YYYY (HH:mm)') + ' [' + moment.duration(member.joinedTimestamp - message.createdTimestamp).humanize() + ']', true)
       // Need be fixed aswell /\
       .addField('Roles', member.roles.map(r => r.toString()).join(', ') || 'None', true)
       .addField('Avatar', `[Link to it](${user.displayAvatarURL})`)

@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const wolke = require('./wolkeapi');
+const apis = require('./apis');
 
 module.exports = class Embed {
   static meme(link, color, message) {
@@ -18,7 +18,7 @@ module.exports = class Embed {
   {
     if (typeof color !== 'string') throw new Error('Color must be a String!');
 
-    let image = await wolke.picture(type);
+    let image = await apis.wolke(type);
 
 
     return new Discord.RichEmbed()
@@ -35,5 +35,15 @@ module.exports = class Embed {
     return new Discord.RichEmbed()
     .setColor(color)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL);
+  }
+
+  static async cat(color, message)
+  {
+    let image = await apis.meow();
+
+    return new Discord.RichEmbed()
+    .setColor(color)
+    .setFooter(`Requested by ${message.author.tag} | Powered by random.cat`, message.author.displayAvatarURL)
+    .setImage(image.body.file);
   }
 }
