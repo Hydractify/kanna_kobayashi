@@ -8,11 +8,11 @@ module.exports = class Kiss extends Command
   {
     super(client,
     {
-      alias: ['suck'],
-      name: 'succ',
-      description: 'Succ Someone! 👀',
-      usage: 'succ <user>',
-      example: ['succ @Wizardλ#4559'],
+      alias: ['MASSAGE'],
+      name: 'massage',
+      description: 'Give someone a massage',
+      usage: 'massage <user>',
+      example: ['massage @Wizardλ#4559'],
       category: 'int',
       coins: 75,
       exp: 125,
@@ -22,7 +22,7 @@ module.exports = class Kiss extends Command
 
   async run(client, message, color, args)
   {
-    const embed = await embeds.meme(require('../util/links').memes.succ, color, message);
+    const embed = await embeds.meme(require('../util/links').memes.massage, color, message);
 
     let nandayo;
 
@@ -34,25 +34,26 @@ module.exports = class Kiss extends Command
 
       if (member.user.id === message.author.id)
       {
-        return message.channel.send(`You can't kiss yourself O///O`);
+        return message.channel.send(`${message.author} you can't give yourself a masssage!`);
       }
       else if(require('../util/settings').client.devs.includes(member.user.id))
       {
-        nandayo = `**${message.member.displayName}** has succ **${member.displayName}**`;
-        embed.setDescription(`wew`);
+        nandayo = `**${message.member.displayName}** gave **${member.displayName}** a massage!`;
+        embed.setDescription(`\:eyes:`);
       }
       else if(member.user.id === client.user.id)
       {
-        nandayo = `I'll succ you entirely **${message.member.displayName}**`;
+        nandayo = `I'll give you a massage **${message.member.displayName}**! <:ayy:315270615844126720>`;
+        return message.channel.send(nandayo, {embed})
       }
       else
       {
-        nandayo = `**${message.member.displayName}** has succ **${member.displayName}**`;
+        nandayo = `**${message.member.displayName}** gave **${member.displayName}** a massage!`;
       }
     }
     else
     {
-      nandayo = 'Succ';
+      nandayo = `I'll give Kobayashi-san a massage!`;
     }
 
     await message.channel.send('<:hmm:315264556282675200> | ' + nandayo, {embed})

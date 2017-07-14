@@ -79,4 +79,15 @@ module.exports = class get {
       return message.channel.send(`${message.author} you have input an invalid message ID!`);
     });
   }
+
+  static invite(client, link, message)
+  {
+    if(typeof link !== 'string') throw new Error('Link must be a String!');
+
+    return client.fetchInvite(link)
+    .catch(() =>
+    {
+      return message.channel.send(`${message.author} i couldn't find that invite! It either expired or it's invalid!`);
+    })
+  }
 }

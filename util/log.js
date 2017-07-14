@@ -22,6 +22,6 @@ module.exports = class log
 
   static error(message)
   {
-    console.log(`\x1b[41m\x1b[30m[ERROR]\x1b[0m ${message.stack}`);
+    console.log(`\n\x1b[41m\x1b[30m[ERROR]\x1b[0m ${message.stack}`);
   }
 }
