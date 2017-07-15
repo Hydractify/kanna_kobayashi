@@ -14,7 +14,9 @@
     "type" : "git",
     "url" : "https://github.com/WizardLink/kanna_v4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^4.2.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
