@@ -1,0 +1,7 @@
+{
+    "commands" : 
+    {
+        "options" : ["levelup", "prefix", "modrole", "welcome", "leave", "eventrole"],
+        "quiz" : ["name", "quizphoto", "start", "premade"]
+    }
+}
