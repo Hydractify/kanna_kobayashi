@@ -49,7 +49,7 @@ module.exports = class Embed {
 
   static async ibsearch(client, color, message, args)
   {
-    let image = await apis.ibsearch('random:');
+    let image;
 
     if(args[0])
     {
@@ -61,6 +61,10 @@ module.exports = class Embed {
       {
         image = await apis.ibsearch(args.join('+'));
       }
+    }
+    else 
+    {
+      image = await apis.ibsearch('random:');
     }
 
     image = image.body[Math.floor(Math.random() * image.body.length)];
@@ -94,7 +98,7 @@ module.exports = class Embed {
 
   static async ibsearch_xxx(client, color, message, args)
   {
-      let image = await apis.ibsearch_xxx('random:');
+      let image;
 
       if(args[0])
       {
@@ -106,6 +110,10 @@ module.exports = class Embed {
         {
           image = await apis.ibsearch_xxx(args.join('+'));
         }
+      }
+      else 
+      {
+        image = await apis.ibsearch_xxx('random:');
       }
 
       image = image.body[Math.floor(Math.random() * image.body.length)];

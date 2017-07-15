@@ -23,14 +23,14 @@ module.exports = class APIs
   static ibsearch(tag)
   {
     return superagent
-    .get(`https://ibsear.ch/api/v1/images.json?key=${settings.keys.ibsearch}&q=${tag}-rating:e&limit=5`)
-    .catch(e => log.error(e.stack));
+    .get(`https://ibsear.ch/api/v1/images.json?key=${settings.keys.ibsearch}&q=${tag}&limit=5`)
+    .catch(e => log.error(e));
   }
 
   static ibsearch_xxx(tag)
   {
     return superagent
     .get(`https://ibsearch.xxx/api/v1/images.json?key=${settings.keys.ibsearch_xxx}&q=${tag}+rating:e&limit=5`)
-    .catch(e => log.error(e.stack));
+    .catch(e => log.error(e));
   }
 }

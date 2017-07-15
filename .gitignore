@@ -3,3 +3,4 @@ img/
 rethinkdb.exe
 package-lock.json
 rethinkdb_data/
+.eslintrc.json
