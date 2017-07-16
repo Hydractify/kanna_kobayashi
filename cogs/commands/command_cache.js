@@ -7,7 +7,8 @@ exports.start = () =>
 	{	if(err) return console.error(err);
 		files.forEach(f =>
 		{	readdir(`./commands/${f}`, (err, files) =>
-			{	if(err) return console.error(err);
+			{	if(!files) return;
+				if(err) return console.error(err);
 				f.forEach(c =>
 				{	let commandFile = require(`../../commands/${f}/${c}`);
 					//Here is where we define the cmd
