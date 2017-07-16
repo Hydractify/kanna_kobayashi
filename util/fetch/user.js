@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const log = require('../client/error/fetch');
 
 module.exports = async (client, message, args) => 
 {
@@ -21,6 +22,6 @@ module.exports = async (client, message, args) =>
     
     fetch = client.fetchUser(fetch)
     .catch(e =>
-    {   sendErr(resolvable, message);   }   );
+    {   return log(fetch, message);   }   );
 
     return fetch;   }

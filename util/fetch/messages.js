@@ -9,6 +9,6 @@ module.exports = async (message) =>
 
     let fetch = await message.channel.fetchMessages()
     .catch(e => 
-    {   throw log(e);   }   );
+    {   return log(e);   }   );
 
     return fetch;   }

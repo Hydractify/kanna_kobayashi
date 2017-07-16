@@ -21,6 +21,6 @@ module.exports = async (client, message, args) =>
 
         fetch = message.guild.fetchMember(fetch)
         .catch(e =>
-        {   throw log(fetch, message); }   );
+        {   return log(fetch, message); }   );
 
         return fetch;   }   }

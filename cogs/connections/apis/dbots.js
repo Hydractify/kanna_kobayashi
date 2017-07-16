@@ -2,7 +2,7 @@ const superagent = require('superagent');
 const { dbots } = require('../../../data/auth/keys');
 const log = require('../../../util/log/bot');
 const client = require('../discord').Client;
-const log1 = require('../../../data/log/error');
+const log1 = require('../../../util/log/error');
 
 exports.start = async () =>
 {	setTimeout( () =>
