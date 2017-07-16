@@ -9,6 +9,6 @@ module.exports = async (message) =>
 
     let fetch = await message.guild.fetchMembers()
     .catch(e => 
-    {   throw log(e);   });
+    {   return log(e);   });
 
     return fetch;   }

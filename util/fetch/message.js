@@ -11,6 +11,6 @@ module.exports = async (id, message) =>
 
     let fetch = await message.channel.fetchMessage(id)
     .catch(e => 
-    {   throw log(id, message);    }   );
+    {   return log(id, message);    }   );
 
     return fetch;   }

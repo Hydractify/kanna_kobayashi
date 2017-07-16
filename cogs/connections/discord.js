@@ -4,10 +4,18 @@ const beta = require('../../data/client/beta');
 //const official = require('../../data/client/official');
 
 module.exports = class Discord_JS
-{	static async start()
+{	static start()
 	{	const Client = new Discord.Client();
-		await Client.login(beta.token);
-		log(`Connected to Discord as ${Client.user.tag} (${Client.user.id}) at ${require('moment')().format('HH:mm')} [${require('moment')().format('DD/MM/YYYY')}]`);
+		Client.login(beta.token);
+		log('Connected to Discord!');
+		Client.on('ready', () =>
+		{	log(`Connected as ${Client.user.tag} (${Client.user.id}) at ${require('moment')().format('HH:mm')} [${require('moment')().format('DD/MM/YYYY')}]`)
+			require('./rethinkdb').start();
+			require('./apis/dbl').start();
+			require('./apis/dbots').start();
+			require('../client/event_handler').start();	});
+		Client.commands = new Discord.Collection();
+		Client.aliases = new Discord.Collection();
 		Discord_JS._client = Client;	}
 	
 	static get client()
