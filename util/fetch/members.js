@@ -1,19 +1,14 @@
+const log = require('../log/error');
+
 module.exports = async (message) =>
 {
-    if(!message)
-        {
-            throw new Error('fetchMembers takes one parameter: Message');
-        }
-        else 
-            {
-                if(typeof message !== 'object') throw new Error('Message must be an Object');
-            }
+    if (!message)
+    {   throw new Error('fetchMembers takes one parameter: Message');   }
+    else 
+    {   if (typeof message !== 'object') throw new Error('Message must be an Object');  }
 
-            let fetch = await message.guild.fetchMembers()
-            .catch(e => 
-            {
-                throw require('../log/error')(e);
-            });
+    let fetch = await message.guild.fetchMembers()
+    .catch(e => 
+    {   throw log(e);   });
 
-            return fetch;
-}
+    return fetch;   }
