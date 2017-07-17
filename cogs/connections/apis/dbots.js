@@ -13,5 +13,4 @@ exports.start = async () =>
 		.send({	server_count : totalGuilds	})
 		.then( () =>
 		{	log('Sucessfully posted server_count to Discord Bot List');	})
-		.catch( (err) =>
-		{	log1(err);	});	}, 1800000);	}
+		.catch(log);	}, 1800000);	}
