@@ -1,13 +1,13 @@
-const log = require('discord.js');
+const { Client, GuildMember, Message, } = require('discord.js');
 
 module.exports = (client, member, message) =>
 {
 	if (!client || !member || !message)
 	{	throw new Error('checkPerm takes 3 parameters: Client, GuildMember and Message');	}
 	else
-	{	if (!client instanceof Discord.Client()	) throw new Error('Client isn\'t an instanceof Discord.Client()');
-		if (typeof message !== 'object') throw new Error('Message must be an Object');
-		if (typeof member !== 'object') throw new Error('Member must be an Object');	}
+	{	if (!(client instanceof Client)) throw new Error('client parameter isn\'t instanceof Client!');
+		if (!(member instanceof GuildMember)) throw new Error('member isn\'t instanceof GuildMember!');
+		if (!(message instanceof Message)) throw new Error('message parameter isn\'t instanceof Message!');	}
 
 	if (member.permissions.has('MANAGE_GUILD')
 		|| member.permissions.has(['BAN_MEMBERS', 'KICK_MEMBERS', 'MANAGE_MESSAGES'])	) return 2;
