@@ -13,7 +13,8 @@ module.exports = class Discord_JS
 			require('./rethinkdb').start();
 			require('./apis/dbl').start();
 			require('./apis/dbots').start();
-			require('../client/event_handler').start();	});
+			require('../client/event_handler').start();
+			require('../client/perm_level').start();	});
 		Client.commands = new Discord.Collection();
 		Client.aliases = new Discord.Collection();
 		Discord_JS._client = Client;	}

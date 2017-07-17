@@ -6,5 +6,4 @@ module.exports = (type) =>
 	{	throw new Error('Type must be a String');	}
 	return superagent
 	.get(`https://rra.ram.moe/i/r?type=${type}`)
-	.catch((e) =>
-	{	log(e);	}	)	}
+	.catch(log)	}

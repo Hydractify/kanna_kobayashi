@@ -1,2 +1,2 @@
-require('./cogs/connections/discord').start();
-
+const Boat = require('./cogs/connections/discord');
+Boat.start();
