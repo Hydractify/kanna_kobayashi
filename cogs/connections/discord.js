@@ -8,17 +8,19 @@ module.exports = class Discord_JS
 	{	const Client = new Discord.Client();
 		Client.login(beta.token);
 		log('Connected to Discord!');
-		Client.on('ready', () =>
-		{	log(`Connected as ${Client.user.tag} (${Client.user.id}) at ${require('moment')().format('HH:mm')} [${require('moment')().format('DD/MM/YYYY')}]`)
-			require('./rethinkdb').start();
-			require('./apis/dbl').start();
-			require('./apis/dbots').start();
-			require('../client/event_handler').start();
-			require('../client/perm_level').start();	});
 		Client.commands = new Discord.Collection();
 		Client.aliases = new Discord.Collection();
-		Discord_JS._client = Client;	}
-	
+		Discord_JS._client = Client;
+		require('../client/event_handler').start();
+		Client.on('ready', () =>
+		{	log(`Connected as ${Client.user.tag} (${Client.user.id}) at ${require('moment')().format('HH:mm \\[DD/MM/YYYY\\]')}`);
+			require('./rethinkdb').start();
+			require('./apis/dbl').start();
+			require('./apis/dbots').start();;
+			require('../client/perm_level').start();
+    		require("../commands/command_cache").start();	});
+			}
+
 	static get client()
 	{	if(!Discord_JS._client)
 		{	throw new Error('Couldn\'t find Client')	}

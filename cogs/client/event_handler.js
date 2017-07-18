@@ -9,5 +9,6 @@ exports.start = () =>
 		log(`Loading ${files.length} Client Events`);
 		files.forEach(f =>
 		{	const eName = f.replace('.js', '');
-			client.on(eName, (...args) => event(eName)(client, ...args));	});	
+			client.on(eName, (...args) => event(eName)(client, ...args)
+                .catch(err => console.log(`Unexpected error at event ${eName}\n${err.stack}`)));	});
 		log(`Sucessfully loaded ${files.length} Client Events`);	});	}
