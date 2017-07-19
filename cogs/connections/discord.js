@@ -6,14 +6,14 @@ const beta = require('../../data/client/beta');
 module.exports = class Discord_JS
 {	static start()
 	{	const Client = new Discord.Client();
-		Client.login(beta.token);
+		Client.login(official.token);
 		log('Connected to Discord!');
-		Client.commands = new Discord.Collection();
-		Client.aliases = new Discord.Collection();
-		Discord_JS._client = Client;
-		require('../client/event_handler').start();
-		Client.on('ready', () =>
-		{	log(`Connected as ${Client.user.tag} (${Client.user.id}) at ${require('moment')().format('HH:mm \\[DD/MM/YYYY\\]')}`);
+		Client.on('ready', async () =>
+		{	/*if(!Client.user.presence.game)
+			{	const a = await Client.shard.fetchClientValues('guilds.size');
+				const b = a.reduce((p, n) => {	return p + n, 0});
+				client.user.setGame(`k!help | on ${b} guilds`);	}*/
+				log(`Connected as ${Client.user.tag} (${Client.user.id}) at ${require('moment')().format('HH:mm \\[DD/MM/YYYY\\]')}`);
 			require('./rethinkdb').start();
 			require('./apis/dbl').start();
 			require('./apis/dbots').start();;
