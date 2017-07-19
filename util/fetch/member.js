@@ -1,26 +1,34 @@
+const { Client, GuildMember, Message } = require('discord.js');
 const log = require('../client/error/fetch');
 
-module.exports = async (client, message, args) =>
-{
-    if (!client || !message || !args) // Check if all 3 parameters were put
-    {   throw new Error('fetchMember takes 3 parameters: Client, Message and Arguments');   }
-    else 
-    {   if (typeof client !== 'object') throw new Error('Client must be an Object');
-        if (typeof message !== 'object') throw new Error('Message must be an Object');
-        if (!Array.isArray(args)    ) throw new Error('Arguments must be an Array');
-        // Check if parameters are valid
+const resolveMember = (message, [input]) => {
+	if (message.mentions.members.size) return message.mentions.members.first();
 
-        let fetch = args[0];
+	// if uncached
+	if (message.mentions.users.size) return message.mentions.users.first().id;
 
-        if (message.mentions.size >= 1) // If the message have mentions
-        {   fetch = message.mentions.users.first();    }
-        else if (message.guild.members.find(m => m.user.tag.toLowerCase().includes(args[0].toLowerCase()    )   )   ) // If the message fits someone's tag (username + discriminator)
-        {   fetch = message.guild.members.find(m => m.user.tag.toLowerCase().includes(args[0].toLowerCase() )   );  }
-        else if (message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase() )   )   ) // If Username or Nickname is found
-        {   fetch = message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase()  )   );   }
+	// wew, whether input is in someones tag
+	let resolved = message.guild.members.find(member => member.user.tag.toLowerCase().includes(input.toLowerCase()));
+	if (resolved) return resolved;
 
-        fetch = message.guild.fetchMember(fetch)
-        .catch(e =>
-        {   return log(fetch, message); }   );
+	// wew the second, whether the input is in someone's displayname
+	resolved = message.guild.members.find(member => member.displayName.toLowerCase().includes(input.toLowerCase()));
+	if (resolved) return resolved;
 
-        return fetch;   }   }
+	return input;
+};
+
+module.exports = (client, message, args) =>
+{	
+	if (!client || !message || !args)
+	{	throw new Error('The member (fetchMember) function takes 3 parameters: client, message and args!');	}
+
+	if (!(client instanceof Client)) throw new Error('The client parameter is not instanceof Client!');
+	if (!(message instanceof Message)) throw new Error('The message parameter is not instanceof Message!');
+	if (!(args instanceof Array)) throw new Error('The args parameter is not instanceof Array!');
+
+	const resolved = resolveMember(message, args);
+	if (resolved instanceof GuildMember) return resolved;
+
+	return message.guild.fetchMember(resolveMember(message, args))
+		.catch(() => log(args[0], message));	};

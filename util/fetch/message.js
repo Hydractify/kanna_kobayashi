@@ -1,16 +1,13 @@
+const { Message } = require('discord.js');
 const log = require('../client/error/fetch');
 
-module.exports = async (id, message) => 
-{
-    if (!id || !message) // Check if parameters exist
-    {   throw new Error('fetchMessage takes 2 paremeters: ID and Message')  }
-    else 
-    {   if (typeof id !== 'string') throw new Error('ID must be a String');
-        if (typeof message !== 'object') throw new Error('Message must be an Object');  }
-        // Check if parameters are valid
+module.exports = (id, message) =>
+{	
+	if (!id || !message)
+	{	throw new Error('The message (fetchMessage) function takes 2 paremeters: ID and Message!');	}
 
-    let fetch = await message.channel.fetchMessage(id)
-    .catch(e => 
-    {   return log(id, message);    }   );
+	if (typeof id !== 'string') throw new Error('The id parameter ist not a string!');
+	if (!(message instanceof Message)) throw new Error('The message parameter is not instanceof Message!');
 
-    return fetch;   }
+	return message.channel.fetchMessage(id)
+		.catch(() =>	log(id, message));	};
