@@ -1,27 +1,29 @@
-const Discord = require('discord.js');
+const { Client, Message, User } = require('discord.js');
 const log = require('../client/error/fetch');
 
-module.exports = async (client, message, args) => 
+const resolveUser = (message, [input]) => {
+	if (message.mentions.users.size) return message.mentions.users.first();
+
+	let resolved = message.guild.members.find(member => member.user.tag.toLowerCase().includes(input.toLowerCase()));
+	if (resolved) return resolved.user;
+
+	resolved = message.guild.members.find(member => member.displayName.toLowerCase().includes(input.toLowerCase()));
+	if (resolved) return resolved.user;
+
+	return input;
+};
+
+module.exports = (client, message, args) =>
 {
-    if (!client || !message || !args) //Check if parameters were passed
-    {   throw new Error('fetchUser takes 3 parameters: Client, Message and Arguments'); }
-    else
-    {   if (client instanceof Discord.Client()    ) throw new Error('Client isn\'t an instance of Discord.Client()');
-        if (typeof message !== 'object') throw new Error('Message must be an Object');
-        if (!Array.isArray(args)    ) throw new Error('Arguments must be an Array'); }
-        // Check if parameters are valid
+	if (!client || !message || !args)
+	{	throw new Error('The user (fetchUser) function takes 3 parameters: client, message and args!');	}
 
-    let fetch = args[0];
+	if (!(client instanceof Client)) throw new Error('The client parameter is not instance of Client!');
+	if (!(message instanceof Message)) throw new Error('The message parameter is not instanceof Message!');
+	if (!(args instanceof Array)) throw new Error('The args parameter is not instanceof Array!');
 
-    if (message.mentions.users.size >= 1)
-    {   resolvable = message.mentions.users.first().id; }
-    else if (message.guild.members.find(m => m.user.tag.toLowerCase().includes(args[0].toLowerCase()    )   )   )
-    {   resolvable = message.guild.members.find(m => m.user.tag.toLowerCase().includes(args[0].toLowerCase()    )   ).user.id; }
-    else if (message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase() )   )   )
-    {   resolvable = message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase() )   ).user.id;  }
-    
-    fetch = client.fetchUser(fetch)
-    .catch(e =>
-    {   return log(fetch, message);   }   );
+	const resolved = resolveUser(message, args);
+	if (resolved instanceof User) return resolved;
 
-    return fetch;   }
+	return client.fetchUser(resolved)
+		.catch(() => log(resolved, message));	};

@@ -1,14 +1,10 @@
+const { Message } = require('discord.js');
 const log = require('../log/error');
 
-module.exports = async (message) =>
+module.exports = (message) =>
 {
-    if (!message) // Check if all parameters have been passed
-    {   throw new Error('fetchMessages takes 1 parameter: Message');    }
-    else
-    {   if (typeof message !== 'object') throw new Error('Message must be an Object');  } // Check if parameter is valid
+	if (!message) throw new Error('The messages (fetchMessages) function takes 1 parameter: message!');
+	if (!(message instanceof Message)) throw new Error('The message parameter is not instanceof Message!');
 
-    let fetch = await message.channel.fetchMessages()
-    .catch(e => 
-    {   return log(e);   }   );
-
-    return fetch;   }
+	return message.channel.fetchMessages()
+		.catch(error => log(error));	};
