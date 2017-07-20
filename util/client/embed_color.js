@@ -1,4 +1,4 @@
-const colorConvert = require('color_convert');
+const colorConvert = require('color-convert');
 
 module.exports = (message) =>
 {	

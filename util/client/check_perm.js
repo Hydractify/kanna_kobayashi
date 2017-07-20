@@ -1,8 +1,9 @@
 const { Client, GuildMember, Message } = require('discord.js');
+const { client } = require('../../cogs/connections/discord');
 
-module.exports = (client, member, message) =>
+module.exports = (member, message) =>
 {
-	if (!client || !member || !message)
+	if (!member || !message)
 	{	throw new Error('The check_perm function takes 3 parameters: client, member and message');	}
 
 	if (!(client instanceof Client)) throw new Error('The client parameter is not instanceof Client!');
@@ -14,6 +15,6 @@ module.exports = (client, member, message) =>
 
 	const eventRole = message.guild.roles.find(role => role.name.toLowerCase() === 'dragon tamer');
 
-	if (eventRole && message.member.role.has(eventRole)) return 1;
+	if (eventRole && member.roles.has(eventRole)) return 1;
 
 	return 0;	};
