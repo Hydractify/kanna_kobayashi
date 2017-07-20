@@ -6,9 +6,8 @@ const { client } = require('../connections/discord');
 exports.start = () =>
 {	readdir('./cogs/client/events/', (err, files) =>
 	{	if(err) return console.error(err);
-		log(`Loading ${files.length} Client Events`);
 		files.forEach(f =>
 		{	const eName = f.replace('.js', '');
 			client.on(eName, (...args) => event(eName)(client, ...args)
-			.catch(err => console.log(`Unexpected error at event ${eName}\n${err.stack}`)));	});
-		log(`Sucessfully loaded ${files.length} Client Events`);	});	}
+			.catch(err => console.log(`Unexpected error at event ${eName}\n${err.stack}`)));	});	
+		log(`Loaded ${files.length} Client Events`);	});	}

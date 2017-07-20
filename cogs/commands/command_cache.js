@@ -12,10 +12,10 @@ exports.start = () =>
 		{	readdir(`./commands/${f}`, (error, filez) =>
 			{	if(!filez) return;
 				if(error) return console.error(error);
-				log(`Loading ${filez.length} ${f} commands`);
 				filez.forEach(c =>
 				{	const CommandClass = require(`../../commands/${f}/${c}`);
-					let cmd = new CommandClass(client);
+					let cmd = new CommandClass();
 					client.commands.set(cmd.name, cmd);
 					cmd.alias.forEach(alias =>
-					{	client.aliases.set(alias, cmd.name);	});	});	});	});	});	}
+					{	client.aliases.set(alias, cmd.name);	});	});	
+				log(`Loaded ${filez.length} ${f} commands`);	});	});	});	}
