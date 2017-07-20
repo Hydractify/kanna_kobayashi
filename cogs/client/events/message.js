@@ -1,7 +1,10 @@
 const embed_color = require('../../../util/client/embed_color');
 const error_message = require('../../../util/client/error/stack');
+const blackFile = require('../../../data/client/blacklist');
 
 module.exports = async(client, message) => {
+    if (blackFile.includes(message.guild.owner.user.id)) return;
+    if (blackFile.includes(message.author.id)) return;
     if (message.content.startsWith('kanna pls ')) {
         let command = message.content.split('kanna pls ')[1].split(' ')[0].toLowerCase();
         let cmd = client.commands.get(command);
