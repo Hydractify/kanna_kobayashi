@@ -10,4 +10,4 @@ module.exports = (permission, message, cmd) =>
 	if (!(message instanceof Message)) throw new Error('The message parameter is not an instanceof Message!');
 	if (typeof permission !== 'string') throw new Error('The permission must be a string!');
 
-	message.channel.send(`Couldn't execute ${cmd} because of the lack of \`${permission}\` permission <:ayy:315270615844126720>`);	};
+	message.channel.send(`Couldn't execute ${cmd.name} because of the lack of \`${permission}\` permission <:ayy:315270615844126720>`);	};

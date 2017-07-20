@@ -1,5 +1,6 @@
 class Command {
-    constructor(client, options = {}) {
+    constructor(options = {}) {
+        const { client } = require('../connections/discord');        
         if (!options.name) throw new Error('This command must have a name!');
         if (!Array.isArray(options.alias) && typeof options.alias !== 'undefined') throw new Error('Alias must be an Array!');
         if (!Array.isArray(options.example) && options.example) throw new Error('Example must be an Array!');

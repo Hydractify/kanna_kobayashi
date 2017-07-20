@@ -1,5 +1,6 @@
 const { Client, Message, User } = require('discord.js');
 const log = require('../client/error/fetch');
+const { client } = require('../../cogs/connections/discord');
 
 const resolveUser = (message, [input]) => {
 	if (message.mentions.users.size) return message.mentions.users.first();
@@ -13,9 +14,9 @@ const resolveUser = (message, [input]) => {
 	return input;
 };
 
-module.exports = (client, message, args) =>
+module.exports = (message, args) =>
 {
-	if (!client || !message || !args)
+	if (!message || !args)
 	{	throw new Error('The user (fetchUser) function takes 3 parameters: client, message and args!');	}
 
 	if (!(client instanceof Client)) throw new Error('The client parameter is not instance of Client!');
