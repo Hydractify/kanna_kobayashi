@@ -1,14 +1,14 @@
 const Command = require('../../cogs/commands/framework'); 
 const meme = require('../../util/embeds/meme'); 
 
-module.exports = class Cancer extends Command
+module.exports = class FlatIsJustice extends Command
 { constructor()
   { super(
-    { name: 'cancer',
-      alias: ['whykannahavesacancercommand'],
+    { alias: ['flat'],
+      name: 'flatisjustice',
       enabled: true	});	}
 
   async run(message, color)
-  {	let img = require('../../data/links').memes.cancer;
+  {	let img = require('../../data/links').memes.flatisjustice;
 
     await message.channel.send({embed : meme(img, color, message)});	}	}

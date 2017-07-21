@@ -10,4 +10,4 @@ module.exports = (error, message, command) =>
 	if (!(message instanceof Message)) throw new Error('The message parameter is not an instanceof Message!');
 	if (!(command instanceof Command)) throw new Error('The command parameter is not an instanceof Command!');
 
-	message.channel.send(`**An Error has occured! Please paste this on the official guild!** <:ayy:315270615844126720> http://kannathebot.me/guild\n\n\\\`${command.name}\\\`\n\\\`\\\`\\\`js\n${error.stack}\n\\\`\\\`\\\``);	};
+	message.channel.send(`**An Error has occured! Please paste this on the official guild!** <:ayy:315270615844126720> http://kannathebot.me/guild\n\n\\\`${command.name}\\\`\n\\\`\\\`\\\`\n${error.stack}\n\\\`\\\`\\\``);	};

@@ -4,4 +4,4 @@ const superagent = require('superagent');
 module.exports = () =>
 {	return superagent
 	.get('http://random.cat/meow')
-	.catch(log)	}
+	.catch(e => log(e.stack))	}

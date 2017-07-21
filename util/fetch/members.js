@@ -7,4 +7,4 @@ module.exports = (message) =>
 	if (!(message instanceof Message)) throw new Error('The message parameter is not instanceof Message.');
 
 	return message.guild.fetchMembers()
-		.catch(error => log(error));	};
+		.catch(error => log(error.stack));	};
