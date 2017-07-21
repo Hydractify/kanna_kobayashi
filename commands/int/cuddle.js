@@ -1,7 +1,7 @@
 const ram = require('../../util/embeds/ram');
-const Command = require('../../cogs/commands/framework');
 const memberu = require('../../util/fetch/member');
 const info = require('../../data/client/info');
+const Command = require('../../cogs/commands/framework');
 const { client } = require('../../cogs/connections/discord');
 const blacklist = require('../../data/client/blacklist');
 

@@ -36,12 +36,12 @@ module.exports = class Blacklist extends Command
 		if (collected.first().content.toLowerCase() === 'yes')
 		{	await file.push(user.id)
 			await fs.writeFile('./data/client/blacklist.json', JSON.stringify(file), 'utf8', (err) =>
-			{	if (err) log(err);	});
+			{	if (err) log(err.stack);	});
 			await message.channel.send(`Sucessfully blacklisted **${user.tag}**`);
 			let cases = JSON.parse(fs.readFileSync('./data/client/cases.json', 'utf8'));
 			cases.blacklist++;
 			await fs.writeFile('./data/client/cases.json', JSON.stringify(cases), 'utf8', (err) =>
-			{	if (err) log(err);	}); 
+			{	if (err) log(err.stack);	}); 
 			const embed = new Discord.RichEmbed()
 			.setColor(color)
 			.setTimestamp()

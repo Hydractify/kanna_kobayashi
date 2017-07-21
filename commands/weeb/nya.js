@@ -1,14 +1,14 @@
 const Command = require('../../cogs/commands/framework'); 
-const cat = require('../../util/embeds/cat'); 
+const ram = require('../../util/embeds/ram'); 
 
-module.exports = class Cat extends Command
+module.exports = class Nya extends Command
 { constructor()
   { super(
-    { alias: ['neko'],
-      name: 'cat',
+    { alias: ['nyan'],
+      name: 'nya',
       enabled: true	});	}
 
   async run(message, color)
-  { const embed = await cat(color, message);
+  { const embed = await ram('nyan', color, message);
 
     await message.channel.send({embed});	}	}

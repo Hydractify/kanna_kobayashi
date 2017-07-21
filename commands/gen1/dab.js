@@ -6,7 +6,6 @@ module.exports = class Dab extends Command
   { super(
     { alias: ['dabu'],
       name: 'dab',
-      category: 'gen1',
       enabled: true	});	}
 
   async run(message, color)
