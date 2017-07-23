@@ -19,7 +19,8 @@ module.exports = class Discord_JS
 			require('./apis/dbots').start();;
 			require('../client/perm_level').start();
 			require('../commands/command_cache').start();
-			require('../client/event_handler').start();	});
+			require('../client/event_handler').start();
+			require('../client/reload').start();	});
 			Discord_JS._client = Client;	}
 
 	static get client()
