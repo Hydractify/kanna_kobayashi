@@ -16,11 +16,10 @@ module.exports = async (color, message, args) =>
 
   image = image.body[Math.floor(Math.random() * image.body.length)];
 
-  let rating = 'Explicit';
-
   return new Discord.RichEmbed()
   .setColor(color)
   .setFooter(`Requested by ${message.author.tag} | Powered by ibsearch.xxx`, message.author.displayAvatarURL)
   .setImage(`https://${image.server}.ibsearch.xxx/${image.path}`)
-  .setAuthor(`IbSearch NSFW Result (${rating})`, client.user.displayAvatarURL)
-  .setDescription(image.tags.split(' ').slice(0, 10).join(', ') + '...'); }
+  .setAuthor(`IbSearch NSFW Result (Explicit)`, client.user.displayAvatarURL)
+  .setDescription(image.tags.split(' ').slice(0, 10).join(', ') + '...')
+  .setURL(`https://${image.server}.ibsearch.xxx/${image.path}`); }
