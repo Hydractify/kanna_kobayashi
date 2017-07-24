@@ -19,8 +19,8 @@ module.exports = class Pat extends Command
   async run(message, color, args)
   {	if(args[0])
     { const embed = await ram('pat', color, message);
-	  const member = await memberu(message, args);
-	  let nandayo;
+	    const member = await memberu(message, args);
+	    let nandayo;
 
       if(!member) return;
 
