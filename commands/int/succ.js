@@ -1,7 +1,6 @@
 const memberu = require('../../util/fetch/member');
 const info = require('../../data/client/info');
 const Command = require('../../cogs/commands/framework');
-const { client } = require('../../cogs/connections/discord');
 const meme = require('../../util/embeds/meme'); 
 
 module.exports = class Kiss extends Command
@@ -31,7 +30,7 @@ module.exports = class Kiss extends Command
       else if (info.devs.includes(member.user.id))
       {	nandayo = `**${message.member.displayName}** has succ **${member.displayName}**`;
         embed.setDescription(`wew`);	}
-      else if(member.user.id === client.user.id)
+      else if(member.user.id === this.client.user.id)
       {	nandayo = `I'll succ you entirely **${message.member.displayName}**`;	}
       else
       {	nandayo = `**${message.member.displayName}** has succ **${member.displayName}**`;	}	}

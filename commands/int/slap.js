@@ -2,7 +2,6 @@ const ram = require('../../util/embeds/ram');
 const memberu = require('../../util/fetch/member');
 const info = require('../../data/client/info');
 const Command = require('../../cogs/commands/framework');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class Slap extends Command
 { constructor()
@@ -29,7 +28,7 @@ module.exports = class Slap extends Command
       {	return message.channel.send(`${message.author} you can't slap yourself!`);	}
       else if (info.devs.includes(member.user.id))
       {	return message.channel.send(`You can\'t slap ${member.toString()}! :<`);	}
-      else if (member.user.id === client.user.id)
+      else if (member.user.id === this.client.user.id)
       {	nandayo = `**${member.displayName}** has **S L A P P E D** **${message.member.displayName}**!`;	}
       else
 	  {	nandayo = `**${member.displayName}** you got slapped by **${message.member.displayName}**!`;	}

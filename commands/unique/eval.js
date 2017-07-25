@@ -21,10 +21,9 @@ module.exports = class Eval extends Command
 	 cooldown: 1, 
 	 enabled: true }); } 
  async run(message, pinku, args)  
- { try 
-   { const { client } = require('../../cogs/connections/discord'); 
-	 var code = args.join(" "); 
-	 var evaled = eval(code); 
+ { try {
+	 const code = args.join(" "); 
+	 const evaled = eval(code); 
 	 if (typeof evaled !== "string") 
 	   evaled = require("util").inspect(evaled); 
 	 await message.channel.send(`\`\`\`js\n${clean(evaled)}\n\`\`\``); } 

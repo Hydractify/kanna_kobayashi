@@ -1,6 +1,5 @@
 const Command = require('../../cogs/commands/framework');
 const sendErr = require('../../util/client/error/stack');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class Reload extends Command 
 { constructor()
@@ -17,16 +16,16 @@ module.exports = class Reload extends Command
   async run(message, pink, args) 
   {	try
 	{ let command;
-	  if (client.commands.has(args[0])) 
+	  if (this.client.commands.has(args[0])) 
 	  {	command = args[0];	} 
-	else if (client.aliases.has(args[0])) 
-	{	command = client.aliases.get(args[0]);	}
+	else if (this.client.aliases.has(args[0])) 
+	{	command = this.client.aliases.get(args[0]);	}
 	if (!command) 
 	{	return await message.channel.send(`I cannot find the command: ${args[0]}`);	}
 	else 
 	{	message.channel.send(`Reloading: ${command}`)
 		.then(async m => 
-		{	await client.reload(command)
+		{	await this.client.reload(command)
 			.then(async () => 
 			{	await m.edit(`Successfully reloaded: ${command}`);	})
 			.catch(async e => 

@@ -1,6 +1,5 @@
 const Command = require('../../cogs/commands/framework');
 const Discord = require('discord.js');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class SetStatus extends Command
 { constructor()
@@ -18,8 +17,8 @@ module.exports = class SetStatus extends Command
 
     if(!options.includes(args[0])) return message.channel.send(`Invalid status... \`${options.join('` | `')}\` if u forget `)
 
-    if(client.user.presence.status === args[0]) return message.channel.send(`Wait but... I'm already ${args[0]}... <:tired:315264554600890390>`)
+    if(this.client.user.presence.status === args[0]) return message.channel.send(`Wait but... I'm already ${args[0]}... <:tired:315264554600890390>`)
 
-    await client.user.setStatus(args[0]);
+    await this.client.user.setStatus(args[0]);
 
     await message.channel.send(`Changed status to ${args[0]}`);	}	}

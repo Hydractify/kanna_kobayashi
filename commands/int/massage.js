@@ -1,7 +1,6 @@
 const meme = require('../../util/embeds/meme');
 const Command = require('../../cogs/commands/framework');
 const memberu = require('../../util/fetch/member');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class Kiss extends Command
 { constructor()
@@ -27,10 +26,10 @@ module.exports = class Kiss extends Command
 
       if (member.user.id === message.author.id)
       { return message.channel.send(`${message.author} you can't give yourself a masssage!`); }
-      else if(require('../../data/client/info').devs.includes(member.user.id))
+      else if(require('../../data/this.client/info').devs.includes(member.user.id))
       {	nandayo = `**${message.member.displayName}** gave **${member.displayName}** a massage!`;
         embed.setDescription(`\:eyes:`);	}
-      else if(member.user.id === client.user.id)
+      else if(member.user.id === this.client.user.id)
       {	nandayo = `I'll give you a massage **${message.member.displayName}**! <:ayy:315270615844126720>`;
         return message.channel.send(nandayo, {embed})	}
       else
