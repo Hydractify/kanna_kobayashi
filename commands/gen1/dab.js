@@ -11,4 +11,4 @@ module.exports = class Dab extends Command
   async run(message, color)
   { let image = require('../../data/links').memes.dab;
 
-    await message.channel.send({embed : embed.meme(image, color, message)});	}	}
+    await message.channel.send({embed : meme(image, color, message)});	}	}
