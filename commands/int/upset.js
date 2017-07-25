@@ -2,7 +2,6 @@ const ram = require('../../util/embeds/ram');
 const memberu = require('../../util/fetch/member');
 const info = require('../../data/client/info');
 const Command = require('../../cogs/commands/framework');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class Upset extends Command
 { constructor()
@@ -32,7 +31,7 @@ module.exports = class Upset extends Command
       else if (info.devs.includes(member.user.id))
       {	nandayo = `**${message.member.displayName}** is upset with **${member.displayName}**...`;
         embed.setDescription(`_${member.user.username} what have you done..._`);	}
-      else if (member.user.id === client.user.id)
+      else if (member.user.id === this.client.user.id)
       {	nandayo = `Why you are upset with me **${message.member.displayName}**...?`;	}
       else
       {	nandayo = `**${message.member.displayName}** is upset with **${member.displayName}**...`;	}	}

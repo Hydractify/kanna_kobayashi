@@ -1,6 +1,5 @@
 const Command = require('../../cogs/commands/framework');
 const Discord = require('discord.js');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class SetGame extends Command
 { constructor()
@@ -14,9 +13,9 @@ module.exports = class SetGame extends Command
       enabled: true	});	}
 
   async run(message, color, args)
-  { const shard = client.shard;
-    const clientValues = await shard.fetchClientValues('guilds.size');
-    let totalGuilds = clientValues.reduce((prev, val) => prev + val, 0);
+  { const shard = this.client.shard;
+    const clientValues = await shard.fetchthis.clientValues('guilds.size');
+    let totalGuilds = this.clientValues.reduce((prev, val) => prev + val, 0);
 
     if(args[0])
     { if(args[0].toLowerCase().startsWith('stream'))

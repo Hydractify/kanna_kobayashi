@@ -10,5 +10,4 @@ module.exports = async (type, color, message) =>
   return new Discord.RichEmbed()
   .setColor(color)
   .setFooter(`Requested by ${message.author.tag} | Powered by ram.moe`, message.author.displayAvatarURL)
-  .setImage('https://rra.ram.moe' + image.body.path);
-}
+  .setImage('https://rra.ram.moe' + image.body.path); }

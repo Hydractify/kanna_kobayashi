@@ -3,7 +3,6 @@ const common = require('../../util/embeds/common');
 const fetchUser = require('../../util/fetch/user');
 const fetchMember = require('../../util/fetch/member');
 const moment = require('moment');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class WhoIs extends Command
 { constructor()
@@ -30,7 +29,7 @@ module.exports = class WhoIs extends Command
       .addField('Discriminator', user.discriminator, true)
       .addField('Status', user.presence.status, true)
       .addField('Playing', user.presence.game ? user.presence.game.name : 'Nothing', true)
-      .addField('Total Shared Guilds', client.guilds.filter(g=>g.members.find(m=>m.user.id === user.id)).size, true)
+      .addField('Total Shared Guilds', this.client.guilds.filter(g=>g.members.find(m=>m.user.id === user.id)).size, true)
       .addField('Date of Creation', moment(user.createdTimestamp).format('MM/DD/YYYY (HH:mm)') + ' [' + moment.duration(user.createdTimestamp - message.createdTimestamp).humanize() + ']', true)
       .addField('Join Date', moment(member.joinedTimestamp).format('MM//DD/YYYY (HH:mm)') + ' [' + moment.duration(member.joinedTimestamp - message.createdTimestamp).humanize() + ']', true)
       .addField('Roles', member.roles.map(r => r.toString()).join(', ') || 'None', true)
@@ -52,7 +51,7 @@ module.exports = class WhoIs extends Command
       .addField('Discriminator', user.discriminator, true)
       .addField('Status', user.presence.status, true)
       .addField('Playing', user.presence.game ? user.presence.game.name : 'Nothing', true)
-      .addField('Total Shared Guilds', client.guilds.filter(g=>g.members.find(m=>m.user.id === user.id)).size, true)
+      .addField('Total Shared Guilds', this.client.guilds.filter(g=>g.members.find(m=>m.user.id === user.id)).size, true)
       .addField('Date of Creation', moment(user.createdTimestamp).format('MM/DD/YYYY (HH:mm)') + ' [' + moment.duration(user.createdTimestamp - message.createdTimestamp).humanize() + ']', true)
       .addField('Join Date', moment(member.joinedTimestamp).format('MM//DD/YYYY (HH:mm)') + ' [' + moment.duration(member.joinedTimestamp - message.createdTimestamp).humanize() + ']', true)
       .addField('Roles', member.roles.map(r => r.toString()).join(', ') || 'None', true)

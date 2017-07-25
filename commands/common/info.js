@@ -1,6 +1,5 @@
 const Command = require('../../cogs/commands/framework');
 const common = require('../../util/embeds/common');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class Info extends Command
 { constructor()
@@ -14,12 +13,12 @@ module.exports = class Info extends Command
   { const embed = common(color, message);
 
     embed
-    .setAuthor(`${client.user.username} Info`, client.user.displayAvatarURL)
+    .setAuthor(`${this.client.user.username} Info`, this.client.user.displayAvatarURL)
     .setDescription('\u200b')
     .addField('Invite', 'http://kannathebot.me/invite', true)
     .addField('Patreon', 'http://kannathebot.me/patreon', true)
     .addField('Official Guild', 'http://kannathebot.me/guild', true)
     .addField('Official Website', 'http://kannathebot.me', true)
-    .setThumbnail(client.user.displayAvatarURL);
+    .setThumbnail(this.client.user.displayAvatarURL);
 
     await message.channel.send({embed});	}	}

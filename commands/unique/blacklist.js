@@ -5,7 +5,6 @@ const log = require('../../util/log/error');
 const blackFile = require('../../data/client/blacklist');
 const fetchM = require('../../util/fetch/member');
 const fetchU = require('../../util/fetch/user');
-const { client } = require('../../cogs/connections/discord');
 const cases = require('../../data/client/cases');
 const info = require('../../data/client/info');
 
@@ -50,8 +49,8 @@ module.exports = class Blacklist extends Command
 			.setThumbnail(user.displayAvatarURL)
 			.addField('Name', user.tag, true)
 			.addField('ID', user.id, true)
-			.addField('Owns', client.guilds.filter(g => g.owner === member).size || '0' + ' guilds', true)
+			.addField('Owns', this.client.guilds.filter(g => g.owner === member).size || '0' + ' guilds', true)
 			.addField('Case Number', cases.blacklist, true)
-			await client.guilds.get('298969150133370880').channels.get('302286657271496705').send({embed});	}
+			await this.client.guilds.get('298969150133370880').channels.get('302286657271496705').send({embed});	}
 		
 		if (collected.first().content.toLowerCase().includes('no')) return message.channel.send(`Canceling the blacklist...`);	}	}	

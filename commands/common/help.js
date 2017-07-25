@@ -1,11 +1,10 @@
 const Command = require('../../cogs/commands/framework');
-const { client } = require('../../cogs/connections/discord');
 const Discord = require('discord.js');
 
 class HelpUtil
 { constructor(message, args, color)
   {	if (!Array.isArray(args)) throw new Error('Args must be an array!');
-    if (typeof client !== 'object') throw new Error('Client must be an object!');
+    if (typeof this.client !== 'object') throw new Error('this.client must be an object!');
     if (typeof color !== 'string') throw new Error('Color must be a String!');
     this.message = message;
     this.args = args;
@@ -16,29 +15,29 @@ class HelpUtil
 
     const embed = new Discord.RichEmbed()
     .setFooter(`Requested by ${this.message.author.tag}`, this.message.author.displayAvatarURL)
-    .setThumbnail(client.user.displayAvatarURL)
+    .setThumbnail(this.client.user.displayAvatarURL)
     .setURL('http://kannathebot.me/guild')
-    .setAuthor(`${client.user.username} ${name} Commands`, client.user.displayAvatarURL)
+    .setAuthor(`${this.client.user.username} ${name} Commands`, this.client.user.displayAvatarURL)
     .setTimestamp()
     .setDescription('\u200b')
     .setColor(this.color)
 
-    client.commands.filter(c=>c.category === category).forEach(c => embed.addField('kanna pls ' + c.name, c.description));
+    this.client.commands.filter(c=>c.category === category).forEach(c => embed.addField('kanna pls ' + c.name, c.description));
 
     return embed;	}
 
   findCmd(color)
-  {	if (client.commands.has(this.args[0]))
-    { let command = client.commands.get(this.args[0]);
+  {	if (this.client.commands.has(this.args[0]))
+    { let command = this.client.commands.get(this.args[0]);
 
       let example = Array.isArray(command.example) ? 'kanna pls ' + command.example.join('\nkanna pls ') : command.example;
 
       const embed = new Discord.RichEmbed()
-      .setAuthor(`${this.args[0].toUpperCase()} Info`, client.user.displayAvatarURL)
+      .setAuthor(`${this.args[0].toUpperCase()} Info`, this.client.user.displayAvatarURL)
       .setDescription('\u200b')
       .setFooter(`Requested by ${this.message.author.tag}`, message.author.displayAvatarURL)
       .setURL('http://kannathebot.me/guild')
-      .setThumbnail(client.user.displayAvatarURL)
+      .setThumbnail(this.client.user.displayAvatarURL)
       .setTimestamp()
       .addField('Usage', 'kanna pls ' + command.usage, true)
       .addField('Example', example, true)

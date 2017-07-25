@@ -1,6 +1,5 @@
 const Command = require('../../cogs/commands/framework');
 const Discord = require('discord.js');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class GuildsRate extends Command
 { constructor()
@@ -13,20 +12,20 @@ module.exports = class GuildsRate extends Command
       enabled: true	});	}
 
   async run(message, color)
-  {	let bguilds = client.guilds.filter(g=>g.members.filter(m=>!m.user.bot).size < g.members.filter(m=>m.user.bot).size).size;
+  {	let bguilds = this.client.guilds.filter(g=>g.members.filter(m=>!m.user.bot).size < g.members.filter(m=>m.user.bot).size).size;
 
-    let eguilds = client.guilds.filter(g=>g.members.filter(m=>!m.user.bot).size === g.members.filter(m=>m.user.bot).size).size;
+    let eguilds = this.client.guilds.filter(g=>g.members.filter(m=>!m.user.bot).size === g.members.filter(m=>m.user.bot).size).size;
 
-    let uguilds = client.guilds.filter(g=>g.members.filter(m=>!m.user.bot).size > g.members.filter(m=>m.user.bot).size).size;
+    let uguilds = this.client.guilds.filter(g=>g.members.filter(m=>!m.user.bot).size > g.members.filter(m=>m.user.bot).size).size;
 
     const embed = new Discord.RichEmbed()
-    .setAuthor(`${client.user.username} current Guild Rates`, client.user.displayAvatarURL)
+    .setAuthor(`${this.client.user.username} current Guild Rates`, this.client.user.displayAvatarURL)
     .setDescription('\u200b')
     .addField('Humans > Bots', uguilds, true)
     .addField('Bots > Humans', bguilds, true)
     .addField('Humans === Bots', eguilds, true)
-    .addField('Total Guilds', client.guilds.size, true)
-    .setThumbnail(client.user.displayAvatarURL)
+    .addField('Total Guilds', this.client.guilds.size, true)
+    .setThumbnail(this.client.user.displayAvatarURL)
     .setColor(color)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL);
 

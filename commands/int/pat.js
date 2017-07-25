@@ -2,7 +2,6 @@ const ram = require('../../util/embeds/ram');
 const memberu = require('../../util/fetch/member');
 const info = require('../../data/client/info');
 const Command = require('../../cogs/commands/framework');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class Pat extends Command
 { constructor()
@@ -29,7 +28,7 @@ module.exports = class Pat extends Command
       else if(info.devs.includes(member.user.id))
       {	nandayo = `**${member.displayName}** you got a pat from **${message.member.displayName}**!`;
         embed.setDescription(`That's cute :3`);	}
-      else if(member.user.id === client.user.id)
+      else if(member.user.id === this.client.user.id)
       {	nandayo = `You are cute **${message.member.displayName}** :3`;	}
       else
       {	nandayo = `**${member.displayName}** you got a pat from **${message.member.displayName}**!`;	}	}

@@ -2,7 +2,6 @@ const ram = require('../../util/embeds/ram');
 const memberu = require('../../util/fetch/member');
 const info = require('../../data/client/info');
 const Command = require('../../cogs/commands/framework');
-const { client } = require('../../cogs/connections/discord');
 const blacklist = require('../../data/client/blacklist');
 
 module.exports = class Tickle extends Command
@@ -33,7 +32,7 @@ module.exports = class Tickle extends Command
       else if (info.devs.includes(member.user.id))
       { nandayo = `**${member.displayName}** you got tickled by **${message.member.displayName}**!`;
         embed.setDescription(`**_poor ${member.user.username}_**`);	}
-      else if (member.user.id === client.user.id)
+      else if (member.user.id === this.client.user.id)
       {	nandayo = `Please don't... i can't stop laughing!`;	}
       else
       {	nandayo = `**${member.displayName}** you got tickled by **${message.member.displayName}**!`;	}	}

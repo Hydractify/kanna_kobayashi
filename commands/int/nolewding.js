@@ -1,7 +1,6 @@
 const Command = require('../../cogs/commands/framework');
 const common = require('../../util/embeds/common');
 const memberu = require('../../util/fetch/member');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class NoLewding extends Command
 { constructor()
@@ -23,9 +22,9 @@ module.exports = class NoLewding extends Command
 
       if(!args[0] || member.user.id === message.author.id)
       {	nandayo = `ARE YOU LEWDING ${message.author.id}?! <:omfg:315264558279426048>`;	}
-      else if(member.user.id === client.user.id)
+      else if(member.user.id === this.client.user.id)
       {	nandayo = `ARE YOU PRETENDING I'M LEWDING ${message.author}?!`;	}
-      else if(require('../../data/client/info').devs.includes(member.user.id))
+      else if(require('../../data/this.client/info').devs.includes(member.user.id))
       {	nandayo = `No lewding allowed on my watch ${message.author}!`;	}
       else
       {	nandayo = `No lewding allowed on my watch **${member.displayName}**!`;	}

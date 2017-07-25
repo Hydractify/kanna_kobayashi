@@ -2,7 +2,6 @@ const ram = require('../../util/embeds/ram');
 const Command = require('../../cogs/commands/framework');
 const memberu = require('../../util/fetch/member');
 const info = require('../../data/client/info');
-const { client } = require('../../cogs/connections/discord');
 
 module.exports = class Kiss extends Command
 { constructor()
@@ -31,7 +30,7 @@ module.exports = class Kiss extends Command
       else if(info.devs.includes(member.user.id))
       {	nandayo = `**${memberu.displayName}** you got kissed by **${message.member.displayName}**`;
         embed.setDescription(`That's lewd o o`);	}
-      else if(member.user.id === client.user.id)
+      else if(member.user.id === this.client.user.id)
       {	return message.channel.send(`T-that's... LEWD... Don't <:lewd:320406420824653825>`);	}
       else
       {	nandayo = `**${memberu.displayName}** you got kissed by **${message.member.displayName}**`;	}	}
