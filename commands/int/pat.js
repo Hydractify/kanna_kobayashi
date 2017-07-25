@@ -16,10 +16,10 @@ module.exports = class Pat extends Command
       enabled: true	});	}
 
   async run(message, color, args)
-  {	if(args[0])
+  {	let nandayo;
+    if(args[0])
     { const embed = await ram('pat', color, message);
 	    const member = await memberu(message, args);
-	    let nandayo;
 
       if(!member) return;
 
