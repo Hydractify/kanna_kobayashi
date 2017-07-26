@@ -29,5 +29,5 @@ module.exports = class Kick extends Command
 
     await member.kick()
     .catch(e =>
-    {	return stack(e, message);	});
+    {	return stack(e, message); });
     await message.channel.send(`**${member.user.tag}** was sucessfully kicked!`);	}	}

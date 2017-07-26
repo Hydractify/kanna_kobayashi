@@ -7,4 +7,4 @@ module.exports = (message) =>
 	if (!(message instanceof Message)) throw new Error('The message parameter is not instanceof Message!');
 
 	return message.channel.fetchMessages()
-		.catch(error => log(error.stack));	};
+		.catch(error => log(error.stack, error));	};

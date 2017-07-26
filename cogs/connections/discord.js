@@ -20,7 +20,8 @@ module.exports = class Discord_JS
 			require('../client/perm_level').start();
 			require('../commands/command_cache').start();
 			require('../client/event_handler').start();
-			require('../client/reload').start();	});
+			require('../client/reload').start();
+			require('./sentry').start();	});
 			Discord_JS._client = Client;	}
 
 	static get client()

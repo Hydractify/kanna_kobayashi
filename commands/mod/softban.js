@@ -29,6 +29,6 @@ module.exports = class SoftBan extends Command
 
     await member.ban(2)
     .catch(e =>
-    { return error(e, message, this);	});
+    { return error(e, message, this); });
     await message.guild.unban(member.user);
     await message.channel.send(`**${member.user.tag}** was sucessfully softbanned!`);	}	}
