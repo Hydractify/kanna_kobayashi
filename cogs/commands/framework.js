@@ -1,6 +1,6 @@
 class Command {
     constructor(options = {}) {
-        const { client } = require('../connections/discord');        
+        const { client } = require('../connections/discord');
         if (!options.name) throw new Error('This command must have a name!');
         if (!Array.isArray(options.alias) && typeof options.alias !== 'undefined') throw new Error('Alias must be an Array!');
         if (!Array.isArray(options.example) && options.example) throw new Error('Example must be an Array!');
@@ -11,7 +11,6 @@ class Command {
         this.description = options.description;
         this.alias = options.alias || [];
         this.name = options.name;
-        this.category = __dirname.split(require('path').sep).pop();
         this.permLevel = (typeof options.permLevel === 'undefined') ? 0 : options.permLevel; // 0 = Everyone, 1 = Dragon Tamer (Event Role), 2 = Permission biased and Mod Role, 3 = Support on official guild, 4 = Devs
         this.enabled = options.enabled;
         this.usage = options.usage || options.name;

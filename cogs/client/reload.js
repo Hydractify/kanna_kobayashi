@@ -12,6 +12,7 @@ exports.start = () =>
 				{	if (cmd === command) client.aliases.delete(alias);	});
 				let CommandClass = require(`../../commands/${command}`);
 				let cmd = new CommandClass(client);
+				cmd.category = command.split('/')[0];
 				client.commands.set(cmd.name, cmd);
 				cmd.alias.forEach(alias =>
 				{	client.aliases.set(alias, cmd.name);	});
