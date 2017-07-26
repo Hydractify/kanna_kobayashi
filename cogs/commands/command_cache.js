@@ -15,7 +15,8 @@ exports.start = () =>
 				filez.forEach(c =>
 				{	const CommandClass = require(`../../commands/${f}/${c}`);
 					let cmd = new CommandClass();
+					cmd.category = f;
 					client.commands.set(cmd.name, cmd);
 					cmd.alias.forEach(alias =>
-					{	client.aliases.set(alias, cmd.name);	});	});	
+					{	client.aliases.set(alias, cmd.name);	});	});
 				log(`Loaded ${filez.length} ${f} commands`);	});	});	});	}
