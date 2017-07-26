@@ -2,7 +2,7 @@ const thinky = require('../../util/data/thinky');
 const type = thinky.type;
 
 const Guild = thinky.createModel('Guild', {
-    id: type.number().integer(),
+    id: type.string(),
     prefix: type.array().schema(type.string())
         .default(['kanna pls ', '<@!?299284740127588353> ', 'k!']),
     roles: type.object().schema({

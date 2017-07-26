@@ -5,7 +5,7 @@ var CommandLog = thinky.createModel("CommandLog", {
     id: type.string(),
     userId: type.string(),
     command: type.string(),
-    lastUsed: type.date()
+    lastUsed: type.date().default(null)
 });
 
 module.exports = CommandLog;
