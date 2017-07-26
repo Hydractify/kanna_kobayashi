@@ -4,7 +4,7 @@ const color = require('../../../util/client/embed_color');
 module.exports = async (client, guild) =>
 {	const Guild = await guild.fetchMembers();
 	const shardGuilds = await client.shard.fetchClientValues('guilds.size');
-	const totalGuilds = shardGuilds.reduce((p, n) => {	return p + n, 0	});
+	const totalGuilds = shardGuilds.reduce((p, n) => p + n , 0 );
 	const embed = new Discord.RichEmbed()
 	.setThumbnail(guild.iconURL)
 	.setTitle('I have left a Guild!')
