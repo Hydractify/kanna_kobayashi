@@ -5,7 +5,7 @@ module.exports = async (client, guild) =>
 {	await guild.defaultChannel.send(`Thanks for adding me on **${guild.name}**! If you want to see a quick start just type \`k!quickstart\`! If you have any problems with the bot join the official guild and ask for help! http://kannathebot.me/guild`);
 	const Guild = await guild.fetchMembers();
 	const shardGuilds = await client.shard.fetchClientValues('guilds.size');
-	const totalGuilds = shardGuilds.reduce((p, n) => {	return p + n, 0	});
+	const totalGuilds = shardGuilds.reduce((p, n) => p + n , 0 );
 	const embed = new Discord.RichEmbed()
 	.setThumbnail(guild.iconURL)
 	.setTitle('I have joined a Guild!')
