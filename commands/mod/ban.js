@@ -31,5 +31,5 @@ module.exports = class Ban extends Command
 
     member.ban(2)
     .catch(e =>
-    {	return error(e, message, this);	});
+    {	return error(e, message, this); });
     await message.channel.send(`**${member.user.tag}** was sucessfully banned!`);	}	}

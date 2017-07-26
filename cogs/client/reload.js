@@ -20,5 +20,5 @@ exports.start = () =>
 				resolve();
 				}
 				catch(e)
-				{	log1(`Failed to reload ${command}`);
+				{	log1(`Failed to reload ${command}`, e);
 					reject();}	});	}	}
