@@ -14,21 +14,19 @@ module.exports = class Reload extends Command
 	  enabled: true	});	}
 	  
   async run(message, pink, args) 
-  {	try
-	{ let command;
-	  if (this.client.commands.has(args[0])) 
-	  {	command = args[0];	} 
-	else if (this.client.aliases.has(args[0])) 
-	{	command = this.client.aliases.get(args[0]);	}
-	if (!command) 
-	{	return await message.channel.send(`I cannot find the command: ${args[0]}`);	}
-	else 
-	{	message.channel.send(`Reloading: ${command}`)
-		.then(async m => 
-		{	await this.client.reload(command)
-			.then(async () => 
-			{	await m.edit(`Successfully reloaded: ${command}`);	})
-			.catch(async e => 
-			{	await m.edit(`Command reload failed: ${command}\n\`\`\`${e}\`\`\``);	});	});	}	}
+	{	try
+		{ let command;
+	  	if (this.client.commands.has(args[0])) 
+	  	{	command = this.client.commands.get(args[0]);	} 
+			else if (this.client.aliases.has(args[0])) 
+			{	command = this.client.aliases.get(args[0]);	}
+			if (!command) 
+			{	return message.channel.send(`Couldn't find the command: ${args[0]}`);	}
+			else 
+			{	let m = await message.channel.send(`Reloading: ${command.name}`)
+			await this.client.reload(command)
+			.catch(e => 
+			{	return m.edit(`Command reload failed: ${command.name}\n\`\`\`${e}\`\`\``);	});
+			await m.edit(`Successfully reloaded: ${command.name}`);	}	}
 	catch(err)
 	{	await message.channel.send(sendErr(err, message, this));	}	}	}
