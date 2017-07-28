@@ -23,9 +23,7 @@ module.exports = class Kick extends Command
     let member = await memberu(message, args);
     let userPerm = permCheck(member, message);
 
-    if(userPerm >= 2) return message.channel.send(`I can't kick this member ${message.author}`);
-
-    if(!member.kickable) return message.channel.send(`I can't kick this member ${message.author}`);
+    if(userPerm >= 2 || !member.kickable) return message.channel.send(`I can't kick this member ${message.author}`);
 
     await member.kick()
     .catch(e =>
