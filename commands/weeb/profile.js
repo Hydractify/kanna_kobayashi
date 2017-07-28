@@ -44,8 +44,8 @@ module.exports = class Profile extends Command {
             .setThumbnail(member.user.displayAvatarURL)
             .addField('Level', user.getLevel() + ' (' + user.exp + ' xp)', true)
             .addField('Kanna Coins', user.coins + ' <:coin:330926092703498240>', true)
-        /*.addField('Items', user.items, true)
-        .addField('Badges', user.badges, true)*/;
+            .addField('Items', user.items || 'None', true)
+            .addField('Badges', user.badges || 'None', true);
 
         message.channel.send({embed});
     }

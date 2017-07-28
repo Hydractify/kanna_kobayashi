@@ -2,7 +2,6 @@ const embed_color = require('../../../util/client/embed_color');
 const error_message = require('../../../util/client/error/stack');
 const blackFile = require('../../../data/client/blacklist');
 const info = require('../../../data/client/info.json');
-
 const { CommandLog, Guild, User } = require('../../../data/Models');
 
 module.exports = async(client, message) => {
@@ -51,7 +50,7 @@ module.exports = async(client, message) => {
     if (log.lastUsed === null || log.lastUsed.getTime() + cmd.cooldown <= time.getTime()) {
         log.lastUsed = new Date();
     } else {
-        return message.reply("pls wait im on kooldaun");
+        return message.reply(`**${cmd.name}** is on cooldown!`);
     }
     log.save();
 
@@ -66,7 +65,7 @@ module.exports = async(client, message) => {
     user.save();
 
     try {
-        await cmd.run(message, color, args);
+        await cmd.run(message, color, args, perm);
     } catch (err) {
         error_message(err, message, cmd);
     }
