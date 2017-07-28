@@ -23,9 +23,7 @@ module.exports = class SoftBan extends Command
     let member = await fetchMember(message, args);
     let userPerm = permCheck(member, message);
 
-    if (userPerm >= 2) return message.channel.send(`I can't softban this member ${message.author}`);
-
-    if (!member.bannable) return message.channel.send(`I can't softban this member ${message.author}`);
+    if (userPerm >= 2 || !member.bannable) return message.channel.send(`I can't softban this member ${message.author}`);
 
     await member.ban(2)
     .catch(e =>

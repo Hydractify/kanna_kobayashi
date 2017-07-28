@@ -25,9 +25,7 @@ module.exports = class Ban extends Command
 	console.log(userPerm);
 	console.log(member.displayName);
 
-    if(userPerm >= 2) return message.channel.send(`I can't ban this member ${message.author}`);
-
-    if(!member.bannable) return message.channel.send(`I can't ban this member ${message.author}`);
+    if(userPerm >= 2 || !member.bannable) return message.channel.send(`I can't ban this member ${message.author}`);
 
     member.ban(2)
     .catch(e =>
