@@ -82,7 +82,7 @@ module.exports = class Help extends Command
         	['4']: util.categoryMap('gen2', 'Memes Generation 2'),
         	['5']: util.categoryMap('gen3', 'Memes Generation 3'),
         	['6']: util.categoryMap('gen4', 'Memes Generation 4'),
-        	['7']: util.categoryMap('event', 'Event'),
+        	['7']: util.categoryMap('weeb', 'Weeaboo'),
         	['8']: util.categoryMap('mod', 'Moderation'),
         	['9']: util.categoryMap('unique', 'Unique Commands')	}
 
