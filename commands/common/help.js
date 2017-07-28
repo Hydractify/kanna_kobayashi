@@ -4,6 +4,7 @@ const Discord = require('discord.js');
 class HelpUtil
 { constructor(message, args, color)
   {	if (!Array.isArray(args)) throw new Error('Args must be an array!');
+    this.client = message.client;
     if (typeof this.client !== 'object') throw new Error('this.client must be an object!');
     if (typeof color !== 'string') throw new Error('Color must be a String!');
     this.message = message;
@@ -35,7 +36,7 @@ class HelpUtil
       const embed = new Discord.RichEmbed()
       .setAuthor(`${this.args[0].toUpperCase()} Info`, this.client.user.displayAvatarURL)
       .setDescription('\u200b')
-      .setFooter(`Requested by ${this.message.author.tag}`, message.author.displayAvatarURL)
+      .setFooter(`Requested by ${this.message.author.tag}`, this.message.author.displayAvatarURL)
       .setURL('http://kannathebot.me/guild')
       .setThumbnail(this.client.user.displayAvatarURL)
       .setTimestamp()
@@ -74,7 +75,7 @@ module.exports = class Help extends Command
     let util = new Util(message, args, color);
 
     if(!args[0])
-	{	const embeds = 
+	{	const embeds =
 		{	['1']: util.categoryMap('common', 'Common'),
         	['2']: util.categoryMap('int', 'Interactive'),
         	['3']: util.categoryMap('gen1', 'Memes Generation 1'),
