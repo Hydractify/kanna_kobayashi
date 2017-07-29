@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
-const beta = require('../data/client/beta');
-//const official = require('../data/client/official');
+//const beta = require('../data/client/beta');
+const official = require('../data/client/official');
 
 const Kanna = new Discord.ShardingManager('./index.js',
-{	token : beta.token	}	);
+{	token : official.token	}	);
 
 Kanna.spawn();
 

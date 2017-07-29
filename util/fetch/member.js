@@ -20,7 +20,7 @@ const resolveMember = (message, [input]) => {
 };
 
 module.exports = (message, args) =>
-{	
+{
 	if (!message || !args)
 	{	throw new Error('The member (fetchMember) function takes 3 parameters: client, message and args!');	}
 

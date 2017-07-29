@@ -5,8 +5,8 @@ const { client } = require('../discord');
 const log1 = require('../../../util/log/error');
 
 exports.start = async () =>
-{	//const clientValues = await client.shard.fetchClientValues('guilds.size');
-	//const totalGuilds = clientValues.reduce((prev, val) => prev + val, 0);
+{	const clientValues = await client.shard.fetchClientValues('guilds.size');
+	const totalGuilds = clientValues.reduce((prev, val) => prev + val, 0);
 	setTimeout( () =>
 	{	log('Posting server_count to Discord Bot List');
 		superagent

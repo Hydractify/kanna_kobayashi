@@ -1,12 +1,12 @@
 const Discord = require('discord.js');
 const log = require('../../util/log/bot');
-const beta = require('../../data/client/beta');
-//const official = require('../../data/client/official');
+//const beta = require('../../data/client/beta');
+const official = require('../../data/client/official');
 
 module.exports = class Discord_JS
 {	static start()
-	{	const Client = new Discord.Client();
-		Client.login(beta.token);
+	{	const Client = new Discord.Client({ disableEveryone : true });
+		Client.login(official.token);
 		log('Connected to Discord!');
 		Client.on('ready', async () =>
 		{	/*if(!Client.user.presence.game)
@@ -14,7 +14,6 @@ module.exports = class Discord_JS
 				const b = a.reduce((p, n) => {	return p + n, 0});
 				client.user.setGame(`k!help | on ${b} guilds`);	}*/
 			log(`Connected as ${Client.user.tag} (${Client.user.id}) at ${require('moment')().format('HH:mm \\[DD/MM/YYYY\\]')}`);
-			require('./rethinkdb').start();
 			require('./apis/dbl').start();
 			require('./apis/dbots').start();;
 			require('../client/perm_level').start();

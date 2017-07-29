@@ -7,7 +7,6 @@ exports.start = () =>
 	{	return new Promise((resolve, reject) =>
 		{	try
 			{	delete require.cache[require.resolve(`../../commands/${command.category}/${command.name}`)];
-				client.commands.delete(command);
 				client.aliases.forEach((cmd, alias) =>
 				{	if (cmd === command.name) client.aliases.delete(alias);	});
 				let CommandClass = require(`../../commands/${command.category}/${command.name}`);

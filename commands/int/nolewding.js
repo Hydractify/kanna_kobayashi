@@ -24,7 +24,7 @@ module.exports = class NoLewding extends Command
       {	nandayo = `ARE YOU LEWDING ${message.author.id}?! <:omfg:315264558279426048>`;	}
       else if(member.user.id === this.client.user.id)
       {	nandayo = `ARE YOU PRETENDING I'M LEWDING ${message.author}?!`;	}
-      else if(require('../../data/this.client/info').devs.includes(member.user.id))
+      else if(require('../../data/client/info').devs.includes(member.user.id))
       {	nandayo = `No lewding allowed on my watch ${message.author}!`;	}
       else
       {	nandayo = `No lewding allowed on my watch **${member.displayName}**!`;	}

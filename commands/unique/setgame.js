@@ -1,5 +1,6 @@
 const Command = require('../../cogs/commands/framework');
 const Discord = require('discord.js');
+const sanitizeQuotes = require('../../util/sanitizeQuotes');
 
 module.exports = class SetGame extends Command
 { constructor()
@@ -14,13 +15,13 @@ module.exports = class SetGame extends Command
 
   async run(message, color, args)
   { const shard = this.client.shard;
-    const clientValues = await shard.fetchthis.clientValues('guilds.size');
-    let totalGuilds = this.clientValues.reduce((prev, val) => prev + val, 0);
+    const clientValues = await shard.fetchClientValues('guilds.size');
+    let totalGuilds = clientValues.reduce((prev, val) => prev + val, 0);
 
     if(args[0])
     { if(args[0].toLowerCase().startsWith('stream'))
-      { shard.broadcastEval(`this.user.setGame('${args.slice(1).join(' ')}  [' + this.shard.id + ']', 'https://twitch.tv/wizzardlink')`);	}
+      { shard.broadcastEval(`this.user.setGame('${sanitizeQuotes(args.slice(1).join(' '))}  [' + this.shard.id + ']', 'https://twitch.tv/wizzardlink')`);	}
       else
-      { shard.broadcastEval(`this.user.setGame('${args.join(' ')} [' + this.shard.id + ']')`);	}	}
+      { shard.broadcastEval(`this.user.setGame('${sanitizeQuotes(args.join(' '))} [' + this.shard.id + ']')`);	}	}
     else
     { shard.broadcastEval(`this.user.setGame('k!help | on ${totalGuilds} guilds [' + this.shard.id + ']')`);	}	}	}
