@@ -68,9 +68,14 @@ module.exports = async (client, message) => {
 	} catch (err) {
 		user = new User({ id: message.author.id });
 	}
+	let oldLevel = user.getLevel();
 	user.exp += cmd.exp;
 	user.coins += cmd.coins;
 	user.save();
+
+	if(guild.notifications.levelUp && user.getLevel() > oldLevel) {
+		message.channel.send(`Woot! ${message.author}, you are now level ${user.getLevel()}!`);
+	}
 
 	try {
 		await cmd.run(message, color, args, perm);
