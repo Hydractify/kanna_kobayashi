@@ -28,12 +28,12 @@ module.exports = class Kiss extends Command
       if (member.user.id === message.author.id)
       {	return message.channel.send(`You can't kiss yourself O///O`);	}
       else if(info.devs.includes(member.user.id))
-      {	nandayo = `**${memberu.displayName}** you got kissed by **${message.member.displayName}**`;
+      {	nandayo = `**${member.displayName}** you got kissed by **${message.member.displayName}**`;
         embed.setDescription(`That's lewd o o`);	}
       else if(member.user.id === this.client.user.id)
       {	return message.channel.send(`T-that's... LEWD... Don't <:lewd:320406420824653825>`);	}
       else
-      {	nandayo = `**${memberu.displayName}** you got kissed by **${message.member.displayName}**`;	}	}
+      {	nandayo = `**${member.displayName}** you got kissed by **${message.member.displayName}**`;	}	}
     else
     {	return message.channel.send(`${message.author} you must tell me who you want to kiss <:lewd:320406420824653825>`);	}
 
