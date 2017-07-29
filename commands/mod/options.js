@@ -55,7 +55,11 @@ module.exports = class Options extends Command {
                 message.channel.send(`Local prefix set: \`${guild.prefix}\``);
             }
         } else {
-            message.channel.send('Invalid argument! See `help options`')
+            message.channel.send(`Hey ${message.author}!
+
+You've input an option that doesn't exist! The available options are
+
+\`levelup\` | \`welcome\` | \`prefix\``);
         }
         guild.save();
     }
