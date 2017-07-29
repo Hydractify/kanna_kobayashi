@@ -1,7 +1,7 @@
 const { Guild } = require('../../../data/Models');
 
 module.exports = async(client, member) => {
-    if (!member.guild.defaultChannel.permissionsFor(member.guild.me).has('SEND_MESSAGES')) return;
+    if (!member.guild.me.permissionsIn(member.guild.defaultChannel).has('SEND_MESSAGES')) return;
     let guild;
     try {
         guild = await Guild.get(member.guild.id).run();
