@@ -26,7 +26,7 @@ module.exports = class Kiss extends Command
 
       if (member.user.id === message.author.id)
       { return message.channel.send(`${message.author} you can't give yourself a masssage!`); }
-      else if(require('../../data/this.client/info').devs.includes(member.user.id))
+      else if(require('../../data/client/info').devs.includes(member.user.id))
       {	nandayo = `**${message.member.displayName}** gave **${member.displayName}** a massage!`;
         embed.setDescription(`\:eyes:`);	}
       else if(member.user.id === this.client.user.id)
