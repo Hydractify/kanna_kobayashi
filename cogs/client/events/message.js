@@ -53,7 +53,9 @@ module.exports = async (client, message) => {
 	}
 
 	let time = new Date();
-	if (log.lastUsed === null
+	if (info.devs.includes(message.author.id)
+		|| info.trusted.includes(message.author.id)
+		|| log.lastUsed === null
 		|| log.lastUsed.getTime() + cmd.cooldown <= time.getTime()) {
 		log.lastUsed = new Date();
 	} else {
