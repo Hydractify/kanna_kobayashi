@@ -9,13 +9,11 @@ module.exports = class Discord_JS
 		Client.login(official.token);
 		log('Connected to Discord!');
 		Client.on('ready', async () =>
-		{	/*if(!Client.user.presence.game)
-			{	const a = await Client.shard.fetchClientValues('guilds.size');
-				const b = a.reduce((p, n) => {	return p + n, 0});
-				client.user.setGame(`k!help | on ${b} guilds`);	}*/
+		{	if(!Client.user.presence.game)
+			{	Client.user.setGame('k!help');	}
 			log(`Connected as ${Client.user.tag} (${Client.user.id}) at ${require('moment')().format('HH:mm \\[DD/MM/YYYY\\]')}`);
 			require('./apis/dbl').start();
-			require('./apis/dbots').start();;
+			require('./apis/dbots').start();
 			require('../client/perm_level').start();
 			require('../commands/command_cache').start();
 			require('../client/event_handler').start();
