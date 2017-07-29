@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const color = require('../../../util/client/embed_color');
-
-const sanitizeQuotes = input => input.replace(/'/g,"\\'");
+const sanitizeQuotes = require('../../../util/sanitizeQuotes');
 
 module.exports = async (client, guild) =>
 {	await guild.defaultChannel.send(`Thanks for adding me on **${guild.name}**! If you want to see a quick start just type \`k!quickstart\`! If you have any problems with the bot join the official guild and ask for help! http://kannathebot.me/guild`);

@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const color = require('../../../util/client/embed_color');
-
-const sanitizeQuotes = input => input.replace(/'/g,"\\'");
+const sanitizeQuotes = require('../../../util/sanitizeQuotes');
 
 module.exports = async (client, guild) =>
 {	const Guild = await guild.fetchMembers();
