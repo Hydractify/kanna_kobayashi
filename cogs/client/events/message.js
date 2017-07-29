@@ -23,7 +23,7 @@ module.exports = async (client, message) => {
 
 	if (!regex.test(message.content)) return;
 
-	let prefixLength = regex.exec(message.content)[0].length;
+	let prefixLength = regex.exec(message.content)[1].length;
 
 	let [command, ...args] = message.content.slice(prefixLength).split(' ');
 	let cmd = client.commands.get(command);
