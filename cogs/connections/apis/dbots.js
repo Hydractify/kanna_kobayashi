@@ -19,3 +19,17 @@ exports.start = async () => {
 		.catch(e => log1(e.stack, e));
 	}, 1800000);
 }
+
+{	//const clientValues = await client.shard.fetchClientValues('guilds.size');
+	//const totalGuilds = clientValues.reduce((prev, val) => prev + val, 0);
+	setTimeout( () =>
+	{	
+		log('Posting server_count to Discord Bot List');
+		superagent
+		.post(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
+		.set('Authorization', fakedbots)
+		.send({	server_count : totalGuilds	})
+		.then( () =>
+		{	log('Sucessfully posted server_count to Discord Bot List');	})
+		.catch(e => log1(e.stack, e));	}, 1800000);	}
+
