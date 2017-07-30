@@ -25,9 +25,9 @@ module.exports = class Options extends Command {
 
         if (args.length === 0) {
             const embed = require('../../util/embeds/common')(color, message)
-                .setAuthor(`${message.guild.name} Options`, message.guild.iconURL)
+                .setAuthor(`${message.guild.name} Options`, message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
                 .setDescription('\u200b')
-                .setThumbnail(message.guild.iconURL)
+                .setThumbnail(message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
                 .addField('Prefix', guild.prefix, true)
                 .addField('Mod Role', guild.roles.mod, true)
                 .addField('Level Up Messages', guild.notifications.levelUp ? 'Enabled' : 'Disabled', true)

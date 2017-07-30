@@ -16,7 +16,7 @@ module.exports = class QuickStart extends Command {
   async run(message, color) {
     const embed = common(color, message)
     .setAuthor(`Welcome to my Quickstart ${message.author.username}`, message.author.displayAvatarURL)
-    .setThumbnail(message.guild.iconURL)
+    .setThumbnail(message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
     .setDescription(`${message.guild.owner} haves from the start permission level 2!`)
     .addField('Set-Up', `First of all, if you gaved me Admin permissions, remove it! It was only so i could send the first message!\nSecond, i work with permissions... Being...\n\n1⃣ **Level 0** | Everyone can do\n2⃣ **Level 1** | Dragon Tamer commands, needs a role assigned to yourself called \`Dragon Tamer\`.\n3⃣ **Level 2** | Human Tamer commands, you need either sufficient permission, or a role called \`Human Tamer\`.`)
     .addField('Disclaimers', `- If your guild haves more than 50 members and haves more bots than humans, Kanna will automatically ignore that guild, join the Official Guild to get whitelisted.\n- If your permission level is higher than the one you want, you don't need to fetch the requirements of that permission.`)

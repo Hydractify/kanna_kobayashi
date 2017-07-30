@@ -24,7 +24,7 @@ module.exports = class Quote extends Command {
     const embed = common(color, message)
     .setAuthor(`${msg.member.displayName} message`, msg.author.displayAvatarURL)
     .setDescription(`On ${msg.channel.toString()} by ${msg.author}`)
-    .setThumbnail(message.guild.iconURL);
+    .setThumbnail(message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png');
 
     if (msg.content) {
       embed.addField('Content', msg.content);

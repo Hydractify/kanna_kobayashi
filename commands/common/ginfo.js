@@ -19,16 +19,28 @@ module.exports = class GuildInfo extends Command {
 
     let members = guild.members;
 
-    let roleNames = guild.roles.map(r => r.toString()).join(' ');
-    if (roleNames.length > 2048) roleNames = roleNames.split(' ').slice(0, 20).join(' ') + '...';
+    let roleNames = [];
+    for (const role of guild.roles.values()) {
+        if (roleNames.join(' ').length + role.toString().length > 1021) {
+          roleNames.push('...');
+          break;
+        }
+        emojiNames.push(role.toString());
+    }
 
-    let emojiNames = guild.emojis.map(e => e.toString()).join(' ');
-    if (emojiNames.length > 2048) emojiNames = emojiNames.split(' ').slice(0, 20).join(' ') + '...';
+    let emojiNames  = [];
+    for (const emoji of guild.emojis.values()) {
+        if (emojiNames.join(' ').length + emoji.toString().length > 1021) {
+          emojiNames.push('...');
+          break;
+        }
+        emojiNames.push(emoji.toString());
+    }
 
     const embed = new Discord.RichEmbed()
     .setColor(color)
-    .setThumbnail(guild.iconURL)
-    .setAuthor(`${guild.name} Stats`, guild.iconURL)
+    .setThumbnail(guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
+    .setAuthor(`${guild.name} Stats`, guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
     .setDescription('\u200b')
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL)
     .addField('Guild ID', guild.id, true)
@@ -42,10 +54,10 @@ module.exports = class GuildInfo extends Command {
     .addField('Total Channels', guild.channels.size, true)
     .addField('Text Channels', guild.channels.filter(c => c.type === "text").size, true)
     .addField('Voice Channels', guild.channels.filter(c => c.type === "voice").size, true)
-    .addField('Total Roles', guild.roles.size, true)
-    .addField('Role Names', roleNames)
+    .addField('Total Roles', guild.roles.size)
+    .addField('Role Names', roleNames.join(' '))
     .addField('Total Emojis', guild.emojis.size)
-    .addField('Emoji Names', emojiNames);
+    .addField('Emoji Names', emojiNames.join(' ') || 'None');
 
     await message.channel.send({embed});
   }

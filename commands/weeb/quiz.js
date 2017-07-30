@@ -61,7 +61,7 @@ module.exports = class Quiz extends Command
         .setAuthor(`${message.member.displayName} started this event`, message.author.displayAvatarURL)
         .setImage(g.quiz.character)
         .addField('Try to guess who this is!', 'This even will be over in 15 minutes.')
-        .setThumbnail(message.guild.iconURL);
+        .setThumbnail(message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png');
 
         await message.channel.send({embed});
 
@@ -81,11 +81,11 @@ module.exports = class Quiz extends Command
         {
           embed = new Discord.RichEmbed()
           .setFooter(`${message.member.displayName} started this event`, message.author.displayAvatarURL)
-          .setAuthor(`${message.guild.name} Quiz Event`, message.guild.iconURL)
+          .setAuthor(`${message.guild.name} Quiz Event`, message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
           .setColor(color)
           .setDescription('No one guessed it right, so the event has ended!')
           .addField('Character Name', g.quiz.answer)
-          .setThumbnail(message.guild.iconURL)
+          .setThumbnail(message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
           .setImage(g.quiz.character);
           await message.channel.send({embed});
         });
@@ -94,11 +94,11 @@ module.exports = class Quiz extends Command
         {
           embed = new Discord.RichEmbed()
           .setFooter(`${message.member.displayName} started this event`, message.author.displayAvatarURL)
-          .setAuthor(`${message.guild.name} Quiz Event`, message.guild.iconURL)
+          .setAuthor(`${message.guild.name} Quiz Event`, message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
           .setColor(color)
           .setDescription(`${collected.first().author} won this event!`)
           .addField('Character Name', g.quiz.answer)
-          .setThumbnail(message.guild.iconURL)
+          .setThumbnail(message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
           .setImage(g.quiz.character);
           await message.channel.send({embed});
         }
@@ -115,7 +115,7 @@ module.exports = class Quiz extends Command
         .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL)
         .setColor(color)
         .setTimestamp()
-        .setThumbnail(message.guild.iconURL);
+        .setThumbnail(message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png');
 
         let msg = await message.channel.send({embed});
 
@@ -201,12 +201,12 @@ module.exports = class Quiz extends Command
     else
     {
       const embed = common(color, message)
-      .setAuthor(`${message.guild.name} Quiz Info`, message.guild.iconURL)
+      .setAuthor(`${message.guild.name} Quiz Info`, message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
       .setDescription('\u200b')
       .addField('Character Name', g.quiz.answer)
       .addField('Character Photo', '\u200b')
       .setImage(g.quiz.character)
-      .setThumbnail(message.guild.iconURL);
+      .setThumbnail(message.guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png');
 
       await message.channel.send({embed});
 	}
