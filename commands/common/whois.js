@@ -4,20 +4,22 @@ const fetchUser = require('../../util/fetch/user');
 const fetchMember = require('../../util/fetch/member');
 const moment = require('moment');
 
-module.exports = class WhoIs extends Command
-{ constructor()
-  { super(
-    { alias: ['ust', 'whois'],
+module.exports = class WhoIs extends Command {
+  constructor() {
+    super({
+      alias: ['ust', 'whois'],
       example: ['whois', 'whois @Wizardλ#5679'],
       name: 'whois',
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, color, args)
-  { if (args[0])
-    { let user = await fetchUser(message, args);
-      if(!user) return;
+  async run(message, color, args) {
+    if (args[0]) {
+      let user = await fetchUser(message, args);
+      if (!user) return;
       let member = await fetchMember(message, args);
-      if(!member) return;
+      if (!member) return;
 
       const embed = common(color, message)
       .setThumbnail(user.displayAvatarURL)
@@ -36,9 +38,9 @@ module.exports = class WhoIs extends Command
       .addField('Avatar', `[Link to it](${user.displayAvatarURL})`)
       .setImage(user.displayAvatarURL);
 
-      await message.channel.send({embed});	}
-    else
-    { let user = message.author;
+      await message.channel.send({embed});
+    } else {
+      let user = message.author;
       let member = message.member;
 
       const embed = common(color, message)
@@ -58,4 +60,7 @@ module.exports = class WhoIs extends Command
       .addField('Avatar', `[Link to it](${user.displayAvatarURL})`)
       .setImage(user.displayAvatarURL);
 
-      await message.channel.send({embed});	}	}	}
+      await message.channel.send({embed});
+    }
+  }
+}

@@ -4,12 +4,15 @@ const blackFile = require('../../../data/client/blacklist');
 const info = require('../../../data/client/info.json');
 const { CommandLog, Guild, User } = require('../../../data/Models');
 const humanizeDuration = require('humanize-duration');
+const whiteFile = require('../../../data/client/whitelist');
 
 module.exports = async(client, message) => {
     if (message.channel.type !== 'text') return;
     if (message.author.bot) return;
     if (blackFile.includes(message.guild.owner.user.id)) return;
     if (blackFile.includes(message.author.id)) return;
+    if (message.guild.members.filter(m => m.user.bot).size > message.guild.members.filter(m => !m.user.bot).size && message.guild.memberCount > 50 && !whiteFile.includes(message.guild.owner.user.id)) return;
+
     let guild;
     try {
         guild = await Guild.get(message.guild.id).run();

@@ -1,14 +1,18 @@
-const Command = require('../../cogs/commands/framework'); 
-const meme = require('../../util/embeds/meme'); 
+const Command = require('../../cogs/commands/framework');
+const meme = require('../../util/embeds/meme');
 
-module.exports = class Friends extends Command
-{ constructor()
-  { super(
-    { alias: ['tomodachi'],
+module.exports = class Friends extends Command {
+  constructor() {
+    super({
+      alias: ['tomodachi'],
       name: 'friends',
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, color)
-  {	let img = require('../../data/links').memes.friends;
+  async run(message, color) {
+    let img = require('../../data/links').memes.friends;
 
-    await message.channel.send({embed : meme(img, color, message)});	}	}
+    await message.channel.send({embed : meme(img, color, message)});
+  }
+}

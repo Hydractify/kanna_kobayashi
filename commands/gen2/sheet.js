@@ -1,14 +1,18 @@
-const Command = require('../../cogs/commands/framework'); 
-const meme = require('../../util/embeds/meme'); 
+const Command = require('../../cogs/commands/framework');
+const meme = require('../../util/embeds/meme');
 
-module.exports = class Sheet extends Command
-{ constructor()
-  { super(
-    { alias: ['shit'],
+module.exports = class Sheet extends Command  {
+  constructor() {
+    super({
+      alias: ['shit'],
       name: 'sheet',
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, color)
-  {	let image = require('../../data/links').memes.sheet;
+  async run(message, color) {
+    let image = require('../../data/links').memes.sheet;
 
-    await message.channel.send({embed : meme(image, color, message)});	}	}
+    await message.channel.send({embed : meme(image, color, message)});
+  }
+}

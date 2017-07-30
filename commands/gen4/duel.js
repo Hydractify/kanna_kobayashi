@@ -1,14 +1,18 @@
-const Command = require('../../cogs/commands/framework'); 
-const meme = require('../../util/embeds/meme'); 
+const Command = require('../../cogs/commands/framework');
+const meme = require('../../util/embeds/meme');
 
-module.exports = class ForEver extends Command
-{ constructor()
-  { super(
-    { alias: ['blueeyedragon'],
+module.exports = class ForEver extends Command  {
+  constructor() {
+    super({
+      alias: ['blueeyedragon'],
       name: 'duel',
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, pinku)
-  { let image = require('../../data/links.json').memes.duel;
+  async run(message, pinku) {
+    let image = require('../../data/links.json').memes.duel;
 
-    await message.channel.send({embed : meme(image, pinku, message)});	}	}
+    await message.channel.send({embed : meme(image, pinku, message)});
+  }
+}
