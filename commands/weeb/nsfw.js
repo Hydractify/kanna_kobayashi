@@ -8,7 +8,7 @@ module.exports = class SFW extends Command
       alias: ['xxx'],
       usage: 'nsfw <tag>',
       examples: ['nsfw mario', 'nsfw weeb'],
-      enabled: true }); }
+      enabled: false }); }
 
   async run(message, color, args)
   { if (!message.channel.nsfw) return message.channel.send(`This channel doesn't have NSFW enabled <:lewd:320406420824653825>`);

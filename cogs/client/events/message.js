@@ -85,6 +85,8 @@ module.exports = async(client, message) => {
         message.channel.send(`Woot! ${message.author}, you are now level ${user.getLevel()}!`);
     }
 
+    if (!cmd.enabled) return message.channel.send(`Currently **${cmd.name}** is disabled!`);
+
     try {
         await cmd.run(message, color, args, perm);
     } catch (err) {

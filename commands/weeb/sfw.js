@@ -9,7 +9,7 @@ module.exports = class SFW extends Command
       alias: ['ibsearch'],
       usage: 'sfw <tag>',
       examples: ['sfw mario', 'sfw weeb'],
-      enabled: true	});	}
+      enabled: false	});	}
 
   async run(message, color, args)
   {
