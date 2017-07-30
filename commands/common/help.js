@@ -1,18 +1,19 @@
 const Command = require('../../cogs/commands/framework');
 const Discord = require('discord.js');
 
-class HelpUtil
-{ constructor(message, args, color)
-  {	if (!Array.isArray(args)) throw new Error('Args must be an array!');
+class HelpUtil {
+  constructor(message, args, color) {
+    if (!Array.isArray(args)) throw new Error('Args must be an array!');
     this.client = message.client;
     if (typeof this.client !== 'object') throw new Error('this.client must be an object!');
     if (typeof color !== 'string') throw new Error('Color must be a String!');
     this.message = message;
     this.args = args;
-    this.color = color;	}
+    this.color = color;
+  }
 
-  categoryMap(category, name)
-  { if (typeof category !== 'string' || typeof name !== 'string') throw new Error('Category and Name must be a String!');
+  categoryMap(category, name) {
+    if (typeof category !== 'string' || typeof name !== 'string') throw new Error('Category and Name must be a String!');
 
     const embed = new Discord.RichEmbed()
     .setFooter(`Requested by ${this.message.author.tag}`, this.message.author.displayAvatarURL)
@@ -25,11 +26,12 @@ class HelpUtil
 
     this.client.commands.filter(c=>c.category === category).forEach(c => embed.addField('kanna pls ' + c.name, c.description));
 
-    return embed;	}
+    return embed;
+  }
 
-  findCmd(color)
-  {	if (this.client.commands.has(this.args[0]))
-    { let command = this.client.commands.get(this.args[0]);
+  findCmd(color) {
+    if (this.client.commands.has(this.args[0])) {
+      let command = this.client.commands.get(this.args[0]);
 
       let example = Array.isArray(command.example) ? 'kanna pls ' + command.example.join('\nkanna pls ') : command.example;
 
@@ -48,18 +50,18 @@ class HelpUtil
       .addField('Enabled', command.enabled ? 'Yes':'No', true)
       .setColor(color);
 
-      return this.message.channel.send({embed})	}
-    else
-	{ return this.message.channel.send(`Couldn't find any command with the name **${this.args[0]}**`);	}	}	}
+      return this.message.channel.send({embed})
+    } else {
+      return this.message.channel.send(`Couldn't find any command with the name **${this.args[0]}**`);
+    }
+  }
+}
 
 const Util = HelpUtil;
 
-module.exports = class Help extends Command
-{
-  constructor()
-  {
-    super(
-    {
+module.exports = class Help extends Command {
+  constructor() {
+    super({
       alias: ['halp'],
       description: 'Display all available commands',
       usage: 'help <command>',
@@ -67,54 +69,67 @@ module.exports = class Help extends Command
       name: 'help',
       exp: 0,
       coins: 0,
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, color, args, perms)
-  {	if(!message.guild.me.permissions.has('ADD_REACTIONS')) return message.channel.send(`I don't have permission to add reactions!`);
+  async run(message, color, args, perms) {
+    if (!message.guild.me.permissions.has('ADD_REACTIONS')) return message.channel.send(`I don't have permission to add reactions!`);
 
     let util = new Util(message, args, color);
 
-    if(!args[0])
-	{	const embeds =
-		{	['1']: util.categoryMap('common', 'Common'),
-        	['2']: util.categoryMap('int', 'Interactive'),
-        	['3']: util.categoryMap('gen1', 'Memes Generation 1'),
-        	['4']: util.categoryMap('gen2', 'Memes Generation 2'),
-        	['5']: util.categoryMap('gen3', 'Memes Generation 3'),
-        	['6']: util.categoryMap('gen4', 'Memes Generation 4'),
-        	['7']: util.categoryMap('weeb', 'Weeaboo'),
-        	['8']: util.categoryMap('mod', 'Moderation'),
-        	['9']: util.categoryMap('unique', 'Unique Commands')	}
+    if(!args[0]) {
+      const embeds = {
+        ['1']: util.categoryMap('common', 'Common'),
+        ['2']: util.categoryMap('int', 'Interactive'),
+        ['3']: util.categoryMap('gen1', 'Memes Generation 1'),
+        ['4']: util.categoryMap('gen2', 'Memes Generation 2'),
+        ['5']: util.categoryMap('gen3', 'Memes Generation 3'),
+        ['6']: util.categoryMap('gen4', 'Memes Generation 4'),
+        ['7']: util.categoryMap('weeb', 'Weeaboo'),
+        ['8']: util.categoryMap('mod', 'Moderation'),
+        ['9']: util.categoryMap('unique', 'Unique Commands')
+      }
 
       let msg = await message.channel.send({embed : embeds['1']});
 
       let emojis = ['⬅', '➡', '❎'];
 
-      for (let emo of emojis)
-      {	await msg.react(emo);	}
+      for (let emo of emojis) {
+        await msg.react(emo);
+      }
 
       let number = 1;
 
-      function selectEmbed(choose)
-      {	choose === '➡' ? number++ : number--;
+      function selectEmbed(choose) {
+        choose === '➡' ? number++ : number--;
         if(number > 9) number = 0;
         if(number < 0) number = 8;
         if(number === 7 && perms < 1) number = 1;
         if(number === 8 && perms < 2) number = 2;
         if(number === 9 && perms < 3) number = 3;
-        return embeds[number.toString()];	}
+        return embeds[number.toString()];
+      }
 
-      let filter = (r, u) =>
-      {	return emojis.includes(r.emoji.name) && u.id === message.author.id;	}
+      let filter = (r, u) => {
+        return emojis.includes(r.emoji.name) && u.id === message.author.id;
+      }
 
-        let collector = msg.createReactionCollector(filter, {time : 900000});
-        collector.on('collect', async(c) =>
-      {	if(c.emoji.name === '➡')
-        {	await msg.edit({embed : selectEmbed('➡')	});	}
-        if(c.emoji.name === '⬅')
-        {	await msg.edit({embed : selectEmbed('⬅')	});	}
-        if(c.emoji.name === '❎')
-		{	await message.delete();
-			await msg.delete();	}	});	}
-    else
-    {	util.findCmd(color);	}	}	}
+      let collector = msg.createReactionCollector(filter, {time : 900000});
+      collector.on('collect', async(c) => {
+        if(c.emoji.name === '➡') {
+          await msg.edit({embed : selectEmbed('➡')});
+        }
+        if(c.emoji.name === '⬅') {
+          await msg.edit({embed : selectEmbed('⬅')});
+        }
+        if(c.emoji.name === '❎') {
+          await message.delete();
+          await msg.delete();
+        }
+      });
+    } else {
+        util.findCmd(color);
+    }
+  }
+}

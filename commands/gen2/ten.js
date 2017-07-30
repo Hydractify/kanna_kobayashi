@@ -1,14 +1,18 @@
 const Command = require('../../cogs/commands/framework');
-const meme = require('../../util/embeds/meme'); 
+const meme = require('../../util/embeds/meme');
 
-module.exports = class Ten extends Command
-{ constructor()
-  { super(
-    { alias: ['10'],
+module.exports = class Ten extends Command  {
+  constructor() {
+    super({
+      alias: ['10'],
       name: 'ten',
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, pinku)
-  {	let image = require('../../data/links.json').memes.ten;
+  async run(message, pinku) {
+    let image = require('../../data/links.json').memes.ten;
 
-    await message.channel.send({embed : meme(image, pinku, message)});	}	}
+    await message.channel.send({embed : meme(image, pinku, message)});
+  }
+}

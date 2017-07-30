@@ -1,14 +1,18 @@
-const Command = require('../../cogs/commands/framework'); 
-const meme = require('../../util/embeds/meme'); 
+const Command = require('../../cogs/commands/framework');
+const meme = require('../../util/embeds/meme');
 
-module.exports = class Rain extends Command
-{ constructor()
-  { super(
-    { alias: ['droplets'],
+module.exports = class Rain extends Command {
+  constructor() {
+    super({
+      alias: ['droplets'],
       name: 'rain',
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, color)
-  { let image = require('../../data/links').memes.rain;
+  async run(message, color) {
+    let image = require('../../data/links').memes.rain;
 
-    await message.channel.send({embed : meme(image, color, message)});	}	}
+    await message.channel.send({embed : meme(image, color, message)});
+  }
+}

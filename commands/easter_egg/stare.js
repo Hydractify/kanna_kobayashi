@@ -1,15 +1,18 @@
-const Command = require('../../cogs/commands/framework'); 
-const ram = require('../../util/embeds/ram'); 
+const Command = require('../../cogs/commands/framework');
+const ram = require('../../util/embeds/ram');
 
-module.exports = class Kawaii extends Command
-{ constructor()
-  { super(
-      { alias: ['whatdidyoufuckingsaidyoumotherfuckingweeb'],
+module.exports = class Kawaii extends Command {
+  constructor() {
+    super({
+      alias: ['whatdidyoufuckingsaidyoumotherfuckingweeb'],
         name: 'stare',
-        enabled: true	});	}
+        enabled: true
+      });
+    }
 
-  async run(message, color)
-  {
+  async run(message, color) {
     const embed = await ram('stare', color, message);
 
-    await message.channel.send({embed});	}	}
+    await message.channel.send({embed});
+  }
+}

@@ -1,8 +1,4 @@
-const Discord = require('discord.js');
 const Command = require('../../cogs/commands/framework');
-const fetchMember = require('../../util/fetch/member');
-const permCheck = require('../../util/client/check_perm');
-const error = require('../../util/client/error/stack');
 
 const { Guild } = require('./../../data/Models');
 
@@ -51,7 +47,7 @@ module.exports = class Options extends Command {
             if (newPrefix.length === 0) {
                 message.channel.send(`My local prefix on this guild is \`${guild.prefix}\``);
             } else {
-                guild.prefix = newPrefix;
+                guild.prefix = newPrefix.replace('[s]', ' ') || newPrefix;
                 message.channel.send(`Local prefix set: \`${guild.prefix}\``);
             }
         } else {
