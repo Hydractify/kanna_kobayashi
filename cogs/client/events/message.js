@@ -6,12 +6,31 @@ const { CommandLog, Guild, User } = require('../../../data/Models');
 const humanizeDuration = require('humanize-duration');
 const whiteFile = require('../../../data/client/whitelist');
 
-module.exports = async(client, message) => {
+const isBotfarm = ({ guild }) => {
+    if (whiteFile.includes(guild.ownerID)) return false;
+    if (guild.memberCount <= 50) return false;
+
+    let botCount = 0;
+    for (const { user: { bot } } of guild.members.values()) {
+        if (!bot) continue;
+        if (++botCount > guild.memberCount / 2) return true;
+    }
+
+    return false;
+};
+
+module.exports = async (client, message) => {
     if (message.channel.type !== 'text') return;
     if (message.author.bot) return;
     if (blackFile.includes(message.guild.owner.user.id)) return;
     if (blackFile.includes(message.author.id)) return;
-    if (message.guild.members.filter(m => m.user.bot).size > message.guild.members.filter(m => !m.user.bot).size && message.guild.memberCount > 50 && !whiteFile.includes(message.guild.owner.user.id)) return;
+    if (isBotfarm(message)) return;
+
+    if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) {
+        message.author.send('I do not have the send messages permission for the channel of your command!')
+            .catch(() => null);
+        return;
+    }
 
     let guild;
     try {
@@ -22,8 +41,11 @@ module.exports = async(client, message) => {
     }
 
     let prefixes = info.defaultPrefixes.slice(0);
-    // super special regex chars escape regex
-    prefixes.push(guild.prefix.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'));
+    prefixes.push(
+        `<@!?${client.user.id}> `,
+        guild.prefix.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'),
+    );
+
     let regex = new RegExp(`^(${prefixes.join('|')})([^]*)`);
 
     if (!regex.test(message.content)) return;
@@ -36,13 +58,9 @@ module.exports = async(client, message) => {
     let color = embedColor(message);
 
     if (!cmd) {
-        let alias = client.aliases.get(command);
-        if (alias) {
-            cmd = client.commands.get(alias);
-            command = alias;
-        } else {
-            return;
-        }
+        command = client.aliases.get(command);
+        if (command) cmd = client.commands.get(command);
+        else return;
     }
 
     if (perm < cmd.permLevel) {
@@ -65,7 +83,8 @@ module.exports = async(client, message) => {
         timeLeft <= 0) {
         log.lastUsed = new Date();
     } else {
-        message.reply(`**${cmd.name}** is on cooldown! Please wait **${humanizeDuration(timeLeft,  {round:true, largest:2, conjunction: ' and ', serialComma: false})}**.`);
+        timeLeft = humanizeDuration(timeLeft, { round: true, largest: 2, conjunction: ' and ', serialComma: false });
+        message.reply(`**${cmd.name}** is on cooldown! Please wait **${timeLeft}**.`);
         return;
     }
     log.save();
@@ -85,7 +104,10 @@ module.exports = async(client, message) => {
         message.channel.send(`Woot! ${message.author}, you are now level ${user.getLevel()}!`);
     }
 
-    if (!cmd.enabled) return message.channel.send(`Currently **${cmd.name}** is disabled!`);
+    if (!cmd.enabled) {
+        message.channel.send(`**${cmd.name}** is currently disabled!`);
+        return;
+    }
 
     try {
         await cmd.run(message, color, args, perm);
