@@ -25,7 +25,7 @@ module.exports = class GuildInfo extends Command {
           roleNames.push('...');
           break;
         }
-        emojiNames.push(role.toString());
+        roleNames.push(role.toString());
     }
 
     let emojiNames  = [];
