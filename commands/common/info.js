@@ -19,7 +19,7 @@ module.exports = class Info extends Command {
     .setDescription('\u200b')
     .addField('Invite', 'http://kannathebot.me/invite', true)
     .addField('Patreon', 'http://kannathebot.me/patreon', true)
-    .addField('Official Guild', 'http://kannathebot.me/guild', true)
+    .addField('Official Guild', 'https://discord.gg/uBdXdE9', true)
     .addField('Official Website', 'http://kannathebot.me', true)
     .setThumbnail(this.client.user.displayAvatarURL);
 

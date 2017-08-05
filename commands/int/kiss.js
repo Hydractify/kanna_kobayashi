@@ -4,8 +4,8 @@ const memberu = require('../../util/fetch/member');
 const info = require('../../data/client/info');
 
 module.exports = class Kiss extends Command {
-  constructor() { super(
-    { alias: ['ks'],
+  constructor() {
+    super({ alias: ['ks'],
       name: 'kiss',
       description: 'Kiss Someone! 👀',
       usage: 'kiss <user>',

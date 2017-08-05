@@ -26,12 +26,6 @@ module.exports = async (client, message) => {
     if (blackFile.includes(message.author.id)) return;
     if (isBotfarm(message)) return;
 
-    if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) {
-        message.author.send('I do not have the send messages permission for the channel of your command!')
-            .catch(() => null);
-        return;
-    }
-
     let guild;
     try {
         guild = await Guild.get(message.guild.id).run();
@@ -49,6 +43,12 @@ module.exports = async (client, message) => {
     let regex = new RegExp(`^(${prefixes.join('|')})([^]*)`);
 
     if (!regex.test(message.content)) return;
+
+    if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) {
+        message.author.send('I do not have the send messages permission for the channel of your command!')
+            .catch(() => null);
+        return;
+    }
 
     let prefixLength = regex.exec(message.content)[1].length;
 

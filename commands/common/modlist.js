@@ -27,12 +27,19 @@ module.exports = class ModList extends Command {
 		const embed = common(color, message)
 		.setAuthor(`${guild.name} Mod List`, guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
 		.setDescription('\u200b')
-		.setThumbnail(guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
-		.addField('Online <:online:339191830140944385>', '**' + (online.join('**\n**') || 'None') + '**', true)
-		.addField('Idle <:idle:339191829515993089>', '**' + (idle.join('**\n**') || 'None') + '**', true)
-		.addField('Do not Disturb <:dnd:339191829524381716>', '**' + (dnd.join('**\n**') || 'None') + '**', true)
-		.addField('Offline/Invisible <:offline:339191829218066433>', '**' + (offline.join('**\n**') || 'None') + '**', true);
-
+		.setThumbnail(guild.iconURL || 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png');
+		if (online.length >= 1) {
+			embed.addField('Online <:online:339191830140944385>', '**' + online.join('**\n**') + '**', true)
+		}
+		if (idle.length >= 1) {
+			embed.addField('Idle <:idle:339191829515993089>', '**' + idle.join('**\n**') + '**', true)
+		}
+		if (dnd.length >= 1) {
+			embed.addField('Do not Disturb <:dnd:339191829524381716>', '**' + dnd.join('**\n**') + '**', true)
+		}
+		if (offline.length >= 1) {
+			embed.addField('Offline/Invisible <:offline:339191829218066433>', '**' + offline.join('**\n**') + '**', true);
+		}
 		await message.channel.send({embed});
 	}
 }

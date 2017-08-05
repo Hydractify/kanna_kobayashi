@@ -15,6 +15,10 @@ module.exports = class Avatar extends Command {
   }
 
   async run(message, color, args) {
+    if (!message.guild.me.permissions.has('EMBED_LINKS')) {
+      await message.channel.send(`${message.author} i don't have permission to send embed links!`);
+      return;
+    }
     let user = message.author;
     if (args[0] || message.mentions.size >= 1) {
       user = await userFetch(message, args);

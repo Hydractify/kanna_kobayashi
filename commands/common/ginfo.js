@@ -15,6 +15,11 @@ module.exports = class GuildInfo extends Command {
   }
 
   async run(message, color) {
+    if (!message.guild.me.permissions.has('EMBED_LINKS')) {
+      await message.channel.send(`${message.author} i don't have permission to send embed links!`);
+      return;
+    }
+
     let guild = await fetchMs(message);
 
     let members = guild.members;

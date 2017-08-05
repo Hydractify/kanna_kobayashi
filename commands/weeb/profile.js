@@ -1,8 +1,6 @@
 const Discord = require('discord.js');
 const Command = require('../../cogs/commands/framework');
 const fetchMember = require('../../util/fetch/member');
-const permCheck = require('../../util/client/check_perm');
-const error = require('../../util/client/error/stack');
 
 const { User } = require('../../data/Models');
 

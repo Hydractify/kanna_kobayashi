@@ -24,30 +24,29 @@ class HelpUtil {
     .setDescription('\u200b')
     .setColor(this.color)
 
-    this.client.commands.filter(c=>c.category === category).forEach(c => embed.addField('kanna pls ' + c.name, c.description));
+    this.client.commands.filter(c=>c.category === category).forEach(c => embed.addField('kanna ' + c.name, c.description));
 
     return embed;
   }
 
   findCmd(color) {
-    if (this.client.commands.has(this.args[0])) {
-      let command = this.client.commands.get(this.args[0]);
-
-      let example = Array.isArray(command.example) ? 'kanna pls ' + command.example.join('\nkanna pls ') : command.example;
+    let command = this.client.commands.get(this.args[0]) || this.client.commands.get(this.client.aliases.get(this.args[0]))
+    if (command) {
+      let example = Array.isArray(command.example) ? 'kanna ' + command.example.join('\nkanna ') : command.example;
 
       const embed = new Discord.RichEmbed()
-      .setAuthor(`${this.args[0].toUpperCase()} Info`, this.client.user.displayAvatarURL)
+      .setAuthor(`${command.name.toUpperCase()} Info`, this.client.user.displayAvatarURL)
       .setDescription('\u200b')
       .setFooter(`Requested by ${this.message.author.tag}`, this.message.author.displayAvatarURL)
       .setURL('http://kannathebot.me/guild')
       .setThumbnail(this.client.user.displayAvatarURL)
       .setTimestamp()
-      .addField('Usage', 'kanna pls ' + command.usage, true)
-      .addField('Example', example, true)
-      .addField('Aliases', 'kanna pls ' + command.alias.join('\nkanna pls '), true)
-      .addField('Description', command.description, true)
-      .addField('Permission Level', command.permLevel, true)
-      .addField('Enabled', command.enabled ? 'Yes':'No', true)
+      .addField('Usage', 'kanna ' + command.usage)
+      .addField('Example', example)
+      .addField('Aliases', 'kanna ' + command.alias.join('\nkanna pls '))
+      .addField('Description', command.description)
+      .addField('Permission Level', command.permLevel)
+      .addField('Enabled', command.enabled ? 'Yes':'No')
       .setColor(color);
 
       return this.message.channel.send({embed})
@@ -74,7 +73,15 @@ module.exports = class Help extends Command {
   }
 
   async run(message, color, args, perms) {
-    if (!message.guild.me.permissions.has('ADD_REACTIONS')) return message.channel.send(`I don't have permission to add reactions!`);
+    if (!message.guild.me.permissions.has('EMBED_LINKS')) {
+      await message.channel.send(`${message.author} i don't have permission to send embed links!`);
+      return;
+    }
+
+    if (!message.guild.me.permissions.has('ADD_REACTIONS')) {
+      await message.channel.send(`${message.author} i don't have permission to add reactions!`);
+      return;
+    }
 
     let util = new Util(message, args, color);
 

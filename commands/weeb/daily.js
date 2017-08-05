@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const Command = require('../../cogs/commands/framework');
 
 module.exports = class Daily extends Command {
@@ -13,6 +12,6 @@ module.exports = class Daily extends Command {
     }
 
     async run(message) {
-        message.reply(`Here is your daily ${this.coins} <:coin:330926092703498240>`);
+        message.reply(`here is your daily ${this.coins} <:coin:330926092703498240>`);
     }
 };

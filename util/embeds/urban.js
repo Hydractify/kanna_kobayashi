@@ -16,6 +16,6 @@ module.exports = async (args, color, message) =>
 	.setURL(list.permalink)
 	.addField('Author', list.author)
 	.addField('Definition', list.definition)
-	.addField('Example', list.example)
+	.addField('Example', list.example || 'No example given')
 	.addField('Thumbs Up <:wave:341330512381607938>', list.thumbs_up, true)
 	.addField('Thumbs Down <:omfg:341330522028507139>', list.thumbs_down, true);	}

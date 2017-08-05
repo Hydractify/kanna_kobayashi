@@ -1,18 +1,20 @@
 const Command = require('../../cogs/commands/framework');
 const Discord = require('discord.js');
 
-module.exports = class GuildsRate extends Command
-{ constructor()
-  { super(
-    { alias: ['grates'],
+module.exports = class GuildsRate extends Command {
+  constructor() {
+    super({
+      alias: ['grates'],
       permLevel: 3,
       name: 'guildsrate',
       coins: 0,
       exp: 0,
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, color)
-  {	let bguilds = this.client.guilds.filter(g=>g.members.filter(m=>!m.user.bot).size < g.members.filter(m=>m.user.bot).size).size;
+  async run(message, color) {
+    let bguilds = this.client.guilds.filter(g=>g.members.filter(m=>!m.user.bot).size < g.members.filter(m=>m.user.bot).size).size;
 
     let eguilds = this.client.guilds.filter(g=>g.members.filter(m=>!m.user.bot).size === g.members.filter(m=>m.user.bot).size).size;
 
@@ -29,4 +31,6 @@ module.exports = class GuildsRate extends Command
     .setColor(color)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL);
 
-    await message.channel.send({embed});	}	}
+    await message.channel.send({embed});
+  }
+}
