@@ -1,14 +1,18 @@
-const Command = require('../../cogs/commands/framework'); 
-const meme = require('../../util/embeds/meme'); 
+const Command = require('../../cogs/commands/framework');
+const meme = require('../../util/embeds/meme');
 
-module.exports = class Rem extends Command
-{ constructor()
-  { super(
-    { alias: ['reimu'],
+module.exports = class Rem extends Command  {
+  constructor() {
+    super({
+      alias: ['reimu'],
       name: 'rem',
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, color)
-  { let image = require('../../data/links').memes.rem;
+  async run(message, color) {
+    let image = require('../../data/links').memes.rem;
 
-    await message.channel.send({embed : meme(image, color, message)});	}	}
+    await message.channel.send({embed : meme(image, color, message)});
+  }
+}

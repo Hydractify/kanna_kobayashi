@@ -1,14 +1,18 @@
-const Command = require('../../cogs/commands/framework'); 
-const meme = require('../../util/embeds/meme'); 
+const Command = require('../../cogs/commands/framework');
+const meme = require('../../util/embeds/meme');
 
-module.exports = class EndMe extends Command
-{ constructor()
-  { super(
-    { alias: ['plsendmylifeijustwanttostopfeelingthepainthatisbeinglonely'],
+module.exports = class EndMe extends Command {
+  constructor() {
+    super({
+      alias: ['plsendmylifeijustwanttostopfeelingthepainthatisbeinglonely'],
       name: 'endme',
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, color)
-  { let img = require('../../data/links').memes.endme;
+  async run(message, color) {
+    let img = require('../../data/links').memes.endme;
 
-    await message.channel.send({embed : meme(img, color, message)});	}	}
+    await message.channel.send({embed : meme(img, color, message)});
+  }
+}

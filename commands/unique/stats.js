@@ -2,18 +2,19 @@ const Discord = require('discord.js');
 const Command = require('../../cogs/commands/framework');
 const moment = require('moment');
 
-module.exports = class StAtUs extends Command
-{ constructor()
-  { super(
-    {
+module.exports = class StAtUs extends Command {
+  constructor() {
+    super({
       alias: ['kannastats', 'bstats'],
       coins: 0,
       exp: 0,
       name: 'stats',
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, color)
-  {	const guildValues = await this.client.shard.fetchClientValues('guilds.size');
+  async run(message, color) {
+    const guildValues = await this.client.shard.fetchClientValues('guilds.size');
     const userValues = await this.client.shard.fetchClientValues('users.size');
 
     const totalGuilds = guildValues.reduce((prev, val) => prev + val, 0);
@@ -35,4 +36,6 @@ module.exports = class StAtUs extends Command
     .addField('RAM Used <:tired:315264554600890390>', Math.floor((process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)) + 'MB', true)
     .addField('Shards <:hmm:315264556282675200>', this.client.shard.count, true);
 
-    await message.channel.send({embed});	}	}
+    await message.channel.send({embed});
+  }
+}

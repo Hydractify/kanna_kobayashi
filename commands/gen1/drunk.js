@@ -1,14 +1,18 @@
-const Command = require('../../cogs/commands/framework'); 
-const meme = require('../../util/embeds/meme'); 
+const Command = require('../../cogs/commands/framework');
+const meme = require('../../util/embeds/meme');
 
-module.exports = class Drunk extends Command
-{ constructor()
-  { super(
-    { alias: ['sake'],
+module.exports = class Drunk extends Command {
+  constructor() {
+    super({
+      alias: ['sake'],
       name: 'drunk',
-      enabled: true	});	}
+      enabled: true
+    });
+  }
 
-  async run(message, color)
-  { let image = require('../../data/links').memes.drunk;
+  async run(message, color) {
+    let image = require('../../data/links').memes.drunk;
 
-    await message.channel.send('You have to be this cute to be drunk  <:lewd:320406420824653825>', {embed : meme(image, color, message)});	}	}
+    await message.channel.send('You have to be this cute to be drunk  <:lewd:320406420824653825>', {embed : meme(image, color, message)});
+  }
+}
