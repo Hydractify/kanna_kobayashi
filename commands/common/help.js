@@ -93,9 +93,10 @@ module.exports = class Help extends Command {
         ['4']: util.categoryMap('gen2', 'Memes Generation 2'),
         ['5']: util.categoryMap('gen3', 'Memes Generation 3'),
         ['6']: util.categoryMap('gen4', 'Memes Generation 4'),
-        ['7']: util.categoryMap('weeb', 'Weeaboo'),
-        ['8']: util.categoryMap('mod', 'Moderation'),
-        ['9']: util.categoryMap('unique', 'Unique')
+        ['7']: util.categoryMap('fun', 'Fun'),
+        ['8']: util.categoryMap('dragon tamer', 'Dragon Tamer'),
+        ['9']: util.categoryMap('mod', 'Moderation'),
+        ['10']: util.categoryMap('unique', 'Unique')
       }
 
       let msg = await message.channel.send({embed : embeds['1']});
@@ -110,11 +111,11 @@ module.exports = class Help extends Command {
 
       const selectEmbed = (choose) => {
         choose === '➡' ? number++ : number--;
-        if (number > 9) number = 1;
+        if (number > 10) number = 1;
         if (number <= 0) number = 9;
-        if (number == 7 && perms < 1) number = 1;
-        if (number == 8 && perms < 2) number = 2;
-        if (number == 9 && perms < 3) number = 3;
+        if (number == 8 && perms < 1) number = 1;
+        if (number == 9 && perms < 2) number = 2;
+        if (number == 10 && perms < 3) number = 3;
         return embeds[number.toString()];
       }
 
