@@ -1,0 +1,33 @@
+{
+  "name": "kanna",
+  "version": "4.0.0-space",
+  "description": "\\o/",
+  "main": "shard.js",
+  "dependencies": {
+    "discord.js": "^11.2.1",
+    "moment": "^2.18.1",
+    "pg": "^6.4.2",
+    "raven": "^2.1.2",
+    "sequelize": "^4.11.1"
+  },
+  "devDependencies": {
+    "eslint-config-aqua": "^2.0.1",
+    "eslint": "^4.7.2"
+  },
+  "scripts": {
+    "test": "eslint *.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WizardLink/kanna_v4.git"
+  },
+  "author": "Wizard",
+  "license": "ISC",
+  "eslintConfig": {
+    "extends": "aqua"
+  },
+  "bugs": {
+    "url": "https://github.com/WizardLink/kanna_v4/issues"
+  },
+  "homepage": "https://github.com/WizardLink/kanna_v4#readme"
+}
