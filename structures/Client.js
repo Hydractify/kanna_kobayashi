@@ -1,7 +1,9 @@
 const { Client: DJSClient, RichEmbed } = require('discord.js');
+const { join } = require('path');
 
-const SpecialUsers = require('../models/SpecialUsers');
+const User = require('../models/User');
 const Logger = require('./Logger');
+const CommandHandler = require('./CommandHandler');
 
 /**
  * Represents the Client used to interace with discord; an extended discord.js Client
@@ -20,13 +22,67 @@ class Client extends DJSClient {
 		 */
 		this.logger = Logger.instance;
 
+		/**
+		 * Command handler of the client
+		 * @type {CommandHandler}
+		 */
+		this.commandHandler = new CommandHandler(this);
+		this.commandHandler.loadCommandsIn(join(__dirname, '..', 'commands'));
+
 		this.on('disconnect', this._onDisconnect);
 		this.on('error', this._onError);
 		this.on('ready', this._onReady);
 		this.on('resume', this._onResume);
 
+		this.on('message', this.commandHandler.handle.bind(this.commandHandler));
+
 		this.on('guildCreate', this._onGuild.bind(this, false));
 		this.on('guildDelete', this._onGuild.bind(this, true));
+	}
+
+	/**
+	 * Get a color, accepts a user model as fist parameter to account for devs / trusted
+	 * @param {User} [user] The user model (not discord.js User)
+	 * @returns {number} The resolved color
+	 */
+	color(user) {
+		if (user) {
+			if (user.type === 'DEV') return 0x00000f;
+			if (user.type === 'TRUSTED') return 0xffffff;
+		}
+
+		/* eslint-disable id-length */
+		// Copy from https://github.com/Qix-/color-convert/blob/4cb0bcc87e1f0e1b9e2f63447e8a5a8cc5709138/conversions.js#L314
+		const h = ((Math.random() * 150) + 250) / 60;
+		const s = ((Math.random() * 50) + 50) / 100;
+		let v = ((Math.random() * 50) + 50) / 100;
+		const hi = Math.floor(h) % 6;
+
+		const f = h - Math.floor(h);
+
+		const p = 255 * v * (1 - s);
+		const q = 255 * v * (1 - (s * f));
+		const t = 255 * v * (1 - (s * (1 - f)));
+		v *= 255;
+		/* eslint-enable id-length */
+
+		switch (hi) {
+			case 0:
+				return this.resolver.resolveColor([v, t, p]);
+			case 1:
+				return this.resolver.resolveColor([q, v, p]);
+			case 2:
+				return this.resolver.resolveColor([p, v, t]);
+			case 3:
+				return this.resolver.resolveColor([p, q, v]);
+			case 4:
+				return this.resolver.resolveColor([t, p, v]);
+			case 5:
+				return this.resolver.resolveColor([v, p, q]);
+			default:
+				// You're welcome, eslint
+				throw new Error('Arithmetic failure with HSV conversion, technically impossible.');
+		}
 	}
 
 	/**
@@ -75,7 +131,7 @@ class Client extends DJSClient {
 
 		const totalGuilds = await this.shard.fetchClientValues('guilds.size')
 			.then(result => result.reduce((previous, current) => previous + current));
-		const blacklisted = await SpecialUsers.findOne({ where: { id: guild.ownerID, type: 'BLACKLISTED' } })
+		const blacklisted = await User.findOne({ where: { id: guild.ownerID, type: 'BLACKLISTED' } })
 			.then(user => user ? 'Yes' : 'No');
 		const humanCount = guild.members.filter(member => !member.user.bot).size;
 

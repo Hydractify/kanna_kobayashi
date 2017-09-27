@@ -18,6 +18,7 @@ class Command {
 		description,
 		examples = ['No example provided.'],
 		exp = 850,
+		name,
 		usage,
 		permLevel = 0
 	} = {}) {
@@ -33,6 +34,15 @@ class Command {
 		if (!(examples instanceof Array)) {
 			throw new Error(`Command ${this.constructor.name}'s examples is not instanceof array!`);
 		}
+		if (!name) {
+			throw new Error(`Command ${this.constructor.name} does not have a name!`);
+		}
+
+		/**
+		 * The category of this command
+		 * @type {string}
+		 */
+		this.category = null;
 
 		/**
 		 * Client that instantiated this command
@@ -76,6 +86,11 @@ class Command {
 		 */
 		this.exp = exp;
 		/**
+		 * Name of the command
+		 * @type {string}
+		 */
+		this.name = name;
+		/**
 		 * How this command is to be used
 		 * @type {string}
 		 */
@@ -95,11 +110,11 @@ class Command {
 
 	/**
 	 * Runs this command
-	 * @param {Message} msg Message triggering this method
+	 * @param {Message} message Message triggering this method
 	 * @param {string[]} args Passed args
 	 * @abstract
 	 */
-	run(msg, args) { // eslint-disable-line no-unused-vars
+	run(message, args) { // eslint-disable-line no-unused-vars
 		throw new Error(`${this.constructor.name} does not implement a run method!`);
 	}
 }

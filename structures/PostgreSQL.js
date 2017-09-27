@@ -58,7 +58,7 @@ class Database {
 			.then(() => this.logger.database('[POSTGRES]: Synchronizing database...'))
 			.then(() => this.db.sync()
 				.then(() => this.logger.database('[POSTGRES]: Done Synchronizing database!'))
-				.catch(error => this.logger.error('[POSTGRES]: Error synchronizing the database: \n', error))
+				.catch(error => this.logger.error('[POSTGRES]: Error synchronizing the database:\n', error))
 			)
 			.catch(error => {
 				this.logger.error('[POSTGRES]: Unable to connect to the database: \n', error);

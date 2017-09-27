@@ -5,6 +5,7 @@
   "main": "shard.js",
   "dependencies": {
     "discord.js": "^11.2.1",
+    "humanize-duration": "^3.10.1",
     "moment": "^2.18.1",
     "pg": "^6.4.2",
     "raven": "^2.1.2",
