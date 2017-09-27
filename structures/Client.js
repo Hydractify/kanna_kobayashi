@@ -204,7 +204,6 @@ class Client extends DJSClient {
 
 		post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
 			.set('Authorization', fakedbots)
-			// eslint-disable-next-line camelcase
 			.send(body)
 			.then(() => this.logger.bot('[BotLists]: Updated discordbots\' guild count.'))
 			.catch(error => {
