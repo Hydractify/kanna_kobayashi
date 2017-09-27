@@ -159,8 +159,7 @@ class Client extends DJSClient {
 			|| 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
 			.setTitle(`I have ${left ? 'left' : 'joined'} a guild!`)
 			.setDescription(`I am now on ${totalGuilds} guilds.`)
-			// TODO: What is this hsv -> rgb -> hex conversion?
-			// .setColor()
+			.setColor(this.color())
 			.addField('Name', guild.name, true)
 			.addField('ID', guild.id, true)
 			.addField('Owner', guild.owner.user.tag, true)
