@@ -2,7 +2,7 @@
 
 const { STRING, ENUM } = require('sequelize');
 
-const { db } = require('../structures/PostgreSQL');
+const { instance: { db } } = require('../structures/PostgreSQL');
 
 const SpecialUser = db.define('special_users', {
 	id: {
