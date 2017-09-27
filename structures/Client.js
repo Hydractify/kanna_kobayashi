@@ -1,6 +1,9 @@
 const { Client: DJSClient, RichEmbed } = require('discord.js');
 const { join } = require('path');
+const Raven = require('raven');
+const { post } = require('snekfetch');
 
+const { dbots, fakedbots } = require('../data');
 const User = require('../models/User');
 const Logger = require('./Logger');
 const CommandHandler = require('./CommandHandler');
@@ -31,7 +34,7 @@ class Client extends DJSClient {
 
 		this.on('disconnect', this._onDisconnect);
 		this.on('error', this._onError);
-		this.on('ready', this._onReady);
+		this.once('ready', this._onceReady);
 		this.on('reconnecting', this._onReconnecting);
 		this.on('resume', this._onResume);
 		this.on('warn', this._onWarn);
@@ -106,11 +109,14 @@ class Client extends DJSClient {
 	}
 
 	/**
-	 * Run when the client is ready.
+	 * Run once when the client is ready.
 	 * @private
 	 */
-	_onReady() {
+	_onceReady() {
 		this.logger.bot(`[READY]: Logged in as ${this.user.tag} (${this.user.id})`);
+		if (this.shard.id === 0) {
+			this.setInterval(this._updateBotLists.bind(this), 30 * 60 * 1000);
+		}
 	}
 
 	/**
@@ -172,6 +178,35 @@ class Client extends DJSClient {
 		// Avoid sharding issue when the channel is on a different shard. Still has rate limiting and retry on 5xx
 		// Note: This is somewhat safe to use because there will be no releases until v12, which is breaking anyway
 		this.rest.methods.sendMessage({ id: '303180857030606849' }, undefined, { embed });
+	}
+
+	async _updateBotLists() {
+		const body = {
+			// eslint-disable-next-line camelcase
+			server_count: await this.shard.fetchClientValues('guilds.size')
+				.then(res => res.reduce((prev, val) => prev + val))
+		};
+
+		this.logger.bot('[BotLists]: Updating guild count at bot lists.');
+
+		post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
+			.set('Authorization', dbots)
+			.send(body)
+			.then(() => this.logger.bot('[BotLists]: Updated bots.discord\'s guild count.'))
+			.catch(error => {
+				Raven.captureException(error);
+				this.logger.error('[BotLists]: Updating bots.discord\'s guild coint failed:', error);
+			});
+
+		post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
+			.set('Authorization', fakedbots)
+			// eslint-disable-next-line camelcase
+			.send(body)
+			.then(() => this.logger.bot('[BotLists]: Updated discordbots\' guild count.'))
+			.catch(error => {
+				Raven.captureException(error);
+				this.logger.error('[BotLists]: Updating discordbots\'s guild coint failed:', error);
+			});
 	}
 }
 
