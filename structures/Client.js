@@ -180,6 +180,10 @@ class Client extends DJSClient {
 		this.rest.methods.sendMessage({ id: '303180857030606849' }, undefined, { embed });
 	}
 
+	/**
+	 * Updates the bot lists entries regarding the guild count
+	 * @private
+	 */
 	async _updateBotLists() {
 		const body = {
 			// eslint-disable-next-line camelcase
