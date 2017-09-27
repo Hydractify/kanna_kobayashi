@@ -2,6 +2,7 @@ const { Collection } = require('discord.js');
 const { readdir } = require('fs');
 const humanizeDuration = require('humanize-duration');
 const { join } = require('path');
+const Raven = require('raven');
 const { promisify } = require('util');
 
 const CommandLog = require('../models/CommandLog');
@@ -140,7 +141,20 @@ class CommandHandler {
 		try {
 			await command.run(message, args);
 		} catch (error) {
-
+			await Raven.captureException(error);
+			this.logger.sentry('Sent an error to sentry:', error);
+			await message.channel.send(
+				[
+					'**An errror occured! Please paste this to the official guild!**'
+					+ ' <:ayy:315270615844126720> http://kannathebot.me/guild',
+					'',
+					'',
+					`\\\`${command.name}\\\``,
+					'\\`\\`\\`',
+					error.stack,
+					'\\`\\`\\`'
+				]
+			);
 		}
 	}
 
