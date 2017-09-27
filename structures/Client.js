@@ -32,7 +32,9 @@ class Client extends DJSClient {
 		this.on('disconnect', this._onDisconnect);
 		this.on('error', this._onError);
 		this.on('ready', this._onReady);
+		this.on('reconnecting', this._onReconnecting);
 		this.on('resume', this._onResume);
+		this.on('warn', this._onWarn);
 
 		this.on('message', this.commandHandler.handle.bind(this.commandHandler));
 
@@ -112,12 +114,29 @@ class Client extends DJSClient {
 	}
 
 	/**
+	 * Run whenever the client's WebSocket is reconnecting.
+	 * @private
+	 */
+	_onReconnecting() {
+		this.logger.bot('[RECONNECTING]: Client reconnecting.');
+	}
+
+	/**
 	 * Run whenever the client's WebSocket resumed.
 	 * @param {number} replayed The number of replayed events
 	 * @private
 	 */
 	_onResume(replayed) {
 		this.logger.bot(`[RESUMED]: Replayed ${replayed} events.`);
+	}
+
+	/**
+	 * Run whenever the client emits a warning.
+	 * @param {string} warning The emitted warning
+	 * @private
+	 */
+	_onWarn(warning) {
+		this.logger.bot('[WARN]:', warning);
 	}
 
 	/**
