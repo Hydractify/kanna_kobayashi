@@ -1,10 +1,16 @@
 /* eslint-disable new-cap */
 
-const { ENUM, INTEGER, STRING, JSONB } = require('sequelize');
+const { ENUM, INTEGER, Model, STRING, JSONB } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
 
-const User = db.define('users', {
+class User extends Model {
+	get level() {
+		return Math.floor(Math.sqrt(this.exp / 1000)) + 1;
+	}
+}
+
+User.init({
 	id: {
 		primaryKey: true,
 		type: STRING('20')
@@ -18,11 +24,6 @@ const User = db.define('users', {
 		allowNull: false,
 		defaultValue: 0,
 		type: INTEGER
-	},
-	relationship: {
-		// TODO: No clue what this is for, perhaps something that can make use of a new table?
-		type: STRING,
-		defaultValue: null
 	},
 	items: {
 		// TODO: Most likely a new table with a 1:m / m:m relationship
@@ -38,16 +39,9 @@ const User = db.define('users', {
 		type: ENUM,
 		values: ['BLACKLISTED', 'WHITELISTED', 'TRUSTED', 'DEV']
 	}
-});
+}, { sequelize: db });
 
-Reflect.defineProperty(
-	User.prototype,
-	'level',
-	{
-		get: function getLevel() {
-			return Math.floor(Math.sqrt(this.exp / 1000)) + 1;
-		}
-	}
-);
+// TODO: Verify this actually works
+User.hasOne(User, { as: 'partner', foreignKey: 'partner_id' });
 
 module.exports = User;
