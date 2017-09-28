@@ -1,4 +1,4 @@
-const Client = require('./Client');
+const CommandHandler = require('./CommandHandler');
 
 /**
  * Represents an abstract command
@@ -7,10 +7,10 @@ const Client = require('./Client');
 class Command {
 	/**
 	 * Instantiate a new command
-	 * @param {Client} client Instantiating client
+	 * @param {CommandHandler} handler Instantiating command handler
 	 * @param {Object} options Command options
 	 */
-	constructor(client, {
+	constructor(handler, {
 		aliases = [],
 		coins = 10,
 		cooldown = 5000,
@@ -22,7 +22,7 @@ class Command {
 		usage,
 		permLevel = 0
 	} = {}) {
-		if (!(client instanceof Client)) {
+		if (!(handler instanceof CommandHandler)) {
 			throw new Error(`Command ${this.constructor.name}'s client is not instanceof Client!`);
 		}
 		if (!(aliases instanceof Array)) {
@@ -39,16 +39,21 @@ class Command {
 		}
 
 		/**
+		 * Client that instantiated this command
+		 * @type {Client}
+		 */
+		this.client = handler.client;
+
+		/**
+		 * Command handler this Command is part of
+		 * @type {CommandHandler}
+		 */
+		this.handler = handler;
+		/**
 		 * The category of this command
 		 * @type {string}
 		 */
 		this.category = null;
-
-		/**
-		 * Client that instantiated this command
-		 * @type {Client}
-		 */
-		this.client = client;
 
 		/**
 		 * Aliases of this command

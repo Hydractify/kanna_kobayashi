@@ -172,7 +172,7 @@ class CommandHandler {
 			readdirAsync(join(path, folder)).then(files => {
 				for (const file of files) {
 					const CommandClass = require(join(path, folder, file));
-					const command = new CommandClass(this.client);
+					const command = new CommandClass(this);
 
 					command.category = folder;
 
@@ -185,6 +185,92 @@ class CommandHandler {
 				this.logger.load(`[COMMANDS] Loaded ${files.length} ${folder} commands.`);
 			});
 		}
+	}
+
+	/**
+	 * Resolver should probably be somwhere else, attaching one to the
+	 * client is not really possible since discord.js already has one.
+	 */
+
+	/**
+	 * Resolves the provided input to a guild member
+	 * @param {Guild} guild The guild the member is part of
+	 * @param {string} input The string to resolve the member from
+	 * @returns {Promise<?GuildMember>}
+	 */
+	async resolveMember(guild, input) {
+		if (!input) return null;
+
+		// Mention or id
+		let match = /^<@!?(\d{17,19})>$|^(\d{17,19})$/.exec(input);
+		if (match) {
+			return guild.members.get(match[1] || match[2])
+				|| guild.fetchMember(match[1] || match[2]).catch(() => null);
+		}
+
+		input = input.toLowerCase();
+		let displayMatch = null;
+		for (const member of guild.members.values()) {
+			if (
+				// Check for the member's tag or username
+				member.user.username.toLowerCase().includes(input)
+				|| member.user.tag.toLowerCase() === input
+			) {
+				match = member;
+				break;
+			}
+			// Check for the member's nickname (username has already been checked above)
+			if (!displayMatch && member.nickname && member.nickname.toLowerCase().includes(input)) {
+				displayMatch = member;
+			}
+		}
+
+		if (match || displayMatch || guild.members.size >= guild.memberCount) {
+			return match || displayMatch;
+		}
+
+		match = await this.resolveUser(input);
+		if (match) guild.fetchMember(match).catch(() => null);
+
+		return null;
+	}
+
+	/**
+	 * Resolves a user based on user input
+	 * @param {string} input User input
+	 * @returns {Promise<?User>}
+	 */
+	resolveUser(input) {
+		if (!input) return Promise.resolve(null);
+
+		let match = /^<@!?(\d{17,19})>$|^(\d{17,19})$/.exec(input);
+		if (match) {
+			const user = this.client.users.get(match[1] || match[2]);
+			if (user) return Promise.resolve(user);
+			return this.client.fetchUser(match[1] || match[2]).catch(() => null);
+		}
+		for (const user of this.client.users.values()) {
+			// Check for the user's tag or username
+			if (user.tag.toLowerCase() === input || user.username.toLowerCase().includes(input)) {
+				return Promise.resolve(user);
+			}
+		}
+
+		return Promise.resolve(null);
+	}
+
+	/**
+	 * Fetches a message by id from the provided channel
+	 * @param {TextChannel} channel The channel to fetch from
+	 * @param {string} id The provided input
+	 * @returns {Promise<?Message>}
+	 */
+	resolveMessage(channel, id) {
+		if (!id) return Promise.resolve(null);
+
+		return id.match(/^\d{17,19}$/)
+			? channel.fetchMessage(id).catch(() => null)
+			: Promise.resolve(null);
 	}
 }
 
