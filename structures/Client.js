@@ -114,7 +114,8 @@ class Client extends DJSClient {
 	 */
 	_onceReady() {
 		this.logger.bot(`[READY]: Logged in as ${this.user.tag} (${this.user.id})`);
-		if (this.shard.id === 0) {
+		// Only update stats on Kanna and shard 0
+		if (this.shard.id === 0 && this.user.id === '297459926505095180') {
 			this.setInterval(this._updateBotLists.bind(this), 30 * 60 * 1000);
 		}
 	}
