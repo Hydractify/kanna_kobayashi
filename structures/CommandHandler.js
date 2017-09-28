@@ -5,7 +5,6 @@ const { join } = require('path');
 const Raven = require('raven');
 const { promisify } = require('util');
 
-const CommandLog = require('../models/CommandLog');
 const Guild = require('../models/Guild');
 const User = require('../models/User');
 const Logger = require('./Logger');
@@ -109,13 +108,13 @@ class CommandHandler {
 			return;
 		}
 
-		const commandLog = await CommandLog.findCreateFind({
-			where: {
-				userId: message.author.id,
-				command: commandName.toLowerCase()
-			}
-		}).then(([row]) => row);
-		const timeLeft = commandLog.lastUsed.getTime() + command.cooldown - Date.now();
+		const [commandLog] = await authorModel.getCommandLogs({
+			order: [['run', 'DESC']],
+			limit: 1
+		});
+		const timeLeft = commandLog
+			? commandLog.run.getTime() + command.cooldown - Date.now()
+			: 0;
 
 		if (!['DEV', 'TRUSTED'].includes(authorModel.type)
 			&& timeLeft > 0) {
@@ -130,8 +129,7 @@ class CommandHandler {
 			return;
 		}
 
-		commandLog.lastUsed = new Date();
-		await commandLog.save();
+		await authorModel.createCommandLog({ userId: message.author.id, commandName });
 
 		const { level } = authorModel;
 		authorModel.exp += command.exp;

@@ -3,6 +3,7 @@
 const { BOOLEAN, DATE, ENUM, INTEGER, Model, STRING, JSONB } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
+const CommandLog = require('./CommandLog');
 
 class User extends Model {
 	get level() {
@@ -40,6 +41,7 @@ User.init({
 		values: ['BLACKLISTED', 'WHITELISTED', 'TRUSTED', 'DEV']
 	},
 	partnerId: {
+		field: 'partner_id',
 		type: STRING('20'),
 		set: function setPartnerId(value) {
 			this.setDataValue('partnerId', value);
@@ -47,10 +49,16 @@ User.init({
 			this.setDataValue('partnerMarried', value ? false : null);
 		}
 	},
-	partnerSince: { type: DATE },
-	partnerMarried: { type: BOOLEAN }
+	partnerSince: {
+		field: 'partner_since',
+		type: DATE
+	},
+	partnerMarried: {
+		field: 'partner_married',
+		type: BOOLEAN
+	}
 }, {
-	tableName: 'users',
+	createdAt: false,
 	hooks: {
 		beforeUpdate: user => {
 			// Partner present?
@@ -71,10 +79,13 @@ User.init({
 			}
 		}
 	},
-	sequelize: db
+	sequelize: db,
+	tableName: 'users',
+	updatedAt: false
 });
 
 // TODO: Verify this actually works
 User.hasOne(User, { as: 'partner', foreignKey: 'partnerId' });
+User.hasMany(CommandLog, { foreignKey: 'user_id' });
 
 module.exports = User;

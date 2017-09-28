@@ -44,7 +44,7 @@ class Database {
 		 * @type {Sequelize}
 		 */
 		this.db = new Sequelize('postgres://kanna:kannapw@127.0.0.1:5432/kanna', {
-			// For dev logging: false
+			logging: false,
 			retry: { max: 5 }
 		});
 	}

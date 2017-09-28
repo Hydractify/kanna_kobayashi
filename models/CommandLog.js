@@ -1,26 +1,27 @@
 /* eslint-disable new-cap */
 
-const { DATE, STRING } = require('sequelize');
+const { STRING, Model } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
 
-const CommandLog = db.define('command_log', {
+class CommandLog extends Model { }
+
+CommandLog.init({
 	userId: {
+		allowNull: false,
 		field: 'user_id',
-		primaryKey: true,
 		type: STRING(20)
 	},
-	command: {
-		primaryKey: true,
+	commandName: {
+		allowNull: false,
+		field: 'command_name',
 		type: STRING
-	},
-	lastUsed: {
-		field: 'last_used',
-		type: DATE,
-		get: function getLastUsed() {
-			return this.getDataValue('lastUsed') || new Date(0);
-		}
 	}
+}, {
+	createdAt: 'run',
+	tableName: 'command_logs',
+	sequelize: db,
+	updatedAt: false
 });
 
 module.exports = CommandLog;
