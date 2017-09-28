@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-const { DATE, NOW, STRING } = require('sequelize');
+const { DATE, STRING } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
 
@@ -15,10 +15,11 @@ const CommandLog = db.define('command_log', {
 		type: STRING
 	},
 	lastUsed: {
-		allowNull: false,
 		field: 'last_used',
-		default: NOW,
-		type: DATE
+		type: DATE,
+		get: function getLastUsed() {
+			return this.getDataValue('lastUsed') || new Date(0);
+		}
 	}
 });
 
