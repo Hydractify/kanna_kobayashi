@@ -92,7 +92,7 @@ class Logger {
 	_prepareText(data) {
 		const cleaned = [];
 		for (let arg of data) {
-			if (typeof item !== 'string') arg = inspect(arg);
+			if (typeof arg !== 'string') arg = inspect(arg);
 			cleaned.push(arg);
 		}
 		return cleaned.join(' ');
@@ -107,14 +107,15 @@ class Logger {
 	_write(level, data) {
 		const cleaned = this._prepareText(data);
 
+
 		process.stdout.write(
 			[
 				'\n',
 				`[${moment().format('YYYY.MM.DD-HH:mm:ss')}]`,
-				`\u001b[${levels[level]}`,
-				'\u100b[30m',
+				`\x1b[${levels[level]}m`,
+				'\x1b[30m',
 				`[${level}]`,
-				'\x1b[0m ',
+				'\x1b[0m: ',
 				cleaned,
 				'\n'
 			].join('')
