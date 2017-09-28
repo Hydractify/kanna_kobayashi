@@ -52,17 +52,20 @@ class CommandHandler {
 		if (message.channel.type !== 'text'
 			|| message.author.bot) return;
 
-		const authorModel = message.author.model = await User.findCreateFind({ where: { id: message.author.id } });
+		const authorModel = message.author.model = await User.findCreateFind({ where: { id: message.author.id } })
+			.then(([row]) => row);
 		if (authorModel.type === 'BLACKLISTED') return;
 
 		const ownerModel
 			= message.author.id === message.guild.ownerID
 				? authorModel
-				: message.guild.owner.user.model = await User.findCreateFind({ where: { id: message.guild.ownerID } });
+				: message.guild.owner.user.model = await User.findCreateFind({ where: { id: message.guild.ownerID } })
+					.then(([row]) => row);
 
 		if (ownerModel.type === 'BLACKLISTED') return;
 
-		const guildModel = message.guild.model = await Guild.findCreateFind({ where: { id: message.guild.id } });
+		const guildModel = message.guild.model = await Guild.findCreateFind({ where: { id: message.guild.id } })
+			.then(([row]) => row);
 
 		if (ownerModel.type !== 'WHITELISTED'
 			&& message.guild.isBotfarm) return;
@@ -75,7 +78,7 @@ class CommandHandler {
 		const match = regex.exec(message.content);
 		if (!match) return;
 
-		const [commandName, ...args] = message.content.slice(match[1].length);
+		const [commandName, ...args] = message.content.slice(match[1].length).split(' ');
 
 		const command = this.commands.get(commandName.toLowerCase())
 			|| this.commands.get(this.aliases.get(commandName.toLowerCase()));
@@ -106,12 +109,12 @@ class CommandHandler {
 			return;
 		}
 
-		const commandLog = CommandLog.findCreateFind({
+		const commandLog = await CommandLog.findCreateFind({
 			where: {
 				userId: message.author.id,
-				command: command.toLowerCase()
+				command: commandName.toLowerCase()
 			}
-		});
+		}).then(([row]) => row);
 		const timeLeft = commandLog.lastUsed.getTime() + command.cooldown - Date.now();
 
 		if (!['DEV', 'TRUSTED'].includes(authorModel.type)
