@@ -200,7 +200,7 @@ class Client extends DJSClient {
 			.then(() => this.logger.bot('[BotLists]: Updated bots.discord\'s guild count.'))
 			.catch(error => {
 				Raven.captureException(error);
-				this.logger.error('[BotLists]: Updating bots.discord\'s guild coint failed:', error);
+				this.logger.error('[BotLists]: Updating bots.discord\'s guild count failed:', error);
 			});
 
 		post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
@@ -209,7 +209,7 @@ class Client extends DJSClient {
 			.then(() => this.logger.bot('[BotLists]: Updated discordbots\' guild count.'))
 			.catch(error => {
 				Raven.captureException(error);
-				this.logger.error('[BotLists]: Updating discordbots\'s guild coint failed:', error);
+				this.logger.error('[BotLists]: Updating discordbots\'s guild count failed:', error);
 			});
 	}
 }
