@@ -48,6 +48,9 @@ const Guild = db.define('guilds', {
 		type: ARRAY(STRING),
 		defaultValue: []
 	}
+}, {
+	createdAt: false,
+	updatedAt: false
 });
 
 module.exports = Guild;
