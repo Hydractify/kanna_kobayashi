@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-const { ENUM, INTEGER, Model, STRING, JSONB } = require('sequelize');
+const { BOOLEAN, DATE, ENUM, INTEGER, Model, STRING, JSONB } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
 
@@ -38,10 +38,45 @@ User.init({
 	type: {
 		type: ENUM,
 		values: ['BLACKLISTED', 'WHITELISTED', 'TRUSTED', 'DEV']
+	},
+	partnerId: {
+		type: STRING('20'),
+		set: function setPartnerId(value) {
+			this.setDataValue('partnerId', value);
+			this.setDataValue('partnerSince', value ? new Date() : null);
+		}
+	},
+	partnerSince: { type: DATE },
+	partnerMarried: {
+		allowNull: false,
+		defaultValue: false,
+		type: BOOLEAN
 	}
-}, { sequelize: db });
+}, {
+	hooks: {
+		beforeUpdate: user => {
+			// Partner present?
+			if (user.partnerId) {
+				// But no since date? (newly added)
+				if (!user.partnerSince) {
+					user.partnerSince = new Date();
+				}
+			} else {
+				// No partner but a since date? (just deleted)
+				if (user.partnerSince) {
+					user.partnerSince = null;
+				}
+				// Married without a partner? (^)
+				if (user.partnerMarried) {
+					user.partnerMarried = false;
+				}
+			}
+		}
+	},
+	sequelize: db
+});
 
 // TODO: Verify this actually works
-User.hasOne(User, { as: 'partner', foreignKey: 'partner_id' });
+User.hasOne(User, { as: 'partner', foreignKey: 'partnerId' });
 
 module.exports = User;
