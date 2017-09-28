@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-const { ARRAY, JSONB, STRING } = require('sequelize');
+const { ARRAY, BOOLEAN, STRING } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
 
@@ -14,29 +14,37 @@ const Guild = db.define('guilds', {
 		defaultValue: []
 	},
 	tamerRole: {
+		field: 'tamer_role',
 		type: STRING,
-		set: function setTamerRole(value) { return this.setDataValue('tamerRole', value.toLowerCase()); }
-	},
-	quiz: {
-		// TODO: Maybe move this to a seperate table with a 1:1 or 1:m relationship?
-		type: JSONB,
-		defaultValue: {
-			character: 'http://pm1.narvii.com/6366/2c35594538206f7f598be792bf203b6b638e9c07_hq.jpg',
-			answer: 'kanna kobayashi'
+		set: function setTamerRole(value) {
+			return this.setDataValue('tamerRole', value.toLowerCase());
 		}
 	},
-	notifications: {
-		// TODO: Same here?
-		type: JSONB,
-		defaultValue: {
-			levelUp: true,
-			welcome: {
-				enabled: false,
-				channel: null
-			}
-		}
+	quizAnswer: {
+		field: 'quiz_anaswer',
+		type: STRING,
+		defaultValue: 'kanna kobayashi'
 	},
-	roles: {
+	quizCharacter: {
+		field: 'quiz_character',
+		type: STRING,
+		defaultValue: 'http://pm1.narvii.com/6366/2c35594538206f7f598be792bf203b6b638e9c07_hq.jpg'
+	},
+	levelUpEnabled: {
+		field: 'level_up_enabled',
+		type: BOOLEAN,
+		defaultValue: true
+	},
+	welcomeChannel: {
+		field: 'welcome_channel',
+		type: STRING('20')
+	},
+	welcomeMessage: {
+		field: 'welcome_message',
+		type: STRING('1500')
+	},
+	selfRoles: {
+		field: 'self_roles',
 		type: ARRAY(STRING),
 		defaultValue: []
 	}

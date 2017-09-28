@@ -44,14 +44,11 @@ User.init({
 		set: function setPartnerId(value) {
 			this.setDataValue('partnerId', value);
 			this.setDataValue('partnerSince', value ? new Date() : null);
+			this.setDataValue('partnerMarried', value ? false : null);
 		}
 	},
 	partnerSince: { type: DATE },
-	partnerMarried: {
-		allowNull: false,
-		defaultValue: false,
-		type: BOOLEAN
-	}
+	partnerMarried: { type: BOOLEAN }
 }, {
 	tableName: 'users',
 	hooks: {
@@ -68,8 +65,8 @@ User.init({
 					user.partnerSince = null;
 				}
 				// Married without a partner? (^)
-				if (user.partnerMarried) {
-					user.partnerMarried = false;
+				if (user.partnerMarried !== null) {
+					user.partnerMarried = null;
 				}
 			}
 		}
