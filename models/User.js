@@ -53,6 +53,7 @@ User.init({
 		type: BOOLEAN
 	}
 }, {
+	tableName: 'users',
 	hooks: {
 		beforeUpdate: user => {
 			// Partner present?
