@@ -38,7 +38,7 @@ class Database {
 		 * @type {Logger}
 		 * @private
 		 */
-		this.logger = Logger._instance;
+		this.logger = Logger.instance;
 		/**
 		 * Sequelize connection instance
 		 * @type {Sequelize}
