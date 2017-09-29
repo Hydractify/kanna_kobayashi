@@ -114,7 +114,7 @@ class Logger {
 				`[${moment().format('YYYY.MM.DD-HH:mm:ss')}]`,
 				`\x1b[${levels[level][0]}m`,
 				'\x1b[30m',
-				`[${level[0]}]`,
+				`[${level}]`,
 				'\x1b[0m: ',
 				`\x1b${levels[level][1]}`,
 				cleaned,
