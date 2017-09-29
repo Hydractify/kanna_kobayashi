@@ -11,7 +11,10 @@ const Guild = db.define('guilds', {
 	},
 	prefixes: {
 		type: ARRAY(STRING),
-		defaultValue: []
+		defaultValue: [],
+		set: function setPrefixes(value) {
+			this.setDataValue('prefixes', value.map(prefix => prefix.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')));
+		}
 	},
 	tamerRole: {
 		field: 'tamer_role',

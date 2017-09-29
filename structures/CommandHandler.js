@@ -48,45 +48,29 @@ class CommandHandler {
 	 * @param {Message} message Incoming message
 	 */
 	async handle(message) {
-		if (message.channel.type !== 'text'
-			|| message.author.bot) return;
+		if (message.channel.type !== 'text' || message.author.bot) return;
 
-		const authorModel = message.author.model = await User.findCreateFind({ where: { id: message.author.id } })
-			.then(([row]) => row);
-		if (authorModel.type === 'BLACKLISTED') return;
-
-		const ownerModel
-			= message.author.id === message.guild.ownerID
-				? authorModel
-				: message.guild.owner.user.model = await User.findCreateFind({ where: { id: message.guild.ownerID } })
-					.then(([row]) => row);
-
-		if (ownerModel.type === 'BLACKLISTED') return;
-
-		const guildModel = message.guild.model = await Guild.findCreateFind({ where: { id: message.guild.id } })
-			.then(([row]) => row);
-
-		if (ownerModel.type !== 'WHITELISTED'
-			&& message.guild.isBotfarm) return;
-
+		let guildModel = await this._fetchModel(message.guild, Guild);
 		const prefixes = [`<@!?${this.client.user.id}> `, 'kanna ', 'k!']
-			.concat(guildModel.prefixes.map(prefix =>
-				prefix.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')));
-		const regex = new RegExp(`^(${prefixes.join('|')})`, 'i');
-
-		const match = regex.exec(message.content);
+			.concat(guildModel.prefixes);
+		const match = new RegExp(`^(${prefixes.join('|')})`, 'i').exec(message.content);
 		if (!match) return;
 
-		const [commandName, ...args] = message.content.slice(match[1].length).split(' ');
+		let authorModel = await this._fetchModel(message.author, Guild);
+		if (authorModel.type === 'BLACKLISTED') return;
 
+		if (!message.guild.owner) await message.guild.fetchMember(message.guild.ownerID);
+		let ownerModel = await this._fetchModel(message.guild.owner.user, User);
+		if (ownerModel.type === 'BLACKLISTED' || (ownerModel.type !== 'WHITELISTED' && message.guild.isBotfarm)) return;
+
+		const [commandName, ...args] = message.content.slice(match[1].length).split(' ');
 		const command = this.commands.get(commandName.toLowerCase())
 			|| this.commands.get(this.aliases.get(commandName.toLowerCase()));
-
 		if (!command) return;
 
 		// After checking for a valid command now :^)
 		if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) {
-			await message.author.send('I do not have the send messages permission for the channel of your command!')
+			message.author.send('I do not have the send messages permission for the channel of your command!')
 				.catch(() => null);
 			return;
 		}
@@ -94,10 +78,8 @@ class CommandHandler {
 		// Message#member is not a getter, so just reassign if not cached
 		if (!message.member) message.member = await message.guild.fetchMember(message.author.id);
 
-		const { permLevel } = message.member;
-
-		if (command.permLevel > permLevel) {
-			await message.channel
+		if (command.permLevel > message.member.permLevel) {
+			message.channel
 				.send(`${message.author}, you don't have the required permission level to use **${command.name}**!`);
 			return;
 		}
@@ -115,7 +97,6 @@ class CommandHandler {
 		const timeLeft = commandLog
 			? commandLog.run.getTime() + command.cooldown - Date.now()
 			: 0;
-
 		if (!['DEV', 'TRUSTED'].includes(authorModel.type)
 			&& timeLeft > 0) {
 			const timeLeftString = humanizeDuration(timeLeft, {
@@ -124,6 +105,7 @@ class CommandHandler {
 				conjuntion: ' and ',
 				serialComma: false
 			});
+
 			await message.channel
 				.send(`${message.author}, **${command.name}** is on cooldown! Please wait **${timeLeftString}**`);
 			return;
@@ -131,20 +113,12 @@ class CommandHandler {
 
 		await authorModel.createCommandLog({ userId: message.author.id, commandName });
 
-		const { level } = authorModel;
-		authorModel.exp += command.exp;
-		authorModel.exp += command.coins;
-
-		if (authorModel.level > level && guildModel.notifications.levelUp) {
-			message.channel.send(`Woot! ${message.author}, you are now level ${authorModel.level}!`);
-		}
-
 		try {
 			await command.run(message, args);
 		} catch (error) {
-			await Raven.captureException(error);
+			Raven.captureException(error);
 			this.logger.sentry('Sent an error to sentry:', error);
-			await message.channel.send(
+			message.channel.send(
 				[
 					'**An errror occured! Please paste this to the official guild!**'
 					+ ' <:ayy:315270615844126720> http://kannathebot.me/guild',
@@ -156,6 +130,15 @@ class CommandHandler {
 					'\\`\\`\\`'
 				]
 			);
+		}
+
+		const { level } = authorModel;
+		authorModel.exp += command.exp;
+		authorModel.exp += command.coins;
+		await authorModel.save();
+
+		if (authorModel.level > level && guildModel.notifications.levelUp) {
+			message.channel.send(`Woot! ${message.author}, you are now level ${authorModel.level}!`);
 		}
 	}
 
@@ -269,6 +252,19 @@ class CommandHandler {
 		return id.match(/^\d{17,19}$/)
 			? channel.fetchMessage(id).catch(() => null)
 			: Promise.resolve(null);
+	}
+
+	/**
+	 * Retrieves the appropriate model instance of the target from cache or from database if not cached.
+	 * @param {any} target Target object
+	 * @param {Model} source Source Model class
+	 * @returns {Model} Model instance
+	 */
+	async _fetchModel(target, source) {
+		if (target.model) return target.model;
+		[target.model] = await source.findCreateFind({ where: { id: target.id } });
+
+		return target.model;
 	}
 }
 
