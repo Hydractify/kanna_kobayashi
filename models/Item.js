@@ -20,7 +20,7 @@ Item.init({
 		allowNull: false,
 		type: ENUM,
 		// TODO: Rarities here
-		values: ['PH']
+		values: ['?', 'LIMITED', 'IMM', 'CH', 'HM', 'DSIZE', 'UR', 'R', 'UC', 'C']
 	},
 	buyable: {
 		allowNull: false,

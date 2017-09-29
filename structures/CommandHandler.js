@@ -78,7 +78,7 @@ class CommandHandler {
 
 		if (command.permLevel > message.member.permLevel) {
 			message.channel
-				.send(`${message.author}, you don't have the required permission level to use **${command.name}**!`);
+				.send(`${message.author}, you do not have the required permission level to use **${command.name}**!`);
 			return;
 		}
 
@@ -105,7 +105,7 @@ class CommandHandler {
 			});
 
 			await message.channel
-				.send(`${message.author}, **${command.name}** is on cooldown! Please wait **${timeLeftString}**`);
+				.send(`${message.author}, **${command.name}** is on cooldown! Please wait **${timeLeftString}** and try again!`);
 			return;
 		}
 
@@ -118,8 +118,8 @@ class CommandHandler {
 			this.logger.sentry('Sent an error to sentry:', error);
 			message.channel.send(
 				[
-					'**An errror occured! Please paste this to the official guild!**'
-					+ ' <:ayy:315270615844126720> http://kannathebot.me/guild',
+					'**An errror occured! Please paste this to the official guild support channel!**'
+					+ ' <:KannaAyy:315270615844126720> http://kannathebot.me/guild',
 					'',
 					'',
 					`\\\`${command.name}\\\``,
@@ -136,7 +136,7 @@ class CommandHandler {
 		await authorModel.save();
 
 		if (authorModel.level > level && guildModel.notifications.levelUp) {
-			message.channel.send(`Woot! ${message.author}, you are now level ${authorModel.level}!`);
+			message.channel.send(`${message.author}, you advanced to level **${authorModel.level}**! <:KannaHugMe:299650645001240578>`);
 		}
 	}
 
@@ -194,14 +194,21 @@ class CommandHandler {
 		for (const member of guild.members.values()) {
 			if (
 				// Check for the member's tag or username
-				member.user.username.toLowerCase().includes(input)
+				member.user.username.toLowerCase === input
 				|| member.user.tag.toLowerCase() === input
+				|| (member.nickname && member.nickname.toLowerCase() === input)
+
 			) {
 				match = member;
 				break;
 			}
 			// Check for the member's nickname (username has already been checked above)
-			if (!displayMatch && member.nickname && member.nickname.toLowerCase().includes(input)) {
+			if (
+				!displayMatch
+				&& member.nickname
+				&& (member.user.username.toLowerCase().includes(input)
+					|| member.nickname.toLowerCase().includes(input))
+			) {
 				displayMatch = member;
 			}
 		}

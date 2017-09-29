@@ -143,7 +143,7 @@ class Client extends DJSClient {
 	 * @private
 	 */
 	_onWarn(warning) {
-		this.logger.bot('[WARN]:', warning);
+		this.logger.bot('[WARN]: ', warning);
 	}
 
 	/**
@@ -162,17 +162,16 @@ class Client extends DJSClient {
 		const humanCount = guild.members.filter(member => !member.user.bot).size;
 
 		const embed = new RichEmbed()
-			.setThumbnail(guild.iconURL
-			|| 'https://68.media.tumblr.com/36598cb6de45f077431b7920e3093da6/tumblr_omdagm8mC91v6lhveo1_500.png')
+			.setThumbnail(guild.iconURL)
 			.setTitle(`I have ${left ? 'left' : 'joined'} a guild!`)
 			.setDescription(`I am now on ${totalGuilds} guilds.`)
 			.setColor(this.color())
 			.addField('Name', guild.name, true)
 			.addField('ID', guild.id, true)
 			.addField('Owner', guild.owner.user.tag, true)
-			.addField('Owner id', guild.ownerID, true)
+			.addField('Owner ID', guild.ownerID, true)
 			.addField('Blacklisted', blacklisted, true)
-			.addField('Total members', guild.memberCount, true)
+			.addField('Total Members', guild.memberCount, true)
 			.addField('Humans', humanCount, true)
 			.addField('Bots', guild.memberCount - humanCount, true);
 

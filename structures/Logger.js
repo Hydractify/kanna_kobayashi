@@ -112,11 +112,13 @@ class Logger {
 			[
 				'\n',
 				`[${moment().format('YYYY.MM.DD-HH:mm:ss')}]`,
-				`\x1b[${levels[level]}m`,
+				`\x1b[${levels[level][0]}m`,
 				'\x1b[30m',
-				`[${level}]`,
+				`[${level[0]}]`,
 				'\x1b[0m: ',
+				`\x1b${levels[level][1]}`,
 				cleaned,
+				'\x1b[0m',
 				'\n'
 			].join('')
 		);
@@ -124,12 +126,12 @@ class Logger {
 }
 
 const levels = {
-	BOT: 45,
-	DATABASE: 47,
-	ERROR: 41,
-	LOAD: 43,
-	SENTRY: 42,
-	SHARD: 46
+	BOT: [45, 35],
+	DATABASE: [47, 37],
+	ERROR: [41, 31],
+	LOAD: [43, 33],
+	SENTRY: [42, 32],
+	SHARD: [46, 36]
 };
 
 module.exports = Logger;
