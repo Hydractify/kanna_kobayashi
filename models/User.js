@@ -42,12 +42,7 @@ User.init({
 	},
 	partnerId: {
 		field: 'partner_id',
-		type: STRING('20'),
-		set: function setPartnerId(value) {
-			this.setDataValue('partnerId', value);
-			this.setDataValue('partnerSince', value ? new Date() : null);
-			this.setDataValue('partnerMarried', value ? false : null);
-		}
+		type: STRING('20')
 	},
 	partnerSince: {
 		field: 'partner_since',
