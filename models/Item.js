@@ -9,7 +9,7 @@ class Item extends Model { }
 Item.init({
 	name: {
 		type: STRING,
-		primaryKey: true
+		unique: true
 	},
 	type: {
 		allowNull: false,
@@ -20,7 +20,7 @@ Item.init({
 		allowNull: false,
 		type: ENUM,
 		// TODO: Rarities here
-		values: []
+		values: ['PH']
 	},
 	buyable: {
 		allowNull: false,
@@ -34,6 +34,7 @@ Item.init({
 		singular: 'item',
 		plural: 'items'
 	},
+	tableName: 'items',
 	sequelize: db,
 	updatedAt: false
 });

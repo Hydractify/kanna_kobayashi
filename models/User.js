@@ -1,9 +1,10 @@
 /* eslint-disable new-cap */
 
-const { BOOLEAN, DATE, ENUM, INTEGER, Model, STRING, JSONB } = require('sequelize');
+const { BOOLEAN, DATE, ENUM, INTEGER, Model, STRING } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
 const CommandLog = require('./CommandLog');
+const Item = require('./Item');
 
 class User extends Model {
 	get level() {
@@ -25,16 +26,6 @@ User.init({
 		allowNull: false,
 		defaultValue: 0,
 		type: INTEGER
-	},
-	items: {
-		// TODO: Most likely a new table with a 1:m / m:m relationship
-		type: JSONB,
-		defaultValue: []
-	},
-	badges: {
-		// TODO: Same here
-		type: JSONB,
-		defaultValue: []
 	},
 	type: {
 		type: ENUM,
@@ -82,5 +73,20 @@ User.init({
 // TODO: Verify this actually works
 User.hasOne(User, { as: 'partner', foreignKey: 'partnerId' });
 User.hasMany(CommandLog, { foreignKey: 'user_id' });
+User.belongsToMany(Item, {
+	as: 'items',
+	otherKey: 'item_id',
+	through: 'user_items',
+	foreignKey: 'user_id',
+	scope: { type: 'ITEM' }
+});
+User.belongsToMany(Item, {
+	as: 'badges',
+	otherKey: 'item_id',
+	through: 'user_items',
+	foreignKey: 'user_id',
+	scope: { type: 'BADGE' }
+});
+Item.belongsToMany(User, { as: 'holders', otherKey: 'user_id', through: 'user_items', foreignKey: 'item_id' });
 
 module.exports = User;
