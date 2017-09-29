@@ -5,8 +5,6 @@ const { join } = require('path');
 const Raven = require('raven');
 const { promisify } = require('util');
 
-const Guild = require('../models/Guild');
-const User = require('../models/User');
 const Logger = require('./Logger');
 
 const readdirAsync = promisify(readdir);
@@ -50,17 +48,17 @@ class CommandHandler {
 	async handle(message) {
 		if (message.channel.type !== 'text' || message.author.bot) return;
 
-		let guildModel = await this._fetchModel(message.guild, Guild);
+		let guildModel = await message.guild.fetchModel();
 		const prefixes = [`<@!?${this.client.user.id}> `, 'kanna ', 'k!']
 			.concat(guildModel.prefixes);
 		const match = new RegExp(`^(${prefixes.join('|')})`, 'i').exec(message.content);
 		if (!match) return;
 
-		let authorModel = await this._fetchModel(message.author, Guild);
+		let authorModel = await message.author.fetchModel();
 		if (authorModel.type === 'BLACKLISTED') return;
 
 		if (!message.guild.owner) await message.guild.fetchMember(message.guild.ownerID);
-		let ownerModel = await this._fetchModel(message.guild.owner.user, User);
+		let ownerModel = await message.guild.owner.user.fetchModel();
 		if (ownerModel.type === 'BLACKLISTED' || (ownerModel.type !== 'WHITELISTED' && message.guild.isBotfarm)) return;
 
 		const [commandName, ...args] = message.content.slice(match[1].length).split(' ');
@@ -254,19 +252,6 @@ class CommandHandler {
 		return id.match(/^\d{17,19}$/)
 			? channel.fetchMessage(id).catch(() => null)
 			: Promise.resolve(null);
-	}
-
-	/**
-	 * Retrieves the appropriate model instance of the target from cache or from database if not cached.
-	 * @param {any} target Target object
-	 * @param {Model} source Source Model class
-	 * @returns {Model} Model instance
-	 */
-	async _fetchModel(target, source) {
-		if (target.model) return target.model;
-		[target.model] = await source.findCreateFind({ where: { id: target.id } });
-
-		return target.model;
 	}
 }
 

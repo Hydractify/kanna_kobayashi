@@ -1,6 +1,18 @@
+const Guild = require('../models/Guild');
 const Extension = require('./Extension');
 
 class GuildExtension extends Extension {
+	/**
+	 * Retrieves the appropriate model instance of this guild from cache or from database if not cached.
+	 * @returns {Promise<Guild>} Model instance
+	 */
+	async fetchModel() {
+		if (this.model) return this.model;
+		[this.model] = await Guild.findCreateFind({ where: { id: this.id } });
+
+		return this.model;
+	}
+
 	get isBotfarm() {
 		if (this.owner && this.owner.user.model && this.owner.user.model.type === 'WHITELISTED') return false;
 		if (this.memberCount <= 50) return false;

@@ -1,8 +1,9 @@
-const { Guild, GuildMember } = require('discord.js');
+const { Guild, GuildMember, User } = require('discord.js');
 const Raven = require('raven');
 
 const GuildExtension = require('./extensions/Guild');
 const GuildMemberExtension = require('./extensions/GuildMember');
+const UserExtension = require('./extensions/User');
 const Client = require('./structures/Client');
 const Database = require('./structures/PostgreSQL');
 const Logger = require('./structures/Logger');
@@ -14,6 +15,7 @@ Database.instance.start();
 
 GuildExtension.extend(Guild);
 GuildMemberExtension.extend(GuildMember);
+UserExtension.extend(User);
 
 const client = new Client({ disableEveryone: true });
 
