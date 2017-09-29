@@ -1,10 +1,12 @@
 /* eslint-disable new-cap */
 
-const { ARRAY, BOOLEAN, STRING } = require('sequelize');
+const { ARRAY, BOOLEAN, STRING, Model } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
 
-const Guild = db.define('guilds', {
+class Guild extends Model { }
+
+Guild.init({
 	id: {
 		primaryKey: true,
 		type: STRING('20')
@@ -38,12 +40,16 @@ const Guild = db.define('guilds', {
 		type: BOOLEAN,
 		defaultValue: true
 	},
-	welcomeChannel: {
-		field: 'welcome_channel',
+	notificationChannel: {
+		field: 'notification_channel',
 		type: STRING('20')
 	},
 	welcomeMessage: {
 		field: 'welcome_message',
+		type: STRING('1500')
+	},
+	farewellMessage: {
+		field: 'farewell_message',
 		type: STRING('1500')
 	},
 	selfRoles: {
@@ -53,6 +59,8 @@ const Guild = db.define('guilds', {
 	}
 }, {
 	createdAt: false,
+	tableName: 'guilds',
+	sequelize: db,
 	updatedAt: false
 });
 
