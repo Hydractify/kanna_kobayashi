@@ -54,6 +54,11 @@ class Command {
 		 * @type {string}
 		 */
 		this.category = null;
+		/**
+		 * The location of command
+		 * @type {string}
+		 */
+		this.location = null;
 
 		/**
 		 * Aliases of this command
@@ -111,6 +116,30 @@ class Command {
 		 * @type {number}
 		 */
 		this.permLevel = permLevel;
+	}
+
+	/**
+	 * Reloads this command
+	 */
+	reload() {
+		delete require.cache[require.resolve(this.location)];
+		this.handler.commands.delete(this.name);
+		for (const alias of this.aliases) {
+			this.handler.aliases.delete(alias);
+		}
+
+		const CommandClass = require(this.location);
+		const command = new CommandClass(this.handler);
+
+		command.location = this.location;
+		command.category = this.category;
+
+		this.handler.commands.set(command.name, command);
+		for (const alias of command.aliases) {
+			this.handler.aliases.set(alias, command.name);
+		}
+
+		this.logger.load(`[COMMANDS] Reloaded ${command.name}.`);
 	}
 
 	/**

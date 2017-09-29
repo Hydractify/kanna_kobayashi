@@ -152,9 +152,11 @@ class CommandHandler {
 			// Load all categories at once instead of one by one
 			readdirAsync(join(path, folder)).then(files => {
 				for (const file of files) {
-					const CommandClass = require(join(path, folder, file));
+					const location = join(path, folder, file);
+					const CommandClass = require(location);
 					const command = new CommandClass(this);
 
+					command.location = location;
 					command.category = folder;
 
 					this.commands.set(command.name, command);
