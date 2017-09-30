@@ -163,7 +163,7 @@ class CommandHandler {
 					}
 				}
 
-				this.logger.load(`[COMMANDS] Loaded ${files.length} ${folder} commands.`);
+				this.logger.load(`[COMMANDS]: Loaded ${files.length} ${folder} commands.`);
 			});
 		}
 	}
