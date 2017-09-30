@@ -43,6 +43,9 @@ class Client extends DJSClient {
 
 		this.on('guildCreate', this._onGuild.bind(this, false));
 		this.on('guildDelete', this._onGuild.bind(this, true));
+
+		this.on('guildMemberAdd', this._onGuildMember.bind(this, false));
+		this.on('guildMemberRemove', this._onGuildMember.bind(this, true));
 	}
 
 	/**
@@ -178,6 +181,30 @@ class Client extends DJSClient {
 		// Avoid sharding issue when the channel is on a different shard. Still has rate limiting and retry on 5xx
 		// Note: This is somewhat safe to use because there will be no releases until v12, which is breaking anyway
 		this.rest.methods.sendMessage({ id: '303180857030606849' }, undefined, { embed });
+	}
+
+	/**
+	 * Run whenever a member joins or leaves a guild
+	 * @param {boolean} left Whether the member left the guild
+	 * @param {GuildMember} member The relevant member
+	 */
+	async _onGuildMember(left, member) {
+		const guildModel = await member.guild.fetchModel();
+
+		if (!guildModel.notificationChannel) return;
+		const channel = member.guild.channels.get(guildModel.notificationChannel);
+
+		if (!channel || channel.type !== 'text') {
+			guildModel.notificationChannel = null;
+			await guildModel.save();
+			return;
+		}
+
+		if (!channel.permissionsFor(member.guild.me).has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
+
+		const message = guildModel[left ? 'farewellMessage' : 'welcomeMessage']
+			.replace(/\{\{member\}\}/g, member.user.tag);
+		channel.send(message);
 	}
 
 	/**
