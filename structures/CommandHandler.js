@@ -61,7 +61,7 @@ class CommandHandler {
 		let ownerModel = await message.guild.owner.user.fetchModel();
 		if (ownerModel.type === 'BLACKLISTED' || (ownerModel.type !== 'WHITELISTED' && message.guild.isBotfarm)) return;
 
-		const [commandName, ...args] = message.content.slice(match[1].length).split(' ');
+		const [commandName, ...args] = message.content.slice(match[1].length).split(/ +/);
 		const command = this.commands.get(commandName.toLowerCase())
 			|| this.commands.get(this.aliases.get(commandName.toLowerCase()));
 		if (!command) return;
@@ -112,7 +112,7 @@ class CommandHandler {
 		await authorModel.createCommandLog({ userId: message.author.id, commandName });
 
 		try {
-			await command.run(message, args);
+			await command.run(message, args, commandName);
 		} catch (error) {
 			Raven.captureException(error);
 			this.logger.sentry('Sent an error to sentry:', error);
