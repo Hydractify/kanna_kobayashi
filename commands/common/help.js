@@ -73,7 +73,7 @@ class HelpCommand extends Command {
 					if (reaction.emoji.name === '❎') {
 						reactionCollector.stop();
 					}
-				}).end(() => {
+				}).on('end', () => {
 					message.delete().catch(() => null);
 					helpMessage.delete().catch(() => null);
 				});
