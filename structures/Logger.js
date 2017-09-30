@@ -111,6 +111,8 @@ class Logger {
 		process.stdout.write(
 			[
 				'\n',
+				// eslint-disable-next-line no-process-env
+				'SHARD_ID' in process.env ? `\x1b[32m[SHARD ${process.env.SHARD_ID}]\x1b[0m` : '',
 				`[${moment().format('YYYY.MM.DD-HH:mm:ss')}]`,
 				`\x1b[${levels[level][0]}m`,
 				'\x1b[30m',

@@ -16,7 +16,9 @@
     "eslint": "^4.7.2"
   },
   "scripts": {
-    "test": "eslint ./ *.js"
+    "test": "eslint ./ *.js",
+    "start": "node ./shard.js",
+    "dev": "export DEBUG=sequelize* || set DEBUG=sequelize* && node ./shard.js"
   },
   "repository": {
     "type": "git",
