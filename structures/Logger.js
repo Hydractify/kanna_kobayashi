@@ -116,7 +116,7 @@ class Logger {
 				'\x1b[30m',
 				`[${level}]`,
 				'\x1b[0m: ',
-				`\x1b${levels[level][1]}`,
+				`\x1b[${levels[level][1]}m`,
 				cleaned,
 				'\x1b[0m',
 				'\n'

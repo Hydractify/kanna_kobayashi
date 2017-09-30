@@ -163,7 +163,7 @@ class Client extends DJSClient {
 
 		const embed = new RichEmbed()
 			.setThumbnail(guild.iconURL)
-			.setTitle(`I have ${left ? 'left' : 'joined'} a guild!`)
+			.setTitle(`I have ${left ? 'left' : 'joined'} a guild! [${this.shard.id}]`)
 			.setDescription(`I am now on ${totalGuilds} guilds.`)
 			.setColor(this.color())
 			.addField('Name', guild.name, true)
