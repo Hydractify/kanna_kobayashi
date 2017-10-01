@@ -89,8 +89,9 @@ class CommandHandler {
 		}
 
 		const [commandLog] = await authorModel.getCommandLogs({
+			limit: 1,
 			order: [['run', 'DESC']],
-			limit: 1
+			where: { commandName: command.name }
 		});
 		const timeLeft = commandLog
 			? commandLog.run.getTime() + command.cooldown - Date.now()
@@ -105,11 +106,14 @@ class CommandHandler {
 			});
 
 			await message.channel
-				.send(`${message.author}, **${command.name}** is on cooldown! Please wait **${timeLeftString}** and try again!`);
+				.send([
+					`${message.author}, **${command.name}** is on cooldown!`,
+					`Please wait **${timeLeftString}** and try again!`
+				].join(''));
 			return;
 		}
 
-		await authorModel.createCommandLog({ userId: message.author.id, commandName });
+		await authorModel.createCommandLog({ userId: message.author.id, commandName: command.name });
 
 		try {
 			await command.run(message, args, commandName);
@@ -136,7 +140,8 @@ class CommandHandler {
 		await authorModel.save();
 
 		if (authorModel.level > level && guildModel.notifications.levelUp) {
-			message.channel.send(`${message.author}, you advanced to level **${authorModel.level}**! <:KannaHugMe:299650645001240578>`);
+			message.channel
+				.send(`${message.author}, you advanced to level **${authorModel.level}**! <:KannaHugMe:299650645001240578>`);
 		}
 	}
 
