@@ -1,7 +1,6 @@
 const { Guild, GuildMember, User } = require('discord.js');
 const Raven = require('raven');
 
-require('./extensions/String');
 const GuildExtension = require('./extensions/Guild');
 const GuildMemberExtension = require('./extensions/GuildMember');
 const UserExtension = require('./extensions/User');

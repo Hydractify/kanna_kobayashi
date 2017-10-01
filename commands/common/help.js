@@ -2,6 +2,7 @@ const { Collection } = require('discord.js');
 
 const Command = require('../../structures/Command');
 const RichEmbed = require('../../structures/RichEmbed');
+const { titleCase } = require('../../util/util');
 
 class HelpCommand extends Command {
 	constructor(handler) {
@@ -15,7 +16,7 @@ class HelpCommand extends Command {
 			name: 'help',
 			permLevel: 0,
 			examples: ['help ping', 'help'],
-			usage: 'help <Command[Optional]>'
+			usage: 'help [Command]'
 		});
 	}
 
@@ -100,7 +101,7 @@ class HelpCommand extends Command {
 			const embed = RichEmbed.common(message)
 				.setThumbnail(message.guild.iconURL)
 				.setURL('http://kannathebot.me/guild')
-				.setAuthor(`${this.client.user.username}'s ${category.toTitleCase()} Commands`)
+				.setAuthor(`${this.client.user.username}'s ${titleCase(category)} Commands`)
 				.setDescription('\u200b')
 				.setColor(this.client.color(message.author.model));
 
@@ -120,7 +121,7 @@ class HelpCommand extends Command {
 
 		if (command) {
 			return message.channel.send(RichEmbed.common(message)
-				.setAuthor(`${command.name.toTitleCase()}'s Info`, this.client.user.displayAvatarURL)
+				.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user.displayAvatarURL)
 				.setDescription('\u200b')
 				.setURL('http://kannathebot.me/guild')
 				.setColor(this.client.color(message.author.model))
