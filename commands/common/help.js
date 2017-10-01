@@ -2,7 +2,7 @@ const { Collection } = require('discord.js');
 
 const Command = require('../../structures/Command');
 const RichEmbed = require('../../structures/RichEmbed');
-const { titleCase } = require('../../util/util');
+const { titleCase } = require('../../util/Util');
 
 class HelpCommand extends Command {
 	constructor(handler) {

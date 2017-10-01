@@ -24,7 +24,16 @@ Item.init({
 	buyable: {
 		allowNull: false,
 		defaultValue: true,
-		type: BOOLEAN
+		type: BOOLEAN,
+		validate: {
+			isPriceSet: function checkPrice(value) {
+				if (value && this.price === undefined) {
+					throw new Error(`The buyable item "${this.name}" must have a price!`);
+				} else if (!value && this.price !== undefined) {
+					throw new Error(`The not buyable item "${this.name}" has a price; Did you intend it to be buyable?`);
+				}
+			}
+		}
 	},
 	price: { type: INTEGER }
 }, {

@@ -30,12 +30,12 @@ class Util {
 	 */
 	static parseFlags(input, lowercase) {
 		// Scary regex magic
-		const regex = new RegExp(/--(\w+) (.+?(?=--|$))/ig);
+		const regex = /--(\w+) (.+?(?=--|$))/g;
 		const parsed = new Collection();
 
 		let match = null;
 		while ((match = regex.exec(input)) !== null) {
-			parsed.set(lowercase ? match[1].toLowerCase() : match[1], match[2]);
+			parsed.set(lowercase ? match[1].toLowerCase() : match[1], match[2].trim());
 		}
 
 		return parsed;
