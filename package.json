@@ -9,11 +9,11 @@
     "moment": "^2.18.1",
     "pg": "^6.4.2",
     "raven": "^2.1.2",
-    "sequelize": "^4.11.1"
+    "sequelize": "^4.13.1"
   },
   "devDependencies": {
-    "eslint-config-aqua": "^2.0.1",
-    "eslint": "^4.7.2"
+    "eslint": "^4.8.0",
+    "eslint-config-aqua": "^2.0.1"
   },
   "scripts": {
     "test": "eslint ./ *.js",
