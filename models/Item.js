@@ -19,7 +19,6 @@ Item.init({
 	rarity: {
 		allowNull: false,
 		type: ENUM,
-		// TODO: Rarities here
 		values: ['?', 'LIMITED', 'IMM', 'CH', 'HM', 'DSIZE', 'UR', 'R', 'UC', 'C']
 	},
 	buyable: {

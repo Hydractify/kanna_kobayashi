@@ -11,7 +11,7 @@ class HelpCommand extends Command {
 			exp: 0,
 			cooldown: 10000,
 			description: 'See all the commands (or a specifc one) Kanna has!\n'
-			+ 'PS: Use the arrow reactions to scroll through categories_',
+			+ '_PS: Use the arrow reactions to scroll through categories_',
 			name: 'help',
 			permLevel: 0,
 			examples: ['help ping', 'help'],
@@ -100,7 +100,8 @@ class HelpCommand extends Command {
 			const embed = RichEmbed.common(message)
 				.setThumbnail(message.guild.iconURL)
 				.setURL('http://kannathebot.me/guild')
-				.setAuthor(`${this.client.user.username} ${category.toTitleCase()}`)
+				.setAuthor(`${this.client.user.username}'s ${category.toTitleCase()} Commands`)
+				.setDescription('\u200b')
 				.setColor(this.client.color(message.author.model));
 
 			for (const command of commands) {
@@ -120,6 +121,7 @@ class HelpCommand extends Command {
 		if (command) {
 			return message.channel.send(RichEmbed.common(message)
 				.setAuthor(`${command.name.toTitleCase()}'s Info`, this.client.user.displayAvatarURL)
+				.setDescription('\u200b')
 				.setURL('http://kannathebot.me/guild')
 				.setColor(this.client.color(message.author.model))
 				.setThumbnail(message.guild.iconURL)
