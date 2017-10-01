@@ -57,7 +57,7 @@ class ItemCommand extends Command {
 			return message.channel.send([
 				`${message.author}, here the item structure`,
 				'```js',
-				structure,
+				structure.join('\n'),
 				'```'
 			]);
 		}
