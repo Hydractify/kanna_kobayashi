@@ -153,7 +153,7 @@ class ItemCommand extends Command {
 			await transaction.commit();
 
 			return message.channel.send([
-				'You successfully transfered your ',
+				'You successfully transferred your ',
 				`\`${item.name}\` ${type.toLowerCase()} to **${member.user.tag}**!`
 			]);
 		} catch (error) {
