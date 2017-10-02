@@ -7,7 +7,7 @@ const Command = require('../../structures/Command');
 class EvalCommand extends Command {
 	constructor(handler) {
 		super(handler, {
-			aliases: ['evaluate'],
+			aliases: ['evaluate', 'broadcasteval'],
 			coins: 0,
 			cooldown: 0,
 			description: 'Evaluates arbitrary JavaScript code',
@@ -19,14 +19,13 @@ class EvalCommand extends Command {
 		});
 	}
 
-	async run(message, args) {
-		const code = args.join(' ');
+	async run(message, args, name) {
+		let code = args.join(' ');
+		if (code.includes('await')) code = `(async()=>{${code}})()`;
 		try {
-			let evaled = await eval(
-				code.includes('await')
-					? `(async()=>{${code}})()`
-					: code
-			);
+			let evaled = name === 'broadcasteval'
+				? await this.client.shard.broadcastEval(code)
+				: await eval(code);
 
 			if (typeof evaled !== 'string') {
 				const tmp = inspect(evaled);
@@ -34,9 +33,9 @@ class EvalCommand extends Command {
 				else evaled = tmp;
 			}
 
-			await message.channel.send(evaled, { code: 'js' });
+			return message.channel.send(evaled, { code: 'js' });
 		} catch (error) {
-			await message.channel.send(
+			return message.channel.send(
 				[
 					'**Error**',
 					'```js',

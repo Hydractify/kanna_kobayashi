@@ -1,8 +1,9 @@
-const { Guild, GuildMember, User } = require('discord.js');
+const { Guild, GuildMember, ShardClientUtil, User } = require('discord.js');
 const Raven = require('raven');
 
 const GuildExtension = require('./extensions/Guild');
 const GuildMemberExtension = require('./extensions/GuildMember');
+const ShardClientUtilExtension = require('./extensions/ShardClientUtil');
 const UserExtension = require('./extensions/User');
 const Client = require('./structures/Client');
 const Database = require('./structures/PostgreSQL');
@@ -15,6 +16,7 @@ Database.instance.start();
 
 GuildExtension.extend(Guild);
 GuildMemberExtension.extend(GuildMember);
+ShardClientUtilExtension.extend(ShardClientUtil);
 UserExtension.extend(User);
 
 const client = new Client({ disableEveryone: true });
