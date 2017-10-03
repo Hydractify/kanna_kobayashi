@@ -70,7 +70,6 @@ User.init({
 	updatedAt: false
 });
 
-// TODO: Verify this actually works
 User.hasOne(User, { as: 'partner', foreignKey: 'partnerId' });
 User.hasMany(CommandLog, { foreignKey: 'user_id' });
 User.belongsToMany(Item, {
