@@ -14,7 +14,7 @@ class Util {
 	static titleCase(string) {
 		const titleCased = [];
 		for (const word of string.split(' ')) {
-			titleCased.push(`${word[0].toUpperCase() + word.slice(1)}`);
+			titleCased.push(`${word[0].toUpperCase() + word.slice(1).toLowerCase()}`);
 		}
 
 		return titleCased.join(' ');

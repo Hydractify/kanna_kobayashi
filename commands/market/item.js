@@ -1,9 +1,9 @@
 const { BOOLEAN, col, ENUM, fn, INTEGER, where } = require('sequelize');
-const { inspect, titleCase } = require('util');
+const { inspect } = require('util');
 const RichEmbed = require('../../structures/RichEmbed');
 
 const { instance: { db } } = require('../../structures/PostgreSQL');
-const { parseFlags } = require('../../util/Util');
+const { parseFlags, titleCase } = require('../../util/Util');
 const Command = require('../../structures/Command');
 const Item = require('../../models/Item');
 
@@ -13,9 +13,9 @@ class ItemCommand extends Command {
 			coins: 0,
 			exp: 0,
 			name: 'item',
-			usage: 'item <Method> <Find|Give>',
+			usage: 'item <Check|Give> <...Query|Target>',
 			permLevel: 0,
-			description: 'Check item information, give an item to your friend~~, or make an item if you are a developer~~!'
+			description: 'Check an item\'s information or give an item to your on of your friends!'
 		});
 	}
 
@@ -35,9 +35,11 @@ class ItemCommand extends Command {
 			case 'structure':
 				return this.structure(message);
 
+			case 'check':
 			case 'find':
 				return this.find(message, args);
 
+			case 'trade':
 			case 'give':
 				return this.give(message, args);
 
@@ -54,7 +56,6 @@ class ItemCommand extends Command {
 
 		try {
 			const modelData = this._buildModel(parseFlags(args.join(' '), true));
-			if (!modelData.name) throw new Error('A name is required!');
 
 			let item = await Item.findOne({ where: { name: modelData.name } });
 
@@ -80,7 +81,6 @@ class ItemCommand extends Command {
 				'```'
 			]);
 		} catch (error) {
-			this.handler.logger.error(error);
 			return message.channel.send(error.toString(), { code: true });
 		}
 	}
@@ -108,55 +108,56 @@ class ItemCommand extends Command {
 
 	async find(message, args) {
 		const item = await Item.findOne({ where: where(fn('lower', col('name')), args.join(' ').toLowerCase()) });
-
 		if (!item) return message.channel.send(`${message.author}, could not find an item with that name!`);
 
-		const userModel = message.author.model || await message.author.fetchModel();
+		const embed = RichEmbed.common(message)
+			.setAuthor(`Information about the ${item.type.toLowerCase()} ${item.name}`, this.client.displayAvatarURL)
+			.setThumbnail(message.guild.iconURL)
+			.setDescription(item.description || '\u200b');
 
-		const embed = RichEmbed.common({author: {user: message.author, model: userModel}, client: message.client})
-		.setAuthor(`${item.name}'s Information`, message.client.displayAvatarURL)
-		.setThumbnail(message.guild.iconURL);
-		item.description ? embed.setDescription(item.description) : embed.setDescription('\u200b');
+		for (let [title, value] of Object.entries(item.dataValues)) {
+			// Don't show price for non buyable items
+			if ((title === 'price' && value === null)
+				// Already in the description of the embed.
+				|| title === 'description') continue;
 
-		console.log(item.dataValues);
+			if (value === true) {
+				value = 'Yes';
+			} else if (value === false) {
+				value = 'No';
+			} else {
+				value = titleCase(String(value));
+			}
 
-		// TODO: Make this work because its too late for me to. (And i shouldn't be coding)
-		let n = 0;
-		for (const value of Object.entries(item.dataValues)) {
-			embed.addField(titleCase(value[n[0]]), titleCase(String(value[n[0]])));
-			n++
+			embed.addField(titleCase(title), value, true);
 		}
 
 		return message.channel.send(embed);
-
-		/**
-		return message.channel.send([
-			`${message.author}, your requested item:`,
-			'```js',
-			'Item {',
-			` ${inspect(item.dataValues).slice(1)}`,
-			'```'
-		]);
-		**/
 	}
 
-	async give(message, args) {
-		const member = await this.handler.resolveMember(message.guild, args[0]);
-		if (!member) return message.channel.send(`Couldn't find a member by ${args[0]}.`);
+	async give(message, [target, ...search]) {
+		if (!target) return message.channel.send('You have to tell me who you want to give what item or badge.');
+		if (!search.length) return message.channel.send('You also have to tell me what item or badge you want to give.');
 
-		const item = await Item.findOne({ where: where(fn('lower', col('name')), args.slice(1).join(' ').toLowerCase()) });
-		if (!item) {
-			return message.channel.send(`Couldn't find an Item or Badge with the name \`${args.slice(1).join(' ')}\``);
+		const member = await this.handler.resolveMember(message.guild, target, false);
+		if (!member) return message.channel.send(`Could not find a non-bot member by ${target}.`);
+		if (member.id === message.author.id) {
+			return message.channel.send('You can not give an item to yourself, you already have it.');
 		}
 
-		if (!item.tradable) {
-			return message.channel.send(`${message.author}, **${item.name}** isn't a tradable item!`)
+		const item = await Item.findOne({ where: where(fn('lower', col('name')), search.join(' ').toLowerCase()) });
+		if (!item) {
+			return message.channel.send(`Could not find an item or badge with the name \`${search.join(' ')}\``);
 		}
 
 		const type = item.type === 'BADGE' ? 'Badge' : 'Item';
 
 		const sourceHasItem = await message.author.model[`has${type}`](item);
 		if (!sourceHasItem) return message.channel.send(`You don't have the \`${item.name}\` ${type.toLowerCase()}!`);
+
+		if (!item.tradable) {
+			return message.channel.send(`${message.author}, **${item.name}** may not be traded!`);
+		}
 
 		const targetHasItem = await (member.user.model || await member.user.fetchModel())[`has${type}`](item);
 		if (targetHasItem) {
