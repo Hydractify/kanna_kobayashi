@@ -5,6 +5,7 @@ const { BOOLEAN, DATE, ENUM, INTEGER, Model, STRING } = require('sequelize');
 const { instance: { db } } = require('../structures/PostgreSQL');
 const CommandLog = require('./CommandLog');
 const Item = require('./Item');
+const Reputation = require('./Reputation');
 
 class User extends Model {
 	get level() {
@@ -70,8 +71,12 @@ User.init({
 	updatedAt: false
 });
 
+// Partner
 User.hasOne(User, { as: 'partner', foreignKey: 'partnerId' });
+// Command log
 User.hasMany(CommandLog, { foreignKey: 'user_id' });
+
+// Item / Badge
 User.belongsToMany(Item, {
 	as: 'items',
 	otherKey: 'item_id',
@@ -87,5 +92,15 @@ User.belongsToMany(Item, {
 	scope: { type: 'BADGE' }
 });
 Item.belongsToMany(User, { as: 'holders', otherKey: 'user_id', through: 'user_items', foreignKey: 'item_id' });
+
+// Reputation
+User.hasMany(Reputation, {
+	as: 'reps',
+	foreignKey: 'target_id'
+});
+User.hasMany(Reputation, {
+	as: 'repped',
+	foreignKey: 'source_id'
+});
 
 module.exports = User;
