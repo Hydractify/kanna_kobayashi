@@ -45,6 +45,8 @@ class Database {
 		 */
 		this.db = new Sequelize('postgres://kanna:kannapw@127.0.0.1:5432/kanna', {
 			logging: false,
+			// Deprecated, also gets rid of the warning on startup
+			operatorAliases: false,
 			retry: { max: 5 }
 		});
 	}
