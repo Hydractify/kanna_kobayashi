@@ -22,27 +22,23 @@ class HelpCommand extends Command {
 
 	async run(message, args) {
 		if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
-			await message.channel.send(`${message.author}! I do not have the permission to send **Embeds** (Embed Links Permission)! <:KannaWtf:320406412133924864>`);
-			return;
+			return message.channel.send(`${message.author}! I do not have the permission to send **Embeds** (Embed Links Permission)! <:KannaWtf:320406412133924864>`);
 		}
 
 		if (!message.channel.permissionsFor(message.guild.me).has('ADD_REACTIONS')) {
-			await message.channel.send(`${message.author}! I do not have the permission to **Add Reactions** (Add Reactions Permission)! <:KannaWtf:320406412133924864>`);
-			return;
+			return message.channel.send(`${message.author}! I do not have the permission to **Add Reactions** (Add Reactions Permission)! <:KannaWtf:320406412133924864>`);
 		}
 
 		if (!message.channel.permissionsFor(message.guild.me).has('MANAGE_MESSAGES')) {
-			await message.channel.send(`${message.author}! I do not have the permission to **Delete Messages** (Manage Messages Permission)! <:KannaWtf:320406412133924864>`);
-			return;
+			return message.channel.send(`${message.author}! I do not have the permission to **Delete Messages** (Manage Messages Permission)! <:KannaWtf:320406412133924864>`);
 		}
 
 		if (!args[0]) {
-			const [embeds, categoryCount] = await this.mapCategories(message);
+			if (!message.author.model) await message.author.fetchModel();
+			const [embeds, categoryCount] = this.mapCategories(message);
 
 			const helpMessage = await message.channel.send({ embed: embeds[0] });
-
 			const emojis = ['⬅', '➡', '❎'];
-
 			for (const emoji of emojis) {
 				// eslint-disable-next-line no-await-in-loop
 				await helpMessage.react(emoji);
@@ -62,14 +58,14 @@ class HelpCommand extends Command {
 			const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && user.id === message.author.id;
 
 			const reactionCollector = helpMessage.createReactionCollector(filter, { time: 300000 })
-				.on('collect', async reaction => {
+				.on('collect', reaction => {
 					if (reaction.emoji.name === '➡') {
-						await helpMessage.edit({ embed: selectEmbed(true) });
-						await reaction.remove(message.author);
+						helpMessage.edit({ embed: selectEmbed(true) });
+						reaction.remove(message.author);
 					}
 					if (reaction.emoji.name === '⬅') {
-						await helpMessage.edit({ embed: selectEmbed(false) });
-						await reaction.remove(message.author);
+						helpMessage.edit({ embed: selectEmbed(false) });
+						reaction.remove(message.author);
 					}
 					if (reaction.emoji.name === '❎') {
 						reactionCollector.stop();
@@ -79,13 +75,13 @@ class HelpCommand extends Command {
 					helpMessage.delete().catch(() => null);
 				});
 
-			return;
+			return undefined;
 		}
 
-		await this.findCommand(message, args);
+		return this.findCommand(message, args);
 	}
 
-	async mapCategories(message) {
+	mapCategories(message) {
 		// Map all commands to their appropiate categories
 		const categories = new Collection();
 		for (const command of this.handler.commands.values()) {
@@ -94,13 +90,12 @@ class HelpCommand extends Command {
 			else category.push(command);
 			categories.set(command.category, category);
 		}
-		
-		const userModel = message.author.model || await message.author.fetchModel();
+
 
 		// Make embeds out of them
 		const embeds = [];
 		for (const [category, commands] of categories) {
-			const embed = RichEmbed.common({author: {user: message.author, model: userModel}, client: message.client})
+			const embed = RichEmbed.common(message)
 				.setThumbnail(message.guild.iconURL)
 				.setURL('http://kannathebot.me/guild')
 				.setAuthor(`${this.client.user.username}'s ${titleCase(category)} Commands`)
@@ -117,14 +112,12 @@ class HelpCommand extends Command {
 		return [embeds, categories.size];
 	}
 
-	async findCommand(message, [commandName]) {
+	findCommand(message, [commandName]) {
 		const command = this.handler.commands.get(commandName)
 			|| this.handler.commands.get(this.handler.aliases.get(commandName));
 
-			const userModel = message.author.model || await message.author.fetchModel();
-
 		if (command) {
-			return message.channel.send(RichEmbed.common({author: {user: message.author, model: userModel}, client: message.client})
+			return message.channel.send(RichEmbed.common(message)
 				.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user.displayAvatarURL)
 				.setDescription('\u200b')
 				.setURL('http://kannathebot.me/guild')
