@@ -182,37 +182,42 @@ class CommandHandler {
 	 * Resolves the provided input to a guild member
 	 * @param {Guild} guild The guild the member is part of
 	 * @param {string} input The string to resolve the member from
+	 * @param {boolean} [allowBots=true] Whether to allow bots to be resolved
 	 * @returns {Promise<?GuildMember>}
 	 */
-	async resolveMember(guild, input) {
+	async resolveMember(guild, input, allowBots = true) {
 		if (!input) return null;
 
 		// Mention or id
 		let match = /^<@!?(\d{17,19})>$|^(\d{17,19})$/.exec(input);
 		if (match) {
-			return guild.members.get(match[1] || match[2])
-				|| guild.fetchMember(match[1] || match[2]).catch(() => null);
+			match = match[1] || match[2];
+
+			let member = guild.members.get(match)
+				|| await guild.fetchMember(match).catch(() => null);
+
+			if (!member || (!allowBots && member.user.bot)) return null;
+			return member;
 		}
 
 		input = input.toLowerCase();
 		let displayMatch = null;
 		for (const member of guild.members.values()) {
-			if (
-				// Check for the member's tag or username
-				member.user.username.toLowerCase === input
-				|| member.user.tag.toLowerCase() === input
-				|| (member.nickname && member.nickname.toLowerCase() === input)
+			if (!allowBots && member.user.bot) continue;
 
+			// Check for an "exact" lowercased match
+			if ((member.nickname && member.nickname.toLowerCase() === input)
+				|| member.user.username.toLowerCase() === input
+				|| member.user.tag.toLowerCase() === input
 			) {
 				match = member;
 				break;
 			}
-			// Check for the member's nickname (username has already been checked above)
-			if (
-				!displayMatch
-				&& member.nickname
+			// Check for a partial match
+			if (!displayMatch
 				&& (member.user.username.toLowerCase().includes(input)
-					|| member.nickname.toLowerCase().includes(input))
+					|| (member.nickname && member.nickname.toLowerCase().includes(input))
+				)
 			) {
 				displayMatch = member;
 			}
@@ -222,7 +227,7 @@ class CommandHandler {
 			return match || displayMatch;
 		}
 
-		match = await this.resolveUser(input);
+		match = await this.resolveUser(input, allowBots);
 		if (match) guild.fetchMember(match).catch(() => null);
 
 		return null;
@@ -231,25 +236,34 @@ class CommandHandler {
 	/**
 	 * Resolves a user based on user input
 	 * @param {string} input User input
+	 * @param {boolean} [allowBots=true] Whether to allow bots being resolved
 	 * @returns {Promise<?User>}
 	 */
-	resolveUser(input) {
-		if (!input) return Promise.resolve(null);
+	async resolveUser(input, allowBots = true) {
+		if (!input) return null;
 
 		let match = /^<@!?(\d{17,19})>$|^(\d{17,19})$/.exec(input);
 		if (match) {
-			const user = this.client.users.get(match[1] || match[2]);
-			if (user) return Promise.resolve(user);
-			return this.client.fetchUser(match[1] || match[2]).catch(() => null);
+			match = match[1] || match[2];
+
+			let user = this.client.users.get(match)
+				|| await this.client.fetchUser(match).catch(() => null);
+
+			if (!user || (!allowBots && user.bot)) return null;
+			return user;
 		}
 		for (const user of this.client.users.values()) {
+			if (!allowBots && user.bot) continue;
+
 			// Check for the user's tag or username
-			if (user.tag.toLowerCase() === input || user.username.toLowerCase().includes(input)) {
-				return Promise.resolve(user);
+			if (user.username.toLowerCase().includes(input)
+				|| user.tag.toLowerCase() === input
+			) {
+				return user;
 			}
 		}
 
-		return Promise.resolve(null);
+		return null;
 	}
 
 	/**
