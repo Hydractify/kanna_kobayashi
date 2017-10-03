@@ -12,18 +12,15 @@ Guild.init({
 		type: STRING('20')
 	},
 	prefixes: {
-		type: ARRAY(STRING),
+		type: ARRAY(STRING('32')),
 		defaultValue: [],
 		set: function setPrefixes(value) {
 			this.setDataValue('prefixes', value.map(prefix => prefix.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')));
 		}
 	},
-	tamerRole: {
-		field: 'tamer_role',
-		type: STRING,
-		set: function setTamerRole(value) {
-			return this.setDataValue('tamerRole', value.toLowerCase());
-		}
+	tamerRoleId: {
+		field: 'tamer_role_id',
+		type: STRING('20')
 	},
 	quizAnswer: {
 		field: 'quiz_anaswer',
@@ -54,7 +51,7 @@ Guild.init({
 	},
 	selfRoles: {
 		field: 'self_roles',
-		type: ARRAY(STRING),
+		type: ARRAY(STRING('20')),
 		defaultValue: []
 	}
 }, {
