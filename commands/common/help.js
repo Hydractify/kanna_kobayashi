@@ -37,7 +37,7 @@ class HelpCommand extends Command {
 		}
 
 		if (!args[0]) {
-			const [embeds, categoryCount] = this.mapCategories(message);
+			const [embeds, categoryCount] = await this.mapCategories(message);
 
 			const helpMessage = await message.channel.send({ embed: embeds[0] });
 
@@ -85,7 +85,7 @@ class HelpCommand extends Command {
 		await this.findCommand(message, args);
 	}
 
-	mapCategories(message) {
+	async mapCategories(message) {
 		// Map all commands to their appropiate categories
 		const categories = new Collection();
 		for (const command of this.handler.commands.values()) {
@@ -94,11 +94,13 @@ class HelpCommand extends Command {
 			else category.push(command);
 			categories.set(command.category, category);
 		}
+		
+		const userModel = message.author.model || await message.author.fetchModel();
 
 		// Make embeds out of them
 		const embeds = [];
 		for (const [category, commands] of categories) {
-			const embed = RichEmbed.common(message)
+			const embed = RichEmbed.common({author: {user: message.author, model: userModel}, client: message.client})
 				.setThumbnail(message.guild.iconURL)
 				.setURL('http://kannathebot.me/guild')
 				.setAuthor(`${this.client.user.username}'s ${titleCase(category)} Commands`)
@@ -115,12 +117,14 @@ class HelpCommand extends Command {
 		return [embeds, categories.size];
 	}
 
-	findCommand(message, [commandName]) {
+	async findCommand(message, [commandName]) {
 		const command = this.handler.commands.get(commandName)
 			|| this.handler.commands.get(this.handler.aliases.get(commandName));
 
+			const userModel = message.author.model || await message.author.fetchModel();
+
 		if (command) {
-			return message.channel.send(RichEmbed.common(message)
+			return message.channel.send(RichEmbed.common({author: {user: message.author, model: userModel}, client: message.client})
 				.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user.displayAvatarURL)
 				.setDescription('\u200b')
 				.setURL('http://kannathebot.me/guild')

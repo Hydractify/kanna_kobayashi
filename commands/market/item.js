@@ -1,5 +1,6 @@
 const { BOOLEAN, col, ENUM, fn, INTEGER, where } = require('sequelize');
-const { inspect } = require('util');
+const { inspect, titleCase } = require('util');
+const RichEmbed = require('../../structures/RichEmbed');
 
 const { instance: { db } } = require('../../structures/PostgreSQL');
 const { parseFlags } = require('../../util/Util');
@@ -12,9 +13,7 @@ class ItemCommand extends Command {
 			coins: 0,
 			exp: 0,
 			name: 'item',
-			// Literals could be displayed as <Make|See|Give|Etc>
-			// Maybe hide DEV only stuff from usage?
-			usage: 'item <Method> <...Parameters>',
+			usage: 'item <Method> <Find|Give>',
 			permLevel: 0,
 			description: 'Check item information, give an item to your friend~~, or make an item if you are a developer~~!'
 		});
@@ -112,7 +111,25 @@ class ItemCommand extends Command {
 
 		if (!item) return message.channel.send(`${message.author}, could not find an item with that name!`);
 
-		// TODO: User friendly display
+		const userModel = message.author.model || await message.author.fetchModel();
+
+		const embed = RichEmbed.common({author: {user: message.author, model: userModel}, client: message.client})
+		.setAuthor(`${item.name}'s Information`, message.client.displayAvatarURL)
+		.setThumbnail(message.guild.iconURL);
+		item.description ? embed.setDescription(item.description) : embed.setDescription('\u200b');
+
+		console.log(item.dataValues);
+
+		// TODO: Make this work because its too late for me to. (And i shouldn't be coding)
+		let n = 0;
+		for (const value of Object.entries(item.dataValues)) {
+			embed.addField(titleCase(value[n[0]]), titleCase(String(value[n[0]])));
+			n++
+		}
+
+		return message.channel.send(embed);
+
+		/**
 		return message.channel.send([
 			`${message.author}, your requested item:`,
 			'```js',
@@ -120,6 +137,7 @@ class ItemCommand extends Command {
 			` ${inspect(item.dataValues).slice(1)}`,
 			'```'
 		]);
+		**/
 	}
 
 	async give(message, args) {
@@ -131,7 +149,9 @@ class ItemCommand extends Command {
 			return message.channel.send(`Couldn't find an Item or Badge with the name \`${args.slice(1).join(' ')}\``);
 		}
 
-		// TODO: Tradable?
+		if (!item.tradable) {
+			return message.channel.send(`${message.author}, **${item.name}** isn't a tradable item!`)
+		}
 
 		const type = item.type === 'BADGE' ? 'Badge' : 'Item';
 

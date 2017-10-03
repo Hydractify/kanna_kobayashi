@@ -1,12 +1,13 @@
 const { RichEmbed: DJSRichEmbed } = require('discord.js');
+const UserModel = require('../models/User');
 
 class RichEmbed extends DJSRichEmbed {
-	static common({ author, client }) {
-		if (!author.model) throw new Error('The model of the author of the supplied message is not cached!');
+	static common({ author: {model, user}, client }) {
+		if (!(model instanceof UserModel)) throw new TypeError('The author model supplied isn\'t an instaceof UserModel');
 
 		return new this()
-			.setColor(client.color(author.model))
-			.setFooter(`Requested by ${author.tag}`, author.displayAvatarURL);
+			.setColor(client.color(model))
+			.setFooter(`Requested by ${user.tag}`, user.displayAvatarURL);
 	}
 }
 

@@ -11,6 +11,10 @@ Item.init({
 		type: STRING,
 		unique: true
 	},
+	description: {
+		type: STRING(1024),
+		allowNull: true
+	},
 	type: {
 		allowNull: false,
 		type: ENUM,
@@ -35,7 +39,12 @@ Item.init({
 			}
 		}
 	},
-	price: { type: INTEGER }
+	price: { type: INTEGER },
+	tradable: {
+		allowNull: false,
+		type: BOOLEAN,
+		defaultValue: false
+	}
 }, {
 	createdAt: false,
 	name: {
