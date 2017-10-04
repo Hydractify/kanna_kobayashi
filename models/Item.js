@@ -14,7 +14,8 @@ class Item extends Model {
 		}
 
 		this.UserItem.count = count;
-		return this.UserItem.save(options);
+		return this.UserItem.save(options)
+			.then(() => this);
 	}
 
 	get count() {
@@ -25,43 +26,50 @@ class Item extends Model {
 
 Item.init(
 	{
-		name: {
-			type: STRING,
-			unique: true
+		buyable: {
+			allowNull: false,
+			defaultValue: false,
+			type: BOOLEAN,
+			validate: {
+				isPriceSet: function checkPrice(value) {
+					if (value && this.price === undefined) {
+						throw new Error(`The buyable item "${this.name}" must have a price!`);
+					}
+					if (!value && this.price !== undefined) {
+						throw new Error(`The not buyable item "${this.name}" has a price; Did you intend it to be buyable?`);
+					}
+				}
+			}
 		},
 		description: {
 			type: STRING(1024),
 			allowNull: true
+		},
+		name: {
+			allowNull: false,
+			type: STRING,
+			unique: true
+		},
+		price: { type: INTEGER },
+		rarity: {
+			allowNull: false,
+			type: ENUM,
+			values: ['?', 'LIMITED', 'IMM', 'CH', 'HM', 'DSIZE', 'UR', 'R', 'UC', 'C']
+		},
+		tradable: {
+			allowNull: false,
+			defaultValue: false,
+			type: BOOLEAN
 		},
 		type: {
 			allowNull: false,
 			type: ENUM,
 			values: ['BADGE', 'ITEM']
 		},
-		rarity: {
-			allowNull: false,
-			type: ENUM,
-			values: ['?', 'LIMITED', 'IMM', 'CH', 'HM', 'DSIZE', 'UR', 'R', 'UC', 'C']
-		},
-		buyable: {
+		unique: {
 			allowNull: false,
 			defaultValue: true,
-			type: BOOLEAN,
-			validate: {
-				isPriceSet: function checkPrice(value) {
-					if (value && this.price === undefined) {
-						throw new Error(`The buyable item "${this.name}" must have a price!`);
-					} else if (!value && this.price !== undefined) {
-						throw new Error(`The not buyable item "${this.name}" has a price; Did you intend it to be buyable?`);
-					}
-				}
-			}
-		},
-		price: { type: INTEGER },
-		tradable: {
-			allowNull: false,
-			type: BOOLEAN,
-			defaultValue: false
+			type: BOOLEAN
 		}
 	},
 	{

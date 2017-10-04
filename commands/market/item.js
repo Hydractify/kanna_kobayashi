@@ -153,13 +153,13 @@ class ItemCommand extends Command {
 	}
 
 	async give(message, [target, ...search]) {
-		if (!target) return message.channel.send('You have to tell me who you want to give what item or badge.');
+		if (!target) return message.channel.send('You have to tell me who you want to give an item or badge.');
 		if (!search.length) return message.channel.send('You also have to tell me what item or badge you want to give.');
 
 		const member = await this.handler.resolveMember(message.guild, target, false);
 		if (!member) return message.channel.send(`Could not find a non-bot member by ${target}.`);
 		if (member.id === message.author.id) {
-			return message.channel.send('You can not give an item to yourself, you already have it.');
+			return message.channel.send('You can not give an item or badge to yourself.');
 		}
 
 		const item = await Item.findOne({ where: where(fn('lower', col('name')), search.join(' ').toLowerCase()) });
@@ -169,30 +169,48 @@ class ItemCommand extends Command {
 
 		const type = item.type === 'BADGE' ? 'Badge' : 'Item';
 
-		const sourceHasItem = await message.author.model[`has${type}`](item);
-		if (!sourceHasItem) return message.channel.send(`You don't have the \`${item.name}\` ${type.toLowerCase()}!`);
+		const [sourceItem] = await message.author.model[`get${type}s`]({ where: { id: item.id } });
+		if (!sourceItem) return message.channel.send(`You don't have the \`${item.name}\` ${type.toLowerCase()}!`);
 
 		if (!item.tradable) {
 			return message.channel.send(`${message.author}, **${item.name}** may not be traded!`);
 		}
 
-		const targetHasItem = await (member.user.model || await member.user.fetchModel())[`has${type}`](item);
-		if (targetHasItem) {
-			return message.channel.send(`**${member.user.tag}** already has the \`${item.name}\` ${type.toLowerCase()}!`);
+		const targetModel = member.user.model || await member.user.fetchModel();
+		const [targetItem] = await targetModel[`get${type}s`]({ where: { id: item.id } });
+		if (targetItem && item.unique) {
+			return message.channel.send(
+				`**${member.user.tag}** already has the unique \`${item.name}\` ${type.toLowerCase()}!`
+			);
 		}
 
 		try {
+			const promises = [];
+			const singular = item.unique || sourceItem.count === 1;
 			// Make a transaction to rollback when something fails
 			const transaction = await db.transaction();
-			await Promise.all([
-				message.author.model[`remove${type}`](item, { transaction }),
-				member.user.model[`add${type}`](item, { transaction })
-			]);
+
+
+			// If the source has more than one of this item remove one, otherwise remove the whole item
+			if (sourceItem.count > 1) {
+				promises.push(sourceItem.setItemCount(sourceItem.count - 1, { transaction }));
+			} else {
+				promises.push(message.author.model[`remove${type}`](sourceItem, { transaction }));
+			}
+
+			// If the target already has that item add one, otherwise add it as whole
+			if (targetItem) {
+				promises.push(targetItem.setItemCount(targetItem.count + 1, { transaction }));
+			} else {
+				promises.push(targetModel[`add${type}`](item, { transaction }));
+			}
+
+			await Promise.all(promises);
 			await transaction.commit();
 
 			return message.channel.send([
-				'You successfully transferred your ',
-				`\`${item.name}\` ${type.toLowerCase()} to **${member.user.tag}**!`
+				`You successfully transferred${singular ? '' : ' one of'} your `,
+				`\`${item.name}\` ${type.toLowerCase()}${singular === 1 ? '' : 's'} to **${member.user.tag}**!`
 			]);
 		} catch (error) {
 			this.handler.logger.error(error);
