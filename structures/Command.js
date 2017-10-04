@@ -139,7 +139,7 @@ class Command {
 			this.handler.aliases.set(alias, command.name);
 		}
 
-		this.logger.load(`[COMMANDS] Reloaded ${command.name}.`);
+		this.handler.logger.load(`[COMMANDS] Reloaded command ${command.name}.`);
 	}
 
 	/**
