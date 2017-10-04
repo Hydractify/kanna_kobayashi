@@ -14,63 +14,66 @@ class User extends Model {
 	}
 }
 
-User.init({
-	id: {
-		primaryKey: true,
-		type: STRING('20')
-	},
-	coins: {
-		allowNull: false,
-		defaultValue: 0,
-		type: INTEGER
-	},
-	exp: {
-		allowNull: false,
-		defaultValue: 0,
-		type: INTEGER
-	},
-	type: {
-		type: ENUM,
-		values: ['BLACKLISTED', 'WHITELISTED', 'TRUSTED', 'DEV']
-	},
-	partnerId: {
-		field: 'partner_id',
-		type: STRING('20')
-	},
-	partnerSince: {
-		field: 'partner_since',
-		type: DATE
-	},
-	partnerMarried: {
-		field: 'partner_married',
-		type: BOOLEAN
-	}
-}, {
-	createdAt: false,
-	hooks: {
-		beforeUpdate: user => {
-			// Partner present?
-			if (user.partnerId) {
-				// But no since date? (newly added)
-				if (!user.partnerSince) {
-					user.partnerSince = new Date();
-				}
-			} else {
-				// No partner but a since date? (just deleted)
-				if (user.partnerSince) {
-					user.partnerSince = null;
-				}
-				// Married without a partner? (^)
-				if (user.partnerMarried !== null) {
-					user.partnerMarried = null;
-				}
-			}
+User.init(
+	{
+		id: {
+			primaryKey: true,
+			type: STRING('20')
+		},
+		coins: {
+			allowNull: false,
+			defaultValue: 0,
+			type: INTEGER
+		},
+		exp: {
+			allowNull: false,
+			defaultValue: 0,
+			type: INTEGER
+		},
+		type: {
+			type: ENUM,
+			values: ['BLACKLISTED', 'WHITELISTED', 'TRUSTED', 'DEV']
+		},
+		partnerId: {
+			field: 'partner_id',
+			type: STRING('20')
+		},
+		partnerSince: {
+			field: 'partner_since',
+			type: DATE
+		},
+		partnerMarried: {
+			field: 'partner_married',
+			type: BOOLEAN
 		}
 	},
-	sequelize: db,
-	tableName: 'users',
-	updatedAt: false
-});
+	{
+		createdAt: false,
+		hooks: {
+			beforeUpdate: user => {
+				// Partner present?
+				if (user.partnerId) {
+					// But no since date? (newly added)
+					if (!user.partnerSince) {
+						user.partnerSince = new Date();
+					}
+				} else {
+					// No partner but a since date? (just deleted)
+					if (user.partnerSince) {
+						user.partnerSince = null;
+					}
+					// Married without a partner? (^)
+					if (user.partnerMarried !== null) {
+						user.partnerMarried = null;
+					}
+				}
+			}
+		},
+		sequelize: db,
+		tableName: 'users',
+		updatedAt: false
+	}
+);
 
 // Partner
 User.hasOne(User, { as: 'partner', foreignKey: 'partnerId' });
