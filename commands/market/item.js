@@ -6,6 +6,7 @@ const { instance: { db } } = require('../../structures/PostgreSQL');
 const { parseFlags, titleCase } = require('../../util/Util');
 const Command = require('../../structures/Command');
 const Item = require('../../models/Item');
+const User = require('../../models/User');
 
 class ItemCommand extends Command {
 	constructor(handler) {
@@ -107,11 +108,20 @@ class ItemCommand extends Command {
 	}
 
 	async find(message, args) {
-		const item = await Item.findOne({ where: where(fn('lower', col('name')), args.join(' ').toLowerCase()) });
+		const item = await Item.findOne({
+			include: [{
+				as: 'holders',
+				joinTableAttributes: ['count'],
+				model: User,
+				required: false,
+				where: { id: message.author.id }
+			}],
+			where: where(fn('lower', col('name')), args.join(' ').toLowerCase())
+		});
 		if (!item) return message.channel.send(`${message.author}, could not find an item with that name!`);
 
 		const embed = RichEmbed.common(message)
-			.setAuthor(`Information about the ${item.type.toLowerCase()} ${item.name}`, this.client.displayAvatarURL)
+			.setAuthor(`Information about the ${item.type.toLowerCase()} "${item.name}"`, this.client.displayAvatarURL)
 			.setThumbnail(message.guild.iconURL)
 			.setDescription(item.description || '\u200b');
 
@@ -120,6 +130,11 @@ class ItemCommand extends Command {
 			if ((title === 'price' && value === null)
 				// Already in the description of the embed.
 				|| title === 'description') continue;
+
+			if (title === 'holders') {
+				embed.addField('You own', item.holders[0].UserItem.count);
+				continue;
+			}
 
 			if (value === true) {
 				value = 'Yes';

@@ -6,6 +6,7 @@ const { instance: { db } } = require('../structures/PostgreSQL');
 const CommandLog = require('./CommandLog');
 const Item = require('./Item');
 const Reputation = require('./Reputation');
+const UserItem = require('./UserItem');
 
 class User extends Model {
 	get level() {
@@ -79,19 +80,28 @@ User.hasMany(CommandLog, { foreignKey: 'user_id' });
 // Item / Badge
 User.belongsToMany(Item, {
 	as: 'items',
+	joinTableAttributes: ['count'],
 	otherKey: 'item_id',
-	through: 'user_items',
+	through: UserItem,
 	foreignKey: 'user_id',
 	scope: { type: 'ITEM' }
 });
 User.belongsToMany(Item, {
 	as: 'badges',
+	joinTableAttributes: ['count'],
 	otherKey: 'item_id',
-	through: 'user_items',
+	through: UserItem,
 	foreignKey: 'user_id',
 	scope: { type: 'BADGE' }
 });
-Item.belongsToMany(User, { as: 'holders', otherKey: 'user_id', through: 'user_items', foreignKey: 'item_id' });
+Item.belongsToMany(User, {
+	as: 'holders',
+	// This does not have any convenience getter atm. Will add when necessary
+	joinTableAttributes: ['count'],
+	otherKey: 'user_id',
+	through: UserItem,
+	foreignKey: 'item_id'
+});
 
 // Reputation
 User.hasMany(Reputation, {

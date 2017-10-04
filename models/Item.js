@@ -4,7 +4,24 @@ const { BOOLEAN, ENUM, INTEGER, STRING, Model } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
 
-class Item extends Model { }
+class Item extends Model {
+	setItemCount(count, options = {}) {
+		if (!this.UserItem) {
+			throw new Error([
+				`"${this.name}" does not have an item count associated with it!`,
+				'Maybe not from an associated user?'
+			].join('\n'));
+		}
+
+		this.UserItem.count = count;
+		return this.UserItem.save(options);
+	}
+
+	get count() {
+		if (!this.UserItem) return undefined;
+		return this.UserItem.count;
+	}
+}
 
 Item.init({
 	name: {
