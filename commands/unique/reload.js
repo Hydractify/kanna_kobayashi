@@ -1,7 +1,3 @@
-// eslint-disable-next-line no-unused-vars
-const Discord = require('discord.js');
-const { inspect } = require('util');
-
 const Command = require('../../structures/Command');
 
 class ReloadCommand extends Command {
