@@ -7,6 +7,8 @@ const { titleCase } = require('../../util/Util');
 class HelpCommand extends Command {
 	constructor(handler) {
 		super(handler, {
+			// TODO: Fallbacks, forcing the bot to have MANAGE_MESSAGES seems like a bad idea.
+			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'MANAGE_MESSAGES'],
 			aliases: ['halp', 'commands'],
 			coins: 0,
 			exp: 0,
@@ -21,18 +23,6 @@ class HelpCommand extends Command {
 	}
 
 	async run(message, args) {
-		if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) {
-			return message.channel.send(`${message.author}! I do not have the permission to send **Embeds** (Embed Links Permission)! <:KannaWtf:320406412133924864>`);
-		}
-
-		if (!message.channel.permissionsFor(message.guild.me).has('ADD_REACTIONS')) {
-			return message.channel.send(`${message.author}! I do not have the permission to **Add Reactions** (Add Reactions Permission)! <:KannaWtf:320406412133924864>`);
-		}
-
-		if (!message.channel.permissionsFor(message.guild.me).has('MANAGE_MESSAGES')) {
-			return message.channel.send(`${message.author}! I do not have the permission to **Delete Messages** (Manage Messages Permission)! <:KannaWtf:320406412133924864>`);
-		}
-
 		if (!args[0]) {
 			if (!message.author.model) await message.author.fetchModel();
 			const [embeds, categoryCount] = this.mapCategories(message);
