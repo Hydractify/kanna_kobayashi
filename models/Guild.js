@@ -24,7 +24,7 @@ Guild.init(
 			type: STRING('20')
 		},
 		quizAnswer: {
-			field: 'quiz_anaswer',
+			field: 'quiz_answer',
 			type: STRING,
 			defaultValue: 'kanna kobayashi'
 		},
