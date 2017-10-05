@@ -76,7 +76,7 @@ User.init(
 );
 
 // Partner
-User.hasOne(User, { as: 'partner', foreignKey: 'partnerId' });
+User.hasOne(User, { as: 'partner', foreignKey: 'partner_id' });
 
 // Command log
 User.hasMany(CommandLog, { foreignKey: 'user_id' });
