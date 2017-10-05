@@ -23,6 +23,7 @@ class AvatarCommand extends Command {
 					: this.handler.resolveUser(input)
 				)
 			: message.author;
+		if (!user) return message.channel.send(`Could not find a user with ${input}.`);
 
 		const embed = RichEmbed.common(message)
 			.setAuthor(`${user.tag}'s avatar`, user.displayAvatarURL, user.displayAvatarURL)
