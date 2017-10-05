@@ -5,6 +5,7 @@ const { join } = require('path');
 const Raven = require('raven');
 const { promisify } = require('util');
 
+const { titleCase } = require('../util/Util');
 const Logger = require('./Logger');
 
 const readdirAsync = promisify(readdir);
@@ -66,12 +67,23 @@ class CommandHandler {
 			|| this.commands.get(this.aliases.get(commandName.toLowerCase()));
 		if (!command) return;
 
-		// After checking for a valid command now :^)
-		if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) {
+		// Cache permissions to reuse them later
+		const permissions = message.channel.permissionsFor(message.guild.me);
+		if (!permissions.has('SEND_MESSAGES')) {
 			message.author.send('I do not have the send messages permission for the channel of your command!')
 				.catch(() => null);
 			return;
 		}
+		const missing = permissions.missing(command.clientPermissions);
+		if (missing.length) {
+			const missingString = missing.map(permission =>
+				titleCase(permission.replace(/_/g, ' '))
+			).join(', ');
+			message.channel.send(`I require the following permissions to execute this command: ${missingString}`)
+				.catch(() => null);
+			return;
+		}
+
 
 		// Message#member is not a getter, so just reassign if not cached
 		if (!message.member) message.member = await message.guild.fetchMember(message.author.id);

@@ -1,3 +1,5 @@
+const { Permissions } = require('discord.js');
+
 const CommandHandler = require('./CommandHandler');
 
 /**
@@ -12,6 +14,7 @@ class Command {
 	 */
 	constructor(handler, {
 		aliases = [],
+		clientPermissions = [],
 		coins = 10,
 		cooldown = 5000,
 		enabled = true,
@@ -22,11 +25,15 @@ class Command {
 		usage,
 		permLevel = 0
 	} = {}) {
+		// Assert correct type
 		if (!(handler instanceof CommandHandler)) {
-			throw new Error(`Command ${this.constructor.name}'s client is not instanceof Client!`);
+			throw new Error(`Command ${this.constructor.name}'s handler is not instanceof CommandHandler!`);
 		}
 		if (!(aliases instanceof Array)) {
 			throw new Error(`Command ${this.constructor.name}'s aliases is not instanceof array!`);
+		}
+		if (!(clientPermissions instanceof Array)) {
+			throw new Error(`Command ${this.constructor.name}'s clientPermissions is not instanceof array!`);
 		}
 		if (!description) {
 			throw new Error(`Command ${this.constructor.name} does not have a description!`);
@@ -36,6 +43,15 @@ class Command {
 		}
 		if (!name) {
 			throw new Error(`Command ${this.constructor.name} does not have a name!`);
+		}
+
+		// Assert correct value
+		for (const permission of clientPermissions) {
+			try {
+				Permissions.resolve(permission);
+			} catch (error) {
+				throw new RangeError(`${permission} is not a valid permission string!`);
+			}
 		}
 
 		/**
@@ -65,6 +81,11 @@ class Command {
 		 * @type {string[]}
 		 */
 		this.aliases = aliases;
+		/**
+		 * Permissions required for this command to be executed
+		 * @type {string[]}
+		 */
+		this.clientPermissions = clientPermissions;
 		/**
 		 * Amount of coins a user receives for using this command
 		 * @type {number}
