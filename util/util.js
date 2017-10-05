@@ -40,6 +40,38 @@ class Util {
 
 		return parsed;
 	}
+
+	/**
+	 * 
+	 * @param {IterableIterator} iterator The iterator of the values to map
+	 * @param {boolean} [random=fase] Whether to randomize the order
+	 * @returns {string}
+	 * @static
+	 */
+	static mapIterator(iterator, random = false) {
+		const array = Array.from(iterator);
+
+		if (random) {
+			for (let i = array.length - 1; i > 0; --i) {
+				const randomIndex = Math.floor(Math.random() * (i + 1));
+				const randomValue = array[randomIndex];
+				array[i] = array[randomIndex];
+				array[randomIndex] = randomValue;
+			}
+		}
+
+		let mapped = '';
+		for (const value of array) {
+			const stringValue = String(value);
+			if (mapped.length + stringValue.length >= 1021) {
+				mapped += '...';
+				break;
+			}
+			mapped += ` ${stringValue}`;
+		}
+
+		return mapped;
+	}
 }
 
 module.exports = Util;

@@ -2,7 +2,7 @@ const moment = require('moment');
 
 const Command = require('../../structures/Command');
 const RichEmbed = require('../../structures/RichEmbed');
-const { titleCase } = require('../../util/Util');
+const { titleCase, mapIterator } = require('../../util/Util');
 
 class GuildInfoCommand extends Command {
 	constructor(handler) {
@@ -25,9 +25,9 @@ class GuildInfoCommand extends Command {
 		let roles = guild.roles.clone();
 		// Get rid of @everyone
 		roles.delete(guild.id);
-		roles = this._mapIterator(roles.values());
+		roles = mapIterator(roles.values());
 
-		const emojis = this._mapIterator(guild.emojis.values());
+		const emojis = mapIterator(guild.emojis.values());
 
 		const counts = { users: 0, bots: 0, text: 0, voice: 0 };
 		for (const { user: { bot } } of guild.members.values()) {
@@ -83,31 +83,6 @@ class GuildInfoCommand extends Command {
 			.addField('Emojis', emojis || 'None', true);
 
 		return message.channel.send(embed);
-	}
-
-	_mapIterator(iterator, random = false) {
-		const array = Array.from(iterator);
-
-		if (random) {
-			for (let i = array.length - 1; i > 0; --i) {
-				const randomIndex = Math.floor(Math.random() * (i + 1));
-				const randomValue = array[randomIndex];
-				array[i] = array[randomIndex];
-				array[randomIndex] = randomValue;
-			}
-		}
-
-		let mapped = '';
-		for (const value of array) {
-			const stringValue = String(value);
-			if (mapped.length + stringValue.length >= 1021) {
-				mapped += '...';
-				break;
-			}
-			mapped += ` ${stringValue}`;
-		}
-
-		return mapped;
 	}
 }
 
