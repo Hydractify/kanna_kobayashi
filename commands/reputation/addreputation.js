@@ -25,14 +25,14 @@ class AddReputationCommand extends Command {
 		}
 
 		const [already] = await (member.user.model || await member.user.fetchModel())
-			.getReps({ where: { sourceId: message.author.id } });
+			.getReps({ scope: { repperId: message.author.id } });
 		if (already) {
-			if (already.type === 'POSITIVE') {
+			if (already.UserReputation.type === 'POSITIVE') {
 				return message.channel.send(`You already added a positive reputation to **${member.user.tag}**.`);
 			}
 
-			already.type = 'POSITIVE';
-			await already.save();
+			already.UserReputation.type = 'POSITIVE';
+			await already.UserReputation.save();
 
 			return message.channel.send([
 				'You successfully edited your reputation entry of',
@@ -40,10 +40,7 @@ class AddReputationCommand extends Command {
 			].join(' '));
 		}
 
-		await message.author.model.createRepped({
-			targetId: member.id,
-			type: 'POSITIVE'
-		});
+		await message.author.model.addRepped(member.user.model, { through: { type: 'POSITIVE' } });
 
 		return message.channel.send(`You successfully added a positive reputation to **${member.user.tag}**.`);
 	}

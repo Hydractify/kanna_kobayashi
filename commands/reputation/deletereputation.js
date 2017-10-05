@@ -21,12 +21,12 @@ class DeleteReputationCommand extends Command {
 		const member = await this.handler.resolveMember(message.guild, target, false);
 		if (!member) return message.channel.send(`Could not find a non-bot member by ${target}.`);
 
-		const [reputation] = await message.author.model.getRepped({ where: { targetId: member.id } });
+		const [reputation] = await message.author.model.getRepped({ scope: { repId: member.id } });
 		if (!reputation) {
 			return message.channel.send(`You never added a reputation to **${member.user.tag}**!`);
 		}
 
-		await reputation.destroy();
+		await message.author.model.removeRepped(reputation);
 
 		return message.channel.send(`Successfully deleted your reputation entry of **${member.user.tag}**.`);
 	}

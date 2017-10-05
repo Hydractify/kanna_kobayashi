@@ -25,14 +25,14 @@ class RemoveReputationCommand extends Command {
 		}
 
 		const [already] = await (member.user.model || await member.user.fetchModel())
-			.getReps({ where: { sourceId: message.author.id } });
+			.getReps({ scope: { repperId: message.author.id } });
 		if (already) {
-			if (already.type === 'NEGATIVE') {
+			if (already.UserReputation.type === 'NEGATIVE') {
 				return message.channel.send(`You already added a negative reputation to **${member.user.tag}**.`);
 			}
 
-			already.type = 'NEGATIVE';
-			await already.save();
+			already.UserReputation.type = 'NEGATIVE';
+			await already.UserReputation.save();
 
 			return message.channel.send([
 				'You successfully edited your reputation entry of',
@@ -40,10 +40,7 @@ class RemoveReputationCommand extends Command {
 			].join(' '));
 		}
 
-		await message.author.model.createRepped({
-			targetId: member.id,
-			type: 'NEGATIVE'
-		});
+		await message.author.model.addRepped(member.user.model, { through: { type: 'NEGATIVE' } });
 
 		return message.channel.send(`You successfully added a negative reputation to **${member.user.tag}**.`);
 	}

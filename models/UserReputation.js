@@ -4,19 +4,19 @@ const { ENUM, STRING, Model } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
 
-class Reputation extends Model { }
+class UserReputation extends Model { }
 
-Reputation.init(
+UserReputation.init(
 	{
-		sourceId: {
-			field: 'source_id',
+		repperId: {
+			field: 'repper_id',
 			type: STRING('20'),
-			unique: 'reputation-target-source-index'
+			primaryKey: true
 		},
-		targetId: {
-			field: 'target_id',
+		repId: {
+			field: 'rep_id',
 			type: STRING('20'),
-			unique: 'reputation-target-source-index'
+			primaryKey: true
 		},
 		type: {
 			allowNull: false,
@@ -27,9 +27,9 @@ Reputation.init(
 	{
 		createdAt: false,
 		sequelize: db,
-		tableName: 'reputations',
+		tableName: 'user_reputations',
 		updatedAt: false
 	}
 );
 
-module.exports = Reputation;
+module.exports = UserReputation;
