@@ -17,7 +17,7 @@ class ReloadCommand extends Command {
 	run(message, [commandName]) {
 		try {
 			const command = this.handler.commands.get(commandName.toLowerCase())
-				|| this.handler.commands.get(this.aliases.get(commandName.toLowerCase()));
+				|| this.handler.commands.get(this.handler.aliases.get(commandName.toLowerCase()));
 			if (!command) return message.channel.send(`Could not find a command by the name or alias ${commandName}!`);
 
 			command.reload();
