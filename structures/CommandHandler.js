@@ -130,8 +130,13 @@ class CommandHandler {
 		try {
 			await command.run(message, args, commandName);
 		} catch (error) {
-			Raven.captureException(error);
-			this.logger.sentry('Sent an error to sentry:', error);
+			if (process.env.NODE_ENV !== 'dev') {
+				Raven.captureException(error);
+				this.logger.sentry('Sent an error to sentry:', error);
+			} else {
+				this.logger.error('CommandHandler#handle:', error);
+			}
+
 			message.channel.send(
 				[
 					'**An errror occured! Please paste this to the official guild support channel!**'

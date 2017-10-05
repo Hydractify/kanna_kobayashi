@@ -19,7 +19,7 @@
   "scripts": {
     "test": "eslint ./ *.js",
     "start": "node ./shard.js",
-    "dev": "export DEBUG=sequelize* || set DEBUG=sequelize* && node ./shard.js"
+    "dev": "export DEBUG=sequelize*|| set DEBUG=sequelize*&& export NODE_ENV=dev|| set NODE_ENV=dev&& node ./shard.js"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,10 @@
   "author": "Wizard",
   "license": "ISC",
   "eslintConfig": {
-    "extends": "aqua"
+    "extends": "aqua",
+    "rules": {
+      "no-process-env": "off"
+    }
   },
   "bugs": {
     "url": "https://github.com/WizardLink/kanna_v4/issues"

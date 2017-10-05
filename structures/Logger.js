@@ -84,6 +84,16 @@ class Logger {
 	}
 
 	/**
+	 * Writes a DEBUG message to the log.
+	 * (Only in dev environment)
+	 * @param {...any} data Data to log
+	 */
+	debug(...data) {
+		if (process.env.NODE_ENV !== 'dev') return;
+		this._write('DEBUG', data);
+	}
+
+	/**
 	 * Converts any data to a string.
 	 * @param {any[]} data Data to clean
 	 * @returns {string}
@@ -107,11 +117,9 @@ class Logger {
 	_write(level, data) {
 		const cleaned = this._prepareText(data);
 
-
 		process.stdout.write(
 			[
 				'\n',
-				// eslint-disable-next-line no-process-env
 				'SHARD_ID' in process.env ? `\x1b[32m[SHARD ${process.env.SHARD_ID}]\x1b[0m` : '',
 				`[${moment().format('YYYY.MM.DD-HH:mm:ss')}]`,
 				`\x1b[${levels[level][0]}m`,
@@ -133,7 +141,8 @@ const levels = {
 	ERROR: [41, 31],
 	LOAD: [43, 33],
 	SENTRY: [42, 32],
-	SHARD: [46, 36]
+	SHARD: [46, 36],
+	DEBUG: [44, 37]
 };
 
 module.exports = Logger;

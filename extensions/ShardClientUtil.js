@@ -18,6 +18,7 @@ class ShardClientUtilExtension extends Extension {
 			this._respond('fetchProp', { _fetchProp: message._fetchProp, _result: value });
 		} else if (message._eval) {
 			try {
+				this.client.logger.debug('broadcastEval', message._eval);
 				const _result = await this.client._eval(message._eval);
 
 				// Checking for circulars; Not reassigning is intended.
