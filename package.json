@@ -7,9 +7,10 @@
     "discord.js": "^11.2.1",
     "humanize-duration": "^3.10.1",
     "moment": "^2.18.1",
+    "moment-duration-format": "^1.3.0",
     "pg": "^6.4.2",
-    "raven": "^2.1.2",
-    "sequelize": "^4.13.1"
+    "raven": "^2.2.1",
+    "sequelize": "^4.13.5"
   },
   "devDependencies": {
     "eslint": "^4.8.0",
