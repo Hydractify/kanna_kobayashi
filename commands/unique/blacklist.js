@@ -17,6 +17,7 @@ class BlacklistCommand extends Command {
 	async run(message, [target, remove]) {
 		// To allow nicknames, I am so sure they will be used.
 		let user = await this.handler.resolveMember(message.guild, target, false);
+		user = user.user;
 		if (!user) user = await this.client.fetchUser(target).catch(() => null);
 		if (!user || user.bot) return message.channel.send(`Could not find a non-bot user by ${target}!`);
 
