@@ -16,12 +16,13 @@ class AddReputationCommand extends Command {
 	}
 
 	async run(message, [target]) {
-		if (!target) return message.channel.send('You need to tell me who you want a positive reputation to.');
+		if (!target) return message.channel.send('You need to tell me who you want to add a positive reputation to.');
 
 		const member = await this.handler.resolveMember(message.guild, target, false);
-		const authorM = message.member || await message.guild.fetchMember(message.author);
-		if (authorM === member) return message.channel.send(`You can't give a reputation point to yourself ${message.author}`)
 		if (!member) return message.channel.send(`Could not find a non-bot member by ${target}.`);
+		if (member.id === message.author.id) {
+			return message.channel.send(`You can't give a reputation point to yourself, ${message.author}`);
+		}
 
 		const [already] = await (member.user.model || await member.user.fetchModel())
 			.getReps({ where: { sourceId: message.author.id } });

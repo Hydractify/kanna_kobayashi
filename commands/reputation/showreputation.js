@@ -17,9 +17,9 @@ class ShowReputationCommand extends Command {
 	}
 
 	async run(message, [target]) {
-		let member;
-		if (!target) member = message.member || await message.guild.fetchMember(message.author);
-		else member = await this.handler.resolveMember(message.guild, target, false)
+		const member = target
+			? await this.handler.resolveMember(message.guild, target, false)
+			: message.member;
 
 		if (!member) return message.channel.send(`Could not find a non-bot member by **${target}**.`);
 
