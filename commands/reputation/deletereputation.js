@@ -16,7 +16,7 @@ class DeleteReputationCommand extends Command {
 	}
 
 	async run(message, [target]) {
-		if (!target) return message.channel.send('You need to tell me who you want a positive reputation to.');
+		if (!target) return message.channel.send('You need to tell me who you want to remove your reputation from.');
 
 		const member = await this.handler.resolveMember(message.guild, target, false);
 		if (!member) return message.channel.send(`Could not find a non-bot member by ${target}.`);
