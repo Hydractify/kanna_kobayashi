@@ -50,12 +50,22 @@ class HelpCommand extends Command {
 			const reactionCollector = helpMessage.createReactionCollector(filter, { time: 300000 })
 				.on('collect', reaction => {
 					if (reaction.emoji.name === '➡') {
-						helpMessage.edit({ embed: selectEmbed(true) });
-						reaction.remove(message.author);
+						Promise.all([
+							helpMessage.edit({ embed: selectEmbed(true) }),
+							reaction.remove(message.author)
+						]).catch(error => {
+							reactionCollector.stop();
+							throw error;
+						});
 					}
 					if (reaction.emoji.name === '⬅') {
-						helpMessage.edit({ embed: selectEmbed(false) });
-						reaction.remove(message.author);
+						Promise.all([
+							helpMessage.edit({ embed: selectEmbed(false) }),
+							reaction.remove(message.author)
+						]).catch(error => {
+							reactionCollector.stop();
+							throw error;
+						});
 					}
 					if (reaction.emoji.name === '❎') {
 						reactionCollector.stop();
@@ -93,13 +103,14 @@ class HelpCommand extends Command {
 				.setColor(this.client.color(message.author.model));
 
 			for (const command of commands) {
-				embed.addField(`kanna ${command.name}`, command.usage);
+				if (command.permLevel > message.member.permLevel) continue;
+				embed.addField(`kanna ${command.name}`, command.usage, true);
 			}
 
-			embeds.push(embed);
+			if (embed.fields.length) embeds.push(embed);
 		}
 
-		return [embeds, categories.size];
+		return [embeds, embeds.length];
 	}
 
 	findCommand(message, [commandName]) {
