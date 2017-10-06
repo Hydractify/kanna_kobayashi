@@ -3,6 +3,7 @@
 const { ARRAY, BOOLEAN, STRING, Model } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
+const Quiz = require('./Quiz');
 
 class Guild extends Model { }
 
@@ -23,15 +24,11 @@ Guild.init(
 			field: 'tamer_role_id',
 			type: STRING('20')
 		},
-		quizAnswer: {
-			field: 'quiz_answer',
-			type: STRING,
-			defaultValue: 'kanna kobayashi'
-		},
-		quizCharacter: {
-			field: 'quiz_character',
-			type: STRING,
-			defaultValue: 'http://pm1.narvii.com/6366/2c35594538206f7f598be792bf203b6b638e9c07_hq.jpg'
+		// Not optimal, since it will be either 0-10, the guild id, or null.
+		// But can't do much about it, a join table would be unnecessary
+		quizId: {
+			field: 'quiz_id',
+			type: STRING('20')
 		},
 		levelUpEnabled: {
 			field: 'level_up_enabled',
@@ -63,5 +60,8 @@ Guild.init(
 		updatedAt: false
 	}
 );
+
+// Quizzes
+Guild.belongsTo(Quiz, { foreignKey: 'quiz_id' });
 
 module.exports = Guild;
