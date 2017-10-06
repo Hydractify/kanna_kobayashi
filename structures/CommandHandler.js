@@ -156,7 +156,7 @@ class CommandHandler {
 		authorModel.exp += command.coins;
 		await authorModel.save();
 
-		if (authorModel.level > level && guildModel.notifications.levelUp) {
+		if (authorModel.level > level && guildModel.levelUpEnabled) {
 			message.channel
 				.send(`${message.author}, you advanced to level **${authorModel.level}**! <:KannaHugMe:299650645001240578>`);
 		}
