@@ -13,8 +13,10 @@ class GuildMemberExtension extends Extension {
 			|| permissions.has(['BAN_MEMBERS', 'KICK_MEMBERS'])) return 2;
 
 		// Guild model should not be uncached, but just as fallback
-		const roleName = this.guild.model ? this.guild.model.tamerRole : 'dragon tamer';
-		if (this.roles.exists(role => role.name.toLowerCase() === roleName)) return 1;
+		const role = this.guild.model
+			? this.guild.roles.get(this.guild.model.tamerRoleId)
+			: this.guild.roles.find('name', 'dragon tamer');
+		if (role && this.roles.has(role)) return 1;
 
 		return 0;
 	}
