@@ -4,6 +4,7 @@ const RichEmbed = require('../../structures/RichEmbed');
 class ShowReputationCommand extends Command {
 	constructor(handler) {
 		super(handler, {
+			clientPermissions: ['EMBED_LINKS'],
 			aliases: ['showrep'],
 			coins: 0,
 			cooldown: 0,

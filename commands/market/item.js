@@ -11,12 +11,13 @@ const User = require('../../models/User');
 class ItemCommand extends Command {
 	constructor(handler) {
 		super(handler, {
+			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
+			description: 'Check an item\'s information or give an item to your on of your friends!',
 			exp: 0,
 			name: 'item',
 			usage: 'item <Check|Give> <...Query|Target>',
-			permLevel: 0,
-			description: 'Check an item\'s information or give an item to your on of your friends!'
+			permLevel: 0
 		});
 	}
 
