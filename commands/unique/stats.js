@@ -44,7 +44,7 @@ class StatsCommand extends Command {
 		other.sort((a, b) => a.shardId - b.shardId);
 
 		const uptime = [
-			moment.duration(this.client.uptime).format('d[ Days], hh:mm:ss'),
+			moment.duration(this.client.uptime).format('d[ Days], hh[h]:mm[m]:ss[s]'),
 			`[${moment.duration(this.client.uptime).humanize()}]`
 		].join(' ');
 		const ram = other.map(shard => `Shard ${shard.shardId + 1}: ${shard.ram}`);
@@ -52,7 +52,7 @@ class StatsCommand extends Command {
 		const embed = RichEmbed.common(message)
 			.setAuthor(`${this.client.user.username}'s stats`, this.client.user.displayAvatarURL)
 			.setDescription('\u200b')
-			.setThumbnail(this.client.user.displayAvatarURL)
+			.setThumbnail(message.guild.iconURL)
 			.addField('Uptime <:hugme:299650645001240578>', uptime, true)
 			.addField('Guilds <:oh:315264555859181568>', guilds, true)
 			// Technically bots as well

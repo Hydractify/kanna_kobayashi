@@ -75,7 +75,7 @@ class QuizNameCommand extends Command {
 
 			if (!toSend) {
 				toSend = [
-					`Set the answer to ${titleCase(name.join(' '))}.`,
+					`Set the answer to \`${titleCase(name.join(' '))}\`.`,
 					'_There is no photo associated with this quiz!_'
 				];
 			}

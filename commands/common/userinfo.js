@@ -30,6 +30,10 @@ class UserInfoCommand extends Command {
 
 		const member = message.guild.members.get(user.id) || await message.guild.fetchMember(user.id).catch(() => null);
 
+		let roles = member.roles.clone();
+		roles.delete(message.guild.id);
+		roles = mapIterator(roles.values());
+
 		const embed = RichEmbed.common(message)
 			.setAuthor(`Info about ${user.tag}`, user.displayAvatarURL, user.displayAvatarURL)
 			.setDescription('\u200b')
@@ -48,7 +52,7 @@ class UserInfoCommand extends Command {
 		if (member) {
 			embed
 				.addField('Joined this guild', this._formatTimespan(member.joinedAt), true)
-				.addField('Roles', mapIterator(member.roles.values()));
+				.addField('Roles', roles);
 		}
 
 		embed.addField('Avatar', `[Link](${user.displayAvatarURL})`)
@@ -58,7 +62,7 @@ class UserInfoCommand extends Command {
 	}
 
 	_formatTimespan(from) {
-		return `${moment(from).format('MM/DD/YYY (HH:mm)')} [${moment.duration(from, Date.now()).humanize()}]`;
+		return `${moment(from).format('MM/DD/YYY (HH:mm)')} [${moment.duration(from - Date.now()).humanize()}]`;
 	}
 }
 

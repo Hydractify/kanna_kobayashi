@@ -17,7 +17,7 @@ class QuizPremadeCommand extends Command {
 		});
 
 		this.emojis = [
-			// 'KannaOmfg:315264558279426048',
+			'KannaOmfg:315264558279426048',
 			'1%E2%83%A3',
 			'2%E2%83%A3',
 			'3%E2%83%A3',
@@ -37,7 +37,7 @@ class QuizPremadeCommand extends Command {
 			.addField(
 				'Dragons',
 				[
-					'<:KannaOmfg:315264558279426048> **Ilulu**',
+					'<:KannaMad:315264558279426048> **Ilulu**',
 					':one: **Tohru**',
 					':two: **Quetzalcoatl**',
 					':three: **Fafnir**',

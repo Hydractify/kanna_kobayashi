@@ -23,7 +23,7 @@ class InfoCommand extends Command {
 			.addField('Patreon', 'http://kannathebot.me/patreon', true)
 			.addField('Official Guild', 'https://discord.gg/uBdXdE9', true)
 			.addField('Official Website', 'http://kannathebot.me', true)
-			.setThumbnail(this.client.user.displayAvatarURL);
+			.setThumbnail(message.guild.iconURL);
 
 		return message.channel.send(embed);
 	}

@@ -21,8 +21,8 @@ class QuizStartCommand extends Command {
 		const quiz = await message.guild.model.getQuiz();
 		if (!quiz || !quiz.name || !quiz.photo) {
 			return message.channel.send([
-				'This guild does not have a quiz set up!',
-				'You can use one of the a pre made oned, or addi your own by setting a photo and an answer.'
+				`${message.author}, this guild does not have a quiz set up!`,
+				'You can use one of the a pre made ones, or add your own by setting a photo and an answer! <:KannaAyy:315270615844126720>'
 			]);
 		}
 
