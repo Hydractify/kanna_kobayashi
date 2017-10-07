@@ -144,13 +144,14 @@ class Command {
 	 */
 	reload() {
 		delete require.cache[require.resolve(this.location)];
+
+		const CommandClass = require(this.location);
+		const command = new CommandClass(this.handler);
+
 		this.handler.commands.delete(this.name);
 		for (const alias of this.aliases) {
 			this.handler.aliases.delete(alias);
 		}
-
-		const CommandClass = require(this.location);
-		const command = new CommandClass(this.handler);
 
 		command.location = this.location;
 		command.category = this.category;

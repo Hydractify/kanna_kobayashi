@@ -14,23 +14,16 @@ class ReloadCommand extends Command {
 		});
 	}
 
-	run(message, [commandName]) {
-		try {
-			const command = this.handler.commands.get(commandName.toLowerCase())
-				|| this.handler.commands.get(this.handler.aliases.get(commandName.toLowerCase()));
-			if (!command) return message.channel.send(`Could not find a command by the name or alias ${commandName}!`);
+	async run(message, [commandName]) {
+		if (!commandName) return message.channel.send('You should supply a command to reload.');
 
-			command.reload();
+		const results = await this.client.shard.broadcastEval(`this.commandHandler.reload('${commandName}')`)
+			.then(result =>
+				result.map(res =>
+					`Shard: ${res[0]} - ${res[1].message ? `\`${res[1].message}\`` : res[1] ? 'Success' : 'Not found'}`)
+			);
 
-			return message.channel.send(`Command **${command.name}** reloaded.`);
-		} catch (error) {
-			return message.channel.send([
-				'**Error**',
-				'```js',
-				String(error),
-				'```'
-			]);
-		}
+		return message.channel.send(results.join('\n'));
 	}
 }
 

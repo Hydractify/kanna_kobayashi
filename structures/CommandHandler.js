@@ -1,4 +1,4 @@
-const { Collection } = require('discord.js');
+const { Collection, Util: { makePlainError } } = require('discord.js');
 const { readdir } = require('fs');
 const humanizeDuration = require('humanize-duration');
 const { join } = require('path');
@@ -188,6 +188,21 @@ class CommandHandler {
 				this.logger.load(`[COMMANDS]: Loaded ${files.length} ${folder} commands.`);
 			});
 		}
+	}
+
+	reload(commandName) {
+		const command = this.commands.get(commandName.toLowerCase())
+			|| this.commands.get(this.aliases.get(commandName.toLowerCase()));
+
+		if (!command) return [this.client.shard.id, false];
+
+		try {
+			command.reload();
+		} catch (error) {
+			return [this.client.shard.id, makePlainError(error)];
+		}
+
+		return [this.client.shard.id, true];
 	}
 
 	/**
