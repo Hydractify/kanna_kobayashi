@@ -7,8 +7,7 @@ const { titleCase } = require('../../util/Util');
 class HelpCommand extends Command {
 	constructor(handler) {
 		super(handler, {
-			// TODO: Fallbacks, forcing the bot to have MANAGE_MESSAGES seems like a bad idea.
-			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'MANAGE_MESSAGES'],
+			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS'],
 			aliases: ['halp', 'commands'],
 			coins: 0,
 			exp: 0,
@@ -22,8 +21,9 @@ class HelpCommand extends Command {
 		});
 	}
 
-	async run(message, args) {
-		if (!args[0]) {
+	async run(message, [name]) {
+		name = name.toLowerCase();
+		if (!name || name === 'all') {
 			if (!message.author.model) await message.author.fetchModel();
 			const [embeds, categoryCount] = this.mapCategories(message);
 
@@ -50,19 +50,15 @@ class HelpCommand extends Command {
 			const reactionCollector = helpMessage.createReactionCollector(filter, { time: 300000 })
 				.on('collect', reaction => {
 					if (reaction.emoji.name === '➡') {
-						Promise.all([
-							helpMessage.edit({ embed: selectEmbed(true) }),
-							reaction.remove(message.author)
-						]).catch(error => {
+						reaction.remove(message.author).catch(() => null);
+						helpMessage.edit({ embed: selectEmbed(true) }).catch(error => {
 							reactionCollector.stop();
 							throw error;
 						});
 					}
 					if (reaction.emoji.name === '⬅') {
-						Promise.all([
-							helpMessage.edit({ embed: selectEmbed(false) }),
-							reaction.remove(message.author)
-						]).catch(error => {
+						reaction.remove(message.author).catch(() => null);
+						helpMessage.edit({ embed: selectEmbed(false) }).catch(error => {
 							reactionCollector.stop();
 							throw error;
 						});
@@ -78,7 +74,8 @@ class HelpCommand extends Command {
 			return undefined;
 		}
 
-		return this.findCommand(message, args);
+		return this.findCategory(message, name)
+			|| this.findCommand(message, name);
 	}
 
 	mapCategories(message) {
@@ -113,7 +110,30 @@ class HelpCommand extends Command {
 		return [embeds, embeds.length];
 	}
 
-	findCommand(message, [commandName]) {
+	findCategory(message, categoryName) {
+		let embed;
+		for (const command of this.handler.commands.values()) {
+			if (command.category.toLowerCase() === categoryName) {
+				// Only generate embed if category name is valid, pointless optimizing tbh
+				if (!embed) {
+					embed = RichEmbed.common(message)
+						.setThumbnail(message.guild.iconURL)
+						.setURL('http://kannathebot.me/guild')
+						.setAuthor(`${this.client.user.username}'s ${titleCase(categoryName)} Commands`)
+						.setDescription('\u200b')
+						.setColor(this.client.color(message.author.model));
+				}
+
+				embed.addField(`kanna ${command.name}`, command.usage, true);
+			}
+		}
+
+		return embed
+			? message.channel.send(embed)
+			: null;
+	}
+
+	findCommand(message, commandName) {
 		const command = this.handler.commands.get(commandName)
 			|| this.handler.commands.get(this.handler.aliases.get(commandName));
 
