@@ -22,7 +22,8 @@ class QuizStartCommand extends Command {
 		if (!quiz || !quiz.name || !quiz.photo) {
 			return message.channel.send([
 				`${message.author}, this guild does not have a quiz set up!`,
-				'You can use one of the a pre made ones, or add your own by setting a photo and an answer! <:KannaAyy:315270615844126720>'
+				'You can use one of the a pre made ones,'
+				+ ' or add your own by setting a photo and an answer! <:KannaAyy:315270615844126720>'
 			]);
 		}
 

@@ -16,13 +16,19 @@ class UrbanCommand extends Command {
 	}
 
 	async run(message, args) {
-		if (!args.length) return message.channel.send(`Hey ${message.author}... You are supposed to tell me what to search (\`kanna ${this.usage}\`) <:KannaWtf:320406412133924864>`);
+		if (!args.length) {
+			return message.channel.send([
+				`Hey ${message.author}... You are supposed to tell me what to search`,
+				`(\`kanna ${this.usage}\`) <:KannaWtf:320406412133924864>`
+			].join(' '));
+		}
 
 		const query = encodeURIComponent(args.join('+').replace(/%2B/g, '+'));
 		const { body: { list } } = await get(`http://api.urbandictionary.com/v0/define?term=${query}`);
 
 		const embed = RichEmbed.common(message)
-			.setAuthor(`Search result for ${titleCase(args.join(' '))}`, 'https://d2gatte9o95jao.cloudfront.net/assets/store-mug-example-256@2x-34cb1d3724cbce5ce790228b5bf8eabe.png')
+			.setAuthor(`Search result for ${titleCase(args.join(' '))}`,
+				'https://d2gatte9o95jao.cloudfront.net/assets/store-mug-example-256@2x-34cb1d3724cbce5ce790228b5bf8eabe.png')
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL);
 		embed.footer.text += ' | Powered by urbandictionary';

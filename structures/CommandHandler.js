@@ -79,8 +79,9 @@ class CommandHandler {
 			const missingString = missing.map(permission =>
 				titleCase(permission.replace(/_/g, ' '))
 			).join(', ');
-			message.channel.send(`${message.author}! I require the following permissions to execute **${commandName}** command: ${missingString}`)
-				.catch(() => null);
+			message.channel.send(
+				`${message.author}, I require the following permissions to execute **${commandName}** command: ${missingString}`
+			).catch(() => null);
 			return;
 		}
 

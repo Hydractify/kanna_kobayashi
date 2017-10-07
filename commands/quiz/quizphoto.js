@@ -76,7 +76,7 @@ class QuizPhotoCommand extends Command {
 				});
 			}
 
-			embed.setTitle(`Set picture of ${(quiz && quiz.name) ? titleCase(quiz.name) : '\'No name set up yet\''}`);
+			embed.setTitle(`Set picture of ${quiz && quiz.name ? titleCase(quiz.name) : '\'No name set up yet\''}`);
 
 			return confirmMessage.edit(embed);
 		}
