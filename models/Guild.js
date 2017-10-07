@@ -35,8 +35,8 @@ Guild.init(
 			type: BOOLEAN,
 			defaultValue: true
 		},
-		notificationChannel: {
-			field: 'notification_channel',
+		notificationChannelId: {
+			field: 'notification_channel_id',
 			type: STRING('20')
 		},
 		welcomeMessage: {
