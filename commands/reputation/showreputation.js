@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const RichEmbed = require('../../structures/RichEmbed');
+const UserReputation = require('../../models/UserReputation');
 
 class ShowReputationCommand extends Command {
 	constructor(handler) {
@@ -24,11 +25,15 @@ class ShowReputationCommand extends Command {
 
 		if (!member) return message.channel.send(`Could not find a non-bot member by **${target}**.`);
 
-		const targetModel = member.user.model || await member.user.fetchModel();
-		const [positive, negative] = await Promise.all([
-			targetModel.countReps({ where: { type: 'POSITIVE' } }),
-			targetModel.countReps({ where: { type: 'NEGATIVE' } })
-		]);
+		const { POSITIVE: positive = 0, NEGATIVE: negative = 0 } = await UserReputation.count({
+			where: { repId: member.id },
+			attributes: ['type'],
+			group: ['type']
+		}).then(results => {
+			const reps = {};
+			for (const result of results) reps[result.type] = result.count;
+			return reps;
+		});
 		if (!positive && !negative) return message.channel.send(`**${member.user.tag}**, does not have any reputations.`);
 
 		const embed = RichEmbed.common(message)
