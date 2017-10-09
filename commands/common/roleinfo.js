@@ -21,6 +21,7 @@ class RoleInfoCommand extends Command {
 	run(message, [roleName]) {
 		if (!roleName) return message.channel.send('You need to give me a role name to search for.');
 
+		// TODO: Make resolveRole method XD
 		const role = this.handler.resolveRole(message.guild.roles, roleName, false);
 
 		const embed = RichEmbed.common(message)

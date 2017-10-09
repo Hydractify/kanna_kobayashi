@@ -16,7 +16,7 @@ class DiscriminatorCommand extends Command {
 	}
 
 	async run(message, [discrim]) {
-		if (!discrim) return message.channel.send('You have to tell me a discriminator.');
+		if (!discrim) return message.reply('you have to tell me a discriminator!');
 		// Will happen, sure of it
 		if (discrim[0] === '#') discrim = discrim.slice(1);
 		if (discrim === '0000') return message.channel.send('`0000` is not a valid disriminator.');
@@ -40,6 +40,7 @@ class DiscriminatorCommand extends Command {
 			usersString += `, ${user}`;
 		}
 
+		// TODO: Make it user friendly
 		return message.channel.send(response + usersString.slice(2));
 	}
 
