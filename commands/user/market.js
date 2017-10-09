@@ -1,42 +1,43 @@
-const Item = require('../../models/Item');
 const { col, fn, where } = require('sequelize');
+
+const Item = require('../../models/Item');
 const User = require('../../models/User');
-
 const Command = require('../../structures/Command');
+const { instance: { db } } = require('../../structures/PostgreSQL');
+const { titleCase } = require('../../util/util');
 
-class Market extends Command {
-  constructor(handler) {
-    super(handler, {
-      aliases: ['shop'],
-      coins: 0,
-      cooldown: 0,
-      description: 'Shows stats about the bot.',
-      examples: ['stats'],
-      exp: 0,
-      name: 'market',
-      usage: 'market <Method> <>',
-      permLevel: 0
-    });
-  }
+class MarketCommand extends Command {
+	constructor(handler) {
+		super(handler, {
+			aliases: ['shop'],
+			coins: 0,
+			description: 'You can buy items or badges here.',
+			examples: ['market buy some item'],
+			exp: 0,
+			name: 'market',
+			usage: 'market <Method> <>',
+			permLevel: 0
+		});
+	}
 
-  async run(message, [method, ...args]) {
-    if (!method) {
-      return message.reply(`you must provide a method! (**\`${this.usage}\`**)`);
-    }
-    switch(method) {
-      case 'buy':
-      this.buy(message, args);
-      break;
+	run(message, [method, ...args]) {
+		if (!method) {
+			return message.channel.send(`${message.author}, you must provide a method! (**\`${this.usage}\`**)`);
+		}
 
-      default:
-      return message.reply(`**${method}** is not a method!`);
-    }
-  }
+		switch (method) {
+			case 'buy':
+				return this.buy(message, args);
 
-  async buy(message, args) {
-    const userModel = message.author.model || await message.author.fetchModel();
+			default:
+				return message.channel.send(`${message.author}, **${method}** is not a method!`);
+		}
+	}
 
-    const item = await Item.findOne({
+	async buy(message, args) {
+		const userModel = message.author.model || await message.author.fetchModel();
+
+		const item = await Item.findOne({
 			include: [{
 				as: 'holders',
 				joinTableAttributes: ['count'],
@@ -46,26 +47,66 @@ class Market extends Command {
 			}],
 			where: where(fn('lower', col('name')), args.join(' ').toLowerCase())
 		});
-		if (!item) return message.channel.send(`${message.author}, could not find an item with that name!`);
-    if (!item.buyable) return message.channel.send(`That item is unbayable ${message.author}!`)
+		if (!item) return message.channel.send(`${message.author}, could not find an item or badge with that name!`);
+		if (!item.buyable) {
+			return message.channel.send(`${message.author}, the **${item.name}** ${item.type.toLowerCase()} is not to buy!`);
+		}
 
-    await message.channel.send([
-      `Is the item **${item.name}** that you want ${message.author}? <:KannaTea:366019180203343872>`,
-      '(Answer with *Y*es or **N**o)'
-    ]);
-    const MessagesReceived = await message.channel.awaitMessages((m) => m.content.toLowerCase().includes(['yes', 'no']) || m.content.toLowerCase() === ('y' || 'n'), { time: 10000, maxMatches: 1 });
+		const [already] = await userModel[`get${titleCase(item.type)}s`]({ where: { id: item.id } });
 
-    if (MessagesReceived.size) {
-      if (MessagesReceived.first() === 'yes') {
-        if (userModel.coins < item.price) return message.reply(`you don't have sufficient coins to buy that item! <:KannaWtf:320406412133924864>`);
-        userModel.coins -= item.price;
-      } else {
-        return message.channel.send(`Ok... Canceling command <:FeelsKannaMan:341054171212152832>`);
-      }
-    } else {
-      return message.channel.send(`${message.author}... As you didn't told me yes or no, i have cancelled the command <:FeelsKannaMan:341054171212152832>`);
-    }
-  }
+		if (item.unique && already) {
+			return message.channel.send(
+				`${message.author}, you already own the unique **${item.name}** ${item.type.toLowerCase()}!`
+			);
+		}
+
+		await message.channel.send([
+			`Is the **${item.name}** ${item.type.toLowerCase()} the one you are looking for, ${message.author}?`
+			+ ' <:KannaTea:366019180203343872>',
+			'(Answer with **Y**es or **N**o)'
+		]);
+
+		const filter = msg => msg.author.id === message.author.id
+			&& /^(y|n|yes|no)/i.test(msg.content);
+
+		const collected = await message.channel.awaitMessages(filter, { time: 10000, maxMatches: 1 });
+
+		if (!collected.size) {
+			return message.channel.send([
+				`${message.author}... as you didn't told me yes or no,`,
+				'I had to cancel the command <:FeelsKannaMan:341054171212152832>'
+			].join(' '));
+		}
+
+		if (/^(y|yes)/i.test(collected.first())) {
+			if (userModel.coins < item.price) {
+				return message.channel.send(
+					`${message.author}, you don't have enough coins to buy that item! <:KannaWtf:320406412133924864>`
+				);
+			}
+			userModel.coins -= item.price;
+
+			const transaction = await db.transaction();
+
+			const promises = [userModel.save({ transaction })];
+			if (already) promises.push(already.setItemCount(already.count + 1, { transaction }));
+			else promises.push(userModel[`add${titleCase(item.type)}`](item, { transaction }));
+			await Promise.all(promises).catch(error => {
+				// Something failed, give the user their coins back.
+				userModel.coins += item.price;
+				throw error;
+			});
+
+			await transaction.commit();
+
+			return message.channel.send([
+				`You successfully bought the following ${item.type.toLowerCase()}: ${item.name}!`,
+				already ? `You now own ${already.count} of them!` : ''
+			]);
+		}
+
+		return message.channel.send(`Ok... canceling command <:FeelsKannaMan:341054171212152832>`);
+	}
 }
 
-module.exports = Market;
+module.exports = MarketCommand;
