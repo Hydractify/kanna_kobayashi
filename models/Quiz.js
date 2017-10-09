@@ -24,6 +24,7 @@ Quiz.init(
 		},
 		photo: STRING,
 		duration: {
+			allowNull: false,
 			type: INTEGER,
 			default: 15
 		}
