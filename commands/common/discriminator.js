@@ -16,17 +16,26 @@ class DiscriminatorCommand extends Command {
 	}
 
 	async run(message, [discrim]) {
-		if (!discrim) return message.reply('you have to tell me a discriminator!');
+		if (!discrim) return message.channel.send(`${message.author}, you have to tell me a discriminator!`);
 		// Will happen, sure of it
 		if (discrim[0] === '#') discrim = discrim.slice(1);
-		if (discrim === '0000') return message.channel.send('`0000` is not a valid disriminator.');
+		if (discrim === '0000') return message.channel.send(`${message.author}, \`0000\` is not a valid disriminator!`);
 		if (!/^\d{4}$/.test(discrim)) {
-			return message.channel.send('A discriminator must be sequenze of 4 numbers with the exception of `0000`.');
+			return message.channel.send([
+				`That is not a valid discriminator, ${message.author}!`,
+				'A valid discriminator must be a sequenze of 4 numbers but not `0000`.'
+			]);
 		}
 
 		const users = await this.client.shard
 			.broadcastEval(`this.commandHandler.commands.get('discriminator').filterAndMap('${discrim}');`)
 			.then(res => [...new Set([].concat(...res))]);
+
+		if (!users.length) {
+			return message.channel.send(
+				`I couldn't find any users with the \`${discrim}\` discriminator, ${message.author}.`
+			);
+		}
 
 		const response = `I found the following users with the discriminator \`${discrim}\`:\n`;
 
