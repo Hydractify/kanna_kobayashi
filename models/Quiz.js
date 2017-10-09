@@ -1,43 +1,20 @@
 /* eslint-disable new-cap */
 
-const { cast, col, Op: { between }, STRING, Model, where } = require('sequelize');
+const { INTEGER, STRING, Model } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
 
-class Quiz extends Model {
-	// Insert default values if not already
-	static async sync(...args) {
-		await super.sync(...args);
-
-		const already = await this.count({
-			// Not-escape column name -> cast column string to integer -> where that int is 0-10
-			where: where(cast(col('quiz_id'), 'integer'), { [between]: [0, 10] })
-		});
-		if (already === 10) return undefined;
-
-		return this.bulkCreate(
-			Quiz.preMade.map(
-				([name, photo], index) => ({
-					quizId: String(index),
-					name,
-					photo
-				})
-			)
-		);
-	}
-
-	get preMade() {
-		return Number(this.id) < 10;
-	}
-}
+class Quiz extends Model { }
 
 Quiz.init(
 	{
-		// 1-10 (as strings) are pre made quizes, others are the guild ids
-		quizId: {
-			field: 'quiz_id',
+		guildId: {
+			field: 'guild_id',
 			type: STRING('20'),
-			primaryKey: true
+			primaryKey: true,
+			validate: value => {
+				if (Number(value) < 11) throw new Error('ID must be 11 or larger!');
+			}
 		},
 		name: {
 			type: STRING,
@@ -45,7 +22,11 @@ Quiz.init(
 				this.setDataValue('name', value.toLowerCase());
 			}
 		},
-		photo: STRING
+		photo: STRING,
+		duration: {
+			type: INTEGER,
+			default: 15
+		}
 	},
 	{
 		createdAt: false,
@@ -60,46 +41,47 @@ Quiz.init(
 );
 
 Quiz.preMade = [
-	[
-		'Ilulu',
-		'https://vignette2.wikia.nocookie.net/maid-dragon/images/3/3d/IluluManga.png/revision/latest?cb=20170304002454'
-	],
-	[
-		'Tohru',
-		'https://cdn-images-1.medium.com/max/1280/0*sh_VM38909y2PtYQ.jpg'
-	],
-	[
-		'Quetzalcoat',
-		'https://myanimelist.cdn-dena.com/images/characters/4/322674.jpg'
-	],
-	[
-		'Fafnir',
-		'https://i.ytimg.com/vi/CCAYUrzeGoM/maxresdefault.jpg'
-	],
-	[
-		'Elma',
-		'https://i.ytimg.com/vi/lOLVU9A3fq8/maxresdefault.jpg'
-	],
-	[
-		'Kanna Kamui',
-		'https://myanimelist.cdn-dena.com/images/characters/7/322911.jpg'
-	],
-	[
-		'Kobayashi',
-		'https://myanimelist.cdn-dena.com/images/characters/10/317876.jpg'
-	],
-	[
-		'Makoto Takiya',
-		'https://myanimelist.cdn-dena.com/images/characters/4/317870.jpg'
-	],
-	[
-		'Shouta Magatsuchi',
-		'https://68.media.tumblr.com/104abedcd97ce15a51ed3238091aedff/tumblr_op4vnkjh9g1uctmvwo7_1280.png'
-	],
-	[
-		'Saikawa Riko',
-		'https://myanimelist.cdn-dena.com/images/characters/8/323304.jpg'
-	]
+	{
+		name: 'Ilulu',
+		// eslint-disable-next-line max-len
+		photo: 'https://vignette2.wikia.nocookie.net/maid-dragon/images/3/3d/IluluManga.png/revision/latest?cb=20170304002454'
+	},
+	{
+		name: 'Tohru',
+		photo: 'https://cdn-images-1.medium.com/max/1280/0*sh_VM38909y2PtYQ.jpg'
+	},
+	{
+		name: 'Quetzalcoat',
+		photo: 'https://myanimelist.cdn-dena.com/images/characters/4/322674.jpg'
+	},
+	{
+		name: 'Fafnir',
+		photo: 'https://i.ytimg.com/vi/CCAYUrzeGoM/maxresdefault.jpg'
+	},
+	{
+		name: 'Elma',
+		photo: 'https://i.ytimg.com/vi/lOLVU9A3fq8/maxresdefault.jpg'
+	},
+	{
+		name: 'Kanna Kamui',
+		photo: 'https://myanimelist.cdn-dena.com/images/characters/7/322911.jpg'
+	},
+	{
+		name: 'Kobayashi',
+		photo: 'https://myanimelist.cdn-dena.com/images/characters/10/317876.jpg'
+	},
+	{
+		name: 'Makoto Takiya',
+		photo: 'https://myanimelist.cdn-dena.com/images/characters/4/317870.jpg'
+	},
+	{
+		name: 'Shouta Magatsuchi',
+		photo: 'https://68.media.tumblr.com/104abedcd97ce15a51ed3238091aedff/tumblr_op4vnkjh9g1uctmvwo7_1280.png'
+	},
+	{
+		name: 'Saikawa Riko',
+		photo: 'https://myanimelist.cdn-dena.com/images/characters/8/323304.jpg'
+	}
 ];
 
 module.exports = Quiz;

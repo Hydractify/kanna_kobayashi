@@ -8,7 +8,7 @@ class QuizPhotoCommand extends Command {
 			aliases: ['qphoto'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'Choose one of the pre made quizzes of 10 characters from the series.',
+			description: 'Change or view the photo of the current quiz character!',
 			examples: [
 				'quizphoto set https://static.comicvine.com/uploads/original/11120/111201214/4317240-azua3.jpg',
 				'quizphoto view'
@@ -22,9 +22,10 @@ class QuizPhotoCommand extends Command {
 
 	async run(message, [option, photo]) {
 		if (!option) {
-			return message.channel.send(
-				`${message.author}, do you want to \`set\` a new photo, or \`view\` the current one?`
-			);
+			return message.channel.send([
+				`${message.author}, you also need to tell me whether you want to`,
+				'`set` a new photo, or `view` the current one?'
+			].join(' '));
 		}
 
 		option = option.toLowerCase();
@@ -66,12 +67,12 @@ class QuizPhotoCommand extends Command {
 				return message.channel.send('This does not look like a valid photo url.');
 			}
 
-			if (quiz && !quiz.preMade) {
+			if (quiz) {
 				quiz.photo = photo;
 				await quiz.save();
 			} else {
 				await message.guild.model.createQuiz({
-					quizId: message.guild.id,
+					guildId: message.guild.id,
 					photo
 				});
 			}

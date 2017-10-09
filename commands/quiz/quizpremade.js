@@ -17,7 +17,7 @@ class QuizPremadeCommand extends Command {
 		});
 
 		this.emojis = [
-			'KannaOmfg:315264558279426048',
+			'KannaMad:315264558279426048',
 			'1%E2%83%A3',
 			'2%E2%83%A3',
 			'3%E2%83%A3',
@@ -68,29 +68,26 @@ class QuizPremadeCommand extends Command {
 		const filter = ({ emoji: { identifier } }, user) =>
 			user.id === message.author.id && this.emojis.includes(identifier);
 
-		const reactionCollector = pickMessage.createReactionCollector(filter, { max: 1, time: 60 * 1000 })
-			.on('collect', async ({ emoji: { identifier } }) => {
-				reactionCollector.stop();
+		const reactions = await pickMessage.awaitReactions(filter, { max: 1, time: 60 * 1000 });
+		pickMessage.delete().catch(() => null);
+		if (!reactions.size) return undefined;
 
-				const index = this.emojis.indexOf(identifier);
+		const already = await message.guild.model.getQuiz();
+		const quiz = preMade[this.emojis.indexOf(reactions.first().emoji.identifier)];
+		if (already) {
+			already.set(quiz);
+			await already.save();
+		} else {
+			await message.guild.model.createQuiz(Object.assign({ guildId: message.guild.id }, quiz));
+		}
 
-				// Delete an already existing quiz if it's not premade
-				const already = await message.guild.model.getQuiz();
-				if (already && !already.preMade) {
-					await already.destroy();
-				}
 
-				await message.guild.model.setQuiz(String(index));
-
-				const [name, photo] = preMade[index];
-				return message.channel.send(
-					RichEmbed.common(message)
-						.setTitle('Set your quiz to:')
-						.setDescription(name)
-						.setImage(photo)
-				);
-			})
-			.on('end', () => pickMessage.delete().catch(() => null));
+		return message.channel.send(
+			RichEmbed.common(message)
+				.setTitle('Set your quiz to:')
+				.setDescription(quiz.name)
+				.setImage(quiz.photo)
+		);
 	}
 }
 

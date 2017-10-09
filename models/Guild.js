@@ -24,12 +24,6 @@ Guild.init(
 			field: 'tamer_role_id',
 			type: STRING('20')
 		},
-		// Not optimal, since it will be either 0-10, the guild id, or null.
-		// But can't do much about it, a join table would be unnecessary
-		quizId: {
-			field: 'quiz_id',
-			type: STRING('20')
-		},
 		levelUpEnabled: {
 			field: 'level_up_enabled',
 			type: BOOLEAN,
@@ -62,6 +56,6 @@ Guild.init(
 );
 
 // Quizzes
-Guild.belongsTo(Quiz, { foreignKey: 'quiz_id' });
+Guild.hasOne(Quiz, { foreignKey: 'guildId' });
 
 module.exports = Guild;

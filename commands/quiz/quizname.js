@@ -8,7 +8,7 @@ class QuizNameCommand extends Command {
 			aliases: ['qname'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'Change the name of the quiz character!',
+			description: 'Change or view the name of the current quiz character!',
 			example: [
 				'quizname view',
 				'quizname set Dio Brando'
@@ -22,9 +22,10 @@ class QuizNameCommand extends Command {
 
 	async run(message, [option, ...name]) {
 		if (!option) {
-			return message.channel.send(
-				`${message.author}, do you want to \`set\` a new name, or \`view\` the current one?`
-			);
+			return message.channel.send([
+				`${message.author}, you also need to tell me whether you want to`,
+				'`set` a new name, or `view` the current one?'
+			].join(' '));
 		}
 
 		option = option.toLowerCase();
@@ -58,7 +59,7 @@ class QuizNameCommand extends Command {
 
 			let toSend;
 			const quiz = await message.guild.model.getQuiz();
-			if (quiz && !quiz.preMade) {
+			if (quiz) {
 				quiz.name = name.join(' ');
 				await quiz.save();
 				if (quiz.photo) {
@@ -68,7 +69,7 @@ class QuizNameCommand extends Command {
 				}
 			} else {
 				await message.guild.model.createQuiz({
-					quizId: message.guild.id,
+					guildId: message.guild.id,
 					name: name.join(' ')
 				});
 			}
