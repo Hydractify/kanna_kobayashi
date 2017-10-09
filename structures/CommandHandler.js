@@ -313,6 +313,33 @@ class CommandHandler {
 			? channel.fetchMessage(id).catch(() => null)
 			: Promise.resolve(null);
 	}
+
+	/**
+	 * Resolves a role from a collection of roles by user input
+	 * @param {Collection<string, Roles>} roles Collection of roles 
+	 * @param {string} input Input to resolve from
+	 * @param {boolean} [allowEveryone=true] Whether to allow the everyone role to be machted
+	 * @returns {Role}
+	 */
+	resolveRole(roles, input, allowEveryone = true) {
+		let match = /^<@&(\d{17,19})>$|^(\d{17,19})$/.exec(input);
+		if (match) {
+			match = match[1] || match[2];
+			if (!allowEveryone && match === roles.first().guild.id) return null;
+			return roles.get(match[1] || match[2]) || null;
+		}
+
+		input = input.toLowerCase();
+
+		for (const role of roles.values()) {
+			if (!allowEveryone && role.id === role.guild.id) continue;
+			const roleName = role.name.toLowerCase();
+			if (roleName === input) return role;
+			if (!match && roleName.includes(input)) match = role;
+		}
+
+		return match;
+	}
 }
 
 module.exports = CommandHandler;
