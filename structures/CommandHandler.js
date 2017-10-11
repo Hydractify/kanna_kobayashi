@@ -155,7 +155,7 @@ class CommandHandler {
 
 		const { level } = authorModel;
 		authorModel.exp += command.exp;
-		authorModel.exp += command.coins;
+		authorModel.coins += command.coins;
 		await authorModel.save();
 
 		if (authorModel.level > level && guildModel.levelUpEnabled) {
