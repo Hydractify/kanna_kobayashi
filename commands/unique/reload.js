@@ -10,7 +10,8 @@ class ReloadCommand extends Command {
 			exp: 0,
 			name: 'reload',
 			usage: 'You should know how to use this.',
-			permLevel: 4
+			permLevel: 4,
+			aliases: ['r']
 		});
 	}
 

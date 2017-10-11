@@ -105,6 +105,8 @@ class MarketCommand extends Command {
 			]);
 		}
 
+		if (/^(n|no)/i.test(collected.first())) return message.channel.send(`Canceling command... <:FeelsKannaMan:341054171212152832>`);
+
 		return message.channel.send(`Ok... canceling command <:FeelsKannaMan:341054171212152832>`);
 	}
 }
