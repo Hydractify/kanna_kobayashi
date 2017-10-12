@@ -49,34 +49,15 @@ User.init(
 	},
 	{
 		createdAt: false,
-		hooks: {
-			beforeUpdate: user => {
-				// Partner present?
-				if (user.partnerId) {
-					// But no since date? (newly added)
-					if (!user.partnerSince) {
-						user.partnerSince = new Date();
-					}
-				} else {
-					// No partner but a since date? (just deleted)
-					if (user.partnerSince) {
-						user.partnerSince = null;
-					}
-					// Married without a partner? (^)
-					if (user.partnerMarried !== null) {
-						user.partnerMarried = null;
-					}
-				}
-			}
-		},
 		sequelize: db,
 		tableName: 'users',
 		updatedAt: false
 	}
 );
 
-// Partner
-User.hasOne(User, { as: 'partner', foreignKey: 'partner_id' });
+// Partner -- camelCase FK because sequelize is very smart
+// TODO: This feels very weird, make this better, no clue how. Join table for 1:1?
+User.hasOne(User, { as: 'partner', foreignKey: 'partnerId' });
 
 // Command log
 User.hasMany(CommandLog, { foreignKey: 'user_id' });
