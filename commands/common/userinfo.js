@@ -26,7 +26,7 @@ class UserInfoCommand extends Command {
 					: this.handler.resolveUser(input)
 				)
 			: message.author;
-		if (!user) return message.channel.send(`Could not find a user with ${input}.`);
+		if (!user) return message.reply(`I could not find a user with ${input}.`);
 
 		const member = message.guild.members.get(user.id) || await message.guild.fetchMember(user.id).catch(() => null);
 

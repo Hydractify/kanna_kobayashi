@@ -19,8 +19,8 @@ class LevelUpCommand extends Command {
 
 	async run(message, [state]) {
 		if (!state) {
-			return message.channel.send(
-				`Level up messages are currently ${message.guild.model.levelUpEnabled ? 'enabled' : 'disabled'}.`
+			return message.reply(
+				`level up messages are currently ${message.guild.model.levelUpEnabled ? 'enabled' : 'disabled'}.`
 			);
 		}
 
@@ -30,11 +30,11 @@ class LevelUpCommand extends Command {
 			);
 		}
 
-		state = state.toLowerCase();		
+		state = state.toLowerCase();
 
 		if ((state === 'true') === message.guild.model.levelUpEnabled) {
-			return message.channel.send(
-				`Level up message are already ${message.guild.model.levelUpEnabled ? 'enabled' : 'disabled'}`
+			return message.reply(
+				`level up message are already ${message.guild.model.levelUpEnabled ? 'enabled' : 'disabled'}`
 			);
 		}
 
@@ -42,8 +42,8 @@ class LevelUpCommand extends Command {
 		message.guild.model.levelUpEnabled = state === 'true';
 		await message.guild.model.save();
 
-		return message.channel.send(
-			`Level up message in this guild are now ${message.guild.model.levelUpEnabled ? 'enabled' : 'disabled'}`
+		return message.reply(
+			`level up message in this guild are now ${message.guild.model.levelUpEnabled ? 'enabled' : 'disabled'}`
 		);
 	}
 }

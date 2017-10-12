@@ -16,7 +16,7 @@ class ReloadCommand extends Command {
 	}
 
 	async run(message, [commandName]) {
-		if (!commandName) return message.channel.send('You should supply a command to reload.');
+		if (!commandName) return message.reply('you should supply a command to reload.');
 
 		const results = await this.client.shard.broadcastEval(`this.commandHandler.reload('${commandName}')`)
 			.then(result =>

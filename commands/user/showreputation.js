@@ -23,7 +23,7 @@ class ShowReputationCommand extends Command {
 			? await this.handler.resolveMember(message.guild, target, false)
 			: message.member;
 
-		if (!member) return message.channel.send(`Could not find a non-bot member by **${target}**.`);
+		if (!member) return message.reply(`I could not find a non-bot member by **${target}**.`);
 
 		const { POSITIVE: positive = 0, NEGATIVE: negative = 0 } = await UserReputation.count({
 			where: { repId: member.id },
@@ -34,7 +34,7 @@ class ShowReputationCommand extends Command {
 			for (const result of results) reps[result.type] = result.count;
 			return reps;
 		});
-		if (!positive && !negative) return message.channel.send(`**${member.user.tag}**, does not have any reputations.`);
+		if (!positive && !negative) return message.reply(`**${member.user.tag}** does not have any reputations.`);
 
 		const embed = RichEmbed.common(message)
 			.setAuthor(`Reputation for ${member.user.tag}`, message.client.user.displayAvatarURL);

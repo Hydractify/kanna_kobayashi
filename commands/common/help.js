@@ -153,8 +153,8 @@ class HelpCommand extends Command {
 			);
 		}
 
-		return message.channel
-			.send(`Could not find any command matching **${commandName}** <:KannaAyy:315270615844126720>`);
+		return message
+			.reply(`, I could not find a command matching **${commandName}** <:KannaAyy:315270615844126720>`);
 	}
 }
 

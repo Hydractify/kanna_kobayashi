@@ -12,7 +12,7 @@ class ChooseCommand extends Command {
 	}
 
 	run(message, args) {
-		if (!args.length) return message.reply(`you must give me options! (\`${this.usage}\`)`);
+		if (!args.length) return message.reply(`you must give me something to choose from! (\`${this.usage}\`)`);
 
 		const joined = args.join(' ');
 
@@ -20,8 +20,10 @@ class ChooseCommand extends Command {
 			? joined.split('|')
 			: args;
 
+		if (options.length === 1) return message.reply(`I chose the only available option **${options[0]}**!`);
+
 		const answer = options[Math.floor(Math.random() * options.length)];
-		return message.channel.send(`I choose **${answer}**`);
+		return message.reply(`I chose **${answer}**!`);
 	}
 }
 

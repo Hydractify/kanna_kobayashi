@@ -21,8 +21,8 @@ class QuizDurationCommand extends Command {
 
 	async run(message, [option, time]) {
 		if (!option) {
-			return message.channel.send([
-				`${message.author}, you also need to tell me whether you want to`,
+			return message.reply([
+				'you also need to tell me whether you want to',
 				'`set` a new name, or `view` the current one?'
 			].join(' '));
 		}
@@ -31,23 +31,23 @@ class QuizDurationCommand extends Command {
 
 		if (option === 'view') {
 			const quiz = await message.guild.model.getQuiz();
-			if (!quiz) return message.channel.send(`${message.author}, there is no quiz set up.`);
+			if (!quiz) return message.reply(`there is no quiz set up.`);
 
-			return message.channel.send(
-				`${message.author}, the currentl length of a quiz is ${quiz.duration} minute${quiz.duration === 1 ? '' : 's'}.`
+			return message.reply(
+				`the current length of a quiz is ${quiz.duration} minute${quiz.duration === 1 ? '' : 's'}.`
 			);
 		}
 
 		if (option === 'set') {
 			if (!time) {
-				return message.channel.send(`${message.author}, you also need to tell me how long the quizzes should be.`);
+				return message.reply('you also need to tell me how long the quizzes should be.');
 			}
 			// Allow 5m / 5minutes / 1minute to be used. UX and stuff
 			time = parseInt(time.replace(/(m$|minutes?$)/i, '').trim());
 
-			if (isNaN(time)) return message.channel.send(`${message.author}, that does not look like a number!`);
+			if (isNaN(time)) return message.reply('that does not look like a number!');
 			if (time <= 0) {
-				return message.channel.send(`${message.author}, the duration must be a whole number larger than 0!`);
+				return message.reply('duration must be a whole number larger than 0!');
 			}
 
 			const quiz = await message.guild.model.getQuiz();
@@ -61,10 +61,12 @@ class QuizDurationCommand extends Command {
 				});
 			}
 
-			return message.channel.send(
-				`${message.author}, successfully ${quiz ? 'updated' : 'set'} the time of quizzes to ${time} minutes!`
+			return message.reply(
+				`successfully ${quiz ? 'updated' : 'set'} the time of quizzes to ${time} minutes!`
 			);
 		}
+
+		return message.reply('that is not a valid option, valid options are `view` and `set`.');
 	}
 }
 

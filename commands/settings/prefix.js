@@ -20,19 +20,19 @@ class PrefixCommand extends Command {
 
 	async run(message, args) {
 		if (!args.length) {
-			const prefixes = `Always working prefixes are: \`@${this.client.user.tag} \u200b\`, \`k!\` and \`kanna \u200b\``;
+			const prefixes = `always working prefixes are: \`@${this.client.user.tag} \u200b\`, \`k!\` and \`kanna \u200b\``;
 			if (!message.guild.model.prefixes.length) {
-				return message.channel.send(prefixes);
+				return message.reply(prefixes);
 			}
 
-			return message.channel.send(
+			return message.reply(
 				`${prefixes}\nAdditionally in this guild added: \`${message.guild.model.prefixes[0]}\u200b\``
 			);
 		}
 
 		// Disallow every non "mod" to change
 		if (message.member.permLevel < 2) {
-			return message.channel.send(`${message.author}, you do not have the required permission level to set a prefix!`);
+			return message.reply(`you do not have the required permission level to set a prefix!`);
 		}
 
 		let newPrefix = args.join(' ');
@@ -43,7 +43,7 @@ class PrefixCommand extends Command {
 		message.guild.model.prefixes[0] = newPrefix;
 		await message.guild.model.save();
 
-		return message.channel.send(`Set the guild specific prefix to \`${newPrefix}\u200b\``);
+		return message.reply(`set the guild specific prefix to \`${newPrefix}\u200b\``);
 	}
 }
 

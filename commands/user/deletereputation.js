@@ -6,7 +6,7 @@ class DeleteReputationCommand extends Command {
 			aliases: ['delrep'],
 			coins: 0,
 			cooldown: 0,
-			description: 'Deletes your reputation entry of a member.',
+			description: 'Deletes your reputation of a member.',
 			examples: ['delrep @space#0302'],
 			exp: 0,
 			name: 'deletereputation',
@@ -16,19 +16,19 @@ class DeleteReputationCommand extends Command {
 	}
 
 	async run(message, [target]) {
-		if (!target) return message.channel.send('You need to tell me who you want to remove your reputation from.');
+		if (!target) return message.reply('you need to tell me who you want to remove your reputation from.');
 
 		const member = await this.handler.resolveMember(message.guild, target, false);
-		if (!member) return message.channel.send(`Could not find a non-bot member by ${target}.`);
+		if (!member) return message.reply(`I could not find a non-bot member by ${target}.`);
 
 		const [reputation] = await message.author.model.getRepped({ scope: { repId: member.id } });
 		if (!reputation) {
-			return message.channel.send(`You never added a reputation to **${member.user.tag}**!`);
+			return message.reply(`you never added a reputation to **${member.user.tag}**!`);
 		}
 
 		await message.author.model.removeRepped(reputation);
 
-		return message.channel.send(`Successfully deleted your reputation entry of **${member.user.tag}**.`);
+		return message.reply(`I successfully deleted your reputation of **${member.user.tag}**.`);
 	}
 }
 

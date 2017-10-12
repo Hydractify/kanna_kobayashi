@@ -15,7 +15,7 @@ class SayDeleteCommand extends Command {
 	}
 
 	run(message, [first], command) {
-		if (!first) return message.channel.send('You need to give me something to say!');
+		if (!first) return message.reply('you need to give me something to say!');
 
 		// Clean content to avoid mentions and such (everyone and here are disable per client options)
 		const content = message.cleanContent.slice(message.cleanContent.indexOf(command) + command.length);

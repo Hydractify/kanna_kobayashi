@@ -22,7 +22,7 @@ class MarketCommand extends Command {
 
 	run(message, [method, ...args]) {
 		if (!method) {
-			return message.channel.send(`${message.author}, you must provide a method! (**\`${this.usage}\`**)`);
+			return message.reply(`you must provide a method! (**\`${this.usage}\`**)`);
 		}
 
 		switch (method) {
@@ -30,7 +30,7 @@ class MarketCommand extends Command {
 				return this.buy(message, args);
 
 			default:
-				return message.channel.send(`${message.author}, **${method}** is not a method!`);
+				return message.reply(`**${method}** is not a method!`);
 		}
 	}
 
@@ -47,17 +47,15 @@ class MarketCommand extends Command {
 			}],
 			where: where(fn('lower', col('name')), args.join(' ').toLowerCase())
 		});
-		if (!item) return message.channel.send(`${message.author}, could not find an item or badge with that name!`);
+		if (!item) return message.reply('could not find an item or badge with that name!');
 		if (!item.buyable) {
-			return message.channel.send(`${message.author}, the **${item.name}** ${item.type.toLowerCase()} is not to buy!`);
+			return message.reply(`the **${item.name}** ${item.type.toLowerCase()} is not to buy!`);
 		}
 
 		const [already] = await userModel[`get${titleCase(item.type)}s`]({ where: { id: item.id } });
 
 		if (item.unique && already) {
-			return message.channel.send(
-				`${message.author}, you already own the unique **${item.name}** ${item.type.toLowerCase()}!`
-			);
+			return message.reply(`you already own the unique **${item.name}** ${item.type.toLowerCase()}!`);
 		}
 
 		await message.channel.send([
@@ -73,16 +71,14 @@ class MarketCommand extends Command {
 
 		if (!collected.size) {
 			return message.channel.send([
-				`${message.author}... as you didn't told me yes or no,`,
+				`${message.author}... as you didn't tell me yes or no,`,
 				'I had to cancel the command <:FeelsKannaMan:341054171212152832>'
 			].join(' '));
 		}
 
 		if (/^(y|yes)/i.test(collected.first())) {
 			if (userModel.coins < item.price) {
-				return message.channel.send(
-					`${message.author}, you don't have enough coins to buy that item! <:KannaWtf:320406412133924864>`
-				);
+				return message.reply('you do not have enough coins to buy that item! <:KannaWtf:320406412133924864>');
 			}
 
 			const transaction = await db.transaction();
@@ -99,13 +95,13 @@ class MarketCommand extends Command {
 
 			await transaction.commit();
 
-			return message.channel.send([
-				`${message.author}, you successfully bought the following ${item.type.toLowerCase()}: ${item.name}!`,
+			return message.reply([
+				`you successfully bought the following ${item.type.toLowerCase()}: ${item.name}!`,
 				already ? `You now own ${already.count} of them!` : ''
-			]);
+			].join('\n'));
 		}
 
-		return message.channel.send(`${message.author}, canceling command... <:FeelsKannaMan:341054171212152832>`);
+		return message.reply('canceling command... <:FeelsKannaMan:341054171212152832>');
 	}
 }
 

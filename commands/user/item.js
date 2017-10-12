@@ -46,14 +46,14 @@ class ItemCommand extends Command {
 				return this.give(message, args);
 
 			default:
-				return message.channel.send(`Unknown method \`${method}\`.`);
+				return message.reply(`Unknown method \`${method}\`.`);
 		}
 	}
 
 	async create(message, args) {
 		const userModel = message.author.model || await message.author.fetchModel();
 		if (userModel.type !== 'DEV') {
-			return message.reply('Only developers can make or update items! <:KannaOmfg:315264558279426048>');
+			return message.reply('only developers can make or update items! <:KannaOmfg:315264558279426048>');
 		}
 
 		try {
@@ -63,25 +63,25 @@ class ItemCommand extends Command {
 
 			if (item) {
 				item = await item.update(modelData);
-				return message.channel.send([
-					`${message.author}, I have sucessfully updated the ${item.type[0] + item.type.slice(1).toLowerCase()}!`
+				return message.reply([
+					`I have sucessfully updated the ${item.type[0] + item.type.slice(1).toLowerCase()}!`
 					+ ' Here it is... <:KannaAyy:315270615844126720>',
 					'```js',
 					'Item {',
 					` ${inspect(item.dataValues).slice(1)}`,
 					'```'
-				]);
+				].join('\n'));
 			}
 
 			item = await Item.create(modelData);
-			return message.channel.send([
-				`${message.author}, I have sucessfully created the ${item.type[0] + item.type.slice(1).toLowerCase()}!`
+			return message.reply([
+				`I have sucessfully created the ${item.type[0] + item.type.slice(1).toLowerCase()}!`
 				+ ' Here it is... <:KannaAyy:315270615844126720>',
 				'```js',
 				'Item {',
 				` ${inspect(item.dataValues).slice(1)}`,
 				'```'
-			]);
+			].join('\n'));
 		} catch (error) {
 			return message.channel.send(error.toString(), { code: true });
 		}
@@ -90,7 +90,7 @@ class ItemCommand extends Command {
 	async structure(message) {
 		const userModel = message.author.model || await message.author.fetchModel();
 		if (userModel.type !== 'DEV') {
-			return message.reply('Only developers can see the structure of items! <:KannaOmfg:315264558279426048>');
+			return message.reply('only developers can see the structure of items! <:KannaOmfg:315264558279426048>');
 		}
 
 		const structure = ['Item {'];
@@ -100,8 +100,8 @@ class ItemCommand extends Command {
 		// Remove dangling comma
 		structure[structure.length - 1] = `${structure[structure.length - 1].slice(0, -1)} }`;
 
-		return message.channel.send([
-			`${message.author}, here the item structure`,
+		return message.reply([
+			'here the item structure.',
 			'```js',
 			structure.join('\n'),
 			'```'
@@ -119,7 +119,7 @@ class ItemCommand extends Command {
 			}],
 			where: where(fn('lower', col('name')), args.join(' ').toLowerCase())
 		});
-		if (!item) return message.channel.send(`${message.author}, could not find an item with that name!`);
+		if (!item) return message.reply('could not find an item with that name!');
 
 		const embed = RichEmbed.common(message)
 			.setAuthor(`Information about the ${item.type.toLowerCase()} "${item.name}"`, this.client.displayAvatarURL)
@@ -154,35 +154,33 @@ class ItemCommand extends Command {
 	}
 
 	async give(message, [target, ...search]) {
-		if (!target) return message.channel.send('You have to tell me who you want to give an item or badge.');
-		if (!search.length) return message.channel.send('You also have to tell me what item or badge you want to give.');
+		if (!target) return message.reply('you have to tell me who you want to give an item or badge.');
+		if (!search.length) return message.reply('you also have to tell me what item or badge you want to give.');
 
 		const member = await this.handler.resolveMember(message.guild, target, false);
-		if (!member) return message.channel.send(`Could not find a non-bot member by ${target}.`);
+		if (!member) return message.reply(`I could not find a non-bot member by ${target}.`);
 		if (member.id === message.author.id) {
-			return message.channel.send('You can not give an item or badge to yourself.');
+			return message.reply('you can not give an item or badge to yourself.');
 		}
 
 		const item = await Item.findOne({ where: where(fn('lower', col('name')), search.join(' ').toLowerCase()) });
 		if (!item) {
-			return message.channel.send(`Could not find an item or badge with the name \`${search.join(' ')}\``);
+			return message.reply(`I could not find an item or badge with the name \`${search.join(' ')}\``);
 		}
 
 		const type = item.type === 'BADGE' ? 'Badge' : 'Item';
 
 		const [sourceItem] = await message.author.model[`get${type}s`]({ where: { id: item.id } });
-		if (!sourceItem) return message.channel.send(`You don't have the \`${item.name}\` ${type.toLowerCase()}!`);
+		if (!sourceItem) return message.reply(`you don't have the \`${item.name}\` ${type.toLowerCase()}!`);
 
 		if (!item.tradable) {
-			return message.channel.send(`${message.author}, **${item.name}** may not be traded!`);
+			return message.reply(`**${item.name}** may not be traded!`);
 		}
 
 		const targetModel = member.user.model || await member.user.fetchModel();
 		const [targetItem] = await targetModel[`get${type}s`]({ where: { id: item.id } });
 		if (targetItem && item.unique) {
-			return message.channel.send(
-				`**${member.user.tag}** already has the unique \`${item.name}\` ${type.toLowerCase()}!`
-			);
+			return message.reply(`**${member.user.tag}** already has the unique \`${item.name}\` ${type.toLowerCase()}!`);
 		}
 
 		try {
@@ -209,14 +207,14 @@ class ItemCommand extends Command {
 			await Promise.all(promises);
 			await transaction.commit();
 
-			return message.channel.send([
-				`You successfully transferred${singular ? '' : ' one of'} your `,
+			return message.reply([
+				`you successfully transferred${singular ? '' : ' one of'} your `,
 				`\`${item.name}\` ${type.toLowerCase()}${singular === 1 ? '' : 's'} to **${member.user.tag}**!`
-			]);
+			].join('\n'));
 		} catch (error) {
 			this.handler.logger.error(error);
-			return message.channel.send(
-				`Something went wrong while transferring your ${type.toLowerCase()}, the transaction has been reverted.`
+			return message.reply(
+				`something went wrong while transferring your ${type.toLowerCase()}, the transaction has been reverted.`
 			);
 		}
 	}

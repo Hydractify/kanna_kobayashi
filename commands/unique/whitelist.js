@@ -19,11 +19,11 @@ class WhitelistCommand extends Command {
 		let user = await this.handler.resolveMember(message.guild, target, false)
 			.then(member => member ? member.user : null);
 		if (!user) user = await this.client.fetchUser(target).catch(() => null);
-		if (!user || user.bot) return message.channel.send(`Could not find a non-bot user by ${target}!`);
+		if (!user || user.bot) return message.reply(`I could not find a non-bot user by ${target}!`);
 
 		const targetModel = user.model || await user.fetchModel();
 		if (['DEV', 'TRUSTED'].includes(targetModel.type)) {
-			return message.channel.send(`Devs or trusted users can not be whitelisted. Maybe entered the wrong user?`);
+			return message.reply(`devs or trusted users can not be whitelisted. Maybe entered the wrong user?`);
 		}
 
 		if (targetModel.type === 'WHITELISTED') {
@@ -31,16 +31,16 @@ class WhitelistCommand extends Command {
 				targetModel.type = null;
 				await targetModel.save();
 
-				return message.channel.send(`**${user.tag}** has been removed from the whitelist.`);
+				return message.reply(`**${user.tag}** has been removed from the whitelist.`);
 			}
 
-			return message.channel.send(`**${user.tag}** is already whitelisted.`);
+			return message.reply(`**${user.tag}** is already whitelisted.`);
 		}
 
 		targetModel.type = 'WHITELISTED';
 		await targetModel.save();
 
-		return message.channel.send(`**${user.tag}** has been added to the whitelist.`);
+		return message.reply(`**${user.tag}** has been added to the whitelist.`);
 	}
 }
 

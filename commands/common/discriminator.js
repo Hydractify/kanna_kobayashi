@@ -16,10 +16,10 @@ class DiscriminatorCommand extends Command {
 	}
 
 	async run(message, [discrim]) {
-		if (!discrim) return message.channel.send(`${message.author}, you have to tell me a discriminator!`);
+		if (!discrim) return message.reply('you have to tell me a discriminator!');
 		// Will happen, sure of it
 		if (discrim[0] === '#') discrim = discrim.slice(1);
-		if (discrim === '0000') return message.channel.send(`${message.author}, \`0000\` is not a valid disriminator!`);
+		if (discrim === '0000') return message.reply('`0000` is not a valid disriminator!');
 		if (!/^\d{4}$/.test(discrim)) {
 			return message.channel.send([
 				`That is not a valid discriminator, ${message.author}!`,
@@ -33,7 +33,7 @@ class DiscriminatorCommand extends Command {
 
 		if (!users.length) {
 			return message.channel.send(
-				`I couldn't find any users with the \`${discrim}\` discriminator, ${message.author}.`
+				`I could not find any users with the \`${discrim}\` discriminator, ${message.author}.`
 			);
 		}
 

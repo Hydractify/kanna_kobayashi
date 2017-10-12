@@ -15,7 +15,7 @@ class DailyCommand extends Command {
 	}
 
 	run(message) {
-		return message.channel.send(`${message.author}, here are your daily **${this.coins}** <:coin:330926092703498240>!`);
+		return message.reply(`here are your daily **${this.coins}** <:coin:330926092703498240>!`);
 	}
 }
 

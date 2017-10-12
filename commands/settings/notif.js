@@ -23,14 +23,14 @@ class NotifCommand extends Command {
 		if (!target) {
 			const channel = message.guild.channels.get(message.guild.model.notificationChannelId);
 			if (channel) {
-				return message.channel.send(`The current channel for welcome and farewell messages is ${channel}.`);
+				return message.reply(`the current channel for welcome and farewell messages is ${channel}.`);
 			}
 			if (message.guild.model.notificationChannelId) {
 				message.guild.model.notificationChannelId = null;
 				await message.guild.model.save();
 			}
 
-			return message.channel.send('There is no channel for welcome and farewell messages set up.');
+			return message.reply('there is no channel for welcome and farewell messages set up.');
 		}
 
 		// "false" passed, remove
@@ -39,10 +39,10 @@ class NotifCommand extends Command {
 				message.guild.model.notificationChannelId = null;
 				await message.guild.model.save();
 
-				return message.channel.send('The channel for welcome and farewell messages has been removed from the config.');
+				return message.reply('the channel for welcome and farewell messages has been removed from the config.');
 			}
 
-			return message.channel.send('There is no channel for welcome and farewell messages set up.');
+			return message.reply('there is no channel for welcome and farewell messages set up.');
 		}
 
 		// Something was passed, try to set a new one
@@ -62,17 +62,17 @@ class NotifCommand extends Command {
 				&& cha.name.toLowerCase() === target);
 		}
 
-		if (!channel) return message.channel.send(`Couldn't find a channel with **${target}**.`);
+		if (!channel) return message.reply(`I could not find a channel with **${target}**.`);
 
 		// Be sure that we can send messages to the specified channel
 		if (!channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
-			return message.channel.send(`I don't have permissions to send messages in ${channel}.`);
+			return message.reply(`I do not have permissions to send messages in ${channel}.`);
 		}
 
 		message.guild.model.notificationChannelId = channel.id;
 		await message.guild.model.save();
 
-		return message.channel.send(`The new channel for welcome and farewell messages is now ${channel}.`);
+		return message.reply(`the new channel for welcome and farewell messages is now ${channel}.`);
 	}
 }
 

@@ -17,9 +17,9 @@ class ProposeCommand extends Command {
 	}
 
 	async run(message, [input]) {
-		if (!input) return message.reply(` you must give me a user! (\`${this.usage}\`)`);
+		if (!input) return message.reply(`you are missing someone to propose to! (\`${this.usage}\`)`);
 		const mentionedUser = await this.handler.resolveUser(input, false);
-		if (!mentionedUser) return message.reply(`i could not find a non bot user with **${input}**.`);
+		if (!mentionedUser) return message.reply(`I could not find a non bot user with **${input}**.`);
 		if (mentionedUser.id === message.author.id) return message.reply('you can not propose to yourself.');
 
 		if (!message.author.model) await message.author.fetchModel();
@@ -49,7 +49,7 @@ class ProposeCommand extends Command {
 		// Mentioned user is not the current user
 		if (partner.id !== mentionedUser.id) {
 			await message.reply(
-				' are you sure you want to break with you current partner? (**Y**es or **N**o) <:KannaWtf:320406412133924864>'
+				'are you sure you want to break with you current partner? (**Y**es or **N**o) <:KannaWtf:320406412133924864>'
 			);
 
 			const filter = msg => msg.author.id === mentionedUser.id
@@ -88,7 +88,7 @@ class ProposeCommand extends Command {
 				return true;
 			}
 
-			await message.reply(' cancelling the command... <:KannaWtf:320406412133924864>');
+			await message.reply('cancelling the command... <:KannaWtf:320406412133924864>');
 
 			return false;
 		}
@@ -97,14 +97,14 @@ class ProposeCommand extends Command {
 		// Days * hours * minutes * seconds * milliseconds (large to small)
 		if ((partner.partnerSince.valueOf() + (30 * 24 * 60 * 60 * 1000)) > message.createdTimestamp) {
 			await message.reply(
-				' sorry but not enough time has passed since you two got together! <:KannaAyy:315270615844126720>'
+				'sorry but not enough time has passed since you two got together! <:KannaAyy:315270615844126720>'
 			);
 
 			return false;
 		}
 
 		if (authorModel.partnerMarried) {
-			await message.reply(' you two are already married.');
+			await message.reply('you two are already married.');
 
 			return false;
 		}
@@ -119,8 +119,8 @@ class ProposeCommand extends Command {
 		const collected = await message.channel.awaitMessages(filter, { time: 10000, maxMatches: 1 });
 
 		if (!collected.size) {
-			await message.channel.send([
-				`${message.author}, looks like you got no response, so`,
+			await message.reply([
+				'looks like you got no response, so',
 				'I had to cancel the command <:FeelsKannaMan:341054171212152832>'
 			].join(' '));
 
@@ -147,7 +147,7 @@ class ProposeCommand extends Command {
 			return false;
 		}
 
-		await message.reply(' cancelling the command... <:KannaAyy:315270615844126720>');
+		await message.reply('cancelling the command... <:KannaAyy:315270615844126720>');
 
 		return false;
 	}
@@ -160,7 +160,7 @@ class ProposeCommand extends Command {
 	 */
 	async relationStart(message, mentionedUser) {
 		await message.channel.send(
-			`${mentionedUser}, ${message.author} proposes to you! Do you want to accept? (**Y**es / **N**o)`
+			`${mentionedUser}, ${message.author} proposed to you! Do you want to accept? (**Y**es / **N**o)`
 		);
 
 		const filter = msg => msg.author.id === mentionedUser.id
@@ -169,8 +169,8 @@ class ProposeCommand extends Command {
 		const collected = await message.channel.awaitMessages(filter, { time: 10000, maxMatches: 1 });
 
 		if (!collected.size) {
-			return message.channel.send([
-				`${message.author}, looks like you got no response, so`,
+			return message.reply([
+				'looks like you got no response, so',
 				'I had to cancel the command <:FeelsKannaMan:341054171212152832>'
 			].join(' '));
 		}

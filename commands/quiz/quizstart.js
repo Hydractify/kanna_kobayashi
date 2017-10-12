@@ -20,11 +20,11 @@ class QuizStartCommand extends Command {
 	async run(message) {
 		const quiz = await message.guild.model.getQuiz();
 		if (!quiz || !quiz.name || !quiz.photo) {
-			return message.channel.send([
-				`${message.author}, this guild does not have a quiz set up!`,
+			return message.reply([
+				`this guild does not have a quiz set up!`,
 				'You can use one of the a pre made ones,'
 				+ ' or add your own by setting a photo and an answer! <:KannaAyy:315270615844126720>'
-			]);
+			].join('\n'));
 		}
 
 		const eventEmbed = RichEmbed.common(message)

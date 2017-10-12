@@ -22,8 +22,8 @@ class QuizNameCommand extends Command {
 
 	async run(message, [option, ...name]) {
 		if (!option) {
-			return message.channel.send([
-				`${message.author}, you also need to tell me whether you want to`,
+			return message.reply([
+				'you also need to tell me whether you want to',
 				'`set` a new name, or `view` the current one?'
 			].join(' '));
 		}
@@ -32,9 +32,9 @@ class QuizNameCommand extends Command {
 
 		if (option === 'view') {
 			const quiz = await message.guild.model.getQuiz();
-			if (!quiz) return message.channel.send(`${message.author}, there is no quiz set up.`);
+			if (!quiz) return message.reply('there is no quiz set up.');
 			if (!quiz.name) {
-				return message.channel.send(`${message.author}, the set up quiz has no answer associated with it.`);
+				return message.reply(`the set up quiz has no answer associated with it.`);
 			}
 
 			if (quiz.photo) {
@@ -84,7 +84,7 @@ class QuizNameCommand extends Command {
 			return message.channel.send(toSend);
 		}
 
-		return message.channel.send('Unknown option, valid options are `set` and `view`.');
+		return message.reply(', that is not a valid option. Valid options are `set` and `view`.');
 	}
 }
 

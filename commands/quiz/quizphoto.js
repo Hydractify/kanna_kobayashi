@@ -22,8 +22,8 @@ class QuizPhotoCommand extends Command {
 
 	async run(message, [option, photo]) {
 		if (!option) {
-			return message.channel.send([
-				`${message.author}, you also need to tell me whether you want to`,
+			return message.reply([
+				'you also need to tell me whether you want to',
 				'`set` a new photo, or `view` the current one?'
 			].join(' '));
 		}
@@ -32,9 +32,9 @@ class QuizPhotoCommand extends Command {
 
 		if (option === 'view') {
 			const quiz = await message.guild.model.getQuiz();
-			if (!quiz) return message.channel.send(`${message.author}, there is no quiz set up.`);
+			if (!quiz) return message.reply('there is no quiz set up.');
 			if (!quiz.photo) {
-				return message.channel.send(`${message.author}, the set up quiz has no character photo associated with it.`);
+				return message.reply('the set up quiz has no character photo associated with it.');
 			}
 
 			const embed = RichEmbed.common(message)
@@ -47,7 +47,7 @@ class QuizPhotoCommand extends Command {
 
 		if (option === 'set') {
 			if (!photo) {
-				return message.channel.send(`You need to give me the url to a picture of the charactor you want to set.`);
+				return message.reply(`you need to give me the url to a picture of the charactor you want to set.`);
 			}
 
 			let quiz = await message.guild.model.getQuiz();
@@ -64,7 +64,7 @@ class QuizPhotoCommand extends Command {
 					throw confirmMessage;
 				}
 
-				return message.channel.send('This does not look like a valid photo url.');
+				return message.reply('this does not look like a valid photo url.');
 			}
 
 			if (quiz) {
@@ -82,7 +82,7 @@ class QuizPhotoCommand extends Command {
 			return confirmMessage.edit(embed);
 		}
 
-		return message.channel.send('Unknown option, valid options are `set` and `view`.');
+		return message.reply('that is not a valid option, valid options are `set` and `view`.');
 	}
 }
 

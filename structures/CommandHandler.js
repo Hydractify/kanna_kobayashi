@@ -76,13 +76,13 @@ class CommandHandler {
 		}
 		const missing = permissions.missing(command.clientPermissions);
 		if (missing.length) {
-			const missingString = missing.map(permission =>
+			const missingPermsString = missing.map(permission =>
 				titleCase(permission.replace(/_/g, ' '))
 			).join(', ');
-			message.channel.send([
-				`${message.author}, I require the following permissions to execute`,
-				`the **${commandName}** command: ${missingString}`
-			].join(' ')).catch(() => null);
+
+			message.reply(
+				`I require the following permissions to execute the **${commandName}** command: ${missingPermsString}`
+			).catch(() => null);
 			return;
 		}
 
@@ -91,14 +91,13 @@ class CommandHandler {
 		if (!message.member) message.member = await message.guild.fetchMember(message.author.id);
 
 		if (command.permLevel > message.member.permLevel) {
-			message.channel
-				.send(`${message.author}, you do not have the required permission level to use **${command.name}**!`);
+			message.reply(`you do not have the required permission level to use **${command.name}**!`);
 			return;
 		}
 
 		// Check whether the command is enabled before editing log / granting coins / exp
 		if (!command.enabled) {
-			message.channel.send(`${message.author}, **${command.name}** is currently disabled!`);
+			message.reply(`**${command.name}** is currently disabled!`);
 			return;
 		}
 
@@ -119,11 +118,10 @@ class CommandHandler {
 				serialComma: false
 			});
 
-			await message.channel
-				.send([
-					`${message.author}, **${command.name}** is on cooldown!`,
-					`Please wait **${timeLeftString}** and try again!`
-				]);
+			await message.reply([
+				`**${command.name}** is on cooldown!`,
+				`Please wait **${timeLeftString}** and try again!`
+			].join('\n'));
 			return;
 		}
 
@@ -139,9 +137,9 @@ class CommandHandler {
 				this.logger.error('CommandHandler#handle:', error);
 			}
 
-			message.channel.send(
+			message.reply(
 				[
-					'**An errror occured! Please paste this to the official guild support channel!**'
+					'**an errror occured! Please paste this to the official guild support channel!**'
 					+ ' <:KannaAyy:315270615844126720> http://kannathebot.me/guild',
 					'',
 					'',
@@ -149,7 +147,7 @@ class CommandHandler {
 					'\\`\\`\\`',
 					error.stack,
 					'\\`\\`\\`'
-				]
+				].join('\n')
 			);
 		}
 
@@ -159,8 +157,7 @@ class CommandHandler {
 		await authorModel.save();
 
 		if (authorModel.level > level && guildModel.levelUpEnabled) {
-			message.channel
-				.send(`${message.author}, you advanced to level **${authorModel.level}**! <:KannaHugMe:299650645001240578>`);
+			message.reply(`you advanced to level **${authorModel.level}**! <:KannaHugMe:299650645001240578>`);
 		}
 	}
 
