@@ -62,7 +62,7 @@ class NotifCommand extends Command {
 				&& cha.name.toLowerCase() === target);
 		}
 
-		if (!channel) return message.channel.send(`Couldn't find a channel with ${target}.`);
+		if (!channel) return message.channel.send(`Couldn't find a channel with **${target}**.`);
 
 		// Be sure that we can send messages to the specified channel
 		if (!channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {

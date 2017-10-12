@@ -18,12 +18,19 @@ class LevelUpCommand extends Command {
 	}
 
 	async run(message, [state]) {
-		state = state.toLowerCase();
-		if (!state || !['true', 'false'].includes(state)) {
+		if (!state) {
 			return message.channel.send(
 				`Level up messages are currently ${message.guild.model.levelUpEnabled ? 'enabled' : 'disabled'}.`
 			);
 		}
+
+		if (!['true', 'false'].includes(state)) {
+			return message.reply(
+				`you must tell me if you want to disable or not! (\`${this.usage}\`)`
+			);
+		}
+
+		state = state.toLowerCase();		
 
 		if ((state === 'true') === message.guild.model.levelUpEnabled) {
 			return message.channel.send(

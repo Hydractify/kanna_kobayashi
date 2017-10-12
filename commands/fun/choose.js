@@ -12,6 +12,8 @@ class ChooseCommand extends Command {
 	}
 
 	run(message, args) {
+		if (!args.length) return message.reply(`you must give me options! (\`${this.usage}\`)`);
+
 		const joined = args.join(' ');
 
 		const options = joined.includes('|')

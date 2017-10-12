@@ -19,8 +19,8 @@ class ProposeCommand extends Command {
 	async run(message, [input]) {
 		if (!input) return message.reply(` you must give me a user! (\`${this.usage}\`)`);
 		const mentionedUser = await this.handler.resolveUser(input, false);
-		if (!mentionedUser) return message.reply(` I could not find a non bot user with ${input}.`);
-		if (mentionedUser.id === message.author.id) return message.reply(' you can not propose to yourself.');
+		if (!mentionedUser) return message.reply(`i could not find a non bot user with **${input}**.`);
+		if (mentionedUser.id === message.author.id) return message.reply('you can not propose to yourself.');
 
 		if (!message.author.model) await message.author.fetchModel();
 		if (!mentionedUser.model) await mentionedUser.fetchModel();
