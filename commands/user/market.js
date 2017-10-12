@@ -84,10 +84,10 @@ class MarketCommand extends Command {
 					`${message.author}, you don't have enough coins to buy that item! <:KannaWtf:320406412133924864>`
 				);
 			}
-			userModel.coins -= item.price;
 
 			const transaction = await db.transaction();
 
+			userModel.coins -= item.price;
 			const promises = [userModel.save({ transaction })];
 			if (already) promises.push(already.setItemCount(already.count + 1, { transaction }));
 			else promises.push(userModel[`add${titleCase(item.type)}`](item, { transaction }));
@@ -100,14 +100,12 @@ class MarketCommand extends Command {
 			await transaction.commit();
 
 			return message.channel.send([
-				`You successfully bought the following ${item.type.toLowerCase()}: ${item.name}!`,
+				`${message.author}, you successfully bought the following ${item.type.toLowerCase()}: ${item.name}!`,
 				already ? `You now own ${already.count} of them!` : ''
 			]);
 		}
 
-		if (/^(n|no)/i.test(collected.first())) return message.channel.send(`Canceling command... <:FeelsKannaMan:341054171212152832>`);
-
-		return message.channel.send(`Ok... canceling command <:FeelsKannaMan:341054171212152832>`);
+		return message.channel.send(`${message.author}, canceling command... <:FeelsKannaMan:341054171212152832>`);
 	}
 }
 
