@@ -123,7 +123,7 @@ class CommandHandler {
 				.send([
 					`${message.author}, **${command.name}** is on cooldown!`,
 					`Please wait **${timeLeftString}** and try again!`
-				].join(''));
+				]);
 			return;
 		}
 
