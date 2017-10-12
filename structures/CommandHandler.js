@@ -240,17 +240,17 @@ class CommandHandler {
 			if (!allowBots && member.user.bot) continue;
 
 			// Check for an "exact" lowercased match
-			if ((member.nickname && member.nickname.toLowerCase() === input)
-				|| member.user.username.toLowerCase() === input
-				|| member.user.tag.toLowerCase() === input
+			if ((member.nickname && member.nickname.toLowerCase() === input.toLowerCase())
+				|| member.user.username.toLowerCase() === input.toLowerCase()
+				|| member.user.tag.toLowerCase() === input.toLowerCase()
 			) {
 				match = member;
 				break;
 			}
 			// Check for a partial match
 			if (!displayMatch
-				&& (member.user.username.toLowerCase().includes(input)
-					|| (member.nickname && member.nickname.toLowerCase().includes(input))
+				&& (member.user.username.toLowerCase().includes(input.toLowerCase())
+					|| (member.nickname && member.nickname.toLowerCase().includes(input.toLowerCase()))
 				)
 			) {
 				displayMatch = member;
@@ -290,8 +290,8 @@ class CommandHandler {
 			if (!allowBots && user.bot) continue;
 
 			// Check for the user's tag or username
-			if (user.username.toLowerCase().includes(input)
-				|| user.tag.toLowerCase() === input
+			if (user.tag.toLowerCase() === input.toLowerCase()
+				|| user.username.toLowerCase().includes(input.toLowerCase())
 			) {
 				return user;
 			}
