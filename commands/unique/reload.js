@@ -21,7 +21,8 @@ class ReloadCommand extends Command {
 		const results = await this.client.shard.broadcastEval(`this.commandHandler.reload('${commandName}')`)
 			.then(result =>
 				result.map(res =>
-					`Shard: ${res[0]} - ${res[1].message ? `\`${res[1].message}\`` : res[1] ? 'Success' : 'Not found'}`)
+					`Shard: ${res[0]} - ${res[1].message ? `\`${res[1].message}\`` : res[1] ? 'Success' : 'Not found'}`
+				)
 			);
 
 		return message.channel.send(results.join('\n'));
