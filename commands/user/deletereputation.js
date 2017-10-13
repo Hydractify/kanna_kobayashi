@@ -22,7 +22,7 @@ class DeleteReputationCommand extends Command {
 		const member = await this.handler.resolveMember(message.guild, target, false);
 		if (!member) return message.reply(`I could not find a non-bot member by ${target}.`);
 
-		const [reputation] = await UserReputation.findOne({ where: { repId: member.id, repperId: message.author.id } });
+		const reputation = await UserReputation.findOne({ where: { repId: member.id, repperId: message.author.id } });
 		if (!reputation) {
 			return message.reply(`you never added a reputation to **${member.user.tag}**!`);
 		}
