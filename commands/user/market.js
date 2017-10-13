@@ -36,18 +36,20 @@ class MarketCommand extends Command {
 	}
 
 	async buy(message, args) {
-		const userModel = await message.author.fetchModel();
+		const [userModel, item] = await Promise.all([
+			message.author.fetchModel(),
+			Item.findOne({
+				include: [{
+					as: 'holders',
+					joinTableAttributes: ['count'],
+					model: User,
+					required: false,
+					where: { id: message.author.id }
+				}],
+				where: where(fn('lower', col('name')), args.join(' ').toLowerCase())
+			})
+		]);
 
-		const item = await Item.findOne({
-			include: [{
-				as: 'holders',
-				joinTableAttributes: ['count'],
-				model: User,
-				required: false,
-				where: { id: message.author.id }
-			}],
-			where: where(fn('lower', col('name')), args.join(' ').toLowerCase())
-		});
 		if (!item) return message.reply('could not find an item or badge with that name!');
 		if (!item.buyable) {
 			return message.reply(`the **${item.name}** ${item.type.toLowerCase()} is not to buy!`);

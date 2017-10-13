@@ -22,8 +22,10 @@ class ProposeCommand extends Command {
 		if (!mentionedUser) return message.reply(`I could not find a non bot user with **${input}**.`);
 		if (mentionedUser.id === message.author.id) return message.reply('you can not propose to yourself.');
 
-		const authorModel = await message.author.fetchModel();
-		const mentionedModel = await mentionedUser.fetchModel();
+		const [authorModel, mentionedModel] = await Promise.all([
+			message.author.fetchModel(),
+			mentionedUser.fetchModel()
+		]);
 
 		const checked = await this.relationCheck(message, mentionedUser, authorModel);
 
