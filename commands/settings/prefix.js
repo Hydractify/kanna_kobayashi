@@ -31,7 +31,7 @@ class PrefixCommand extends Command {
 		}
 
 		// Disallow every non "mod" to change
-		if (message.member.permLevel < 2) {
+		if (message.member.permLevel(await message.author.fetchModel()) < 2) {
 			return message.reply(`you do not have the required permission level to set a prefix!`);
 		}
 

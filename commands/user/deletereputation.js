@@ -1,4 +1,5 @@
 const Command = require('../../structures/Command');
+const UserReputation = require('../../models/UserReputation');
 
 class DeleteReputationCommand extends Command {
 	constructor(handler) {
@@ -21,12 +22,12 @@ class DeleteReputationCommand extends Command {
 		const member = await this.handler.resolveMember(message.guild, target, false);
 		if (!member) return message.reply(`I could not find a non-bot member by ${target}.`);
 
-		const [reputation] = await message.author.model.getRepped({ scope: { repId: member.id } });
+		const [reputation] = await UserReputation.findOne({ where: { repId: member.id, repperId: message.author.id } });
 		if (!reputation) {
 			return message.reply(`you never added a reputation to **${member.user.tag}**!`);
 		}
 
-		await message.author.model.removeRepped(reputation);
+		await reputation.destroy();
 
 		return message.reply(`I successfully deleted your reputation of **${member.user.tag}**.`);
 	}

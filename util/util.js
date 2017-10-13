@@ -1,4 +1,5 @@
 const { Collection } = require('discord.js');
+const { promisify } = require('util');
 
 /**
  * Static util class which has all sorts of handy methods
@@ -71,6 +72,21 @@ class Util {
 		}
 
 		return mapped;
+	}
+
+	/**
+	 * Promisifies passed prototype's functions
+	 * @param {Object} proto Prototype to promisify
+	 * @return {Object} Promisified prototype
+	 * @static
+	 */
+	static promisifyAll(proto) {
+		for (const [key, fn] of Object.entries(proto)) {
+			if (typeof fn !== 'function') continue;
+			proto[`${key}Async`] = promisify(fn);
+		}
+
+		return proto;
 	}
 }
 

@@ -21,7 +21,7 @@ class WhitelistCommand extends Command {
 		if (!user) user = await this.client.fetchUser(target).catch(() => null);
 		if (!user || user.bot) return message.reply(`I could not find a non-bot user by ${target}!`);
 
-		const targetModel = user.model || await user.fetchModel();
+		const targetModel = await user.fetchModel();
 		if (['DEV', 'TRUSTED'].includes(targetModel.type)) {
 			return message.reply(`devs or trusted users can not be whitelisted. Maybe entered the wrong user?`);
 		}

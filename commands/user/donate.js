@@ -1,5 +1,6 @@
 const Command = require('../../structures/Command');
 const { instance: { db } } = require('../../structures/PostgreSQL');
+const { instance: { db: redis } } = require('../../structures/Redis');
 
 class DonateCommand extends Command {
 	constructor(handler) {
@@ -21,23 +22,30 @@ class DonateCommand extends Command {
 
 		const mentionedUser = await this.handler.resolveUser(input, false);
 		if (!mentionedUser) return message.reply(`could not find a non bot user with ${input}.`);
-		const mentionedModel = mentionedUser.model || await mentionedUser.fetchModel();
 
 		const userAmount = parseInt(amount);
 		if (isNaN(userAmount) || userAmount <= 0) {
 			return message.reply('you must give me a valid amount, which must be a positive number!');
 		}
 
-		const authorModel = message.author.model || await message.author.fetchModel();
+		const [authorModel, mentionedModel] = await Promise.all([
+			message.author.fetchModel(),
+			mentionedUser.fetchModel()
+		]);
 		if (authorModel.coins < userAmount) return message.reply('you do not have that amount of money to donate!');
 
 		const transaction = await db.transaction();
 
-		mentionedModel.coins += amount;
-		authorModel.coins -= amount;
+		await Promise.all([
+			authorModel.increment({ coins: -amount }, { transaction }),
+			mentionedModel.increment({ coins: amount }, { transaction })
+		]);
 
-		await authorModel.save({ transaction });
-		await mentionedModel.save({ transaction });
+		await redis
+			.multi()
+			.hincrby(`users::${message.author.id}`, 'coins', -amount)
+			.hincrby(`users::${mentionedUser.id}`, 'coins', amount)
+			.execAsync();
 
 		await transaction.commit();
 

@@ -13,8 +13,13 @@ class GuildExtension extends Extension {
 		return this.model;
 	}
 
-	get isBotfarm() {
-		if (this.owner && this.owner.user.model && this.owner.user.model.type === 'WHITELISTED') return false;
+	/**
+	 * Whether the guild is a bot farm
+	 * @param {User} [ownerModel] Model of the owner
+	 * @return {boolean}
+	 */
+	isBotFarm(ownerModel) {
+		if (ownerModel && ownerModel.type === 'WHITELISTED') return false;
 		if (this.memberCount <= 30) return false;
 
 		const halfMemberCount = this.memberCount / 2;

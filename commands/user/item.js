@@ -13,7 +13,7 @@ class ItemCommand extends Command {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'Check an item\'s information or give an item to your on of your friends!',
+			description: 'Check an item\'s information or give an item one of your friends!',
 			exp: 0,
 			name: 'item',
 			usage: 'item <Check|Give> <...Query|Target>',
@@ -51,7 +51,7 @@ class ItemCommand extends Command {
 	}
 
 	async create(message, args) {
-		const userModel = message.author.model || await message.author.fetchModel();
+		const userModel = await message.author.fetchModel();
 		if (userModel.type !== 'DEV') {
 			return message.reply('only developers can make or update items! <:KannaOmfg:315264558279426048>');
 		}
@@ -88,7 +88,7 @@ class ItemCommand extends Command {
 	}
 
 	async structure(message) {
-		const userModel = message.author.model || await message.author.fetchModel();
+		const userModel = await message.author.fetchModel();
 		if (userModel.type !== 'DEV') {
 			return message.reply('only developers can see the structure of items! <:KannaOmfg:315264558279426048>');
 		}
@@ -170,22 +170,23 @@ class ItemCommand extends Command {
 
 		const type = item.type === 'BADGE' ? 'Badge' : 'Item';
 
-		const [sourceItem] = await message.author.model[`get${type}s`]({ where: { id: item.id } });
+		const authorModel = await message.author.fetchModel();
+		const [sourceItem] = await authorModel[`get${type}s`]({ where: { id: item.id } });
 		if (!sourceItem) return message.reply(`you don't have the \`${item.name}\` ${type.toLowerCase()}!`);
 
 		if (!item.tradable) {
 			return message.reply(`**${item.name}** may not be traded!`);
 		}
 
-		const targetModel = member.user.model || await member.user.fetchModel();
+		const targetModel = await member.user.fetchModel();
 		const [targetItem] = await targetModel[`get${type}s`]({ where: { id: item.id } });
 		if (targetItem && item.unique) {
 			return message.reply(`**${member.user.tag}** already has the unique \`${item.name}\` ${type.toLowerCase()}!`);
 		}
 
+		const singular = item.unique || sourceItem.count === 1;
 		try {
 			const promises = [];
-			const singular = item.unique || sourceItem.count === 1;
 			// Make a transaction to rollback when something fails
 			const transaction = await db.transaction();
 
@@ -194,7 +195,7 @@ class ItemCommand extends Command {
 			if (sourceItem.count > 1) {
 				promises.push(sourceItem.setItemCount(sourceItem.count - 1, { transaction }));
 			} else {
-				promises.push(message.author.model[`remove${type}`](sourceItem, { transaction }));
+				promises.push(authorModel[`remove${type}`](sourceItem, { transaction }));
 			}
 
 			// If the target already has that item add one, otherwise add it as whole
@@ -209,13 +210,14 @@ class ItemCommand extends Command {
 
 			return message.reply([
 				`you successfully transferred${singular ? '' : ' one of'} your `,
-				`\`${item.name}\` ${type.toLowerCase()}${singular === 1 ? '' : 's'} to **${member.user.tag}**!`
+				`\`${item.name}\` ${type.toLowerCase() + singular ? '' : 's'} to **${member.user.tag}**!`
 			].join('\n'));
 		} catch (error) {
 			this.handler.logger.error(error);
-			return message.reply(
-				`something went wrong while transferring your ${type.toLowerCase()}, the transaction has been reverted.`
-			);
+			return message.reply([
+				'something went wrong while I was transferring your',
+				`${type.toLowerCase() + singular ? '' : 's'}, the transaction has been reverted.`
+			].join(' '));
 		}
 	}
 

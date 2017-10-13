@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const { inspect } = require('util');
 
 const Command = require('../../structures/Command');
+const { instance: { db } } = require('../../structures/Redis');
 
 class EvalCommand extends Command {
 	constructor(handler) {
@@ -17,6 +18,8 @@ class EvalCommand extends Command {
 			usage: 'You should know how to use this.',
 			permLevel: 4
 		});
+
+		this._inspect = { depth: 0 };
 	}
 
 	async run(message, args, name) {
@@ -28,8 +31,8 @@ class EvalCommand extends Command {
 				: await eval(code);
 
 			if (typeof evaled !== 'string') {
-				const tmp = inspect(evaled);
-				if (tmp.length >= 1985) evaled = inspect(evaled, { depth: 0 });
+				const tmp = inspect(evaled, this._inspect);
+				if (tmp.length >= 1985) evaled = inspect(evaled, this._inspect);
 				else evaled = tmp;
 			}
 
@@ -44,6 +47,13 @@ class EvalCommand extends Command {
 				]
 			);
 		}
+	}
+
+	get depth() {
+		return this._inspect.depth;
+	}
+	set depth(value) {
+		this._inspect.depth = value;
 	}
 }
 

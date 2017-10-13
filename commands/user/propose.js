@@ -22,13 +22,13 @@ class ProposeCommand extends Command {
 		if (!mentionedUser) return message.reply(`I could not find a non bot user with **${input}**.`);
 		if (mentionedUser.id === message.author.id) return message.reply('you can not propose to yourself.');
 
-		if (!message.author.model) await message.author.fetchModel();
-		if (!mentionedUser.model) await mentionedUser.fetchModel();
+		const authorModel = await message.author.fetchModel();
+		const mentionedModel = await mentionedUser.fetchModel();
 
-		const checked = await this.relationCheck(message, mentionedUser);
+		const checked = await this.relationCheck(message, mentionedUser, authorModel);
 
 		if (!checked) return undefined;
-		return this.relationStart(message, mentionedUser);
+		return this.relationStart(message, mentionedUser, authorModel, mentionedModel);
 	}
 
 	/**
@@ -37,14 +37,14 @@ class ProposeCommand extends Command {
 	 * Returns whether to start a new relationship with the mentioned user.
 	 * @param {Message} message Incoming message
 	 * @param {User} mentionedUser Mentioned user
+	 * @param {User} authorModel Database model for the author of the message
 	 * @return {Promise<boolean>}
 	 */
-	async relationCheck(message, mentionedUser) {
-		const partner = await message.author.model.getPartner();
+	async relationCheck(message, mentionedUser, authorModel) {
+		const partner = await authorModel.getPartner();
 
 		// No partner present, green light for a new one
 		if (!partner) return true;
-		const { model: authorModel } = message.author;
 
 		// Mentioned user is not the current user
 		if (partner.id !== mentionedUser.id) {
@@ -156,9 +156,11 @@ class ProposeCommand extends Command {
 	 * Starts a relationship with the 
 	 * @param {Message} message Incoming message
 	 * @param {User} mentionedUser Mentioned user
+	 * @param {User} authorModel Database model for the author of the message
+	 * @param {User} partner Database model for the mentioned user
 	 * @returns {Promise<Message>}
 	 */
-	async relationStart(message, mentionedUser) {
+	async relationStart(message, mentionedUser, authorModel, partner) {
 		await message.channel.send(
 			`${mentionedUser}, ${message.author} proposed to you! Do you want to accept? (**Y**es / **N**o)`
 		);
@@ -176,9 +178,6 @@ class ProposeCommand extends Command {
 		}
 
 		if (/^(y|yes)/i.test(collected.first())) {
-			const { model: partner } = mentionedUser;
-			const { model: authorModel } = message.author;
-
 			const transaction = await db.transaction();
 
 			// Sequelize method seems to not work as expected /shrug

@@ -13,7 +13,7 @@ class HelpCommand extends Command {
 			exp: 0,
 			cooldown: 10000,
 			description: 'See all the commands (or a specifc one) Kanna has!\n'
-			+ '_PS: Use the arrow reactions to scroll through categories_',
+				+ '_PS: Use the arrow reactions to scroll through categories_',
 			name: 'help',
 			permLevel: 0,
 			examples: ['help ping', 'help'],
@@ -22,10 +22,11 @@ class HelpCommand extends Command {
 	}
 
 	async run(message, [name]) {
+		const authorModel = await message.author.fetchModel();
+
 		name = name.toLowerCase();
 		if (!name || name === 'all') {
-			if (!message.author.model) await message.author.fetchModel();
-			const [embeds, categoryCount] = this.mapCategories(message);
+			const [embeds, categoryCount] = this.mapCategories(message, authorModel);
 
 			const helpMessage = await message.channel.send({ embed: embeds[0] });
 			const emojis = ['⬅', '➡', '❎'];
@@ -74,11 +75,11 @@ class HelpCommand extends Command {
 			return undefined;
 		}
 
-		return this.findCategory(message, name)
-			|| this.findCommand(message, name);
+		return this.findCategory(message, name, authorModel)
+			|| this.findCommand(message, name, authorModel);
 	}
 
-	mapCategories(message) {
+	mapCategories(message, authorModel) {
 		// Map all commands to their appropiate categories
 		const categories = new Collection();
 		for (const command of this.handler.commands.values()) {
@@ -88,6 +89,8 @@ class HelpCommand extends Command {
 			categories.set(command.category, category);
 		}
 
+		// Cache permission level
+		const permLevel = message.member.permLevel(authorModel);
 
 		// Make embeds out of them
 		const embeds = [];
@@ -97,10 +100,10 @@ class HelpCommand extends Command {
 				.setURL('http://kannathebot.me/guild')
 				.setAuthor(`${this.client.user.username}'s ${titleCase(category)} Commands`)
 				.setDescription('\u200b')
-				.setColor(this.client.color(message.author.model));
+				.setColor(this.client.color(authorModel));
 
 			for (const command of commands) {
-				if (command.permLevel > message.member.permLevel) continue;
+				if (command.permLevel > permLevel) continue;
 				embed.addField(`kanna ${command.name}`, command.usage, true);
 			}
 
@@ -110,7 +113,7 @@ class HelpCommand extends Command {
 		return [embeds, embeds.length];
 	}
 
-	findCategory(message, categoryName) {
+	findCategory(message, categoryName, authorModel) {
 		let embed;
 		for (const command of this.handler.commands.values()) {
 			if (command.category.toLowerCase() === categoryName) {
@@ -121,7 +124,7 @@ class HelpCommand extends Command {
 						.setURL('http://kannathebot.me/guild')
 						.setAuthor(`${this.client.user.username}'s ${titleCase(categoryName)} Commands`)
 						.setDescription('\u200b')
-						.setColor(this.client.color(message.author.model));
+						.setColor(this.client.color(authorModel));
 				}
 
 				embed.addField(`kanna ${command.name}`, command.usage, true);
@@ -133,7 +136,7 @@ class HelpCommand extends Command {
 			: null;
 	}
 
-	findCommand(message, commandName) {
+	findCommand(message, commandName, authorModel) {
 		const command = this.handler.commands.get(commandName)
 			|| this.handler.commands.get(this.handler.aliases.get(commandName));
 
@@ -142,7 +145,7 @@ class HelpCommand extends Command {
 				.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user.displayAvatarURL)
 				.setDescription('\u200b')
 				.setURL('http://kannathebot.me/guild')
-				.setColor(this.client.color(message.author.model))
+				.setColor(this.client.color(authorModel))
 				.setThumbnail(message.guild.iconURL)
 				.addField('Aliases', `kanna ${command.aliases.join('\nkanna ')}`)
 				.addField('Usage', `kanna ${command.usage}`)

@@ -3,12 +3,78 @@
 const { BOOLEAN, DATE, ENUM, INTEGER, Model, STRING } = require('sequelize');
 
 const { instance: { db } } = require('../structures/PostgreSQL');
+const { instance: { db: redis } } = require('../structures/Redis');
 const CommandLog = require('./CommandLog');
 const Item = require('./Item');
 const UserItem = require('./UserItem');
 const UserReputation = require('./UserReputation');
 
 class User extends Model {
+	/**
+	 * Fetches a model either from redis or database.
+	 * @param {string} id Id of the user to fetch
+	 * @returns {Promise<User>} Model
+	 */
+	static async fetchOrCache(id) {
+		const redisData = await redis.hgetallAsync(`users::${id}`);
+		// User is cached in redis, all good
+		if (redisData) return User.fromRedis(redisData);
+
+		const [user, created] = await User.findCreateFind({ where: { id } });
+		// Created users are automatically updated with a hook
+		if (!created) this.updateRedis(user);
+		return user;
+	}
+
+	/**
+	 * Instantiates a model instance from redis data.
+	 * @param {Object} data Raw data from redis
+	 * @param {string} data.id Id of the user
+	 * @param {number} data.coins Coins of the user
+	 * @param {exp} data.exp Experience of the user
+	 * @param {?string} data.type Special type of the user if any
+	 * @param {?string} data.partnerId Id of the partner if any
+	 * @param {?Date} data.partnerSince Since when this user in a relationship if any
+	 * @param {?string} data.partnerMarried Whether the partner is married if the user is in a relationship
+	 * @param {boolean} [isNewRecord=false] Whether this is a completely new user
+	 * @return {User} Created model instance
+	 */
+	static fromRedis(data, isNewRecord = false) {
+		// Not optimal but /shrug
+		if (data.type === 'null') data.type = null;
+		if (data.partnerId === 'null') data.partnerId = null;
+		if (data.partnerMarried === 'null') data.partnerMarried = null;
+		if (data.partnerSince === 'null') data.partnerSince = null;
+		else data.partnerSince = new Date(Number(data.partnerSince));
+		data.coins = Number(data.coins);
+		data.exp = Number(data.exp);
+
+		return new User(data, { isNewRecord });
+	}
+
+	/**
+	 * Caches or updates a user instance into redis.
+	 * @param {User} user To update user instance
+	 */
+	static updateRedis(user) {
+		redis.hmsetAsync(`users::${user.id}`, user.toRedis());
+	}
+
+	/**
+	 * Returns a JSON stringifyable presentation of this object.
+	 * @returns {Object}
+	 */
+	toRedis() {
+		const obj = this.toJSON();
+		// Redis apparently just String(obj) the things
+		if (obj.partnerSince) obj.partnerSince = obj.partnerSince.valueOf();
+		return obj;
+	}
+
+	/**
+	 * Current level of the user
+	 * @returns {number}
+	 */
 	get level() {
 		return Math.floor(Math.sqrt(this.exp / 1000)) + 1;
 	}
@@ -49,6 +115,13 @@ User.init(
 	},
 	{
 		createdAt: false,
+		hooks: {
+			// Keep cache up-to-date
+			afterCreate: User.updateRedis,
+			afterUpdate: User.updateRedis,
+			afterSave: User.updateRedis,
+			afterUpsert: User.updateRedis
+		},
 		sequelize: db,
 		tableName: 'users',
 		updatedAt: false

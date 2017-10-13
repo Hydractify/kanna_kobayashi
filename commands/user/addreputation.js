@@ -1,4 +1,5 @@
 const Command = require('../../structures/Command');
+const UserReputation = require('../../models/UserReputation');
 
 class AddReputationCommand extends Command {
 	constructor(handler) {
@@ -24,15 +25,15 @@ class AddReputationCommand extends Command {
 			return message.reply(`you can not add a reputation to yourself, ${message.author}`);
 		}
 
-		const [already] = await (member.user.model || await member.user.fetchModel())
-			.getReps({ scope: { repperId: message.author.id } });
-		if (already) {
-			if (already.UserReputation.type === 'POSITIVE') {
+
+		const reputation = await UserReputation.findOne({ where: { repId: member.id, repperId: message.author.id } });
+		if (reputation) {
+			if (reputation.type === 'POSITIVE') {
 				return message.reply(`you already added a positive reputation to **${member.user.tag}**.`);
 			}
 
-			already.UserReputation.type = 'POSITIVE';
-			await already.UserReputation.save();
+			reputation.type = 'POSITIVE';
+			await reputation.save();
 
 			return message.reply([
 				'you successfully edited your reputation entry of',
@@ -40,7 +41,7 @@ class AddReputationCommand extends Command {
 			].join(' '));
 		}
 
-		await message.author.model.addRepped(member.user.model, { through: { type: 'POSITIVE' } });
+		await UserReputation.create({ repId: member.id, repperId: message.author.id, type: 'POSITIVE' });
 
 		return message.reply(`you successfully added a positive reputation to **${member.user.tag}**.`);
 	}

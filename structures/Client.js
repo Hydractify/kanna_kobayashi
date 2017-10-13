@@ -160,8 +160,8 @@ class Client extends DJSClient {
 
 		const totalGuilds = await this.shard.fetchClientValues('guilds.size')
 			.then(result => result.reduce((previous, current) => previous + current));
-		const blacklisted = await User.findOne({ where: { id: guild.ownerID, type: 'BLACKLISTED' } })
-			.then(user => user ? 'Yes' : 'No');
+		const blacklisted = await User.fetchOrCache(guild.ownerID)
+			.then(user => user.type === 'BLACKLISTED' ? 'No' : 'Yes');
 		const humanCount = guild.members.filter(member => !member.user.bot).size;
 
 		const embed = new RichEmbed()

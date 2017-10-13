@@ -1,4 +1,5 @@
 const Command = require('../../structures/Command');
+const UserReputation = require('../../models/UserReputation');
 
 class RemoveReputationCommand extends Command {
 	constructor(handler) {
@@ -24,15 +25,14 @@ class RemoveReputationCommand extends Command {
 			return message.reply(`you can not give a reputation point to yourself, ${message.author}`);
 		}
 
-		const [already] = await (member.user.model || await member.user.fetchModel())
-			.getReps({ scope: { repperId: message.author.id } });
-		if (already) {
-			if (already.UserReputation.type === 'NEGATIVE') {
+		const reputation = await UserReputation.findOne({ where: { repId: member.id, repperId: message.author.id } });
+		if (reputation) {
+			if (reputation.type === 'NEGATIVE') {
 				return message.reply(`you already added a negative reputation to **${member.user.tag}**.`);
 			}
 
-			already.UserReputation.type = 'NEGATIVE';
-			await already.UserReputation.save();
+			reputation.type = 'NEGATIVE';
+			await reputation.save();
 
 			return message.reply([
 				'you successfully edited your reputation of',
@@ -40,7 +40,7 @@ class RemoveReputationCommand extends Command {
 			].join(' '));
 		}
 
-		await message.author.model.addRepped(member.user.model, { through: { type: 'NEGATIVE' } });
+		await UserReputation.create({ repId: member.id, repperId: message.author.id, type: 'NEGATIVE' });
 
 		return message.reply(`you successfully added a negative reputation to **${member.user.tag}**.`);
 	}

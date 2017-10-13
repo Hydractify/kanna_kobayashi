@@ -4,6 +4,7 @@ const Item = require('../../models/Item');
 const User = require('../../models/User');
 const Command = require('../../structures/Command');
 const { instance: { db } } = require('../../structures/PostgreSQL');
+const { instance: { db: redis } } = require('../../structures/Redis');
 const { titleCase } = require('../../util/util');
 
 class MarketCommand extends Command {
@@ -35,7 +36,7 @@ class MarketCommand extends Command {
 	}
 
 	async buy(message, args) {
-		const userModel = message.author.model || await message.author.fetchModel();
+		const userModel = await message.author.fetchModel();
 
 		const item = await Item.findOne({
 			include: [{
@@ -83,15 +84,13 @@ class MarketCommand extends Command {
 
 			const transaction = await db.transaction();
 
-			userModel.coins -= item.price;
-			const promises = [userModel.save({ transaction })];
+			const promises = [userModel.increment({ coins: -item.price }, { transaction })];
+
 			if (already) promises.push(already.setItemCount(already.count + 1, { transaction }));
 			else promises.push(userModel[`add${titleCase(item.type)}`](item, { transaction }));
-			await Promise.all(promises).catch(error => {
-				// Something failed, give the user their coins back.
-				userModel.coins += item.price;
-				throw error;
-			});
+
+			await Promise.all(promises);
+			await redis.hincrby(`users::${message.author.id}`, 'coins', -item.price);
 
 			await transaction.commit();
 
