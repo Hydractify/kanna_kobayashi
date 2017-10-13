@@ -35,6 +35,8 @@ class WhitelistCommand extends Command {
 			}
 
 			return message.reply(`**${user.tag}** is already whitelisted.`);
+		} else if (remove === 'remove') {
+			return message.reply(`**${user.tag}** is not whitelisted.`);
 		}
 
 		targetModel.type = 'WHITELISTED';

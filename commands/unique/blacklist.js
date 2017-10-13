@@ -35,6 +35,8 @@ class BlacklistCommand extends Command {
 			}
 
 			return message.reply(`**${user.tag}** is already blacklisted.`);
+		} else if (remove === 'remove') {
+			return message.reply(`**${user.tag}** is not blacklisted.`);
 		}
 
 		targetModel.type = 'BLACKLISTED';
