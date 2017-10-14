@@ -57,7 +57,7 @@ class EmojiInfoCommand extends Command {
 		const createdAtString = moment(emoji.createdTimestamp).format('MM/DD/YYYY (HH:mm)');
 		const createdBeforeString = moment(emoji.createdTimestamp).fromNow();
 		const embed = RichEmbed.common(message)
-			.addField('Name:', emoji.name, true)
+			.addField('Name', emoji.name, true)
 			.addField('ID', emoji.id, true)
 			.addField('Created', createdAtString, true)
 			.addField('Relative', createdBeforeString, true)
