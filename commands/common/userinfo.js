@@ -44,8 +44,8 @@ class UserInfoCommand extends Command {
 
 		embed
 			.addField('Discriminator', user.discriminator, true)
-			.addField('Status', titleCase(user.presence.status), true)
-			.addField('Game', user.presence.game ? user.presence.game.name : 'Nothing', true)
+			.addField('Status', titleCase((member || user).presence.status), true)
+			.addField('Game', (member || user).presence.game ? (member || user).presence.game.name : 'Nothing', true)
 			.addField('Shard guilds on this shard', this.client.guilds.filter(guild => guild.members.has(user.id)).size, true)
 			.addField('Registered account', this._formatTimespan(user.createdTimestamp));
 
