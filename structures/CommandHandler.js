@@ -182,7 +182,7 @@ class CommandHandler {
 	 * @param {Command} command Command that is to be executed
 	 * @return {Promise<boolean>} Whether the command can be called
 	 */
-	async checkPermissions(message, authorModel, command) {
+	async canCallCommand(message, authorModel, command) {
 		// Cache permissions to reuse them later
 		const permissions = message.channel.permissionsFor(message.guild.me);
 		if (!permissions.has('SEND_MESSAGES')) {
