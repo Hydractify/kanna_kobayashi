@@ -31,7 +31,7 @@ class WhitelistCommand extends Command {
 				targetModel.type = null;
 				await targetModel.save();
 
-				return message.reply(`**${user.tag}** has been removed from the whitelist.`);
+				return message.reply(`you removed **${user.tag}** from the whitelist.`);
 			}
 
 			return message.reply(`**${user.tag}** is already whitelisted.`);
@@ -42,7 +42,7 @@ class WhitelistCommand extends Command {
 		targetModel.type = 'WHITELISTED';
 		await targetModel.save();
 
-		return message.reply(`**${user.tag}** has been added to the whitelist.`);
+		return message.reply(`you added **${user.tag}** to the whitelist.`);
 	}
 }
 

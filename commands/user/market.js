@@ -50,7 +50,7 @@ class MarketCommand extends Command {
 			})
 		]);
 
-		if (!item) return message.reply('could not find an item or badge with that name!');
+		if (!item) return message.reply('I could not find an item or badge with that name!');
 		if (!item.buyable) {
 			return message.reply(`the **${item.name}** ${item.type.toLowerCase()} is not to buy!`);
 		}
@@ -64,6 +64,7 @@ class MarketCommand extends Command {
 		await message.channel.send([
 			`Is the **${item.name}** ${item.type.toLowerCase()} the one you are looking for, ${message.author}?`
 			+ ' <:KannaTea:366019180203343872>',
+			`That would cost you ${item.price} coins.`,
 			'(Answer with **Y**es or **N**o)'
 		]);
 
@@ -74,7 +75,7 @@ class MarketCommand extends Command {
 
 		if (!collected.size) {
 			return message.channel.send([
-				`${message.author}... as you didn't tell me yes or no,`,
+				`${message.author}... as you did not tell me yes or no,`,
 				'I had to cancel the command <:FeelsKannaMan:341054171212152832>'
 			].join(' '));
 		}

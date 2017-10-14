@@ -54,7 +54,7 @@ class QuizNameCommand extends Command {
 
 		if (option === 'set') {
 			if (!name.length) {
-				return message.channel.send(`To set a name, you have to specify one, ${message.author}.`);
+				return message.reply(`to set a name, you have to specify one.`);
 			}
 
 			let toSend;
@@ -84,7 +84,7 @@ class QuizNameCommand extends Command {
 			return message.channel.send(toSend);
 		}
 
-		return message.reply(', that is not a valid option. Valid options are `set` and `view`.');
+		return message.reply('that is not a valid option. Valid options are `set` and `view`.');
 	}
 }
 

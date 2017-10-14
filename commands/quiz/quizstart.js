@@ -30,7 +30,7 @@ class QuizStartCommand extends Command {
 		const eventEmbed = RichEmbed.common(message)
 			.setAuthor(`${message.author.tag} started an event!`)
 			.setImage(quiz.photo)
-			.addField('Who is this character?', 'You have 15 minutes to answer');
+			.addField('Who is this character?', `You have ${quiz.duration} minutes to answer!`);
 
 		const eventMessage = await message.channel.send(eventEmbed);
 
@@ -44,7 +44,7 @@ class QuizStartCommand extends Command {
 				|| (lastname && content.startsWith(lastname));
 		};
 
-		const collected = await message.channel.awaitMessages(filter, { max: 1, time: 15 * 60 * 1000 });
+		const collected = await message.channel.awaitMessages(filter, { max: 1, time: quiz.duration * 60 * 1000 });
 
 		eventEmbed.fields[0].value = `~~${eventEmbed.fields[0].value}~~ Time is over!`;
 		await eventMessage.edit(eventEmbed).catch(() => null);

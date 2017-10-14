@@ -72,7 +72,7 @@ class NotifCommand extends Command {
 		message.guild.model.notificationChannelId = channel.id;
 		await message.guild.model.save();
 
-		return message.reply(`the new channel for welcome and farewell messages is now ${channel}.`);
+		return message.reply(`you set ${channel} as channel for welcome and farewell messages.`);
 	}
 }
 

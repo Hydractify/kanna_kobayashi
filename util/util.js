@@ -26,13 +26,23 @@ class Util {
 	 * Duplicated entries will only return the content of the last one
 	 * @param {string} input String to parse
 	 * @param {boolean} lowercase Whether the keys should be lowercased automatically
-	 * @returns {Collection<string, string>}
+	 * @returns {Collection<string, string>} Parsed flags, text before first flag is keyed under `--`
 	 * @static
 	 */
 	static parseFlags(input, lowercase) {
 		// Scary regex magic
 		const regex = /--(\w+) (.+?(?=--|$))/g;
 		const parsed = new Collection();
+
+		if (!input.startsWith('--')) {
+			if (input.includes('--')) {
+				parsed.set('--', input.slice(0, input.indexOf('--')));
+				input = input.slice(input.indexOf('--'));
+			} else {
+				parsed.set('--', input);
+				return parsed;
+			}
+		}
 
 		let match = null;
 		while ((match = regex.exec(input)) !== null) {
@@ -87,6 +97,28 @@ class Util {
 		}
 
 		return proto;
+	}
+
+	// Straight copy from
+	// https://github.com/Gawdl3y/discord.js-commando/blob/943e3c497de92db3b58670990fbb7f8dc64d42bd/src/util.js#L6-L17
+	/**
+	 * Paginates the passed array.
+	 * @param {T[]} items The original items
+	 * @param {number} page The requested page
+	 * @param {number} pageLength The length of each page
+	 * @returns {{ items: T[], page: number, maxPage: number, pageLength: number }}
+	 */
+	static paginate(items, page, pageLength = 10) {
+		const maxPage = Math.ceil(items.length / pageLength);
+		if (page < 1) page = 1;
+		if (page > maxPage) page = maxPage;
+		const startIndex = (page - 1) * pageLength;
+		return {
+			items: items.length > pageLength ? items.slice(startIndex, startIndex + pageLength) : items,
+			maxPage,
+			page,
+			pageLength
+		};
 	}
 }
 

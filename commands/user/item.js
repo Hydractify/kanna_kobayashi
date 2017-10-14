@@ -215,7 +215,7 @@ class ItemCommand extends Command {
 		} catch (error) {
 			this.handler.logger.error(error);
 			return message.reply([
-				'something went wrong while I was transferring your',
+				'something went wrong while transferring your',
 				`${type.toLowerCase() + singular ? '' : 's'}, the transaction has been reverted.`
 			].join(' '));
 		}

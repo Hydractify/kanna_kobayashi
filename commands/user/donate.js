@@ -49,7 +49,7 @@ class DonateCommand extends Command {
 
 		await transaction.commit();
 
-		return message.reply(`I sucessfully transferred **${amount}** <:coin:330926092703498240> to ${mentionedUser}!`);
+		return message.reply(`You sucessfully transferred **${amount}** <:coin:330926092703498240> to ${mentionedUser}!`);
 	}
 }
 

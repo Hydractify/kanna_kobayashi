@@ -43,7 +43,7 @@ class LevelUpCommand extends Command {
 		await message.guild.model.save();
 
 		return message.reply(
-			`level up message in this guild are now ${message.guild.model.levelUpEnabled ? 'enabled' : 'disabled'}`
+			`you ${message.guild.model.levelUpEnabled ? 'enabled' : 'disabled'} level up message for this guild.`
 		);
 	}
 }

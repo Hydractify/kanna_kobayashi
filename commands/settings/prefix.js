@@ -32,7 +32,7 @@ class PrefixCommand extends Command {
 
 		// Disallow every non "mod" to change
 		if (message.member.permLevel(await message.author.fetchModel()) < 2) {
-			return message.reply(`you do not have the required permission level to set a prefix!`);
+			return message.reply(`you do not have the required permission level to set the prefix!`);
 		}
 
 		let newPrefix = args.join(' ');
@@ -43,7 +43,7 @@ class PrefixCommand extends Command {
 		message.guild.model.prefixes[0] = newPrefix;
 		await message.guild.model.save();
 
-		return message.reply(`set the guild specific prefix to \`${newPrefix}\u200b\``);
+		return message.reply(`you set the guild specific prefix to \`${newPrefix}\u200b\``);
 	}
 }
 

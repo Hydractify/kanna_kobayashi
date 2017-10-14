@@ -23,7 +23,7 @@ class QuizDurationCommand extends Command {
 		if (!option) {
 			return message.reply([
 				'you also need to tell me whether you want to',
-				'`set` a new name, or `view` the current one?'
+				'`set` a new duration, or `view` the current one?'
 			].join(' '));
 		}
 
@@ -34,13 +34,13 @@ class QuizDurationCommand extends Command {
 			if (!quiz) return message.reply(`there is no quiz set up.`);
 
 			return message.reply(
-				`the current length of a quiz is ${quiz.duration} minute${quiz.duration === 1 ? '' : 's'}.`
+				`the current length of quizzes are ${quiz.duration} minute${quiz.duration === 1 ? '' : 's'}.`
 			);
 		}
 
 		if (option === 'set') {
 			if (!time) {
-				return message.reply('you also need to tell me how long the quizzes should be.');
+				return message.reply('you also need to tell me how long quizzes should be.');
 			}
 			// Allow 5m / 5minutes / 1minute to be used. UX and stuff
 			time = parseInt(time.replace(/(m$|minutes?$)/i, '').trim());
@@ -62,7 +62,7 @@ class QuizDurationCommand extends Command {
 			}
 
 			return message.reply(
-				`successfully ${quiz ? 'updated' : 'set'} the time of quizzes to ${time} minutes!`
+				`you successfully ${quiz ? 'updated' : 'set'} the time of quizzes to ${time} minutes!`
 			);
 		}
 

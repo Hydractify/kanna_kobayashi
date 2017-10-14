@@ -32,8 +32,8 @@ class DiscriminatorCommand extends Command {
 			.then(res => [...new Set([].concat(...res))]);
 
 		if (!users.length) {
-			return message.channel.send(
-				`I could not find any users with the \`${discrim}\` discriminator, ${message.author}.`
+			return message.reply(
+				`I could not find any users with the \`${discrim}\` discriminator.`
 			);
 		}
 

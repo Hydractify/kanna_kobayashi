@@ -31,7 +31,7 @@ class BlacklistCommand extends Command {
 				targetModel.type = null;
 				await targetModel.save();
 
-				return message.reply(`**${user.tag}** has been removed from the blacklist.`);
+				return message.reply(`you removed **${user.tag}** from the blacklist.`);
 			}
 
 			return message.reply(`**${user.tag}** is already blacklisted.`);
@@ -42,7 +42,7 @@ class BlacklistCommand extends Command {
 		targetModel.type = 'BLACKLISTED';
 		await targetModel.save();
 
-		return message.reply(`**${user.tag}** has been added to the blacklist.`);
+		return message.reply(`you added **${user.tag}** to the blacklist.`);
 	}
 }
 
