@@ -62,7 +62,7 @@ class UserInfoCommand extends Command {
 	}
 
 	_formatTimespan(from) {
-		return `${moment(from).format('MM/DD/YYY (HH:mm)')} [${moment.duration(from - Date.now()).humanize()}]`;
+		return `${moment(from).format('MM/DD/YYYY (HH:mm)')} [${moment.duration(from - Date.now()).humanize()}]`;
 	}
 }
 
