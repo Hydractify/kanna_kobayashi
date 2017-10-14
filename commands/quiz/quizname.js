@@ -38,7 +38,7 @@ class QuizNameCommand extends Command {
 			}
 
 			if (quiz.photo) {
-				const embed = RichEmbed.common(message)
+				const embed = RichEmbed.common(message, await message.author.fetchModel())
 					.setTitle('Current quiz:')
 					.setDescription(titleCase(quiz.name))
 					.setImage(quiz.photo);
@@ -63,7 +63,7 @@ class QuizNameCommand extends Command {
 				quiz.name = name.join(' ');
 				await quiz.save();
 				if (quiz.photo) {
-					toSend = RichEmbed.common(message)
+					toSend = RichEmbed.common(message, await message.author.fetchModel())
 						.setTitle(titleCase(quiz.name))
 						.setImage(quiz.photo);
 				}

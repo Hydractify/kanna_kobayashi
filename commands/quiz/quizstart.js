@@ -27,7 +27,7 @@ class QuizStartCommand extends Command {
 			].join('\n'));
 		}
 
-		const eventEmbed = RichEmbed.common(message)
+		const eventEmbed = RichEmbed.common(message, await message.author.fetchModel())
 			.setAuthor(`${message.author.tag} started an event!`)
 			.setImage(quiz.photo)
 			.addField('Who is this character?', `You have ${quiz.duration} minutes to answer!`);

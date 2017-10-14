@@ -42,7 +42,7 @@ Guild.init(
 			type: STRING('1500')
 		},
 		selfRoleIds: {
-			field: 'self_roles_ids',
+			field: 'self_role_ids',
 			type: ARRAY(STRING('20')),
 			defaultValue: []
 		}

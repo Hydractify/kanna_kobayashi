@@ -49,7 +49,7 @@ class StatsCommand extends Command {
 		].join(' ');
 		const ram = other.map(shard => `Shard ${shard.shardId + 1}: ${shard.ram}`);
 
-		const embed = RichEmbed.common(message)
+		const embed = RichEmbed.common(message, await message.author.fetchModel())
 			.setAuthor(`${this.client.user.username}'s stats`, this.client.user.displayAvatarURL)
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL)

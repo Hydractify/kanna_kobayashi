@@ -25,7 +25,7 @@ class AvatarCommand extends Command {
 			: message.author;
 		if (!user) return message.reply(`I could not find a user with ${input}.`);
 
-		const embed = RichEmbed.common(message)
+		const embed = RichEmbed.common(message, await user.fetchModel())
 			.setAuthor(`${user.tag}'s avatar`, user.displayAvatarURL, user.displayAvatarURL)
 			.setImage(user.displayAvatarURL);
 

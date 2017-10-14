@@ -18,12 +18,12 @@ class RoleInfoCommand extends Command {
 		});
 	}
 
-	run(message, [roleName]) {
+	async run(message, [roleName]) {
 		if (!roleName) return message.reply('you need to give me a role name to search for.');
 
 		const role = this.handler.resolveRole(message.guild.roles, roleName, false);
 
-		const embed = RichEmbed.common(message)
+		const embed = RichEmbed.common(message, await message.author.fetchModel())
 			.setAuthor(`Information about ${role.name}`)
 			.setThumbnail(message.guild.iconURL)
 			.addField('Color hex', role.color ? role.hexColor : 'No Color', true)

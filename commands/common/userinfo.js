@@ -34,7 +34,7 @@ class UserInfoCommand extends Command {
 		roles.delete(message.guild.id);
 		roles = mapIterator(roles.values());
 
-		const embed = RichEmbed.common(message)
+		const embed = RichEmbed.common(message, await message.author.fetchModel())
 			.setAuthor(`Info about ${user.tag}`, user.displayAvatarURL, user.displayAvatarURL)
 			.setDescription('\u200b')
 			.addField('ID', user.id, true)

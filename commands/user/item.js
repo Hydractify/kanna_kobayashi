@@ -121,7 +121,7 @@ class ItemCommand extends Command {
 		});
 		if (!item) return message.reply('could not find an item with that name!');
 
-		const embed = RichEmbed.common(message)
+		const embed = RichEmbed.common(message, await message.author.fetchModel())
 			.setAuthor(`Information about the ${item.type.toLowerCase()} "${item.name}"`, this.client.displayAvatarURL)
 			.setThumbnail(message.guild.iconURL)
 			.setDescription(item.description || '\u200b');

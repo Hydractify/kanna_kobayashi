@@ -31,7 +31,9 @@ class QuizPremadeCommand extends Command {
 	}
 
 	async run(message) {
-		const embed = RichEmbed.common(message)
+		const authorModel = await message.author.fetchModel();
+
+		const embed = RichEmbed.common(message, authorModel)
 			.setTitle('Take your pick!')
 			.setDescription('This will replace the current set up quiz in this guild.')
 			.addField(
@@ -83,7 +85,7 @@ class QuizPremadeCommand extends Command {
 
 
 		return message.channel.send(
-			RichEmbed.common(message)
+			RichEmbed.common(message, authorModel)
 				.setTitle('Set your quiz to:')
 				.setDescription(quiz.name)
 				.setImage(quiz.photo)

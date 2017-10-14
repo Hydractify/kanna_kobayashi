@@ -36,7 +36,7 @@ class ShowReputationCommand extends Command {
 		});
 		if (!positive && !negative) return message.reply(`**${member.user.tag}** does not have any reputations.`);
 
-		const embed = RichEmbed.common(message)
+		const embed = RichEmbed.common(message, await message.author.fetchModel())
 			.setAuthor(`Reputation for ${member.user.tag}`, message.client.user.displayAvatarURL);
 		// One is always present here
 		if (positive) embed.addField('Positive', positive, true);

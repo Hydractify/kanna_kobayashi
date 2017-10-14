@@ -37,7 +37,7 @@ class GuildInfoCommand extends Command {
 			++counts[type];
 		}
 
-		const embed = RichEmbed.common(message)
+		const embed = RichEmbed.common(message, await message.author.fetchModel())
 			.setThumbnail(guild.iconURL)
 			.setAuthor(`${guild.name}'s stats`, guild.iconURL)
 			.setDescription('\u200b')

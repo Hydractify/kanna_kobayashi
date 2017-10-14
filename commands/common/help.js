@@ -95,12 +95,11 @@ class HelpCommand extends Command {
 		// Make embeds out of them
 		const embeds = [];
 		for (const [category, commands] of categories) {
-			const embed = RichEmbed.common(message)
+			const embed = RichEmbed.common(message, authorModel)
 				.setThumbnail(message.guild.iconURL)
 				.setURL('http://kannathebot.me/guild')
 				.setAuthor(`${this.client.user.username}'s ${titleCase(category)} Commands`)
-				.setDescription('\u200b')
-				.setColor(this.client.color(authorModel));
+				.setDescription('\u200b');
 
 			for (const command of commands) {
 				if (command.permLevel > permLevel) continue;
@@ -119,12 +118,11 @@ class HelpCommand extends Command {
 			if (command.category.toLowerCase() === categoryName) {
 				// Only generate embed if category name is valid, pointless optimizing tbh
 				if (!embed) {
-					embed = RichEmbed.common(message)
+					embed = RichEmbed.common(message, authorModel)
 						.setThumbnail(message.guild.iconURL)
 						.setURL('http://kannathebot.me/guild')
 						.setAuthor(`${this.client.user.username}'s ${titleCase(categoryName)} Commands`)
-						.setDescription('\u200b')
-						.setColor(this.client.color(authorModel));
+						.setDescription('\u200b');
 				}
 
 				embed.addField(`kanna ${command.name}`, command.usage, true);
@@ -141,11 +139,10 @@ class HelpCommand extends Command {
 			|| this.handler.commands.get(this.handler.aliases.get(commandName));
 
 		if (command) {
-			return message.channel.send(RichEmbed.common(message)
+			return message.channel.send(RichEmbed.common(message, authorModel)
 				.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user.displayAvatarURL)
 				.setDescription('\u200b')
 				.setURL('http://kannathebot.me/guild')
-				.setColor(this.client.color(authorModel))
 				.setThumbnail(message.guild.iconURL)
 				.addField('Aliases', `kanna ${command.aliases.join('\nkanna ')}`)
 				.addField('Usage', `kanna ${command.usage}`)
