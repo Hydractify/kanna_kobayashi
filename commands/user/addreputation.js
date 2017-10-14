@@ -25,7 +25,6 @@ class AddReputationCommand extends Command {
 			return message.reply(`you can not add a reputation to yourself, ${message.author}`);
 		}
 
-
 		const reputation = await UserReputation.findOne({ where: { repId: member.id, repperId: message.author.id } });
 		if (reputation) {
 			if (reputation.type === 'POSITIVE') {
