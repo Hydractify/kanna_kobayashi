@@ -41,8 +41,8 @@ Guild.init(
 			field: 'farewell_message',
 			type: STRING('1500')
 		},
-		selfRoles: {
-			field: 'self_roles',
+		selfRoleIds: {
+			field: 'self_roles_ids',
 			type: ARRAY(STRING('20')),
 			defaultValue: []
 		}
