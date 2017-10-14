@@ -29,7 +29,9 @@ class DeleteReputationCommand extends Command {
 
 		await reputation.destroy();
 
-		return message.reply(`I successfully deleted your reputation of **${member.user.tag}**.`);
+		return message.reply(
+			`you successfully deleted your ${reputation.type.toLowerCase()} reputation from **${member.user.tag}**.`
+		);
 	}
 }
 
