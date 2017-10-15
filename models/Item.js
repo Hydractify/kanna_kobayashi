@@ -42,8 +42,8 @@ Item.init(
 			}
 		},
 		description: {
-			type: STRING(1024),
-			allowNull: true
+			allowNull: true,
+			type: STRING(1024)
 		},
 		name: {
 			allowNull: false,
@@ -54,6 +54,7 @@ Item.init(
 		rarity: {
 			allowNull: false,
 			type: ENUM,
+			// Unknown, Limited, Immortal, Chaos, Harmony, Dragon Size, Ultra Rare, Rare, Uncommon, Common
 			values: ['?', 'LIMITED', 'IMM', 'CH', 'HM', 'DSIZE', 'UR', 'R', 'UC', 'C']
 		},
 		tradable: {

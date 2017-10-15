@@ -2,7 +2,8 @@ const { RichEmbed: DJSRichEmbed } = require('discord.js');
 
 class RichEmbed extends DJSRichEmbed {
 	/**
-	 * Builds a common RichEmbed's instance from a message
+	 * Builds a common RichEmbed's instance from a message.
+	 * This sets color and footer.
 	 * @param {Message} message Message to read data from 
 	 * @param {User} [model] User model
 	 * @return {RichEmbed}
