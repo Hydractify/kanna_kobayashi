@@ -24,7 +24,7 @@ class ProfileCommand extends Command {
 			? await this.handler.resolveUser(input, false)
 			: message.author;
 
-		if (!user) return message.reply(`I could not find a non-bot user by ${input}.`);
+		if (!user) return message.reply(`I could not find a non-bot user by **${input}**.`);
 
 		// No redis caching here because of includes, which wouldn't work then :c
 		// Better than a bunch of single queries tho
@@ -49,7 +49,7 @@ class ProfileCommand extends Command {
 
 		const partner = userModel.partner
 			? this.client.users.get(userModel.partner.id)
-			|| await this.client.users.get(userModel.partner.id).catch(() => null)
+			|| await this.client.fetchUser(userModel.partner.id).catch(() => null)
 			: null;
 		const partnerString = partner
 			? `${partner.partnerMarried ? 'Married' : 'Together'} with **${partner.tag}**`
