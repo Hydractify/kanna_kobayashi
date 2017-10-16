@@ -9,10 +9,24 @@ class RichEmbed extends DJSRichEmbed {
 	 * @return {RichEmbed}
 	 * @static
 	 */
-	static common({ author: { displayAvatarURL, tag }, client }, model) {
+	static common({ author: { displayAvatarURL, tag }, client}, model) {
 		return new this()
 			.setColor(client.color(model))
 			.setFooter(`Requested by ${tag}`, displayAvatarURL);
+	}
+
+	/**
+	 * Builds a RichEmbed
+	 * @param {Message} message DJS Message Object
+	 * @param {Link} link Image link
+	 * @returns {RichEmbed}
+	 * @static
+	 */
+	static meme({ author: { displayAvatarURL, tag}, client }, model, link) {
+		return new this()
+		.setColor(client.color(model))
+		.setFooter(`Requested by ${tag}`, displayAvatarURL)
+		.setImage(link);
 	}
 
 	/**
