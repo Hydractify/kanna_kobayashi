@@ -20,8 +20,8 @@ class HungryMeme extends Command {
 
 	async run(message) {
 		const imageLinks = [
-			"https://cdn.discordapp.com/attachments/269129409888256000/300481191151271946/giphy_9.gif", 
-			"https://cdn.discordapp.com/attachments/303005425941479425/323289325921894401/f8bcdb027870ad77d2c23adf8de7ecd000728e07_hq.gif"
+			"http://kannathebot.me/memes/hungry/1.gif", 
+			"http://kannathebot.me/memes/hungry/2.gif"
 		][Math.floor(Math.random() * 2)];
 
 		const model = await message.author.fetchModel();

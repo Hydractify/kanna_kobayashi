@@ -20,8 +20,8 @@ class LoliMeme extends Command {
 
 	async run(message) {
 		const imageLinks = [
-			"https://images-ext-2.discordapp.net/eyJ1cmwiOiJodHRwczovL2Nkbi5kaXNjb3JkYXBwLmNvbS9hdHRhY2htZW50cy8yNzUxMzU5ODA0ODExNTA5NzYvMjk5MjYzMzIyMTU3NzQ0MTI4L2FLVnZCcDFfNDYwcy5wbmcifQ.QZ7r6tUoDr0KZ_R74SJX4iIuPQM?width=388&height=597", 
-			"https://cdn.discordapp.com/attachments/269129409888256000/300666636946374656/1491677914_giphy_2.gif"
+			"http://kannathebot.me/memes/loli/1.png", 
+			"http://kannathebot.me/memes/loli/2.gif"
 		][Math.floor(Math.random() * 2)];
 
 		const model = await message.author.fetchModel();

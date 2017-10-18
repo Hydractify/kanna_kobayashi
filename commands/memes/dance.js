@@ -20,9 +20,9 @@ class DanceMeme extends Command {
 
 	async run(message) {
 		const imageLinks = [
-			"https://cdn.discordapp.com/attachments/299632702087495680/302254759773995008/tumblr_ok24wuFmmK1thzx08o1_400.gif", 
-			"https://cdn.discordapp.com/attachments/303005425941479425/323283437798555658/61X2Bgk.gif", 
-			"https://cdn.discordapp.com/attachments/317398861478100992/334170028561661952/2c9.gif"
+			"http://kannathebot.me/memes/dance/1.gif", 
+			"http://kannathebot.me/memes/dance/2.gif", 
+			"http://kannathebot.me/memes/dance/3.gif"
 		][Math.floor(Math.random() * 3)]
 
 		const model = await message.author.fetchModel();
