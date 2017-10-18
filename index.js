@@ -1,4 +1,5 @@
 const { Emoji, Guild, GuildMember, ShardClientUtil, User } = require('discord.js');
+const Data = require('./data');
 const Raven = require('raven');
 
 const EmojiExtension = require('./extensions/Emoji');
@@ -12,7 +13,7 @@ const Database = require('./structures/PostgreSQL');
 const Redis = require('./structures/Redis');
 
 process.on('unhandledRejection', Logger.instance.error.bind(Logger.instance, '[REJECTION]:'));
-Raven.config('https://27e26b64bed14c6a84bd91f35a52d914:6f98cea9e01a4eba86cfe139ed97e8aa@sentry.io/196287').install();
+Raven.config(Data.ravenToken).install();
 
 EmojiExtension.extend(Emoji);
 GuildExtension.extend(Guild);
@@ -25,4 +26,4 @@ Redis.instance.start();
 
 const client = new Client({ disableEveryone: true });
 
-client.login();
+client.login(Data.clientToken);

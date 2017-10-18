@@ -1,12 +1,13 @@
 const { ShardingManager } = require('discord.js');
 const { join } = require('path');
 
+const Data = require('./data');
 const Logger = require('./structures/Logger');
 
 const manager = new ShardingManager(join(__dirname, 'index.js'), {
 	totalShards: 'auto',
 	respawn: true,
-	token: ''
+	token: Data.clientToken
 });
 
 manager.spawn();
