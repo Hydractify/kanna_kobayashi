@@ -16,7 +16,7 @@ class RichEmbed extends DJSRichEmbed {
 	}
 
 	/**
-	 * Builds a 'meme' RichEmbed instance inherited from a common one,
+	 * Builds an image RichEmbed instance inherited from a common one,
 	 * this just adds an image.
 	 * @param {Message} message Message to read data from 
 	 * @param {User} [model] Sequelize user model instance
@@ -24,7 +24,7 @@ class RichEmbed extends DJSRichEmbed {
 	 * @returns {RichEmbed}
 	 * @static
 	 */
-	static meme(message, model, link) {
+	static image(message, model, link) {
 		return this.common(message, model)
 			.setImage(link);
 	}
