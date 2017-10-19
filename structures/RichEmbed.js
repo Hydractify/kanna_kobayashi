@@ -2,31 +2,31 @@ const { RichEmbed: DJSRichEmbed } = require('discord.js');
 
 class RichEmbed extends DJSRichEmbed {
 	/**
-	 * Builds a common RichEmbed's instance from a message.
+	 * Builds a common RichEmbed instance from a message.
 	 * This sets color and footer.
 	 * @param {Message} message Message to read data from 
-	 * @param {User} [model] User model
+	 * @param {User} [model] Sequelize user model instance
 	 * @return {RichEmbed}
 	 * @static
 	 */
-	static common({ author: { displayAvatarURL, tag }, client}, model) {
+	static common({ author: { displayAvatarURL, tag }, client }, model) {
 		return new this()
 			.setColor(client.color(model))
 			.setFooter(`Requested by ${tag}`, displayAvatarURL);
 	}
 
 	/**
-	 * Builds a RichEmbed
-	 * @param {Message} message DJS Message Object
-	 * @param {Link} link Image link
+	 * Builds a RichEmbed 'meme' RichEmbed instance inherited from a common one,
+	 * this just adds additionally an image.
+	 * @param {Message} message Message to read data from 
+	 * @param {User} [model] Sequelize user model instance
+	 * @param {string} link Image link for the image
 	 * @returns {RichEmbed}
 	 * @static
 	 */
-	static meme({ author: { displayAvatarURL, tag}, client }, model, link) {
-		return new this()
-		.setColor(client.color(model))
-		.setFooter(`Requested by ${tag}`, displayAvatarURL)
-		.setImage(link);
+	static meme(message, model, link) {
+		return this.common(message, model)
+			.setImage(link);
 	}
 
 	/**
