@@ -24,7 +24,7 @@ class EmojiInfoCommand extends Command {
 	}
 
 	async run(message, [emojiName], { authorModel }) {
-		if (!emojiName) return message.reply(', you have to give me something to search for!');
+		if (!emojiName) return message.reply('you have to give me something to search for!');
 
 		let emoji = this.searchEmoji(emojiName);
 
