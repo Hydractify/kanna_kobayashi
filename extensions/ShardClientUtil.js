@@ -1,6 +1,6 @@
-const { Util } = require('discord.js');
+const { ShardClientUtil, Util } = require('discord.js');
 
-const Extension = require('./Extension');
+const { Extension } = require('./Extension');
 
 class ShardClientUtilExtension extends Extension {
 	/**
@@ -36,4 +36,7 @@ class ShardClientUtilExtension extends Extension {
 	}
 }
 
-module.exports = ShardClientUtilExtension;
+module.exports = {
+	Extension: ShardClientUtilExtension,
+	Target: ShardClientUtil
+};

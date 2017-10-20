@@ -1,4 +1,6 @@
-const Extension = require('./Extension');
+const { GuildMember } = require('discord.js');
+
+const { Extension } = require('./Extension');
 
 class GuildMemberExtension extends Extension {
 	permLevel(model) {
@@ -22,4 +24,7 @@ class GuildMemberExtension extends Extension {
 	}
 }
 
-module.exports = GuildMemberExtension;
+module.exports = {
+	Extension: GuildMemberExtension,
+	Target: GuildMember
+};

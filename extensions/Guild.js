@@ -1,5 +1,7 @@
-const Guild = require('../models/Guild');
-const Extension = require('./Extension');
+const { Guild } = require('discord.js');
+
+const GuildModel = require('../models/Guild');
+const { Extension } = require('./Extension');
 
 class GuildExtension extends Extension {
 	/**
@@ -8,7 +10,7 @@ class GuildExtension extends Extension {
 	 */
 	async fetchModel() {
 		if (this.model) return this.model;
-		[this.model] = await Guild.findCreateFind({ where: { id: this.id } });
+		[this.model] = await GuildModel.findCreateFind({ where: { id: this.id } });
 
 		return this.model;
 	}
@@ -34,4 +36,7 @@ class GuildExtension extends Extension {
 	}
 }
 
-module.exports = GuildExtension;
+module.exports = {
+	Extension: GuildExtension,
+	Target: Guild
+};

@@ -1,5 +1,7 @@
-const User = require('../models/User');
-const Extension = require('./Extension');
+const { User } = require('discord.js');
+
+const UserModel = require('../models/User');
+const { Extension } = require('./Extension');
 
 class UserExtension extends Extension {
 	/**
@@ -7,8 +9,11 @@ class UserExtension extends Extension {
 	 * @returns {Promise<User>} Model instance
 	 */
 	fetchModel() {
-		return User.fetchOrCache(this.id);
+		return UserModel.fetchOrCache(this.id);
 	}
 }
 
-module.exports = UserExtension;
+module.exports = {
+	Extension: UserExtension,
+	Target: User
+};

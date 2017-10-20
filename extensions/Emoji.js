@@ -1,4 +1,6 @@
-const Extension = require('./Extension');
+const { Emoji } = require('discord.js');
+
+const { Extension } = require('./Extension');
 
 class EmojiExtension extends Extension {
 	toJSON() {
@@ -13,4 +15,7 @@ class EmojiExtension extends Extension {
 	}
 }
 
-module.exports = EmojiExtension;
+module.exports = {
+	Extension: EmojiExtension,
+	Target: Emoji
+};
