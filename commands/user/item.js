@@ -21,7 +21,7 @@ class ItemCommand extends Command {
 		});
 	}
 
-	run(message, [method, ...args]) {
+	run(message, [method, ...args], { authorModel }) {
 		if (!method) {
 			return message.reply(`you must provide a method! (**\`${this.usage}\`**)`);
 		}
@@ -32,27 +32,26 @@ class ItemCommand extends Command {
 			case 'create':
 			case 'make':
 			case 'update':
-				return this.create(message, args);
+				return this.create(message, args, authorModel);
 
 			case 'structure':
-				return this.structure(message);
+				return this.structure(message, args, authorModel);
 
 			case 'check':
 			case 'find':
-				return this.find(message, args);
+				return this.find(message, args, authorModel);
 
 			case 'trade':
 			case 'give':
-				return this.give(message, args);
+				return this.give(message, args, authorModel);
 
 			default:
 				return message.reply(`Unknown method \`${method}\`.`);
 		}
 	}
 
-	async create(message, args) {
-		const userModel = await message.author.fetchModel();
-		if (userModel.type !== 'DEV') {
+	async create(message, args, authorModel) {
+		if (authorModel.type !== 'DEV') {
 			return message.reply('only developers can make or update items! <:KannaOmfg:315264558279426048>');
 		}
 
@@ -87,9 +86,8 @@ class ItemCommand extends Command {
 		}
 	}
 
-	async structure(message) {
-		const userModel = await message.author.fetchModel();
-		if (userModel.type !== 'DEV') {
+	structure(message, args, authorModel) {
+		if (authorModel.type !== 'DEV') {
 			return message.reply('only developers can see the structure of items! <:KannaOmfg:315264558279426048>');
 		}
 
@@ -108,7 +106,7 @@ class ItemCommand extends Command {
 		]);
 	}
 
-	async find(message, args) {
+	async find(message, args, authorModel) {
 		const item = await Item.findOne({
 			include: [{
 				as: 'holders',
@@ -121,7 +119,7 @@ class ItemCommand extends Command {
 		});
 		if (!item) return message.reply('could not find an item with that name!');
 
-		const embed = RichEmbed.common(message, await message.author.fetchModel())
+		const embed = RichEmbed.common(message, authorModel)
 			.setAuthor(`Information about the ${item.type.toLowerCase()} "${item.name}"`, this.client.displayAvatarURL)
 			.setThumbnail(message.guild.iconURL)
 			.setDescription(item.description || '\u200b');
@@ -153,7 +151,7 @@ class ItemCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	async give(message, [target, ...search]) {
+	async give(message, [target, ...search], authorModel) {
 		if (!target) return message.reply('you have to tell me who you want to give an item or badge.');
 		if (!search.length) return message.reply('you also have to tell me what item or badge you want to give.');
 
@@ -170,7 +168,6 @@ class ItemCommand extends Command {
 
 		const type = item.type === 'BADGE' ? 'Badge' : 'Item';
 
-		const authorModel = await message.author.fetchModel();
 		const [sourceItem] = await authorModel[`get${type}s`]({ where: { id: item.id } });
 		if (!sourceItem) return message.reply(`you don't have the \`${item.name}\` ${type.toLowerCase()}!`);
 

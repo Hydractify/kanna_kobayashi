@@ -18,7 +18,7 @@ class GuildInfoCommand extends Command {
 		});
 	}
 
-	async run(message) {
+	async run(message, __, { authorModel }) {
 		const { guild } = message;
 		if (guild.memberCount > guild.members.size) await guild.fetchMembers();
 
@@ -37,7 +37,7 @@ class GuildInfoCommand extends Command {
 			++counts[type];
 		}
 
-		const embed = RichEmbed.common(message, await message.author.fetchModel())
+		const embed = RichEmbed.common(message, authorModel)
 			.setThumbnail(guild.iconURL)
 			.setAuthor(`${guild.name}'s stats`, guild.iconURL)
 			.setDescription('\u200b')

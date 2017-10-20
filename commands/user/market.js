@@ -16,46 +16,44 @@ class MarketCommand extends Command {
 			examples: ['market buy some item'],
 			exp: 0,
 			name: 'market',
+			// TODO: More methods?
 			usage: 'market <Method> <>',
 			permLevel: 0
 		});
 	}
 
-	run(message, [method, ...args]) {
+	run(message, [method, ...args], { authorModel }) {
 		if (!method) {
 			return message.reply(`you must provide a method! (**\`${this.usage}\`**)`);
 		}
 
 		switch (method) {
 			case 'buy':
-				return this.buy(message, args);
+				return this.buy(message, args, authorModel);
 
 			default:
 				return message.reply(`**${method}** is not a method!`);
 		}
 	}
 
-	async buy(message, args) {
-		const [userModel, item] = await Promise.all([
-			message.author.fetchModel(),
-			Item.findOne({
-				include: [{
-					as: 'holders',
-					joinTableAttributes: ['count'],
-					model: User,
-					required: false,
-					where: { id: message.author.id }
-				}],
-				where: where(fn('lower', col('name')), args.join(' ').toLowerCase())
-			})
-		]);
+	async buy(message, args, authorModel) {
+		const item = await Item.findOne({
+			include: [{
+				as: 'holders',
+				joinTableAttributes: ['count'],
+				model: User,
+				required: false,
+				where: { id: message.author.id }
+			}],
+			where: where(fn('lower', col('name')), args.join(' ').toLowerCase())
+		});
 
 		if (!item) return message.reply('I could not find an item or badge with that name!');
 		if (!item.buyable) {
 			return message.reply(`the **${item.name}** ${item.type.toLowerCase()} is not to buy!`);
 		}
 
-		const [already] = await userModel[`get${titleCase(item.type)}s`]({ where: { id: item.id } });
+		const [already] = await authorModel[`get${titleCase(item.type)}s`]({ where: { id: item.id } });
 
 		if (item.unique && already) {
 			return message.reply(`you already own the unique **${item.name}** ${item.type.toLowerCase()}!`);
@@ -81,16 +79,16 @@ class MarketCommand extends Command {
 		}
 
 		if (/^(y|yes)/i.test(collected.first())) {
-			if (userModel.coins < item.price) {
+			if (authorModel.coins < item.price) {
 				return message.reply('you do not have enough coins to buy that item! <:KannaWtf:320406412133924864>');
 			}
 
 			const transaction = await db.transaction();
 
-			const promises = [userModel.increment({ coins: -item.price }, { transaction })];
+			const promises = [authorModel.increment({ coins: -item.price }, { transaction })];
 
 			if (already) promises.push(already.setItemCount(already.count + 1, { transaction }));
-			else promises.push(userModel[`add${titleCase(item.type)}`](item, { transaction }));
+			else promises.push(authorModel[`add${titleCase(item.type)}`](item, { transaction }));
 
 			await Promise.all(promises);
 			await redis.hincrby(`users::${message.author.id}`, 'coins', -item.price);

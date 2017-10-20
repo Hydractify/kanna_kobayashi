@@ -11,11 +11,11 @@ class UrbanCommand extends Command {
 			description: 'Search up a definition for your query on urbandictonary.',
 			examples: ['urban test'],
 			name: 'urban',
-			usage: 'urban <...term>'
+			usage: 'urban <...Term>'
 		});
 	}
 
-	async run(message, args) {
+	async run(message, args, { authorModel }) {
 		if (!args.length) {
 			return message.channel.send([
 				`Hey ${message.author}... You are supposed to tell me what to search`,
@@ -26,7 +26,7 @@ class UrbanCommand extends Command {
 		const query = encodeURIComponent(args.join('+').replace(/%2B/g, '+'));
 		const { body: { list } } = await get(`http://api.urbandictionary.com/v0/define?term=${query}`);
 
-		const embed = RichEmbed.common(message, await message.author.fetchModel())
+		const embed = RichEmbed.common(message, authorModel)
 			.setAuthor(`Search result for ${titleCase(args.join(' '))}`,
 				'https://d2gatte9o95jao.cloudfront.net/assets/store-mug-example-256@2x-34cb1d3724cbce5ce790228b5bf8eabe.png')
 			.setDescription('\u200b')

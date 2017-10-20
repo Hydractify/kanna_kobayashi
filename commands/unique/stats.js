@@ -21,7 +21,7 @@ class StatsCommand extends Command {
 		});
 	}
 
-	async run(message) {
+	async run(message, args, { authorModel }) {
 		const { guilds, users, other } = await
 			this.client.shard.broadcastEval([
 				'({',
@@ -49,7 +49,7 @@ class StatsCommand extends Command {
 		].join(' ');
 		const ram = other.map(shard => `Shard ${shard.shardId + 1}: ${shard.ram}`);
 
-		const embed = RichEmbed.common(message, await message.author.fetchModel())
+		const embed = RichEmbed.common(message, authorModel)
 			.setAuthor(`${this.client.user.username}'s stats`, this.client.user.displayAvatarURL)
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL)

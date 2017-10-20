@@ -14,7 +14,7 @@ class QuizDurationCommand extends Command {
 			],
 			exp: 0,
 			name: 'quizduration',
-			usage: 'quizduration <\'view\'|\'set\'> [minutes]',
+			usage: 'quizduration <\'view\'|\'set\'> [Minutes]',
 			permLevel: 1
 		});
 	}

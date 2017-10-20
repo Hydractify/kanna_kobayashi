@@ -21,9 +21,8 @@ class HelpCommand extends Command {
 		});
 	}
 
-	async run(message, [name]) {
-		const authorModel = await message.author.fetchModel();
-
+	async run(message, [name], { authorModel }) {
+		if (name) name = name.toLowerCase();
 		if (!name || name === 'all') {
 			const [embeds, categoryCount] = this.mapCategories(message, authorModel);
 
@@ -73,8 +72,7 @@ class HelpCommand extends Command {
 
 			return undefined;
 		}
-		
-		name = name.toLowerCase();		
+
 		return this.findCategory(message, name, authorModel)
 			|| this.findCommand(message, name, authorModel);
 	}

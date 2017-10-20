@@ -30,9 +30,7 @@ class QuizPremadeCommand extends Command {
 		];
 	}
 
-	async run(message) {
-		const authorModel = await message.author.fetchModel();
-
+	async run(message, args, { authorModel }) {
 		const embed = RichEmbed.common(message, authorModel)
 			.setTitle('Take your pick!')
 			.setDescription('This will replace the current set up quiz in this guild.')

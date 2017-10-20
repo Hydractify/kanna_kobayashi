@@ -55,12 +55,15 @@ class ImageEmbedCommand extends Command {
 	/**
 	 * Default basic implementation for an image embed command.
 	 * @param {Message} message Incoming message
+	 * @param {string[]} __ Args
+	 * @param {Object} options Additional data
+	 * @param {User} options.authorModel Sequelize user model instance
+	 * @param {string} options.commandName Name or alias of the called command
 	 * @returns {Promise<Message>}
 	 * @virtual
 	 */
-	async run(message) {
-		const model = await message.author.fetchModel();
-		const embed = this.imageEmbed(message, model);
+	run(message, __, { authorModel }) {
+		const embed = this.imageEmbed(message, authorModel);
 
 		return message.channel.send(embed);
 	}

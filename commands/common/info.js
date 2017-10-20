@@ -15,8 +15,8 @@ class InfoCommand extends Command {
 		});
 	}
 
-	async run(message) {
-		const embed = RichEmbed.common(message, await message.author.fetchModel())
+	run(message, __, { authorModel }) {
+		const embed = RichEmbed.common(message, authorModel)
 			.setAuthor(`${this.client.user.username} Info`, this.client.user.displayAvatarURL)
 			.setDescription('\u200b')
 			.addField('Invite', 'http://kannathebot.me/invite', true)

@@ -19,11 +19,13 @@ class EmojiInfoCommand extends Command {
 			],
 			exp: 0,
 			name: 'emojiinfo',
-			usage: 'emojiinfo <emoji>'
+			usage: 'emojiinfo <Emoji>'
 		});
 	}
 
-	async run(message, [emojiName]) {
+	async run(message, [emojiName], { authorModel }) {
+		if (!emojiName) return message.reply(', you have to give me something to search for!');
+
 		let emoji = this.searchEmoji(emojiName);
 
 		if (!emoji) {
@@ -56,7 +58,7 @@ class EmojiInfoCommand extends Command {
 
 		const createdAtString = moment(emoji.createdTimestamp).format('MM/DD/YYYY (HH:mm)');
 		const createdBeforeString = moment(emoji.createdTimestamp).fromNow();
-		const embed = RichEmbed.common(message)
+		const embed = RichEmbed.common(message, authorModel)
 			.addField('Name', emoji.name, true)
 			.addField('ID', emoji.id, true)
 			.addField('Created', createdAtString, true)

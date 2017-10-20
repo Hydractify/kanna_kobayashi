@@ -7,12 +7,12 @@ class ChooseCommand extends Command {
 			description: 'Let the bot choose one of the supplied options.',
 			examples: ['choose Tohru|Kanna', 'choose Tohru Kanna'],
 			name: 'choose',
-			usage: 'choose <...options>'
+			usage: 'choose <...Choices>'
 		});
 	}
 
 	run(message, args) {
-		if (!args.length) return message.reply(`you must give me something to choose from! (\`${this.usage}\`)`);
+		if (!args.length) return message.reply(`you have to give me some choices! (\`${this.usage}\`)`);
 
 		const joined = args.join(' ');
 

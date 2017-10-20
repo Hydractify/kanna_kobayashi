@@ -12,13 +12,13 @@ class PrefixCommand extends Command {
 			],
 			exp: 0,
 			name: 'prefix',
-			usage: 'prefix [...prefix]',
+			usage: 'prefix [...Prefix]',
 			// Allow everyone to look
 			permLevel: 0
 		});
 	}
 
-	async run(message, args) {
+	async run(message, args, { authorModel }) {
 		if (!args.length) {
 			const prefixes = `always working prefixes are: \`@${this.client.user.tag} \u200b\`, \`k!\` and \`kanna \u200b\``;
 			if (!message.guild.model.prefixes.length) {
@@ -31,7 +31,7 @@ class PrefixCommand extends Command {
 		}
 
 		// Disallow every non "mod" to change
-		if (message.member.permLevel(await message.author.fetchModel()) < 2) {
+		if (message.member.permLevel(authorModel) < 2) {
 			return message.reply(`you do not have the required permission level to set the prefix!`);
 		}
 

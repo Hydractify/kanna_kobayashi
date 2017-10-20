@@ -16,7 +16,7 @@ class DonateCommand extends Command {
 		});
 	}
 
-	async run(message, [input, amount]) {
+	async run(message, [input, amount], { authorModel }) {
 		if (!input) return message.reply(`you must give me a user! (\`${this.usage}\`)`);
 		if (!amount) return message.reply(`you must give me an amount! (\`${this.usage}\`)`);
 
@@ -28,13 +28,10 @@ class DonateCommand extends Command {
 			return message.reply('you must give me a valid amount, which must be a positive number!');
 		}
 
-		const [authorModel, mentionedModel] = await Promise.all([
-			message.author.fetchModel(),
-			mentionedUser.fetchModel()
-		]);
 		if (authorModel.coins < userAmount) return message.reply('you do not have that amount of money to donate!');
 
 		const transaction = await db.transaction();
+		const mentionedModel = await mentionedUser.fetchModel();
 
 		await Promise.all([
 			authorModel.increment({ coins: -amount }, { transaction }),

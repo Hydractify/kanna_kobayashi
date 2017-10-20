@@ -10,7 +10,7 @@ class DiscriminatorCommand extends Command {
 			description: 'Searches for user with a certain discriminator',
 			examples: ['discrim 0001'],
 			name: 'discriminator',
-			usage: 'discriminator <discrim>',
+			usage: 'discriminator <Discriminator>',
 			permLevel: 0
 		});
 	}

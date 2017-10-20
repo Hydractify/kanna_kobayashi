@@ -70,7 +70,7 @@ class CommandHandler {
 		await authorModel.createCommandLog({ userId: message.author.id, commandName: command.name });
 
 		try {
-			await command.run(message, args, commandName);
+			await command.run(message, args, { commandName, authorModel });
 			await this.handleRewards(message, authorModel, guildModel, command);
 		} catch (error) {
 			if (process.env.NODE_ENV !== 'dev') {

@@ -20,7 +20,7 @@ class QuizPhotoCommand extends Command {
 		});
 	}
 
-	async run(message, [option, photo]) {
+	async run(message, [option, photo], { authorModel }) {
 		if (!option) {
 			return message.reply([
 				'you also need to tell me whether you want to',
@@ -37,7 +37,7 @@ class QuizPhotoCommand extends Command {
 				return message.reply('the set up quiz has no character photo associated with it.');
 			}
 
-			const embed = RichEmbed.common(message, await message.author.fetchModel())
+			const embed = RichEmbed.common(message, authorModel)
 				.setTitle('Current Quiz:')
 				.setDescription(quiz.name ? titleCase(quiz.name) : 'No name set up yet')
 				.setImage(quiz.photo);
@@ -52,7 +52,7 @@ class QuizPhotoCommand extends Command {
 
 			let quiz = await message.guild.model.getQuiz();
 
-			const embed = RichEmbed.common(message, await message.author.fetchModel())
+			const embed = RichEmbed.common(message, authorModel)
 				.setTitle('Setting up photo...')
 				.setImage(photo);
 

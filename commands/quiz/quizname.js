@@ -20,7 +20,7 @@ class QuizNameCommand extends Command {
 		});
 	}
 
-	async run(message, [option, ...name]) {
+	async run(message, [option, ...name], { authorModel }) {
 		if (!option) {
 			return message.reply([
 				'you also need to tell me whether you want to',
@@ -38,7 +38,7 @@ class QuizNameCommand extends Command {
 			}
 
 			if (quiz.photo) {
-				const embed = RichEmbed.common(message, await message.author.fetchModel())
+				const embed = RichEmbed.common(message, authorModel)
 					.setTitle('Current quiz:')
 					.setDescription(titleCase(quiz.name))
 					.setImage(quiz.photo);
@@ -63,7 +63,7 @@ class QuizNameCommand extends Command {
 				quiz.name = name.join(' ');
 				await quiz.save();
 				if (quiz.photo) {
-					toSend = RichEmbed.common(message, await message.author.fetchModel())
+					toSend = RichEmbed.common(message, authorModel)
 						.setTitle(titleCase(quiz.name))
 						.setImage(quiz.photo);
 				}

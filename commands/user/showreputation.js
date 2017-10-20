@@ -18,7 +18,7 @@ class ShowReputationCommand extends Command {
 		});
 	}
 
-	async run(message, [target]) {
+	async run(message, [target], { authorModel }) {
 		const member = target
 			? await this.handler.resolveMember(message.guild, target, false)
 			: message.member;
@@ -36,7 +36,7 @@ class ShowReputationCommand extends Command {
 		});
 		if (!positive && !negative) return message.reply(`**${member.user.tag}** does not have any reputations.`);
 
-		const embed = RichEmbed.common(message, await message.author.fetchModel())
+		const embed = RichEmbed.common(message, authorModel)
 			.setAuthor(`Reputation for ${member.user.tag}`, message.client.user.displayAvatarURL);
 		// One is always present here
 		if (positive) embed.addField('Positive', positive, true);

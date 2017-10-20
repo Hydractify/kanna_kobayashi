@@ -17,7 +17,7 @@ class QuizStartCommand extends Command {
 		});
 	}
 
-	async run(message) {
+	async run(message, args, { authorModel }) {
 		const quiz = await message.guild.model.getQuiz();
 		if (!quiz || !quiz.name || !quiz.photo) {
 			return message.reply([
@@ -27,7 +27,7 @@ class QuizStartCommand extends Command {
 			].join('\n'));
 		}
 
-		const eventEmbed = RichEmbed.common(message, await message.author.fetchModel())
+		const eventEmbed = RichEmbed.common(message, authorModel)
 			.setAuthor(`${message.author.tag} started an event!`)
 			.setImage(quiz.photo)
 			.addField('Who is this character?', `You have ${quiz.duration} minutes to answer!`);

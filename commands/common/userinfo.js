@@ -18,7 +18,7 @@ class UserInfoCommand extends Command {
 		});
 	}
 
-	async run(message, [input]) {
+	async run(message, [input], { authorModel }) {
 		const user = input
 			? await this.handler.resolveMember(message.guild, input)
 				.then(member => member
@@ -34,7 +34,7 @@ class UserInfoCommand extends Command {
 		roles.delete(message.guild.id);
 		roles = mapIterator(roles.values());
 
-		const embed = RichEmbed.common(message, await message.author.fetchModel())
+		const embed = RichEmbed.common(message, authorModel)
 			.setAuthor(`Info about ${user.tag}`, user.displayAvatarURL, user.displayAvatarURL)
 			.setDescription('\u200b')
 			.addField('ID', user.id, true)

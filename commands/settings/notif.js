@@ -13,7 +13,7 @@ class NotifCommand extends Command {
 			],
 			exp: 0,
 			name: 'notif-channel',
-			usage: 'notif [channel]',
+			usage: 'notif [Channel]',
 			permLevel: 2
 		});
 	}

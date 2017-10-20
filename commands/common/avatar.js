@@ -15,7 +15,7 @@ class AvatarCommand extends Command {
 		});
 	}
 
-	async run(message, [input]) {
+	async run(message, [input], { authorModel }) {
 		const user = input
 			? await this.handler.resolveMember(message.guild, input)
 				.then(member => member
@@ -25,7 +25,7 @@ class AvatarCommand extends Command {
 			: message.author;
 		if (!user) return message.reply(`I could not find a user with ${input}.`);
 
-		const embed = RichEmbed.common(message, await user.fetchModel())
+		const embed = RichEmbed.common(message, authorModel)
 			.setAuthor(`${user.tag}'s avatar`, user.displayAvatarURL, user.displayAvatarURL)
 			.setImage(user.displayAvatarURL);
 

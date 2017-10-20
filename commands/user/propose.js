@@ -16,16 +16,13 @@ class ProposeCommand extends Command {
 		});
 	}
 
-	async run(message, [input]) {
+	async run(message, [input], { authorModel }) {
 		if (!input) return message.reply(`you are missing someone to propose to! (\`${this.usage}\`)`);
 		const mentionedUser = await this.handler.resolveUser(input, false);
 		if (!mentionedUser) return message.reply(`I could not find a non bot user with **${input}**.`);
 		if (mentionedUser.id === message.author.id) return message.reply('you can not propose to yourself.');
 
-		const [authorModel, mentionedModel] = await Promise.all([
-			message.author.fetchModel(),
-			mentionedUser.fetchModel()
-		]);
+		const mentionedModel = await mentionedUser.fetchModel();
 
 		const checked = await this.relationCheck(message, mentionedUser, authorModel);
 
