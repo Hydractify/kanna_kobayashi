@@ -4,7 +4,6 @@ class HungryMemeCommand extends ImageEmbedCommand {
 	constructor(handler) {
 		super(handler, {
 			aliases: ['food'],
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'See Kanna satisfy her hunger! (And curiosity)',
 			examples: ['hungry'],
 			name: 'hungry',
