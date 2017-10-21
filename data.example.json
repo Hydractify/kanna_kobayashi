@@ -1,0 +1,10 @@
+{
+	"ravenToken": "",
+	"clientToken": "",
+	"anilist": {
+		"client_id": "",
+		"client_secret": ""
+	},
+	"dbots": "",
+	"fakedbots": ""
+}
