@@ -15,9 +15,15 @@ class ImageEmbedCommand extends Command {
 	 * the max number of the file name 
 	 */
 	constructor(handler, options, baseURLOrArray, maxNumber) {
+		super(handler, options);
+
 		if (options.clientPermissions) options.clientPermissions.push('EMBED_LINKS');
 		else options.clientPermissions = ['EMBED_LINKS'];
-		super(handler, options);
+
+		if (options.messageContent) {
+			if (typeof options.messageContent !== 'string') throw new TypeError(`${this.name} messageContent must be a string!`);
+			this.messageContent = options.messageContent;
+		}
 
 		if (!baseURLOrArray) {
 			throw new Error(`${this.name} must be passed an array of urls or a base url and a maxNumber!`);
@@ -67,7 +73,7 @@ class ImageEmbedCommand extends Command {
 	run(message, __, { authorModel }) {
 		const embed = this.imageEmbed(message, authorModel);
 
-		return message.channel.send(embed);
+		return message.channel.send(this.messageContent, embed);
 	}
 }
 

@@ -7,7 +7,8 @@ class HungryMemeCommand extends ImageEmbedCommand {
 			description: 'See Kanna satisfy her hunger! (And curiosity)',
 			examples: ['hungry'],
 			name: 'hungry',
-			usage: 'hungry'
+			usage: 'hungry',
+			messageContent: '**Feed me!** <:KannaOh:315264555859181568>'
 		}, [
 			'http://kannathebot.me/memes/hungry/1.gif',
 			'http://kannathebot.me/memes/hungry/2.gif',
