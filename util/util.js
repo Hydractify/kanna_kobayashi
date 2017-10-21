@@ -99,6 +99,43 @@ class Util {
 		return proto;
 	}
 
+	// eslint-disable-next-line max-len
+	// https://github.com/SpaceEEC/yamdbf-anilist-unofficial/commit/aaecf4c7429d618641bd3563eb07b3db1d427c0d#diff-b10e04079822a0a088ccb4d434a520cfR45
+	/**
+	 * Splits an array into smaller chunks.
+	 * The original array will not be modified.
+	 * @param {T[]} input The array to split
+	 * @param {number} chunkSize The size of the chunks
+	 * @returns {Array<T[]>}
+	 * @static
+	 */
+	static chunkArray(input, chunkSize) {
+		const chunks = [];
+		const length = Math.ceil(input.length / chunkSize);
+
+		for (let i = 0; i < length; null) {
+			chunks.push(input.slice(i * chunkSize, ++i * chunkSize));
+		}
+
+		return chunks;
+	}
+
+	/**
+	 * Replaces parts of a string determined by the specified object.
+	 * @param {string} input The original string
+	 * @param {Object} map The object literal with keys as before and values as after the replace
+	 * @returns {string}
+	 * @static
+	 */
+	static replaceMap(input, map) {
+		const regex = [];
+		for (const key of Object.keys(map)) {
+			regex.push(key.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&'));
+		}
+
+		return input.replace(new RegExp(regex.join('|'), 'g'), element => map[element]);
+	}
+
 	// Straight copy from
 	// https://github.com/Gawdl3y/discord.js-commando/blob/943e3c497de92db3b58670990fbb7f8dc64d42bd/src/util.js#L6-L17
 	/**
