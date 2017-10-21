@@ -101,7 +101,7 @@ class HelpCommand extends Command {
 
 			for (const command of commands) {
 				if (command.permLevel > permLevel) continue;
-				embed.addField(`kanna ${command.name}`, command.usage, true);
+				embed.addField(`kanna ${command.name}`, `<prefix> ${command.usage}`, true);
 			}
 
 			if (embed.fields.length) embeds.push(embed);
