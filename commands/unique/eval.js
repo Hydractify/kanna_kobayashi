@@ -36,7 +36,7 @@ class EvalCommand extends Command {
 				else evaled = tmp;
 			}
 
-			return message.channel.send(evaled, { code: 'js' });
+			return message.channel.send(evaled || '\u200b', { code: 'js' });
 		} catch (error) {
 			return message.channel.send(
 				[
