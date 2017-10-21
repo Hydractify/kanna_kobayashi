@@ -8,7 +8,15 @@ class HungryMemeCommand extends ImageEmbedCommand {
 			examples: ['hungry'],
 			name: 'hungry',
 			usage: 'hungry'
-		}, 'http://kannathebot.me/memes/hungry/', 2);
+		}, [
+			'http://kannathebot.me/memes/hungry/1.gif',
+			'http://kannathebot.me/memes/hungry/2.gif',
+			'http://kannathebot.me/memes/hungry/3.jpg',
+			'http://kannathebot.me/memes/hungry/4.jpg',
+			'http://kannathebot.me/memes/hungry/5.jpg',
+			'http://kannathebot.me/memes/hungry/6.jpg',
+			'http://kannathebot.me/memes/hungry/7.jpg'
+		]);
 	}
 }
 

@@ -7,7 +7,9 @@ class RainMemeCommand extends ImageEmbedCommand {
 			examples: ['rain'],
 			name: 'rain',
 			usage: 'rain'
-		}, 'htpp://kannathebot.me/memes/rain/', 1);
+		}, [
+			'http://kannathebot.me/memes/rain/1.gif'
+		]);
 	}
 }
 

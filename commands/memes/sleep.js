@@ -6,7 +6,8 @@ class SleepMemeCommand extends ImageEmbedCommand {
 			description: 'It is time to sleep!',
 			examples: ['sleep'],
 			name: 'sleep',
-			usage: 'sleep'
+			usage: 'sleep',
+			aliases: ['bosssleeppls']
 		}, [
 			'http://kannathebot.me/memes/sleep/1.png',
 			'http://kannathebot.me/memes/sleep/2.jpg',
