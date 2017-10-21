@@ -10,3 +10,5 @@ class RainMemeCommand extends ImageEmbedCommand {
 		}, 'htpp://kannathebot.me/memes/rain/', 1);
 	}
 }
+
+module.exports = RainMemeCommand;
