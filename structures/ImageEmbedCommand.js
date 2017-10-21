@@ -15,6 +15,7 @@ class ImageEmbedCommand extends Command {
 	 * the max number of the file name 
 	 */
 	constructor(handler, options, baseURLOrArray, maxNumber) {
+		options.clientPermissions = ['EMBED_LINKS'];
 		super(handler, options);
 
 		if (!baseURLOrArray) {

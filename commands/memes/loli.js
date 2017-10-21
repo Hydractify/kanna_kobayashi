@@ -4,7 +4,6 @@ class LoliMemeCommand extends ImageEmbedCommand {
 	constructor(handler) {
 		super(handler, {
 			aliases: ['kanna'],
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Protect all the lolis!',
 			examples: ['loli'],
 			name: 'loli',
