@@ -5,9 +5,11 @@ class PopcornMemeCommand extends ImageEmbedCommand {
 		super(handler, {
 			examples: ['popcorn'],
 			name: 'popcorn',
-			usage: 'popcorn'
+			usage: 'popcorn',
+			description: 'Popcorn!',
+			aliases: ['dreck']
 		}, [
-			'http://kannathebot.me/memes/kanna-popcorn.png'
+			'http://kannathebot.me/memes/popcorn/1.png'
 		]);
 	}
 }
