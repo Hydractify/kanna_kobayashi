@@ -5,11 +5,10 @@ class YummyMemeCommand extends ImageEmbedCommand {
 		super(handler, {
 			description: 'The pure art of noodles',
 			examples: ['yummy'],
+			images: ['http://kannathebot.me/memes/yummy/1.png'],
 			name: 'yummy',
 			usage: 'yummy'
-		}, [
-			'http://kannathebot.me/memes/yummy/1.png'
-		]);
+		});
 	}
 }
 

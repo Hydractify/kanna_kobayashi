@@ -9,12 +9,10 @@ class ImageEmbedCommand extends Command {
 	/**
 	 * Instantiate a new ImageEmbedCommand
 	 * @param {CommandHandler} handler Instantiating CommandHandler
-	 * @param {CommandOptions} options Regular command options
-	 * @param {string|string[]} baseURLOrArray Either the base url or an array of urls
-	 * @param {number} [maxNumber] If a base url is passed,
+	 * @param {CommandOptions} options Command options, including baseURL and maxNumber or images
 	 * the max number of the file name 
 	 */
-	constructor(handler, options, baseURLOrArray, maxNumber) {
+	constructor(handler, options) {
 		super(handler, options);
 
 		if (options.clientPermissions) options.clientPermissions.push('EMBED_LINKS');
@@ -28,23 +26,21 @@ class ImageEmbedCommand extends Command {
 			this.messageContent = options.messageContent;
 		}
 
-		if (!baseURLOrArray) {
-			throw new Error(`${this.name} must be passed an array of urls or a base url and a maxNumber!`);
-		}
-
-		if (baseURLOrArray instanceof Array) {
-			if (!baseURLOrArray.length) {
-				throw new Error(`${this.name}'s url array can't be empty!`);
-			}
-
-			this._urlArray = baseURLOrArray;
-		} else {
-			if (typeof maxNumber !== 'number') {
+		if (options.baseURL) {
+			if (typeof options.maxNumber !== 'number') {
 				throw new Error(`${this.name}'s max number must be a number!`);
 			}
 
-			this._baseURL = baseURLOrArray;
-			this._maxNumber = maxNumber;
+			this._baseURL = options.baseURL;
+			this._maxNumber = options.maxNumber;
+		} else if (options.images) {
+			if (!options.images.length) {
+				throw new Error(`${this.name}'s url array can't be empty!`);
+			}
+
+			this._images = options.images;
+		} else {
+			throw new Error(`${this.name}'s options are missing a base URL or an images array!`);
 		}
 	}
 
@@ -57,7 +53,7 @@ class ImageEmbedCommand extends Command {
 	imageEmbed(message, userModel) {
 		const image = this._baseURL
 			? `${this._baseURL}${Math.floor(Math.random() * this._maxNumber) + 1}.gif`
-			: this._urlArray[Math.floor(Math.random() * this._urlArray.length)];
+			: this._images[Math.floor(Math.random() * this._images.length)];
 
 		return RichEmbed.image(message, userModel, image);
 	}
