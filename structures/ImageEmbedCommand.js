@@ -21,7 +21,10 @@ class ImageEmbedCommand extends Command {
 		else options.clientPermissions = ['EMBED_LINKS'];
 
 		if (options.messageContent) {
-			if (typeof options.messageContent !== 'string') throw new TypeError(`${this.name} messageContent must be a string!`);
+			if (typeof options.messageContent !== 'string') {
+				throw new TypeError(`${this.name} messageContent must be a string!`);
+			}
+
 			this.messageContent = options.messageContent;
 		}
 
@@ -36,12 +39,11 @@ class ImageEmbedCommand extends Command {
 
 			this._urlArray = baseURLOrArray;
 		} else {
-			this._baseURL = baseURLOrArray;
-
 			if (typeof maxNumber !== 'number') {
 				throw new Error(`${this.name}'s max number must be a number!`);
 			}
 
+			this._baseURL = baseURLOrArray;
 			this._maxNumber = maxNumber;
 		}
 	}
