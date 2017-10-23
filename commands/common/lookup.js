@@ -24,7 +24,7 @@ class LookupCommand extends Command {
 
 	async run(message, [code], { authorModel }) {
 		if (!code) return message.reply('you have to give me an invite link or code!');
-		const { guild, channel, memberCount, presenceCount } = await this.client.fetchInvite(code) || {};
+		const { guild, channel, memberCount, presenceCount } = await this.client.fetchInvite(code).catch(() => null) || {};
 		if (!guild) return message.reply('I couldn\'t find a valid invite for this link or code.');
 
 		// This shard is part of that guild, give full info
