@@ -175,7 +175,7 @@ class CommandHandler {
 	 * Whether the command can be run by the caller.
 	 * - Ensures that the bot and caller have correct permissions to execute the command.
 	 * - That it's enabled.
-	 * - That i's not on cooldown
+	 * - That it's not on cooldown
 	 * If not sends a message and returns false.
 	 * @param {Message} message Incoming message
 	 * @param {User} authorModel Model of the author of the message
