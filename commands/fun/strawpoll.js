@@ -3,7 +3,7 @@ const { get, post } = require('snekfetch');
 const Command = require('../../structures/Command');
 const RichEmbed = require('../../structures/RichEmbed');
 
-class StrawpollCommand extends Command {
+class StrawPollCommand extends Command {
 	constructor(handler) {
 		super(handler, {
 			aliases: ['poll'],
@@ -110,4 +110,4 @@ class StrawpollCommand extends Command {
 	}
 }
 
-module.exports = StrawpollCommand;
+module.exports = StrawPollCommand;
