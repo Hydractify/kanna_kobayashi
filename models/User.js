@@ -41,11 +41,12 @@ class User extends Model {
 	 */
 	static fromRedis(data, isNewRecord = false) {
 		// Not optimal but /shrug
-		if (data.type === 'null') data.type = null;
-		if (data.partnerId === 'null') data.partnerId = null;
-		if (data.partnerMarried === 'null') data.partnerMarried = null;
-		if (data.partnerSince === 'null') data.partnerSince = null;
+		if (!data.type) data.type = null;
+		if (!data.partnerId) data.partnerId = null;
+		if (!data.partnerMarried) data.partnerMarried = null;
+		if (!data.partnerSince) data.partnerSince = null;
 		else data.partnerSince = new Date(Number(data.partnerSince));
+
 		data.coins = Number(data.coins);
 		data.exp = Number(data.exp);
 
@@ -57,18 +58,28 @@ class User extends Model {
 	 * @param {User} user To update user instance
 	 */
 	static updateRedis(user) {
-		redis.hmsetAsync(`users::${user.id}`, user.toRedis());
-	}
+		const data = user.toJSON();
+		const nullKeys = [];
 
-	/**
-	 * Returns a JSON stringifyable presentation of this object.
-	 * @returns {Object}
-	 */
-	toRedis() {
-		const obj = this.toJSON();
-		// Redis apparently just String(obj) the things
-		if (obj.partnerSince) obj.partnerSince = obj.partnerSince.valueOf();
-		return obj;
+		if (data.partnerSince) data.partnerSince = data.partnerSince.getTime();
+
+		for (const [k, v] of Object.entries(data)) {
+			if (v === null) {
+				delete data[k];
+				nullKeys.push(k);
+			}
+		}
+
+		// Nothing to delete, just one command
+		if (!nullKeys.length) {
+			redis.hmsetAsync(`users::${user.id}`, data);
+			return;
+		}
+
+		const multi = redis.multi();
+		multi.hmset(`users::${user.id}`, data);
+		multi.hdel([`users::${user.id}`, ...nullKeys]);
+		multi.execAsync();
 	}
 
 	/**
