@@ -16,7 +16,7 @@ class User extends Model {
 	 * @returns {Promise<User>} Model
 	 */
 	static async fetchOrCache(id) {
-		const redisData = await redis.hgetallAsync(`users::${id}`);
+		const redisData = await redis.hgetallAsync(`users:${id}`);
 		// User is cached in redis, all good
 		if (redisData) return User.fromRedis(redisData);
 
@@ -72,13 +72,13 @@ class User extends Model {
 
 		// Nothing to delete, just one command
 		if (!nullKeys.length) {
-			redis.hmsetAsync(`users::${user.id}`, data);
+			redis.hmsetAsync(`users:${user.id}`, data);
 			return;
 		}
 
 		const multi = redis.multi();
-		multi.hmset(`users::${user.id}`, data);
-		multi.hdel([`users::${user.id}`, ...nullKeys]);
+		multi.hmset(`users:${user.id}`, data);
+		multi.hdel([`users:${user.id}`, ...nullKeys]);
 		multi.execAsync();
 	}
 
