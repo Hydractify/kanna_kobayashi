@@ -409,7 +409,7 @@ class CommandHandler {
 	 * @param {boolean} [allowEveryone=true] Whether to allow the everyone role to be machted
 	 * @returns {Role}
 	 */
-	resolveRole(roles, input, allowEveryone = true) {
+	resolveRoles(roles, input, allowEveryone = true) {
 		let match = /^<@&(\d{17,19})>$|^(\d{17,19})$/.exec(input);
 		if (match) {
 			match = match[1] || match[2];
