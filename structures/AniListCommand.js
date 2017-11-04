@@ -201,7 +201,7 @@ class AniListCommand extends Command {
 	 * @private
 	 */
 	async _retrieveToken() {
-		let token = await redis.getAsync('anilist::token');
+		let token = await redis.getAsync('anilist:token');
 
 		if (!token) {
 			const {
@@ -211,8 +211,8 @@ class AniListCommand extends Command {
 				}
 			} = await post('https://anilist.co/api/auth/access_token').send(anilist);
 
-			await redis.setAsync('anilist::token', accessToken);
-			await redis.expireAsync('anilist::token', expiresIn);
+			await redis.setAsync('anilist:token', accessToken);
+			await redis.expireAsync('anilist:token', expiresIn);
 
 			token = accessToken;
 		}

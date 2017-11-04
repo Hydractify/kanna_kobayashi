@@ -40,8 +40,8 @@ class DonateCommand extends Command {
 
 		await redis
 			.multi()
-			.hincrby(`users::${message.author.id}`, 'coins', -amount)
-			.hincrby(`users::${mentionedUser.id}`, 'coins', amount)
+			.hincrby(`users:${message.author.id}`, 'coins', -amount)
+			.hincrby(`users:${mentionedUser.id}`, 'coins', amount)
 			.execAsync();
 
 		await transaction.commit();

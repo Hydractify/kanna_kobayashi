@@ -112,14 +112,14 @@ class CommandHandler {
 		const fields = {};
 
 		if (exp) {
-			multi.hincrby(`users::${message.author.id}`, 'exp', exp);
+			multi.hincrby(`users:${message.author.id}`, 'exp', exp);
 			// We read the exp a few lines below this again to check for a levelup
 			authorModel.exp += exp;
 			fields.exp = exp;
 		}
 
 		if (coins) {
-			multi.hincrby(`users::${message.author.id}`, 'coins', coins);
+			multi.hincrby(`users:${message.author.id}`, 'coins', coins);
 			// Model will be discarded directly anyway, no need to add coins to it
 			fields.coins = coins;
 		}

@@ -91,7 +91,7 @@ class MarketCommand extends Command {
 			else promises.push(authorModel[`add${titleCase(item.type)}`](item, { transaction }));
 
 			await Promise.all(promises);
-			await redis.hincrby(`users::${message.author.id}`, 'coins', -item.price);
+			await redis.hincrby(`users:${message.author.id}`, 'coins', -item.price);
 
 			await transaction.commit();
 
