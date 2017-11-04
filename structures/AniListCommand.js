@@ -78,7 +78,7 @@ class AniListCommand extends Command {
 				`For which ${type} would you like to see addition information?`,
 				'Please respond with the number of the entry you wouldlike to see, for example: `3`.',
 				'',
-				'To cancel this prompt respond with `chancel`, this prompt times out after `30` seconds.'
+				'To cancel this prompt respond with `cancel`, this prompt times out after `30` seconds.'
 			]);
 
 		const prompt = await message.channel.send(embed);

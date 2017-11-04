@@ -18,7 +18,8 @@ class LookupCommand extends Command {
 			],
 			exp: 0,
 			name: 'lookup',
-			usage: 'lookup <invite>'
+			usage: 'lookup <invite>',
+			aliases: ['ii', 'lookup']
 		});
 	}
 

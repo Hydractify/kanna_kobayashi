@@ -7,7 +7,7 @@ const { titleCase, mapIterator } = require('../../util/Util');
 class UserInfoCommand extends Command {
 	constructor(handler) {
 		super(handler, {
-			aliases: ['whois', 'ust'],
+			aliases: ['whois', 'ust', 'uu'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
 			description: 'Display information about a specific user.',
