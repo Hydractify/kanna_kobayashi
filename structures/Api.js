@@ -14,6 +14,7 @@ module.exports = {
 		}
 
 		registered.set(name, { baseURL, bodyParams, catchNotFound, defaultHeaders, name, queryParams });
+		return module.exports.get(name);
 	},
 	get: name => {
 		const options = registered.get(name);
