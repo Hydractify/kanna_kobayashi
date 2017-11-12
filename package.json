@@ -1,20 +1,20 @@
 {
   "name": "kanna",
-  "version": "4.0.0-space",
+  "version": "4.1.0-space",
   "description": "\\o/",
   "main": "shard.js",
   "dependencies": {
     "discord.js": "github:hydrabolt/discord.js#stable",
-    "humanize-duration": "^3.10.1",
+    "humanize-duration": "^3.12.0",
     "moment": "^2.19.1",
     "moment-duration-format": "^1.3.0",
     "pg": "^6.4.2",
     "raven": "^2.2.1",
     "redis": "^2.8.0",
-    "sequelize": "^4.13.10"
+    "sequelize": "^4.22.6"
   },
   "devDependencies": {
-    "eslint": "^4.8.0",
+    "eslint": "^4.11.0",
     "eslint-config-aqua": "^2.0.1"
   },
   "scripts": {
