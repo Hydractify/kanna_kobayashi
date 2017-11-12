@@ -49,6 +49,7 @@ class SauceNaoCommand extends Command {
 			resolved = this._resolveUrl(sourceMessage);
 		}
 
+		// Or just a hyperlink in the command message
 		const source = await this._request(resolved || url);
 
 		if (!source) return message.reply('I could not find any source for the provided image.');
@@ -102,7 +103,7 @@ class SauceNaoCommand extends Command {
 		const response = await Api.query({ url }).get();
 
 		if (response instanceof Buffer) {
-			// Api decided to respond in html instead of proper 400s on invalid requests
+			// Responding with JSON is overrated, just send html instead
 			const responseArray = response.toString().split('\n');
 			const responseString = responseArray[responseArray.length - 1];
 			return responseString[0].toLowerCase() + responseString.slice(1);
@@ -120,7 +121,8 @@ class SauceNaoCommand extends Command {
 		redis.multi()
 			.mset('saucenao:shortRemaining', shortRemaining, 'saucenao:longRemaining', longRemaining)
 			.expire('saucenao:shortRemaining', 30)
-			// Expire in one hour. It's per 24h actually, but I don't know _when_ exactly those run out, or even how they do.
+			// Set TTL to one hour.
+			// The rate limit is per 24 hours, but the api does not tell us that.
 			.expire('saucenao:longRemaining', 60 * 60)
 			.execAsync()
 			.catch(() => null);
