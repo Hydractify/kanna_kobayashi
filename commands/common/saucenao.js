@@ -21,8 +21,6 @@ const Command = require('../../structures/Command');
 const { instance: { db: redis } } = require('../../structures/Redis');
 const RichEmbed = require('../../structures/RichEmbed');
 
-const Ratelimit = Symbol.for('Ratelimit');
-
 class SauceNaoCommand extends Command {
 	constructor(handler) {
 		super(handler, {
@@ -55,9 +53,7 @@ class SauceNaoCommand extends Command {
 
 		if (!source) return message.reply('I could not find any source for the provided image.');
 
-		if (typeof source === 'string') return message.reply(source[0].toLowerCase() + source.slice(1));
-
-		if (source === Ratelimit) return message.reply('Ratelimit');
+		if (typeof source === 'string') return message.reply(source);
 
 		const author = source.artist
 			? `${source.artist}${source.title ? ` -- ${source.title}` : ''}`
@@ -95,16 +91,21 @@ class SauceNaoCommand extends Command {
 	async _request(url) {
 		const [short, long] = await redis.mgetAsync('saucenao:shortRemaining', 'saucenao:longRemaining');
 
-		if ((short !== null && Number(short) <= 0) || (long !== null && (Number(long) <= 0))) {
-			return Ratelimit;
+		if (short !== null && Number(short) <= 0) {
+			return 'I reached the shorter limit for source lookups, try it again in ~30 seconds.';
+		}
+
+		if (long !== null && (Number(long) <= 0)) {
+			return 'I reached the limit for source lookups, try it again in approximately one hour.';
 		}
 
 		const response = await Api.query({ url }).get();
 
 		if (response instanceof Buffer) {
 			// Api decided to respond in html instead of proper 400s on invalid requests
-			const responseString = response.toString().split('\n');
-			return responseString[responseString.length - 1];
+			const responseArray = response.toString().split('\n');
+			const responseString = responseArray[responseArray.length - 1];
+			return responseString[0].toLowerCase() + responseString.slice(1);
 		}
 
 		const {
