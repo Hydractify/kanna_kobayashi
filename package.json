@@ -31,7 +31,8 @@
   "eslintConfig": {
     "extends": "aqua",
     "rules": {
-      "no-process-env": "off"
+      "no-process-env": "off",
+      "id-length": "off"
     }
   },
   "bugs": {
