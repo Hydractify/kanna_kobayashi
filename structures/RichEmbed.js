@@ -4,7 +4,7 @@ class RichEmbed extends DJSRichEmbed {
 	/**
 	 * Builds a common RichEmbed instance from a message.
 	 * This sets color and footer.
-	 * @param {Message} message Message to read data from 
+	 * @param {Message} message Message to read data from
 	 * @param {User} [model] Sequelize user model instance
 	 * @return {RichEmbed}
 	 * @static
@@ -18,7 +18,7 @@ class RichEmbed extends DJSRichEmbed {
 	/**
 	 * Builds an image RichEmbed instance inherited from a common one,
 	 * this just adds an image.
-	 * @param {Message} message Message to read data from 
+	 * @param {Message} message Message to read data from
 	 * @param {User} [model] Sequelize user model instance
 	 * @param {string} link Image link for the image
 	 * @returns {RichEmbed}

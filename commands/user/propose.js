@@ -152,7 +152,7 @@ class ProposeCommand extends Command {
 	}
 
 	/**
-	 * Starts a relationship with the 
+	 * Starts a relationship with the mentioned user.
 	 * @param {Message} message Incoming message
 	 * @param {User} mentionedUser Mentioned user
 	 * @param {User} authorModel Database model for the author of the message

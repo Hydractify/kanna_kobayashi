@@ -53,9 +53,9 @@ class Util {
 	}
 
 	/**
-	 * 
+	 * Map an iterator to a string, values will be stringified if applicable.
 	 * @param {IterableIterator} iterator The iterator of the values to map
-	 * @param {boolean} [random=fase] Whether to randomize the order
+	 * @param {boolean} [random=fase] Whether to randomize the values
 	 * @returns {string}
 	 * @static
 	 */

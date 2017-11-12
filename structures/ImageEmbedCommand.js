@@ -10,7 +10,7 @@ class ImageEmbedCommand extends Command {
 	 * Instantiate a new ImageEmbedCommand
 	 * @param {CommandHandler} handler Instantiating CommandHandler
 	 * @param {CommandOptions} options Command options, including baseURL and maxNumber or images
-	 * the max number of the file name 
+	 * the max number of the file name
 	 */
 	constructor(handler, options) {
 		super(handler, options);

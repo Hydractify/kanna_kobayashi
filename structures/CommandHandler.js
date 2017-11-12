@@ -96,7 +96,7 @@ class CommandHandler {
 	}
 
 	/**
-	 * 
+	 * Handle the rewards granted by the command for the executing user.
 	 * @param {Message} message Incoming message
 	 * @param {User} authorModel Model of the author of the message
 	 * @param {Guild} guildModel Model of the guild
@@ -404,7 +404,7 @@ class CommandHandler {
 
 	/**
 	 * Resolves a role from a collection of roles by user input
-	 * @param {Collection<string, Roles>} roles Collection of roles 
+	 * @param {Collection<string, Roles>} roles Collection of roles
 	 * @param {string} input Input to resolve from
 	 * @param {boolean} [allowEveryone=true] Whether to allow the everyone role to be machted
 	 * @returns {Role}
