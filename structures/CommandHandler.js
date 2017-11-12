@@ -388,6 +388,12 @@ class CommandHandler {
 		return null;
 	}
 
+	resolveMessages(channel, amount = 50, [optionName, optionValue] = []) {
+		return optionValue
+			? channel.fetchMessages({ limit: amount, [optionName]: optionValue })
+			: channel.fetchMessages({ limit: amount });
+	}
+
 	/**
 	 * Fetches a message by id from the provided channel
 	 * @param {TextChannel} channel The channel to fetch from
