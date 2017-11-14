@@ -9,6 +9,7 @@ const { get: guildIconURL } = Object.getOwnPropertyDescriptor(Guild.prototype, '
 class LookupCommand extends Command {
 	constructor(handler) {
 		super(handler, {
+			aliases: ['ii', 'lookup'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
 			description: 'Looks up guild\'s info by an invite link or invite code.',
@@ -17,9 +18,8 @@ class LookupCommand extends Command {
 				'lookup discord.gg/uBdXdE9'
 			],
 			exp: 0,
-			name: 'lookup',
 			usage: 'lookup <invite>',
-			aliases: ['ii', 'lookup']
+			name: 'lookup'
 		});
 	}
 

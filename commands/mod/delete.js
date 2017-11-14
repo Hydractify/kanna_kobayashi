@@ -1,9 +1,8 @@
 const Command = require('../../structures/Command');
 
-const { Collection } = require('discord.js');
 const { parseFlags } = require('../../util/util');
 
-class DeleteCommand extends Command {
+class DeleteMessagesCommand extends Command {
 	constructor(handler) {
 		super(handler, {
 			aliases: ['purge'],
@@ -18,30 +17,35 @@ class DeleteCommand extends Command {
 		});
 	}
 
-	async run(message, [input, ...args]) {
-		if (!input) return message.reply('you must give me an amount of messages or a message ID to delete <:KannaAyy:315270615844126720>');
+	run(message, [input, ...args]) {
+		if (!input) {
+			return message.reply('you must provide me an amount of messages or a message ID <:KannaAyy:315270615844126720>');
+		}
 
+		const match = /^\d{17,19}$/.test(input);
 		const amount = parseInt(input);
-		if (!amount) return message.reply(`**${input}** is not a number`);
 
-		const match = input.match(/^\d{17,19}$/);
+		if (isNaN(amount)) return message.reply(`**${input}** is not a number`);
+
 		if (match) return this.deleteMessage(message, input);
 
-		if (amount > 100 || amount < 2) return message.reply(`you must provide me an amount higher than 2 and lower than 100!`);
+		if (amount > 100 || amount < 2) {
+			return message.reply('you must provide me an amount higher than 2 and lower than 100!');
+		}
 
 		const flags = parseFlags(args.join(' '), true);
-		
-		switch(flags.firstKey()) {
+
+		switch (flags.firstKey()) {
 			case 'before':
-			case 'after': 
-			return this.queryDelete(message, amount, flags);
+			case 'after':
+				return this.queryDelete(message, amount, flags);
 
 			case 'first':
 			case 'bots':
-			return this.userDelete(message, amount, flags);
+				return this.userDelete(message, amount, flags);
 
 			default:
-			return this.deleteMessages(message, amount));
+				return this.deleteMessages(message, amount);
 		}
 	}
 
@@ -50,19 +54,19 @@ class DeleteCommand extends Command {
 		if (!messageResolved) return message.reply(`**${id}** is not a valid Message ID!`);
 
 		return messageResolved.delete()
-		.then(() => message.reply(`I have sucessfully deleted the message with the ID **${id}**!`))
-		.catch(() => message.reply(`I was not able to delete the message with the ID **${id}** <:FeelsKannaMan:341054171212152832>`));
+			.then(() => message.reply(`I have sucessfully deleted the message with the ID **${id}**!`))
+			.catch(() => message.reply(`I was not able to delete that message <:FeelsKannaMan:341054171212152832>`));
 	}
 
 	async queryDelete(message, amount, flags) {
 		const messagesResolved = await this.handler.resolveMessages(message.channel, amount, [flags.firstKey(), flags.first()]);
 
 		return message.channel.bulkDelete(messagesResolved)
-		.then((messages) => message.reply(`I have deleted a total of **${messages.size}** messages!`))
-		.catch(() => null);
+			.then(messages => message.reply(`I have deleted a total of **${messages.size}** messages!`))
+			.catch(() => null);
 	}
 
-	asyn userDelete(message, amount, flags) {
+	async userDelete(message, amount, flags) {
 		const messagesResolved = await this.handler.resolvedMessages(message.channel, amount);
 	}
 
@@ -70,9 +74,9 @@ class DeleteCommand extends Command {
 		const messagesResolved = await this.handler.resolveMessages(message.channel, amount);
 
 		return message.channel.bulkDelete(messagesResolved)
-		.then((messages) => message.reply(`I have deleted a total of **${messages.size}** messages!`))
-		.catch(() => null);
+			.then(messages => message.reply(`I have deleted a total of **${messages.size}** messages!`))
+			.catch(() => null);
 	}
 }
 
-module.exports = DeleteCommand;
+module.exports = DeleteMessagesCommand;

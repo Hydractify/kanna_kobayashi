@@ -7,19 +7,19 @@ const RichEmbed = require('../../structures/RichEmbed');
 class EmojiInfoCommand extends Command {
 	constructor(handler) {
 		super(handler, {
-			aliases: ['einfo', 'ee'],
+			aliases: ['einfo', 'ee', 'emoji'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
 			description: 'Displays information about any custom emoji',
 			examples: [
-				'emojiinfo KannaWave',
-				'emojiinfo 333771413842558976',
+				'emoji KannaWave',
+				'emoji 333771413842558976',
 				// Displays as regular emoji
-				'emojiinfo <:KannaWave:315264556177948673'
+				'emojii <:KannaWave:315264556177948673'
 			],
 			exp: 0,
 			name: 'emojiinfo',
-			usage: 'emojiinfo <Emoji>'
+			usage: 'emoji <Emoji>'
 		});
 	}
 

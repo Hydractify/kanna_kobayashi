@@ -4,6 +4,7 @@ const RichEmbed = require('../../structures/RichEmbed');
 class RoleInfoCommand extends Command {
 	constructor(handler) {
 		super(handler, {
+			aliases: ['rr'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
 			description: [
@@ -12,10 +13,9 @@ class RoleInfoCommand extends Command {
 			].join('\n'),
 			examples: ['roleinfo admin'],
 			exp: 0,
-			name: 'roleinfo',
 			usage: 'roleinfo',
-			permLevel: 0,
-			aliases: ['rr']
+			name: 'roleinfo',
+			permLevel: 0
 		});
 	}
 
