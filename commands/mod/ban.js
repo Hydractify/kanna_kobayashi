@@ -12,17 +12,18 @@ class BanCommand extends Command {
 			examples: ['ban wizard', 'ban wizard anxeal space'],
 			exp: 850,
 			name: 'ban',
-			usage: 'ban <User>',
+			usage: 'ban <...User>',
 			permLevel: 0
 		});
 	}
 
 	async run(message, targets) {
-		if (!targets.length) return message.reply('you must provide me a user or users to ban!');
+		if (!targets.length) return message.reply('you must provide me with at least one user to ban!');
 
 		const members = new Set();
 		for (let input of targets) {
 			const member = await this.handler.resolveMember(message.guild, input);
+			if (!member) continue;
 			members.add(member);
 		}
 
@@ -33,24 +34,25 @@ class BanCommand extends Command {
 				continue;
 			}
 			mentions.push(member.toString());
-		} 
+		};
 		if (!members.size) return message.reply(`I am not able to ban **${targets.join('**, **')}**!`);
 
 		message.reply(`are you sure you want to ban ${mentions.join(' ')}? (**Y**es or **N**o)`);
 
-		const answer = await message.channel.awaitMessages(msg => /^(y|n|yes|no)/i.exec(msg), { errors: ['time'], time: 60 * 1000, max: 1 })
-		.catch(() => null);
+		const answer = await message.channel.awaitMessages(msg => /^(y|n|yes|no)/i.exec(msg), { time: 60 * 1000, max: 1 });
 
-		if (!answer) return message.reply('as you did not told me yes or no, i have canceled the ban <:KannaAyy:315270615844126720>');
+		if (!answer.size) {
+			return message.reply('as you did no answer my question, i have canceled the ban <:KannaAyy:315270615844126720>');
+		}
 
 		if (/^(y|yes)/i.exec(answer.first())) {
 			for (const member of members.values()) {
 				await member.ban(2);
 			}
-			return message.reply(`i have sucessfully banned ${mentions.join(' ')}!`);
-		} else {
-			return message.channel.send('Ok, canceling the ban! <:KannaAyy:315270615844126720>');
+			return message.reply(`I have successfully banned ${mentions.join(' ')}!`);
 		}
+
+		return message.channel.send('Ok, canceling the ban! <:KannaAyy:315270615844126720>');
 	}
 }
 
