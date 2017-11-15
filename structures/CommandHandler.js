@@ -388,26 +388,6 @@ class CommandHandler {
 		return null;
 	}
 
-	resolveMessages(channel, amount = 50, [optionName, optionValue] = []) {
-		return optionValue
-			? channel.fetchMessages({ limit: amount, [optionName]: optionValue })
-			: channel.fetchMessages({ limit: amount });
-	}
-
-	/**
-	 * Fetches a message by id from the provided channel
-	 * @param {TextChannel} channel The channel to fetch from
-	 * @param {string} id The provided input
-	 * @returns {Promise<?Message>}
-	 */
-	resolveMessage(channel, id) {
-		if (!id) return Promise.resolve(null);
-
-		return id.match(/^\d{17,19}$/)
-			? channel.fetchMessage(id).catch(() => null)
-			: Promise.resolve(null);
-	}
-
 	/**
 	 * Resolves a role from a collection of roles by user input
 	 * @param {Collection<string, Roles>} roles Collection of roles
@@ -415,7 +395,7 @@ class CommandHandler {
 	 * @param {boolean} [allowEveryone=true] Whether to allow the everyone role to be machted
 	 * @returns {Role}
 	 */
-	resolveRoles(roles, input, allowEveryone = true) {
+	resolveRole(roles, input, allowEveryone = true) {
 		let match = /^<@&(\d{17,19})>$|^(\d{17,19})$/.exec(input);
 		if (match) {
 			match = match[1] || match[2];
