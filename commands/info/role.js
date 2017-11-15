@@ -22,7 +22,7 @@ class RoleInfoCommand extends Command {
 	run(message, [roleName], { authorModel }) {
 		if (!roleName) return message.reply('you need to give me a role name to search for.');
 
-		const role = this.handler.resolveRoles(message.guild.roles, roleName, false);
+		const role = this.handler.resolveRole(message.guild.roles, roleName, false);
 
 		const embed = RichEmbed.common(message, authorModel)
 			.setAuthor(`Information about ${role.name}`)
