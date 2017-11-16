@@ -1,60 +1,69 @@
 const Command = require('../../structures/Command');
 
-const { parseFlags } = require('../../util/util');
-
-class BanCommand extends Command {
+class KickCommand extends Command {
 	constructor(handler) {
 		super(handler, {
 			clientPermissions: ['KICK_MEMBERS', 'USE_EXTERNAL_EMOJIS'],
-			coins: 10,
-			cooldown: 5000,
-			enabled: true,
+			coins: 0,
 			description: 'Kick a user... Or a lot of them!',
 			examples: ['kick wizard', 'kick wizard anxeal space'],
-			exp: 850,
+			exp: 0,
 			name: 'kick',
 			usage: 'kick <...User>',
-			permLevel: 0
+			permLevel: 2
 		});
 	}
 
 	async run(message, targets) {
 		if (!targets.length) return message.reply('you must provide me with at least one user to kick!');
 
+
+		// Valid members to kick
 		const members = new Set();
-		for (let input of targets) {
-			const member = await this.handler.resolveMember(message.guild, input);
-			if (!member) continue;
-			members.add(member);
+		// Resolved members not to kick
+		const failed = new Set();
+		// Promises to await, serializing the resolving process
+		let promises = [];
+		for (const target of targets) {
+			promises.push(
+				this.handler.resolveMember(message.guild, target).then(member => {
+					// Ensure target was found
+					if (!member) return;
+					// Check whether target is valid
+					if (member.bannable && member.permLevel() < 2) {
+						members.add(member);
+					} else {
+						failed.add(member);
+					}
+				})
+			);
 		}
+		await Promise.all(promises);
 
-		const mentions = [];
-		for (const member of members.values()) {
-			if (!member.bannable || member.permLevel() >= 2) {
-				members.delete(member);
-				continue;
-			}
-			mentions.push(member.toString());
-		}
-		if (!members.size) return message.reply(`I am not able to kick **${targets.join('**, **')}**!`);
+		if (failed.size) return message.reply(`I am not able to kick **${[...failed].join('**, **')}**!`);
 
-		message.reply(`are you sure you want to kick ${mentions.join(' ')}? (**Y**es or **N**o)`);
+		message.reply(`are you sure you want to kick ${[...members].join(' ')}? (**Y**es or **N**o)`);
 
-		const answer = await message.channel.awaitMessages(msg => /^(y|n|yes|no)/i.exec(msg), { time: 60 * 1000, max: 1 });
+		const answer = await message.channel.awaitMessages(msg => /^(y|n|yes|no)/i.test(msg), { time: 60 * 1000, max: 1 });
 
 		if (!answer.size) {
-			return message.reply('as you did no answer my question, i have canceled the kick <:KannaAyy:315270615844126720>');
+			return message.reply(
+				'since you did not answer my question, I had to cancel the kick. <:KannaAyy:315270615844126720>'
+			);
 		}
 
-		if (/^(y|yes)/i.exec(answer.first())) {
+		if (/^(y|yes)/i.test(answer.first().content)) {
+			promises = [];
 			for (const member of members.values()) {
-				await member.kick();
+				promises.push(member.ban(2));
 			}
-			return message.reply(`I have successfully kicked ${mentions.join(' ')}!`);
+			await Promise.all(promises);
+
+			return message.reply(`I successfully kicked ${[...members].join(' ')}!`);
 		}
 
 		return message.channel.send('Ok, canceling the kick! <:KannaAyy:315270615844126720>');
 	}
 }
 
-module.exports = BanCommand;
+module.exports = KickCommand;
