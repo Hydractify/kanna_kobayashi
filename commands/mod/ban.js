@@ -5,51 +5,62 @@ class BanCommand extends Command {
 		super(handler, {
 			aliases: ['banne', 'exile'],
 			clientPermissions: ['BAN_MEMBERS', 'USE_EXTERNAL_EMOJIS'],
-			coins: 10,
-			cooldown: 5000,
-			enabled: true,
+			coins: 0,
 			description: 'Ban a user... Or a lot of them!',
 			examples: ['ban wizard', 'ban wizard anxeal space'],
-			exp: 850,
+			exp: 0,
 			name: 'ban',
 			usage: 'ban <...User>',
-			permLevel: 0
+			permLevel: 2
 		});
 	}
 
 	async run(message, targets) {
 		if (!targets.length) return message.reply('you must provide me with at least one user to ban!');
 
+
+		// Valid members to ban
 		const members = new Set();
-		for (let input of targets) {
-			const member = await this.handler.resolveMember(message.guild, input);
-			if (!member) continue;
-			members.add(member);
+		// Resolved members not to ban
+		const failed = new Set();
+		// Promises to await, serializing the resolving process
+		let promises = [];
+		for (const target of targets) {
+			promises.push(
+				this.handler.resolveMember(message.guild, target).then(member => {
+					// Ensure target was found
+					if (!member) return;
+					// Check whether target is valid
+					if (member.bannable && member.permLevel() < 2) {
+						members.add(member);
+					} else {
+						failed.add(member);
+					}
+				})
+			);
 		}
+		await Promise.all(promises);
 
-		const mentions = [];
-		for (const member of members.values()) {
-			if (!member.bannable || member.permLevel() >= 2) {
-				members.delete(member);
-				continue;
-			}
-			mentions.push(member.toString());
-		};
-		if (!members.size) return message.reply(`I am not able to ban **${targets.join('**, **')}**!`);
+		if (failed.size) return message.reply(`I am not able to ban **${[...failed].join('**, **')}**!`);
 
-		message.reply(`are you sure you want to ban ${mentions.join(' ')}? (**Y**es or **N**o)`);
+		message.reply(`are you sure you want to ban ${[...members].join(' ')}? (**Y**es or **N**o)`);
 
-		const answer = await message.channel.awaitMessages(msg => /^(y|n|yes|no)/i.exec(msg), { time: 60 * 1000, max: 1 });
+		const answer = await message.channel.awaitMessages(msg => /^(y|n|yes|no)/i.test(msg), { time: 60 * 1000, max: 1 });
 
 		if (!answer.size) {
-			return message.reply('as you did no answer my question, i have canceled the ban <:KannaAyy:315270615844126720>');
+			return message.reply(
+				'since you did not answer my question, I had to cancel the ban. <:KannaAyy:315270615844126720>'
+			);
 		}
 
-		if (/^(y|yes)/i.exec(answer.first())) {
+		if (/^(y|yes)/i.test(answer.first().content)) {
+			promises = [];
 			for (const member of members.values()) {
-				await member.ban(2);
+				promises.push(member.ban(2));
 			}
-			return message.reply(`I have successfully banned ${mentions.join(' ')}!`);
+			await Promise.all(promises);
+
+			return message.reply(`I successfully banned ${[...members].join(' ')}!`);
 		}
 
 		return message.channel.send('Ok, canceling the ban! <:KannaAyy:315270615844126720>');
