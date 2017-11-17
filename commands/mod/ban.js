@@ -1,4 +1,5 @@
 const Command = require('../../structures/Command');
+const { FlagsText, parseFlags } = require('../../util/util');
 
 class BanCommand extends Command {
 	constructor(handler) {
@@ -10,22 +11,22 @@ class BanCommand extends Command {
 			examples: ['ban wizard', 'ban wizard anxeal space'],
 			exp: 0,
 			name: 'ban',
-			usage: 'ban <...User>',
+			usage: 'ban <...User> [\'--reason\' reason]',
 			permLevel: 2
 		});
 	}
 
-	async run(message, targets) {
-		if (!targets.length) return message.reply('you must provide me with at least one user to ban!');
+	async run(message, input) {
+		if (!input.length) return message.reply('you must provide me with at least one user to ban!');
 
-
+		const flags = parseFlags(input);
 		// Valid members to ban
 		const members = new Set();
 		// Resolved members not to ban
 		const failed = new Set();
 		// Promises to await, serializing the resolving process
 		let promises = [];
-		for (const target of targets) {
+		for (const target of flags.get(FlagsText).split(' ')) {
 			promises.push(
 				this.handler.resolveMember(message.guild, target).then(member => {
 					// Ensure target was found
@@ -53,10 +54,15 @@ class BanCommand extends Command {
 			);
 		}
 
+
 		if (/^(y|yes)/i.test(answer.first().content)) {
+			const reason = flags.get('reason') || null;
 			promises = [];
 			for (const member of members.values()) {
-				promises.push(member.ban(2));
+				promises.push(member.ban({
+					days: 2,
+					reason
+				}));
 			}
 			await Promise.all(promises);
 
