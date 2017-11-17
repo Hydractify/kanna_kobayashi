@@ -22,8 +22,9 @@ class Util {
 	}
 
 	/**
-	 * Parses flags from a string
-	 * Duplicated entries will only return the content of the last one
+	 * Parses flags from a string.
+	 * Duplicated flags will only return the content of the last one.
+	 * Flags without any content will return the boolean `true` as content.
 	 * @param {string} input String to parse
 	 * @param {boolean} lowercase Whether the keys should be lowercased automatically
 	 * @returns {Collection<string, string>} Parsed flags, text before first flag is keyed under `--`
@@ -31,22 +32,25 @@ class Util {
 	 */
 	static parseFlags(input, lowercase) {
 		// Scary regex magic
-		const regex = /--(\w+) (.+?(?=--|$))/g;
+		const regex = /--(\w+)(.*?(?=--|$))/g;
 		const parsed = new Collection();
 
 		if (!input.startsWith('--')) {
-			if (input.includes('--')) {
-				parsed.set('--', input.slice(0, input.indexOf('--')));
-				input = input.slice(input.indexOf('--'));
-			} else {
-				parsed.set('--', input);
-				return parsed;
-			}
+			if (!input.includes('--')) return parsed.set('--', input.trim());
+
+			parsed.set('--', input.slice(0, input.indexOf('--')).trim());
+			input = input.slice(input.indexOf('--'));
 		}
+
 
 		let match = null;
 		while ((match = regex.exec(input)) !== null) {
-			parsed.set(lowercase ? match[1].toLowerCase() : match[1], match[2].trim());
+			const key = (lowercase
+				? match[1].toLowerCase()
+				: match[1])
+				.trim();
+
+			parsed.set(key, match[2].trim() || true);
 		}
 
 		return parsed;
