@@ -27,7 +27,8 @@ class Util {
 	 * Flags without any content will return the boolean `true` as content.
 	 * @param {string} input String to parse
 	 * @param {boolean} lowercase Whether the keys should be lowercased automatically
-	 * @returns {Collection<string, string>} Parsed flags, text before first flag is keyed under `--`
+	 * @returns {Collection<string, string>} Parsed flags, text before first flag is keyed
+	 * under the symbol stored under `Util.FlagsText`
 	 * @static
 	 */
 	static parseFlags(input, lowercase) {
@@ -36,9 +37,9 @@ class Util {
 		const parsed = new Collection();
 
 		if (!input.startsWith('--')) {
-			if (!input.includes('--')) return parsed.set('--', input.trim());
+			if (!input.includes('--')) return parsed.set(Util.FlagsText, input.trim());
 
-			parsed.set('--', input.slice(0, input.indexOf('--')).trim());
+			parsed.set(Util.FlagsText, input.slice(0, input.indexOf('--')).trim());
 			input = input.slice(input.indexOf('--'));
 		}
 
@@ -164,5 +165,12 @@ class Util {
 		};
 	}
 }
+
+/**
+ * Collection returned by `Util.parseFlags` keys the non flags text
+ * under this symbol to avoid clases of any kind
+ * @type {Symbol}
+ */
+Util.FlagsText = Symbol.for('FlagsText');
 
 module.exports = Util;
