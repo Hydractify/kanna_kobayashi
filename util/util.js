@@ -45,12 +45,14 @@ class Util {
 
 		let match = null;
 		while ((match = regex.exec(input)) !== null) {
-			const key = (lowercase
+			const flag = (lowercase
 				? match[1].toLowerCase()
-				: match[1])
-				.trim();
+				: match[1]
+			).trim();
 
-			parsed.set(key, match[2].trim() || true);
+			const content = match[2].trim() || true;
+
+			parsed.set(flag, content);
 		}
 
 		return parsed;
