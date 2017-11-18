@@ -6,6 +6,6 @@
 		"client_secret": ""
 	},
 	"dbots": "",
-	"fakedbots": "",
+	"dbotsorg": "",
 	"weebToken": "Bearer <token>"
 }

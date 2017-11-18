@@ -3,7 +3,7 @@ const { join } = require('path');
 const Raven = require('raven');
 const { post } = require('snekfetch');
 
-const { dbots, fakedbots } = require('../data');
+const { dbots, dbotsorg } = require('../data');
 const User = require('../models/User');
 const Logger = require('./Logger');
 const CommandHandler = require('./CommandHandler');
@@ -230,7 +230,7 @@ class Client extends DJSClient {
 			});
 
 		post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
-			.set('Authorization', fakedbots)
+			.set('Authorization', dbotsorg)
 			.send(body)
 			.then(() => this.logger.bot('[BotLists]: Updated discordbots\' guild count.'))
 			.catch(error => {
