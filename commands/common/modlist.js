@@ -15,12 +15,12 @@ class ModListCommand extends Command {
 			usage: 'modlist [status]'
 		});
 
-		this.statuses = new Map(
+		this.statuses = new Map([
 			['online', '<:online:339191830140944385>'],
 			['idle', '<:idle:339191829515993089>'],
 			['dnd', '<:dnd:339191829524381716>'],
 			['offline', '<:offline:339191829218066433>']
-		);
+		]);
 	}
 
 	async run(message, [input], { authorModel }) {
@@ -68,6 +68,7 @@ class ModListCommand extends Command {
 
 		const embed = RichEmbed.common(message, authorModel)
 			.setAuthor(`${titleCase(message.guild.name)}'s Mod List`, message.client.user.avatarURL)
+			.setThumbnail(message.guild.iconURL)
 			.setDescription('This list is populated with all members that can ban and kick members.');
 
 		for (const [status, emoji] of this.statuses) {
