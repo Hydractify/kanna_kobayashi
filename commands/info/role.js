@@ -28,7 +28,7 @@ class RoleInfoCommand extends Command {
 			.setAuthor(`Information about ${role.name}`)
 			.setThumbnail(message.guild.iconURL)
 			.addField('Color hex', role.color ? role.hexColor : 'No Color', true)
-			.addField('Displayed seperately?', `**(Hoisting)**\n${role.hoisted ? 'Yes' : 'No'}`, true)
+			.addField('Displayed seperately?', `**(Hoisting)**\n${role.hoist ? 'Yes' : 'No'}`, true)
 			.addField('Mentionable?', role.mentionable ? 'Yes' : 'No', true)
 			.addField('Role member count', role.members.size, true);
 		// Maybe add something like special permissions?
