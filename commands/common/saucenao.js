@@ -28,7 +28,7 @@ class SauceNaoCommand extends Command {
 			coins: 0,
 			exp: 0,
 			usage: 'saucenao [URL|MessageID]',
-			description: 'See how much time it takes me to receive your message!',
+			description: 'Look up the source of an image!',
 			name: 'saucenao',
 			examples: [
 				'saucenao // with an uploaded picture in the same message',
@@ -43,10 +43,11 @@ class SauceNaoCommand extends Command {
 	async run(message, [url], { authorModel }) {
 		// Uploaded attachment or embed (if fast enough)
 		let resolved = this._resolveUrl(message);
-		if (!resolved) {
-			// Passed message id
-			const sourceMessage = await this.handler.resolveMessage(message.channel, url);
-			resolved = this._resolveUrl(sourceMessage);
+		// Passed message id
+		if (!resolved && /^\d{17,19}$/.test(url)) {
+			resolved = this._resolveUrl(
+				await message.channel.fetchMessage(url).catch(() => null)
+			);
 		}
 
 		// Or just a hyperlink in the command message
@@ -122,7 +123,7 @@ class SauceNaoCommand extends Command {
 			.mset('saucenao:shortRemaining', shortRemaining, 'saucenao:longRemaining', longRemaining)
 			.expire('saucenao:shortRemaining', 30)
 			// Set TTL to one hour.
-			// The rate limit is per 24 hours, but the api does not tell us that.
+			// The rate limit is per 24 hours, but the api does not tell us when those are over.
 			.expire('saucenao:longRemaining', 60 * 60)
 			.execAsync()
 			.catch(() => null);
