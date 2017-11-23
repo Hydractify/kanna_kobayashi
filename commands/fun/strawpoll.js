@@ -22,10 +22,12 @@ class StrawPollCommand extends Command {
 
 	async run(message, [id], { authorModel }) {
 		if (id) {
-			const { body: poll } = await get(`${this.apiURL}/${id}`)
+			const poll = await get(`${this.apiURL}/${id}`)
 				.set('Content-Type', 'application/json')
-				.catch(() => ({ body: null }));
-			if (!poll) return message.reply('I could not find a strawpoll with that ID.');
+				.then(res => res.body instanceof Buffer ? null : res.body)
+				.catch(() => null);
+			// 404 and json is overrated, better respond with 200 and html
+			if (!poll || poll instanceof Buffer) return message.reply('I could not find a strawpoll with that ID.');
 
 			return this.showPoll(message, poll, authorModel);
 		}
