@@ -1,5 +1,6 @@
 // tslint:disable member-ordering
 
+import { GuildMember, Role } from 'discord.js';
 import { Multi, RedisClient } from 'redis-p';
 import {
 	AfterCreate,
@@ -18,8 +19,11 @@ import {
 
 import { Redis } from '../structures/Redis';
 import { ItemTypes } from '../types/ItemTypes';
+import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
+import { generateColor } from '../util/generateColor';
 import { CommandLog } from './CommandLog';
+import { Guild } from './Guild';
 import { Item } from './Item';
 import { UserItem } from './UserItem';
 import { UserReputation } from './UserReputation';
@@ -97,6 +101,45 @@ export class User extends Model<User> {
 		return Math.floor(Math.sqrt(this.exp / 1000)) + 1;
 	}
 
+	/**
+	 * Color for this user, either random, or preset for DEVs or trusted
+	 */
+	public get color(): number {
+		if (this.type === UserTypes.DEV) return 0x00000F;
+		if (this.type === UserTypes.TRUSTED) return 0xFFFFFF;
+
+		return generateColor();
+	}
+
+	/**
+	 * Computes the perm level of this user,
+	 * optionally based on a member passed.
+	 */
+	public permLevel(member?: GuildMember): PermLevels {
+		if (this.type === UserTypes.DEV) {
+			return PermLevels.DEV;
+		}
+		if (this.type === UserTypes.TRUSTED) {
+			return PermLevels.TRUSTED;
+		}
+
+		if (member) {
+			const { permissions }: GuildMember = member;
+
+			if (permissions.has('MANAGE_GUILD') || permissions.has(['BAN_MEMBERS', 'KICK_MEMBERS'])) {
+				return PermLevels.HUMANTAMER;
+			}
+
+			const model: Guild = member.guild.model;
+			if ((model && model.tamerRoleId && member.roles.has(model.tamerRoleId))
+				|| member.roles.exists((role: Role) => role.name.toLowerCase() === 'dragon tamer')) {
+				return PermLevels.DRAGONTAMER;
+			}
+		}
+
+		return PermLevels.EVERYONE;
+	}
+
 	@PrimaryKey
 	@Column
 	public readonly id: string;
@@ -145,7 +188,6 @@ export class User extends Model<User> {
 
 	@BelongsToMany(() => Item, {
 		as: 'badges',
-		joinTableAttributes: ['count'],
 		otherKey: 'item_id',
 		through: (): typeof Model => UserItem,
 		foreignKey: 'user_id',
@@ -155,7 +197,6 @@ export class User extends Model<User> {
 
 	@BelongsToMany(() => Item, {
 		as: 'items',
-		joinTableAttributes: ['count'],
 		otherKey: 'item_id',
 		through: (): typeof Model => UserItem,
 		foreignKey: 'user_id',
@@ -168,7 +209,6 @@ export class User extends Model<User> {
 	 */
 	@BelongsToMany(() => User, {
 		as: 'reps',
-		joinTableAttributes: ['type'],
 		otherKey: 'repper_id',
 		through: (): typeof Model => UserReputation,
 		foreignKey: 'rep_id',
@@ -180,7 +220,6 @@ export class User extends Model<User> {
 	 */
 	@BelongsToMany(() => User, {
 		as: 'repped',
-		joinTableAttributes: ['type'],
 		otherKey: 'rep_id',
 		through: (): typeof Model => UserReputation,
 		foreignKey: 'repper_id',

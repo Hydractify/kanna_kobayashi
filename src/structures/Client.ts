@@ -5,7 +5,7 @@ import { post } from 'snekfetch';
 import { User } from '../models/User';
 import { generateColor } from '../util/generateColor';
 import { ListenerUtil } from '../util/ListenerUtil';
-import { Loggable } from '../util/LoggerDecorator';
+import { Loggable, Logger } from './Logger';
 
 const { on, once, registerListeners }: typeof ListenerUtil = ListenerUtil;
 
@@ -14,8 +14,15 @@ const { on, once, registerListeners }: typeof ListenerUtil = ListenerUtil;
  */
 @Loggable
 export class Client extends DJSClient {
+	/**
+	 * Command handler of the client
+	 */
+	public readonly commandHandler: CommandHandler;
 
-	private _commandHandler: CommandHandler;
+	/**
+	 * Reference to the logger
+	 */
+	private readonly logger: Logger;
 
 	/**
 	 * Instantiate the client
@@ -23,18 +30,9 @@ export class Client extends DJSClient {
 	public constructor(options: ClientOptions) {
 		super(options);
 
-		this._commandHandler = new CommandHandler(this);
-		this._commandHandler.loadCommandsIn(join(__dirname, '..', 'commands'));
+		this.commandHandler = new CommandHandler(this);
+		this.commandHandler.loadCommandsIn(join(__dirname, '..', 'commands'));
 
 		registerListeners(this);
-	}
-
-	public color(user: User): number {
-		if (user) {
-			if (user.type === 'DEV') return 0x00000F;
-			if (user.type === 'TRUSTED') return 0xFFFFFF;
-		}
-
-		return generateColor();
 	}
 }
