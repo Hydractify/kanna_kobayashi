@@ -1,0 +1,32 @@
+{
+	"extends": [
+		// fun :^)
+		"tslint:all"
+	],
+	"rules": {
+		"curly": [
+			true,
+			"ignore-same-line"
+		],
+		"quotemark": [
+			true,
+			"single"
+		],
+		"linebreak-style": false,
+		"indent": [
+			true,
+			"tabs"
+		],
+		"no-var-requires": false,
+		"no-require-imports": false,
+		"variable-name": [
+			true,
+			"ban-keywords",
+			"check-format",
+			"allow-leading-underscore"
+		],
+		"prefer-function-over-method": false,
+		"no-magic-numbers": false,
+		"array-type": [true, "array"]
+	}
+}
