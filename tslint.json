@@ -28,6 +28,7 @@
 		"prefer-function-over-method": false,
 		"no-magic-numbers": false,
 		"array-type": [true, "array"],
-		"no-inferrable-types": false
+		"no-inferrable-types": false,
+		"no-parameter-reassignment": false
 	}
 }

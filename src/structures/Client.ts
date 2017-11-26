@@ -2,13 +2,14 @@ import {
 	Client as DJSClient,
 	ClientOptions,
 	Guild,
+	GuildChannel,
 	GuildMember,
 	MessageEmbed,
 	MessageEmbedOptions,
 	TextChannel,
-	Util,
 } from 'discord.js';
 import { join } from 'path';
+import { captureException } from 'raven';
 import { post } from 'snekfetch';
 
 import { Guild as GuildModel } from '../models/Guild';
@@ -16,6 +17,7 @@ import { User as UserModel } from '../models/User';
 import { UserTypes } from '../types/UserTypes';
 import { generateColor } from '../util/generateColor';
 import { ListenerUtil } from '../util/ListenerUtil';
+import { CommandHandler } from './CommandHandler';
 import { Loggable, Logger } from './Logger';
 
 const { on, once, registerListeners }: typeof ListenerUtil = ListenerUtil;
@@ -46,21 +48,21 @@ export class Client extends DJSClient {
 		super(options);
 
 		this.commandHandler = new CommandHandler(this);
-		this.commandHandler.loadCommandsIn(join(__dirname, '..', 'commands'));
+		this.commandHandler.loadCategoriesIn(join(__dirname, '..', 'commands'));
 
 		registerListeners(this);
 	}
 
 	@once('ready')
 	protected _onceReady(): void {
-		this.logger.info('READY', `Logged in as ${this.user.tag} (${this.user.id})`)
+		this.logger.info('READY', `Logged in as ${this.user.tag} (${this.user.id})`);
 		if (this.shard.id === 0 && this.user.id === '297459926505095180') {
 			this.setInterval(this._updateBotLists.bind(this), 30 * 60 * 1000);
 		}
 	}
 
 	@on('disconnect')
-	protected _onDisconnect({ code, reason }: { code: number, reason: string }): void {
+	protected _onDisconnect({ code, reason }: { code: number; reason: string }): void {
 		this.logger.warn('DISCONNECT', `Bot disconnected.\nCode:${code} | ${reason || 'No reason available'}`);
 	}
 
@@ -74,15 +76,16 @@ export class Client extends DJSClient {
 	protected async _onGuild(guild: Guild, left: boolean): Promise<void> {
 		if (guild.memberCount !== guild.members.size) await guild.members.fetch();
 
-		const totalGuilds = await this.shard.fetchClientValues('guilds.size')
+		const totalGuilds: number = await this.shard.fetchClientValues('guilds.size')
 			.then((result: number[]) => result.reduce((prev: number, cur: number) => prev + cur));
-		const blacklisted = await UserModel.fetchOrCache(guild.ownerID)
+		const blacklisted: string = await UserModel.fetchOrCache(guild.ownerID)
 			.then((user: UserModel) => user.type === UserTypes.BLACKLISTED ? 'Yes' : 'No');
-		const botCount = guild.members.filter((member: GuildMember) => member.user.bot).size;
+		const botCount: number = guild.members.filter((member: GuildMember) => member.user.bot).size;
 
 		const embed: MessageEmbedOptions = (new MessageEmbed()
 			.setThumbnail(guild.iconURL())
 			.setTitle(`I have ${left ? 'left' : 'joined'} a guild!`)
+			.setDescription(`I am now in ${totalGuilds} guilds.`)
 			.setColor(generateColor())
 
 			.addField('Name', `${guild.name} (${guild.id})`, true)
@@ -106,7 +109,7 @@ export class Client extends DJSClient {
 		const guildModel: GuildModel = await member.guild.fetchModel();
 
 		if (!guildModel.notificationChannelId) return;
-		const channel: TextChannel = member.guild.channels.get(guildModel.notificationChannelId);
+		const channel: GuildChannel = member.guild.channels.get(guildModel.notificationChannelId);
 
 		if (!(channel instanceof TextChannel)) {
 			guildModel.notificationChannelId = undefined;
@@ -141,7 +144,7 @@ export class Client extends DJSClient {
 	private async _updateBotLists(): Promise<void> {
 		const body: { server_count: number } = {
 			server_count: await this.shard.fetchClientValues('guilds.size')
-				.then((res: number[]) => res.reduce((prev: number, cur: number) => prev + cur));
+				.then((res: number[]) => res.reduce((prev: number, cur: number) => prev + cur)),
 		};
 
 		this.logger.debug('BotLists', `Updating guild count at bot lists to ${body.server_count}.`);
@@ -151,7 +154,10 @@ export class Client extends DJSClient {
 			.send(body)
 			.then(() => this.logger.debug('BotLists', 'Updated bots.discord\'s guild count.'))
 			.catch((error: Error) => {
-				Raven.captureException(error);
+				captureException(error, {
+					tags: { target: 'bots.discord.pw' },
+					extra: { server_count: body.server_count },
+				});
 				this.logger.error('[BotLists]: Updating bots.discord\'s guild count failed:', error);
 			});
 
@@ -160,7 +166,10 @@ export class Client extends DJSClient {
 			.send(body)
 			.then(() => this.logger.info('BotLists', 'Updated discordbots\' guild count.'))
 			.catch((error: Error) => {
-				Raven.captureException(error);
+				captureException(error, {
+					tags: { target: 'discordbots.org' },
+					extra: { server_count: body.server_count },
+				});
 				this.logger.error('[BotLists]: Updating discordbots\'s guild count failed:', error);
 			});
 	}
