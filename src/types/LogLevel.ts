@@ -13,7 +13,7 @@ export const colors: IColor = {
 	[LogLevel.WARN]: [43, 33],
 	[LogLevel.INFO]: [42, 32],
 	[LogLevel.VERBOSE]: [46, 36],
-	[LogLevel.DEBUG]: [40, 34],
+	[LogLevel.DEBUG]: [44, 34],
 	[LogLevel.SILLY]: [45, 35],
 	/**
 	 * Won't be logged, just here for completeness

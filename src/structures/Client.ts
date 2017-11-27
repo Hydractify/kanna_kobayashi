@@ -24,7 +24,7 @@ const { on, once, registerListeners }: typeof ListenerUtil = ListenerUtil;
 const { dbots, dbotsorg }: {
 	dbots: string;
 	dbotsorg: string;
-} = require('../data');
+} = require('../../data');
 
 /**
  * Extended discord.js client
@@ -152,7 +152,7 @@ export class Client extends DJSClient {
 		post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
 			.set('Authorization', dbots)
 			.send(body)
-			.then(() => this.logger.debug('BotLists', 'Updated bots.discord\'s guild count.'))
+			.then(() => this.logger.info('BotLists', 'Updated bots.discord\'s guild count.'))
 			.catch((error: Error) => {
 				captureException(error, {
 					tags: { target: 'bots.discord.pw' },

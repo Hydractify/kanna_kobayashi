@@ -3,15 +3,14 @@ import { readdir } from 'fs';
 import { duration } from 'moment';
 // tslint:disable-next-line:no-import-side-effect
 import 'moment-duration-format';
-import { join } from 'path';
-import { captureException } from 'raven';
+import { extname, join } from 'path';
+import { captureException, wrap } from 'raven';
 import { promisify } from 'util';
 
 import { CommandLog } from '../models/CommandLog';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
 import { UserTypes } from '../types/UserTypes';
-import { ListenerUtil } from '../util/ListenerUtil';
 import { Loggable } from '../util/LoggerDecorator';
 import { titleCase } from '../util/Util';
 import { Client } from './Client';
@@ -19,17 +18,18 @@ import { Command } from './Command';
 import { Logger } from './Logger';
 import { Resolver } from './Resolver';
 
-const { on, registerListeners }: typeof ListenerUtil = ListenerUtil;
 // tslint:disable-next-line:typedef
 const readdirAsync = promisify(readdir);
 
+/**
+ * Handles incoming messages and executes commands if applicable.
+ */
 @Loggable('HANDLER')
 export class CommandHandler {
 	/**
 	 * Instantiating client
 	 */
 	public readonly client: Client;
-
 	/**
 	 * Resolver
 	 */
@@ -58,9 +58,11 @@ export class CommandHandler {
 		this.client = client;
 
 		this.resolver = new Resolver(this);
-		this._prefixes = [`<@!?${this.client.user.id}>`, 'kanna ', 'k!'];
+		this._prefixes = ['kanna ', 'k!'];
 
-		registerListeners(client, this);
+		// Automatically wrap all received messages in a raven context
+		client.on('message', wrap(this.handle.bind(this)));
+		client.once('ready', () => this._prefixes.push(`<@!?${this.client.user.id}>`));
 	}
 
 	public async loadCategoriesIn(path: string): Promise<void> {
@@ -70,7 +72,7 @@ export class CommandHandler {
 
 	public loadCommand(path: string, folder: string, file: string): void {
 		const location: string = join(path, folder, file);
-		const commandConstructor: new (handler: CommandHandler) => Command = require(location);
+		const commandConstructor: new (handler: CommandHandler) => Command = require(location).Command;
 		const command: Command = new commandConstructor(this);
 
 		command.location = location;
@@ -84,12 +86,20 @@ export class CommandHandler {
 
 	public async loadCommandsIn(path: string, folder: string): Promise<void> {
 		const files: string[] = await readdirAsync(join(path, folder));
+		let failed: number = 0;
 		for (const file of files) {
-			let failed: number = 0;
+			if (extname(file) !== '.js') {
+				++failed;
+
+				continue;
+			}
+
 			try {
 				this.loadCommand(path, folder, file);
 			} catch (error) {
 				++failed;
+
+				this.logger.error(`Error while loading ${join(path, folder, file)}`, error);
 				captureException(error, {
 					extra: {
 						commandName: file,
@@ -99,8 +109,9 @@ export class CommandHandler {
 				});
 			}
 
-			this.logger.info(`Loaded ${files.length - failed} ${folder} commands.`);
 		}
+
+		this.logger.info(`Loaded ${files.length - failed} ${folder} commands.`);
 	}
 
 	/**
@@ -111,7 +122,6 @@ export class CommandHandler {
 			|| this._commands.get(this._aliases.get(commandName));
 	}
 
-	@on('message')
 	protected async handle(message: Message): Promise<void> {
 		if (message.author.bot ||
 			!(message.channel instanceof TextChannel)
@@ -130,6 +140,53 @@ export class CommandHandler {
 		) return;
 
 		if (!await this._canCallCommand(message, authorModel, command)) return;
+
+		// tslint:disable-next-line:no-any
+		const parsedArgs: any[] | string = await command.parseArgs(message, args);
+
+		if (!(parsedArgs instanceof Array)) {
+			message.reply(parsedArgs);
+
+			return;
+		}
+
+		await authorModel.$create('CommandLog', {
+			commandName: command.name,
+			guildId: message.guild.id,
+			userId: message.author.id,
+		});
+
+		try {
+			await command.run(message, parsedArgs, { authorModel, commandName, args });
+		} catch (error) {
+			this.logger.error(error);
+
+			captureException(error, {
+				tags: {
+					command: command.name,
+					shard_id: String(this.client.shard.id),
+				},
+				extra: {
+					author: `${message.author.tag} (${message.author.id})`,
+					channel: `${message.channel.name} (${message.channel.id})`,
+					content: message.content,
+					guild: `${message.guild.name} (${message.guild.id})`,
+				},
+			});
+
+			message.reply(
+				[
+					'**an errror occured! Please paste this to the official guild support channel!**'
+					+ ' <:KannaAyy:315270615844126720> http://kannathebot.me/guild',
+					'',
+					'',
+					`\\\`${command.name}\\\``,
+					'\\`\\`\\`',
+					error.stack,
+					'\\`\\`\\`',
+				].join('\n'),
+			);
+		}
 	}
 
 	private async _canCallCommand(message: Message, authorModel: UserModel, command: Command): Promise<boolean> {

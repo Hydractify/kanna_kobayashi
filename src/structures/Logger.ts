@@ -122,7 +122,7 @@ export class Logger {
 			[
 				'\n',
 				'SHARD_ID' in process.env
-					? `\x1b[32m[SHARD ${process.env.SHARD_ID}\x1b[0m`
+					? `\x1b[32m[SHARD ${process.env.SHARD_ID}]\x1b[0m`
 					: '',
 				`[${moment().format('YYYY.MM.DD-HH:mm:ss')}]`,
 				// Background
@@ -130,11 +130,11 @@ export class Logger {
 				// Black
 				'\x1b[30m',
 				`[${LogLevel[level]}]`,
-				tag
-					? `[${tag}]`
-					: '',
 				// Reset
-				'\x1b[0m: ',
+				'\x1b[0m',
+				tag
+					? `[${tag}]: `
+					: ': ',
 				// Foreground
 				`\x1b[${colors[level][1]}m`,
 				cleaned,

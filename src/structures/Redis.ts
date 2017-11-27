@@ -46,6 +46,6 @@ export class Redis {
 	 */
 	public start(): void {
 		this.db.on('error', (error: Error) => this.logger.error(error))
-			.on('reconnecting', () => this.logger.debug('[REDIS]: Reconnecting...'));
+			.on('reconnecting', () => this.logger.info('Reconnecting...'));
 	}
 }

@@ -43,7 +43,6 @@ export class Item extends Model<Item> {
 
 	@BelongsToMany(() => User, {
 		as: 'holders',
-		joinTableAttributes: ['count'],
 		otherKey: 'user_id',
 		through: (): typeof Model => UserItem,
 		foreignKey: 'item_id',

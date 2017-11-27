@@ -1,6 +1,7 @@
 import { Message, Permissions, PermissionString } from 'discord.js';
 
 import { ICommandInfo } from '../types/ICommandInfo';
+import { ICommandRunInfo } from '../types/ICommandRunInfo';
 import { PermLevels } from '../types/PermLevels';
 import { Client } from './Client';
 import { CommandHandler } from './CommandHandler';
@@ -135,14 +136,15 @@ export abstract class Command {
 	}
 
 	/**
-	 * Should be override if parsing and validating args is required.
+	 * Should be overriden if parsing and validating args is required.
+	 * Should return a string with a message to the user if resolving failed.
 	 * @void
 	 */
-	// tslint:disable:no-any no-string-throw
-	public parseArgs(message: Message, args: string[]): any[] {
+	// tslint:disable:no-any
+	public parseArgs(message: Message, args: string[]): Promise<any[] | string> | any[] | string {
 		return args;
 	}
 
-	public abstract run(message: Message, args: any[]): void | Promise<void>;
+	public abstract run(message: Message, args: any[], info: ICommandRunInfo): any;
 
 }
