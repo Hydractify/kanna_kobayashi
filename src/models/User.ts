@@ -17,19 +17,18 @@ import {
 	Table,
 } from 'sequelize-typescript';
 
-import { Redis } from '../structures/Redis';
 import { ItemTypes } from '../types/ItemTypes';
 import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
 import { generateColor } from '../util/generateColor';
+import { redis } from '../util/RedisDecorator';
 import { CommandLog } from './CommandLog';
 import { Guild } from './Guild';
 import { Item } from './Item';
 import { UserItem } from './UserItem';
 import { UserReputation } from './UserReputation';
 
-const redis: RedisClient = Redis.instance.db;
-
+@redis
 @Table({
 	createdAt: false,
 	tableName: 'users',
@@ -42,7 +41,7 @@ export class User extends Model<User> {
 	 * This will either come from redis, or from postgres if not available.
 	 */
 	public static async fetchOrCache(id: string): Promise<User> {
-		const redisData: { [key: string]: string } = await redis.hgetall(`users:${id}`);
+		const redisData: { [key: string]: string } = await this.redis.hgetall(`users:${id}`);
 		if (redisData) return User.fromRedis(redisData);
 
 		const [user, created]: [User, boolean] = await User.findCreateFind<User>({ where: { id } });
@@ -57,8 +56,8 @@ export class User extends Model<User> {
 	public static fromRedis(data: { [key: string]: string | number | Date }, isNewRecord: boolean = false): User {
 		if (data.partnerSince) data.partnerSince = new Date(Number(data.partnerSince));
 
-		data.coins = Number(data.coins);
-		data.exp = Number(data.exp);
+		data.coins = Number(data.coins) || 0;
+		data.exp = Number(data.exp) || 0;
 
 		return new this(data, { isNewRecord });
 	}
@@ -84,15 +83,20 @@ export class User extends Model<User> {
 		}
 
 		if (!nullKeys.length) {
-			return redis.hmset(`users:${user.id}`, data);
+			return this.redis.hmset(`users:${user.id}`, data);
 		}
 
-		const multi: Multi = redis.multi();
+		const multi: Multi = this.redis.multi();
 		multi.hmset(`users:${user.id}`, data);
 		multi.hdel(`users:${user.id}`, ...nullKeys);
 
 		return multi.exec();
 	}
+
+	/**
+	 * Reference to the redis client
+	 */
+	private static redis: RedisClient;
 
 	/**
 	 * Current level of the User

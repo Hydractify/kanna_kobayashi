@@ -28,7 +28,7 @@
 		"build": "tsc -p ./",
 		"test": "tslint -p ./",
 		"start": "cd bin && node ./shard.js",
-		"dev": "export DEBUG=*|| set DEBUG=*&& export NODE_ENV=dev|| set NODE_ENV=dev&& node ./shard.js"
+		"dev": "export DEBUG=*|| set DEBUG=*&& export NODE_ENV=dev|| set NODE_ENV=dev&& cd bin && node ./shard.js"
 	},
 	"repository": {
 		"type": "git",

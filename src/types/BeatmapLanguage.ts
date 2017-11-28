@@ -1,0 +1,14 @@
+export enum BeatmapLanguage {
+	ANY,
+	OTHER,
+	ENGLISH,
+	JAPANESE,
+	CHINESE,
+	INSTRUMENTAL,
+	KOREAN,
+	FRENCH,
+	GERMAN,
+	SWEDISCH,
+	SPANISH,
+	ITALIAN,
+}
