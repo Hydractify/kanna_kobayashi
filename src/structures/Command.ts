@@ -79,7 +79,7 @@ export abstract class Command {
 	/**
 	 * Instantiates a new command
 	 */
-	public constructor(handler: CommandHandler, {
+	protected constructor(handler: CommandHandler, {
 		aliases = [],
 		clientPermissions = [],
 		coins = 10,
@@ -138,7 +138,7 @@ export abstract class Command {
 	/**
 	 * Should be overriden if parsing and validating args is required.
 	 * Should return a string with a message to the user if resolving failed.
-	 * @void
+	 * @virtual
 	 */
 	// tslint:disable:no-any
 	public parseArgs(message: Message, args: string[]): Promise<any[] | string> | any[] | string {

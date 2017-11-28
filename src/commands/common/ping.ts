@@ -10,7 +10,7 @@ class PingCommand extends Command {
 			examples: ['ping'],
 			exp: 0,
 			usage: 'ping',
-			description: 'See how long it takes to see your message and respond.',
+			description: 'See how long I need to see your message and send a response.',
 			name: 'ping',
 		});
 	}
