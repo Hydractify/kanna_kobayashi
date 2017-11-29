@@ -94,7 +94,7 @@ interface IAPIRouteBuilder {
 export interface IAPIOptions {
 	data?: string;
 	headers?: { [name: string]: string };
-	query?: { [name: string]: string | number };
+	query?: { [name: string]: string | number | boolean };
 }
 
 export interface IAPIRouterOptions {
