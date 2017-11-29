@@ -7,7 +7,7 @@ import { AniType } from '../types/anilist/AniType';
 import { CharData } from '../types/anilist/CharData';
 import { MangaData } from '../types/anilist/MangaData';
 import { ICommandInfo } from '../types/ICommandInfo';
-import { redis } from '../util/RedisDecorator';
+import { Redis } from '../util/RedisDecorator';
 import { chunkArray, replaceMap, titleCase } from '../util/Util';
 import { APIRouter, buildRouter } from './Api';
 import { Command } from './Command';
@@ -26,12 +26,8 @@ type AllTypes = AnimeData | CharData | MangaData;
 /**
  * Abstract command to provide Anilist functionality for commands in an easy manner.
  */
-@redis
+@Redis
 export abstract class AniListCommand extends Command {
-	/**
-	 * Reference to the redis client
-	 */
-	protected static redis: RedisClient;
 
 	/**
 	 * Object literal filled with chars to replace html entities with their actual representations
@@ -47,6 +43,10 @@ export abstract class AniListCommand extends Command {
 		'`': '\'',
 	};
 
+	/**
+	 * Reference to the redis client
+	 */
+	protected redis: RedisClient;
 	/**
 	 * Type of resources the command is intended for.
 	 */
@@ -225,7 +225,7 @@ export abstract class AniListCommand extends Command {
 	 * Retrieve the currently valid token for anilist, requests a new token if necessary
 	 */
 	protected async retrieveToken(): Promise<string> {
-		let token: string = await AniListCommand.redis.get(`anilist:token`);
+		let token: string = await this.redis.get(`anilist:token`);
 
 		if (!token) {
 			const data: {
@@ -233,7 +233,7 @@ export abstract class AniListCommand extends Command {
 				expires_in: number;
 			} = await Api().auth.access_token.post({ data: anilist });
 
-			AniListCommand.redis.set('anilist:token', data.access_token, 'EX', data.expires_in);
+			this.redis.set('anilist:token', data.access_token, 'EX', data.expires_in);
 
 			token = data.access_token;
 		}

@@ -5,14 +5,14 @@ import { BeatmapGenre } from '../../types/osu/BeatmapGenre';
 import { BeatmapLanguage } from '../../types/osu/BeatmapLanguage';
 import { BeatmapState } from '../../types/osu/BeatmapState';
 import { OsuMode } from '../../types/osu/OsuMode';
-import { redis } from '../../util/RedisDecorator';
+import { Redis } from '../../util/RedisDecorator';
 import { Api } from './';
 import { Score } from './Score';
 
 /**
  * Represents an osu! beatmap.
  */
-@redis
+@Redis(true)
 export class Beatmap {
 	/**
 	 * Fetch an osu! beatmap by id, mode defaults to `OsuMode.OSU`.

@@ -1,14 +1,14 @@
 import { RedisClient } from 'redis-p';
 
 import { OsuMode } from '../../types/osu/OsuMode';
-import { redis } from '../../util/RedisDecorator';
+import { Redis } from '../../util/RedisDecorator';
 import { Api } from './';
 import { Score } from './Score';
 
 /**
  * Represents an osu! user.
  */
-@redis
+@Redis(true)
 export class User {
 	/**
 	 * Fetches a full osu! user, scores by passed mode.
