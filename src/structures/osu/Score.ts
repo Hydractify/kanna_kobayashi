@@ -1,7 +1,7 @@
 import { Moment, utc } from 'moment';
 
-import { BeatmapMods } from '../../types/BeatmapMods';
-import { OsuMode } from '../../types/OsuMode';
+import { BeatmapMods } from '../../types/osu/BeatmapMods';
+import { OsuMode } from '../../types/osu/OsuMode';
 import { Beatmap } from './Beatmap';
 import { User } from './User';
 

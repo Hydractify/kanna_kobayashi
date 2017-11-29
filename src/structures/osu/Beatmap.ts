@@ -1,10 +1,10 @@
 import { Moment, utc } from 'moment';
 import { Multi, RedisClient } from 'redis-p';
 
-import { BeatmapGenre } from '../../types/BeatmapGenre';
-import { BeatmapLanguage } from '../../types/BeatmapLanguage';
-import { BeatmapState } from '../../types/BeatmapState';
-import { OsuMode } from '../../types/OsuMode';
+import { BeatmapGenre } from '../../types/osu/BeatmapGenre';
+import { BeatmapLanguage } from '../../types/osu/BeatmapLanguage';
+import { BeatmapState } from '../../types/osu/BeatmapState';
+import { OsuMode } from '../../types/osu/OsuMode';
 import { redis } from '../../util/RedisDecorator';
 import { Api } from './';
 import { Score } from './Score';

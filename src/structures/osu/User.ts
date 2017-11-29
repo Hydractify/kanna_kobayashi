@@ -1,6 +1,6 @@
 import { RedisClient } from 'redis-p';
 
-import { OsuMode } from '../../types/OsuMode';
+import { OsuMode } from '../../types/osu/OsuMode';
 import { redis } from '../../util/RedisDecorator';
 import { Api } from './';
 import { Score } from './Score';

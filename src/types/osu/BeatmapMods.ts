@@ -16,34 +16,34 @@ export enum BeatmapMods {
 	// Whatever Relax 2 is...
 	RX2 = 1 << 13,
 	PF = 1 << 14,
-	Key4 = 1 << 15,
-	Key5 = 1 << 16,
-	Key6 = 1 << 17,
-	Key7 = 1 << 18,
-	Key8 = 1 << 19,
-	keyMod = BeatmapMods.Key4
-	| BeatmapMods.Key5
-	| BeatmapMods.Key6
-	| BeatmapMods.Key7
-	| BeatmapMods.Key8,
-	FadeIn = 1 << 20,
-	Random = 1 << 21,
-	LastMod = 1 << 22,
-	FreeModAllowed = BeatmapMods.NF
+	KEY4 = 1 << 15,
+	KEY5 = 1 << 16,
+	KEY6 = 1 << 17,
+	KEY7 = 1 << 18,
+	KEY8 = 1 << 19,
+	KEYMOD = BeatmapMods.KEY4
+	| BeatmapMods.KEY5
+	| BeatmapMods.KEY6
+	| BeatmapMods.KEY7
+	| BeatmapMods.KEY8,
+	FADEIN = 1 << 20,
+	RANDOM = 1 << 21,
+	LASTMOD = 1 << 22,
+	FREEMODALLOWED = BeatmapMods.NF
 	| BeatmapMods.EZ
 	| BeatmapMods.HD
 	| BeatmapMods.HR
 	| BeatmapMods.SD
 	| BeatmapMods.FL
-	| BeatmapMods.FadeIn
+	| BeatmapMods.FADEIN
 	| BeatmapMods.RX
 	| BeatmapMods.RX2
 	| BeatmapMods.SO
-	| BeatmapMods.keyMod,
+	| BeatmapMods.KEYMOD,
 	// No 1 << 23, /shrug
-	Key9 = 1 << 24,
-	Key10 = 1 << 25,
-	Key1 = 1 << 26,
-	Key3 = 1 << 27,
-	Key2 = 1 << 28,
+	KEY9 = 1 << 24,
+	KEY10 = 1 << 25,
+	KEY1 = 1 << 26,
+	KEY3 = 1 << 27,
+	KEY2 = 1 << 28,
 }
