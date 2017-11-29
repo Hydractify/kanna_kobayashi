@@ -30,7 +30,6 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 	catchNotFound = true,
 	defaultHeaders = {},
 	defaultQueryParams = {},
-	defaultBodyParams = {},
 }: IAPIRouterOptions): APIRouter => {
 	const route: PropertyKey[] = [''];
 
@@ -77,20 +76,18 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 	return new Proxy<APIRouter>(noop, handler);
 };
 
-export type APIRouter = IAPIRouteBuilderMethod & IAPIRouteBuilderIndex & IAPIRouteOptions;
+export type APIRouter = IAPIRouteBuilder & IAPIRouteOptions;
 
 interface IAPIRouteOptions {
-	delete<T = any>(options: IAPIOptions): Promise<T>;
-	get<T = any>(options: IAPIOptions): Promise<T>;
-	patch<T = any>(options: IAPIOptions): Promise<T>;
-	post<T = any>(options: IAPIOptions): Promise<T>;
-	put<T = any>(options: IAPIOptions): Promise<T>;
+	delete<T = any>(options?: IAPIOptions): Promise<T>;
+	get<T = any>(options?: IAPIOptions): Promise<T>;
+	patch<T = any>(options?: IAPIOptions): Promise<T>;
+	post<T = any>(options?: IAPIOptions): Promise<T>;
+	put<T = any>(options?: IAPIOptions): Promise<T>;
 }
 
-interface IAPIRouteBuilderMethod {
-	[route: string]: (...args: any[]) => APIRouter;
-}
-interface IAPIRouteBuilderIndex {
+interface IAPIRouteBuilder {
+	(...args: any[]): APIRouter;
 	[route: string]: APIRouter;
 }
 
@@ -103,7 +100,6 @@ export interface IAPIOptions {
 export interface IAPIRouterOptions {
 	baseURL: string;
 	catchNotFound?: boolean;
-	defaultBodyParams?: { [name: string]: any };
 	defaultHeaders?: { [name: string]: string };
 	defaultQueryParams?: { [name: string]: string | number };
 }
