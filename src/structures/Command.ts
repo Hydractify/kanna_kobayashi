@@ -141,7 +141,7 @@ export abstract class Command {
 	 * @virtual
 	 */
 	// tslint:disable:no-any
-	public parseArgs(message: Message, args: string[]): Promise<any[] | string> | any[] | string {
+	public parseArgs(message: Message, args: string[], info: ICommandRunInfo): Promise<any[] | string> | any[] | string {
 		return args;
 	}
 

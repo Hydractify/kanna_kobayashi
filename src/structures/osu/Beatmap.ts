@@ -258,7 +258,9 @@ export class Beatmap {
 	/**
 	 * Fetch the best scores of the beatmap.
 	 */
-	public async fetchBestScore({ limit = 10, mode = this.mode }: { limit?: number; mode?: OsuMode }): Promise<Score[]> {
+	public async fetchBestScores(
+		{ limit = 10, mode = this.mode }: { limit?: number; mode?: OsuMode } = {},
+	): Promise<Score[]> {
 		const scores: { [key: string]: string }[] = await Api().get_scores.get({
 			query: {
 				b: this.id,

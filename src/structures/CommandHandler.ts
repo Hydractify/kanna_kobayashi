@@ -102,8 +102,8 @@ export class CommandHandler {
 				this.logger.error(`Error while loading ${join(path, folder, file)}`, error);
 				captureException(error, {
 					extra: {
-						commandName: file,
 						category: folder,
+						commandName: file,
 						path,
 					},
 				});
@@ -142,7 +142,7 @@ export class CommandHandler {
 		if (!await this._canCallCommand(message, authorModel, command)) return;
 
 		// tslint:disable-next-line:no-any
-		const parsedArgs: any[] | string = await command.parseArgs(message, args);
+		const parsedArgs: any[] | string = await command.parseArgs(message, args, { authorModel, commandName, args });
 
 		if (!(parsedArgs instanceof Array)) {
 			message.reply(parsedArgs);
@@ -162,15 +162,15 @@ export class CommandHandler {
 			this.logger.error(error);
 
 			captureException(error, {
-				tags: {
-					command: command.name,
-					shard_id: String(this.client.shard.id),
-				},
 				extra: {
 					author: `${message.author.tag} (${message.author.id})`,
 					channel: `${message.channel.name} (${message.channel.id})`,
 					content: message.content,
 					guild: `${message.guild.name} (${message.guild.id})`,
+				},
+				tags: {
+					command: command.name,
+					shard_id: String(this.client.shard.id),
 				},
 			});
 

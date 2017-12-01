@@ -6,7 +6,9 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import * as Osu from '../../structures/osu';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
+import { Redis } from '../../util/RedisDecorator';
 
+@Redis
 class EvalCommand extends Command {
 	/**
 	 * Options used to inspect eval output with
