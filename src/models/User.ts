@@ -166,6 +166,9 @@ export class User extends Model<User> {
 	})
 	public type: UserTypes;
 
+	@Column(DataType.INTEGER)
+	public tier: number;
+
 	@HasOne(() => User, {
 		as: 'partner',
 		foreignKey: 'partnerId',

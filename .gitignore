@@ -1,6 +1,5 @@
 node_modules/
 data.json
 package-lock.json
-.eslintrc.json
 old/
 bin/

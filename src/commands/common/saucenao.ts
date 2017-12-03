@@ -17,11 +17,9 @@ const { sauceNaoToken } = require('../../../data');
 const Api: () => APIRouter = buildRouter({
 	baseURL: 'https://saucenao.com/search.php',
 	defaultQueryParams: {
-		/* eslint-disable camelcase */
 		api_key: sauceNaoToken,
 		// JSON
 		output_type: 2,
-		/* eslint-enable camelcase */
 		// All dbs
 		db: 999,
 		// Max results
