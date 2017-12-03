@@ -8,8 +8,8 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { ISauceNaoResult } from '../../types/ISauceNaoResult';
 import { PermLevels } from '../../types/PermLevels';
+import { ISauceNaoResult } from '../../types/saucenao/ISauceNaoResult';
 import { Redis } from '../../util/RedisDecorator';
 
 const { sauceNaoToken } = require('../../../data');
