@@ -1,7 +1,7 @@
-import { Command } from '../../structures/Command';
-import { CommandHandler } from "../../structures/CommandHandler";
 import { Message } from 'discord.js';
 
+import { Command } from '../../structures/Command';
+import { CommandHandler } from '../../structures/CommandHandler';
 
 class ChooseCommand extends Command {
 	public constructor(handler: CommandHandler) {

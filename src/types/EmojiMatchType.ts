@@ -1,0 +1,4 @@
+enum EmojiMatchType {
+	EXACT,
+	INEXCACT,
+}
