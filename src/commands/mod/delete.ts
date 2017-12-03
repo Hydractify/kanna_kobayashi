@@ -79,13 +79,13 @@ class DeleteMessagesCommand extends Command {
 
 	public async run(
 		message: Message,
-		[toDelete]: [Message] | [Collection<Snowflake, Message>]
+		[toDelete]: [Message] | [Collection<Snowflake, Message>],
 	): Promise<Message | Message[]> {
 		if (toDelete instanceof Message) {
 			return toDelete.delete()
 				.then(() => message.reply(`I sucessfully deleted the message with the ID **${toDelete.id}**!`))
 				.catch(() => message.reply(
-					`I was not able to delete the message with the id **${toDelete.id}** message! <:FeelsKannaMan:341054171212152832>`
+					`I was not able to delete the message with the id **${toDelete.id}** message! <:FeelsKannaMan:341054171212152832>`,
 				));
 		}
 
