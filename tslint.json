@@ -29,6 +29,7 @@
 		"no-magic-numbers": false,
 		"array-type": [true, "array"],
 		"no-inferrable-types": false,
-		"no-parameter-reassignment": false
+		"no-parameter-reassignment": false,
+		"radix": false
 	}
 }
