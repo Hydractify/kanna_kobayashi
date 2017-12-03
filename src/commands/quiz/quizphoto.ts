@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { DiscordAPIError, Message } from 'discord.js';
 
 import { Quiz } from '../../models/Quiz';
 import { Command } from '../../structures/Command';
@@ -7,7 +7,6 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 import { titleCase } from '../../util/Util';
-import { DiscordAPIError } from 'discord.js';
 
 class QuizPhotoCommand extends Command {
 	public constructor(handler: CommandHandler) {

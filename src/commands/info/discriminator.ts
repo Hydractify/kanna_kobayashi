@@ -41,7 +41,7 @@ class DiscriminatorCommand extends Command {
 
 	public async run(message: Message, [discrim]: string[]): Promise<Message | Message[]> {
 		const users: string[] = await this.client.shard
-			.broadcastEval(`this.commandHandler.commands.get('discriminator').filterAndMap('${discrim}');`)
+			.broadcastEval(`this.commandHandler.resolveCommand('${this.name}').filterAndMap('${discrim}');`)
 			.then((res: string[][]) => [...new Set([].concat(...res))]);
 
 		if (!users.length) {
