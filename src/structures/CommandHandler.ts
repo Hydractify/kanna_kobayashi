@@ -70,8 +70,11 @@ export class CommandHandler {
 		for (const folder of folders) this.loadCommandsIn(path, folder);
 	}
 
-	public loadCommand(path: string, folder: string, file: string): void {
-		const location: string = join(path, folder, file);
+	public loadCommand(path: string, folder: string, file?: string): void {
+		const location: string = file
+			? join(path, folder, file)
+			: path;
+
 		const commandConstructor: new (handler: CommandHandler) => Command = require(location).Command;
 		const command: Command = new commandConstructor(this);
 
@@ -112,6 +115,32 @@ export class CommandHandler {
 		}
 
 		this.logger.info(`Loaded ${files.length - failed} ${folder} commands.`);
+	}
+
+	public async reloadCommand(command: string | Command): Promise<void> {
+		if (!(command instanceof Command)) command = this.resolveCommand(command);
+		if (!command) throw new Error(`Could not find the specified command!`);
+
+		// On error this will have been run regardless, may lead to unexpected consequences.
+		// TODO: Somehow fix this if it's necessary?
+		await command.free();
+
+		this._commands.delete(command.name);
+		for (const alias of command.aliases) {
+			this._aliases.delete(alias);
+		}
+
+		try {
+			this.loadCommand(command.location, command.category);
+		} catch (error) {
+			// Re-register old command on error
+			this._commands.set(command.name, command);
+			for (const alias of command.aliases) {
+				this._aliases.set(alias, command.name);
+			}
+
+			throw error;
+		}
 	}
 
 	/**

@@ -19,6 +19,7 @@ class EvalCommand extends Command {
 		super(handler, {
 			aliases: ['evaluate', 'broadcasteval'],
 			coins: 0,
+			cooldown: 0,
 			description: 'Evaluates arbitrary JavaScript code',
 			examples: ['You should know how to use this.'],
 			exp: 0,

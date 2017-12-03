@@ -136,6 +136,14 @@ export abstract class Command {
 	}
 
 	/**
+	 * Should be overriden if custom re-requiring or other resource freeing action is required.
+	 * @virtual
+	 */
+	public async free(): Promise<void> {
+		delete require.cache[require.resolve(this.location)];
+	}
+
+	/**
 	 * Should be overriden if parsing and validating args is required.
 	 * Should return a string with a message to the user if resolving failed.
 	 * @virtual
@@ -145,6 +153,8 @@ export abstract class Command {
 		return args;
 	}
 
+	/**
+	 * Main entry point for the actual execution of the command.
+	 */
 	public abstract run(message: Message, args: any[], info: ICommandRunInfo): any;
-
 }

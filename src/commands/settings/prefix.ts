@@ -3,7 +3,6 @@ import { Message } from 'discord.js';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { PermLevels } from '../../types/PermLevels';
 
 class PrefixCommand extends Command {
 	public constructor(handler: CommandHandler) {
@@ -18,8 +17,6 @@ class PrefixCommand extends Command {
 			exp: 0,
 			name: 'prefix',
 			usage: 'prefix [...Prefix]',
-			// Allow everyone to look
-			permLevel: PermLevels.EVERYONE,
 		});
 	}
 
