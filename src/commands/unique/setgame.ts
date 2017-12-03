@@ -42,4 +42,4 @@ class SetGameCommand extends Command {
 	}
 }
 
-module.exports = SetGameCommand;
+export { SetGameCommand as Command };

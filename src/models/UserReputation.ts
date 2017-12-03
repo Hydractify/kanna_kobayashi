@@ -33,5 +33,5 @@ export class UserReputation extends Model<UserReputation> {
 	 * Type (positive or negative)
 	 */
 	@Column({ type: DataType.ENUM, values: Object.keys(UserReputationTypes) })
-	public readonly type: UserReputationTypes;
+	public type: UserReputationTypes;
 }

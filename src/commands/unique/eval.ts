@@ -7,7 +7,9 @@ import * as Osu from '../../structures/osu';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 import { Redis } from '../../util/RedisDecorator';
+import { Sequelize } from '../../util/SequelizeDecorator';
 
+@Sequelize
 @Redis
 class EvalCommand extends Command {
 	/**

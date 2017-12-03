@@ -52,4 +52,4 @@ class WhitelistCommand extends Command {
 	}
 }
 
-module.exports = WhitelistCommand;
+export { WhitelistCommand as Command };

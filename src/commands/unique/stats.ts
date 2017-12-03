@@ -71,4 +71,4 @@ class StatsCommand extends Command {
 	}
 }
 
-module.exports = StatsCommand;
+export { StatsCommand as Command };

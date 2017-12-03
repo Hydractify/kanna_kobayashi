@@ -12,7 +12,7 @@ import { Sequelize as SequelizeDecorator } from '../../util/SequelizeDecorator';
 @SequelizeDecorator
 class KissCommand extends WeebCommand {
 
-	private sequelize: Sequelize;
+	private readonly sequelize: Sequelize;
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {
