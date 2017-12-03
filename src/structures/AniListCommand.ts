@@ -18,7 +18,7 @@ import { MessageEmbed } from './MessageEmbed';
 const Api: () => APIRouter = buildRouter({
 	baseURL: `https://anilist.co/api/`,
 });
-const { anilist } = require('../../../data');
+const { anilist } = require('../../data');
 Object.assign(anilist, { grant_type: 'client_credentials' });
 
 type AllTypes = AnimeData | CharData | MangaData;

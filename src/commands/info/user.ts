@@ -81,4 +81,4 @@ class UserInfoCommand extends Command {
 	}
 }
 
-module.exports = UserInfoCommand;
+export { UserInfoCommand as Command };

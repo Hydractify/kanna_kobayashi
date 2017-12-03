@@ -82,4 +82,4 @@ class LookupCommand extends Command {
 	}
 }
 
-module.exports = LookupCommand;
+export { LookupCommand as Command };

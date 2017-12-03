@@ -49,4 +49,4 @@ class RoleInfoCommand extends Command {
 	}
 }
 
-module.exports = RoleInfoCommand;
+export { RoleInfoCommand as Command };

@@ -37,4 +37,4 @@ class PatCommand extends WeebCommand {
 	}
 }
 
-module.exports = PatCommand;
+export { PatCommand as Command };

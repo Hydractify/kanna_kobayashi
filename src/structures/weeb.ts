@@ -3,7 +3,7 @@ import { TagsResult } from '../types/weeb/TagsResult';
 import { TypesResult } from '../types/weeb/TypesResult';
 import { APIRouter, buildRouter } from './Api';
 
-const { weebToken } = require('../../../data');
+const { weebToken } = require('../../data');
 const api: () => APIRouter = buildRouter({
 	baseURL: 'https://api.weeb.sh',
 	defaultHeaders: { Authorization: weebToken },
