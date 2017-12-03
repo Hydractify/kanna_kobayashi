@@ -3,8 +3,8 @@ import * as moment from 'moment';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
-import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class EmojiInfoCommand extends Command {
 	public constructor(handler: CommandHandler) {

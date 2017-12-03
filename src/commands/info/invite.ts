@@ -1,9 +1,9 @@
-import { MessageEmbed } from '../../structures/MessageEmbed';
-import { Invite, Message, SnowflakeUtil } from 'discord.js';
+import { Invite, Message } from 'discord.js';
 import * as moment from 'moment';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class LookupCommand extends Command {
@@ -64,7 +64,7 @@ class LookupCommand extends Command {
 			'Channel of the invite',
 			[
 				`• Name: \`${channel.name}\``,
-				`• Mention: <#${channel.id}>\n_Note: This mentions only resolves when you are part of this guild._`
+				`• Mention: <#${channel.id}>\n_Note: This mentions only resolves when you are part of this guild._`,
 			],
 			true,
 		)

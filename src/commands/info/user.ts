@@ -1,10 +1,10 @@
-import { Collection,Guild, GuildMember, Message, Role, Snowflake, User } from 'discord.js';
+import { Collection, Guild, GuildMember, Message, Role, Snowflake, User } from 'discord.js';
 import * as moment from 'moment';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
-import { ICommandInfo } from '../../types/ICommandInfo';
+import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { mapIterable, titleCase } from '../../util/Util';
 
 class UserInfoCommand extends Command {
@@ -67,7 +67,7 @@ class UserInfoCommand extends Command {
 		if (member) {
 			embed
 				.addField('Joined this guild', this._formatTimespan(member.joinedTimestamp), true)
-				.addField('Roles', roles);
+				.addField('Roles', rolesString);
 		}
 
 		embed.addField('Avatar', `[Link](${user.displayAvatarURL})`)

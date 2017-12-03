@@ -1,8 +1,10 @@
-import { Collection, GuildMember, Message } from 'discord.js';
+import { Collection, GuildMember, Message, Snowflake } from 'discord.js';
 
 import { User as UserModel } from '../models/User';
 import { ICommandInfo } from '../types/ICommandInfo';
 import { PermLevels } from '../types/PermLevels';
+import { IWeebResolvedMember } from '../types/weeb/IWeebResolvedMember';
+import { IWeebResponseTemplates } from '../types/weeb/IWeebResponseTemplate';
 import { RandomImageResult } from '../types/weeb/RandomImageResult';
 import { Command } from './Command';
 import { CommandHandler } from './CommandHandler';
@@ -19,10 +21,6 @@ export abstract class WeebCommand extends Command {
 	protected static readonly mentionRegex: RegExp = /^<@!?\d{17,19}>$/;
 
 	/**
-	 * Action used in the base string
-	 */
-	protected readonly action: string;
-	/**
 	 * Emoji used in the base string
 	 */
 	protected readonly emoji: string;
@@ -35,15 +33,30 @@ export abstract class WeebCommand extends Command {
 	 * Derive from WeebCommand.
 	 */
 	public constructor(handler: CommandHandler, options: ICommandInfo & {
-		action: string;
 		emoji: string;
 		type: string;
 	}) {
 		super(handler, options);
 
-		this.action = options.action;
 		this.emoji = options.emoji;
 		this.type = options.type;
+	}
+
+	/**
+	 * Default args validating and parsing, may be overriden.
+	 *
+	 * @virtual
+	 */
+	public async parseArgs(
+		message: Message,
+		args: string[],
+	): Promise<string | [Collection<Snowflake, IWeebResolvedMember>]> {
+		if (!args.length) return 'you must meantion someone <:KannaAyy:315270615844126720>';
+
+		const members: Collection<Snowflake, IWeebResolvedMember> = await this.resolveMembers(args, message);
+		if (!members.size) return `I could not find anyone with ${args.join(' ')}`;
+
+		return [members];
 	}
 
 	/**
@@ -52,7 +65,7 @@ export abstract class WeebCommand extends Command {
 	protected computeBaseString(
 		message: Message,
 		members: Collection<string, IWeebResolvedMember>,
-		{ dev, trusted, bot }: IWeebResponseTemplates,
+		{ action, dev, trusted, bot }: IWeebResponseTemplates,
 	): string {
 		let base: string = `${this.emoji} | `;
 
@@ -60,7 +73,7 @@ export abstract class WeebCommand extends Command {
 			const { name, member, perm }: IWeebResolvedMember = members.first();
 
 			if (message.author.id === member.id) {
-				base = `${base}**${message.member.displayName}** ${this.action} **${name}**`;
+				base = `${base}**${message.member.displayName}** ${action} **${name}**`;
 			} else if (dev && perm === PermLevels.DEV) {
 				base += dev;
 			} else if (trusted && perm === PermLevels.TRUSTED) {
@@ -68,13 +81,13 @@ export abstract class WeebCommand extends Command {
 			} else if (bot && message.client.user.id === member.id) {
 				base += bot;
 			} else {
-				base = `${base}**${message.member.displayName}** ${this.action} **${name}**`;
+				base = `${base}**${message.member.displayName}** ${action} **${name}**`;
 			}
 
 			return base;
 		}
 
-		base += `**${message.member.displayName}** ${this.action}`;
+		base += `**${message.member.displayName}** ${action}`;
 		const names: string[] = members.map((member: IWeebResolvedMember) => member.name);
 
 		base += `**${names.slice(0, -1).join('**,')} and **${names[names.length - 1]}**`;
@@ -106,9 +119,9 @@ export abstract class WeebCommand extends Command {
 	/**
 	 * Resolves mentioned members in a specific way.
 	 */
-	protected async resolveMembers(input: string, { author, guild }: Message)
-		: Promise<Collection<string, IWeebResolvedMember>> {
-		const resolved: Collection<string, IWeebResolvedMember> = new Collection<string, IWeebResolvedMember>();
+	protected async resolveMembers(input: string[], { author, guild }: Message)
+		: Promise<Collection<Snowflake, IWeebResolvedMember>> {
+		const resolved: Collection<Snowflake, IWeebResolvedMember> = new Collection<Snowflake, IWeebResolvedMember>();
 		const promises: Promise<void>[] = [];
 
 		for (const word of input) {
@@ -145,17 +158,4 @@ export abstract class WeebCommand extends Command {
 
 		return resolved;
 	}
-}
-
-interface IWeebResolvedMember {
-	member: GuildMember;
-	name: string;
-	partnerId: string;
-	perm: PermLevels;
-}
-
-interface IWeebResponseTemplates {
-	bot: string;
-	dev: string;
-	trusted: string;
 }

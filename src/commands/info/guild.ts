@@ -92,7 +92,7 @@ class GuildInfoCommand extends Command {
 
 			.addField('Role count', guild.roles.size, true)
 			.addField('Emoji count', guild.emojis.size, true)
-			.addField('Roles', roles || 'None', true)
+			.addField('Roles', rolesString || 'None', true)
 			.addField('Emojis', emojis || 'None', true);
 
 		return message.channel.send(embed);
