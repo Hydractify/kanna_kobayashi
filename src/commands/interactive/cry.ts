@@ -6,10 +6,10 @@ import { WeebCommand } from '../../structures/WeebCommand';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class PatCommand extends WeebCommand {
+class CryCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['sad'],
+			aliases: ['sad', 'upset'],
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Show how much you are sad... `Hope you do not use this command often -Att. Wizardλ#5679`',
 			emoji: '<:FeelsKannaMan:341054171212152832>',
@@ -35,19 +35,20 @@ class PatCommand extends WeebCommand {
 	public async run(
 		message: Message,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
-		{ authorModel }: ICommandRunInfo,
+		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
+		const action: string = commandName === 'upset' ? commandName : this.name;
 
 		if (!members) {
 			return message.channel.send(
-				`<:FeelsKannaMan:341054171212152832> | **${message.member.displayName}** is sad...`,
+				`<:FeelsKannaMan:341054171212152832> | **${message.member.displayName}** is ${action}...`,
 				embed,
 			);
 		}
 
 		const baseString: string = this.computeBaseString(message, members, {
-			action: 'is sad with',
+			action: `is ${action} with`,
 			dev: `What did you do **${members.first().name}**?!`,
 			trusted: `Why **${members.first().name}?`,
 			bot: `W-what did i do?!`,
@@ -57,4 +58,4 @@ class PatCommand extends WeebCommand {
 	}
 }
 
-export { PatCommand as Command };
+export { CryCommand as Command };
