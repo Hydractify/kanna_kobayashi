@@ -7,7 +7,7 @@ import { CommandHandler } from '../../structures/CommandHandler';
 class DeleteReputationCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['delrep'],
+			aliases: ['delrep', 'deleterep'],
 			coins: 0,
 			cooldown: 0,
 			description: 'Deletes your reputation of a member.',

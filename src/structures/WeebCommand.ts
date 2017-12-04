@@ -135,7 +135,7 @@ export abstract class WeebCommand extends Command {
 					// A bit ugly, neither case nor if else if would be much better though.
 					const name: string =
 						member.id === author.id
-							? 'himself'
+							? 'themself'
 							: member.id === this.client.user.id
 								? 'me'
 								: WeebCommand.mentionRegex.test(word)
