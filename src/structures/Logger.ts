@@ -3,7 +3,7 @@
 import * as moment from 'moment';
 import { inspect } from 'util';
 
-import { colors, LogLevel } from '../Types/LogLevel';
+import { colors, LogLevel } from '../types/LogLevel';
 
 export { Loggable } from '../util/LoggerDecorator';
 
