@@ -151,25 +151,25 @@ export class Score {
 		let total: number;
 
 		switch (mode) {
-			case 0: {
+			case OsuMode.OSU: {
 				hits = (this.count50 * 50) + (this.count100 * 100) + (this.count300 * 300);
 				total = (this.countMiss + this.count50 + this.count100 + this.count300) * 300;
 				break;
 			}
 
-			case 1: {
+			case OsuMode.TAIKO: {
 				hits = (this.count100 * 0.5) + this.count300;
 				total = this.countMiss + this.count100 + this.count300;
 				break;
 			}
 
-			case 2: {
+			case OsuMode.CTB: {
 				hits = this.count300 + this.count100 + this.count50;
 				total = this.countMiss + this.count50 + this.count100 + this.count300 + this.countKatu;
 				break;
 			}
 
-			case 3: {
+			case OsuMode.MANIA: {
 				hits = (this.count50 * 50)
 					+ (this.count100 * 100)
 					+ (this.countKatu * 200)
