@@ -95,7 +95,8 @@ class SauceNaoCommand extends Command {
 			return 'I reached the limit for source lookups, try it again in approximately one hour.';
 		}
 
-		const response: ISauceNaoResult | Buffer = await Api().get({ query: { url } });
+		// tslint:disable-next-line:no-any
+		const response: ISauceNaoResult<any> | Buffer = await Api().get({ query: { url } });
 
 		if (response instanceof Buffer) {
 			// Responding with JSON is overrated, just send html instead

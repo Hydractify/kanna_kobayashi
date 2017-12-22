@@ -7,7 +7,16 @@ import { IPawooData } from './IPawooData';
 import { IPixivData } from './IPixivData';
 import { ISankakuData } from './ISankakuData';
 
-export interface ISauceNaoResult {
+type DefaultData = IPixivData
+	| IDeviantArtData
+	| IPawooData
+	| ISankakuData
+	| IBcyData
+	| IAnidbData
+	| INicoVideoData
+	| IDanbooruData;
+
+export interface ISauceNaoResult<T = DefaultData> {
 	header: {
 		account_type: string;
 		index: {
@@ -30,16 +39,7 @@ export interface ISauceNaoResult {
 		user_id: string;
 	};
 	results: {
-		data: (
-			IPixivData
-			| IDeviantArtData
-			| IPawooData
-			| ISankakuData
-			| IBcyData
-			| IAnidbData
-			| INicoVideoData
-			| IDanbooruData
-		) & {
+		data: T & {
 			ext_urls: string[];
 		};
 		header: {
