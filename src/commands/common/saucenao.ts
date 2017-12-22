@@ -18,12 +18,12 @@ const Api: () => APIRouter = buildRouter({
 	baseURL: 'https://saucenao.com/search.php',
 	defaultQueryParams: {
 		api_key: sauceNaoToken,
-		// JSON
-		output_type: 2,
 		// All dbs
 		db: 999,
 		// Max results
 		numres: 1,
+		// JSON
+		output_type: 2,
 	},
 });
 
@@ -35,17 +35,17 @@ class SauceNaoCommand extends Command {
 		super(handler, {
 			aliases: ['sauce', 'source'],
 			coins: 0,
-			exp: 0,
-			usage: 'saucenao [URL|MessageID]',
 			description: 'Look up the source of an image!',
-			name: 'saucenao',
 			examples: [
 				'saucenao // with an uploaded picture in the same message',
 				'saucenao 379246454784524300 // message in the same channel with a picture',
 				'saucenao https://example.com/image.png',
 			],
+			exp: 0,
+			name: 'saucenao',
 			// TODO: Replace with Patreon tier once implemented.
 			permLevel: PermLevels.DEV,
+			usage: 'saucenao [URL|MessageID]',
 		});
 	}
 
@@ -128,15 +128,15 @@ class SauceNaoCommand extends Command {
 		}
 
 		return {
-			similarity: Number(header.similarity),
-			thumbnail: header.thumbnail,
 			// There are probably a bunch more of those, hip hip consistency
 			artist: data.member_name
-				|| data.author_name
-				|| data.creator
-				|| data.pawoo_user_display_name,
-			url: data.ext_urls[0],
+			|| data.author_name
+			|| data.creator
+			|| data.pawoo_user_display_name,
+			similarity: Number(header.similarity),
+			thumbnail: header.thumbnail,
 			title: data.title,
+			url: data.ext_urls[0],
 		};
 	}
 
