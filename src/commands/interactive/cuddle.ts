@@ -29,9 +29,9 @@ class CuddleCommand extends WeebCommand {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
 		const baseString: string = this.computeBaseString(message, members, {
 			action,
+			bot: `T-thanks **${message.member.displayName}**`,
 			dev: `**${members.first().name}-senpai**... Y-you got ${action}!`,
 			trusted: `S-so cute **${members.first().name}**`,
-			bot: `T-thanks **${message.member.displayName}**`,
 		});
 
 		return message.channel.send(baseString, embed);

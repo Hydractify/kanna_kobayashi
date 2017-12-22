@@ -27,9 +27,9 @@ class LickCommand extends WeebCommand {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
 		const baseString: string = this.computeBaseString(message, members, {
 			action: 'licked',
+			bot: `D-don't!`,
 			dev: `W-why are you licking **${members.first().name}**?!`,
 			trusted: `P-pervert!`,
-			bot: `D-don't!`,
 		});
 
 		return message.channel.send(baseString, embed);

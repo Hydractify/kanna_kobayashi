@@ -206,7 +206,7 @@ export class CommandHandler {
 			message.reply(
 				[
 					'**an errror occured! Please paste this to the official guild support channel!**'
-					+ ' <:KannaAyy:315270615844126720> http://kannathebot.me/guild',
+					+ ' <:KannaAyy:315270615844126720> https://discord.gg/uBdXdE9',
 					'',
 					'',
 					`\\\`${command.name}\\\``,

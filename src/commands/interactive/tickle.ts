@@ -6,17 +6,16 @@ import { WeebCommand } from '../../structures/WeebCommand';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class HugCommand extends WeebCommand {
+class TickleCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['hwug'],
 			clientPermissions: ['EMBED_LINKS'],
-			description: 'Hug someone tight ❤',
+			description: 'Tickle someone!',
 			emoji: '<:KannaAyy:315270615844126720>',
-			examples: ['hug kanna', 'hug kanna wizard'],
-			name: 'hug',
-			type: 'hug',
-			usage: 'hug <...User>',
+			examples: ['tickle kanna', 'tickle kanna wizard'],
+			name: 'tickle',
+			type: 'tickle',
+			usage: 'tickle <...User>',
 		});
 	}
 
@@ -27,14 +26,14 @@ class HugCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
 		const baseString: string = this.computeBaseString(message, members, {
-			action: 'hugged',
-			bot: `You are so cute **${message.member.displayName}**!`,
-			dev: `Thanks for hugging **${members.first().name}**!`,
-			trusted: `**${members.first().name}** deserved it :3`,
+			action: 'tickled',
+			bot: `P-please stop!`,
+			dev: `Tickle **${members.first().name}** harder!`,
+			trusted: `Poor **${members.first().name}**`,
 		});
 
 		return message.channel.send(baseString, embed);
 	}
 }
 
-export { HugCommand as Command };
+export { TickleCommand as Command };

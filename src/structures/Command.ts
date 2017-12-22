@@ -129,6 +129,7 @@ export abstract class Command {
 		this.description = description;
 		this.examples = examples;
 		this.exp = exp;
+		this.handler = handler;
 		this.name = name;
 		this.resolver = handler.resolver;
 		this.usage = usage;

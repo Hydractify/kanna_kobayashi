@@ -27,9 +27,9 @@ class PokeCommand extends WeebCommand {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
 		const baseString: string = this.computeBaseString(message, members, {
 			action: 'poked',
+			bot: `W-what did i do this time **${message.member.displayName}**!`,
 			dev: `Notice him **${members.first().name}**!`,
 			trusted: `_stares at **${members.first().name}**`,
-			bot: `W-what did i do this time **${message.member.displayName}**!`
 		});
 
 		return message.channel.send(baseString, embed);

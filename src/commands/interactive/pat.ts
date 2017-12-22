@@ -28,9 +28,9 @@ class PatCommand extends WeebCommand {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
 		const baseString: string = this.computeBaseString(message, members, {
 			action: 'patted',
+			bot: `You are so cute **${message.member.displayName}**!`,
 			dev: `Thanks for patting **${members.first().name}**!`,
 			trusted: `**${members.first().name}** deserved it :3`,
-			bot: `You are so cute **${message.member.displayName}**!`,
 		});
 
 		return message.channel.send(baseString, embed);

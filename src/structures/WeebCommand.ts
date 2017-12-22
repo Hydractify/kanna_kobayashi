@@ -100,9 +100,9 @@ export abstract class WeebCommand extends Command {
 	 */
 	protected async fetchEmbed(message: Message, model: UserModel): Promise<MessageEmbed> {
 		const { url }: RandomImageResult = await fetchRandom({
-			type: this.type,
-			nsfw: false,
 			fileType: 'gif',
+			nsfw: false,
+			type: this.type,
 		});
 
 		const embed: MessageEmbed = MessageEmbed.image(
@@ -122,39 +122,33 @@ export abstract class WeebCommand extends Command {
 	protected async resolveMembers(input: string[], { author, guild }: Message)
 		: Promise<Collection<Snowflake, IWeebResolvedMember>> {
 		const resolved: Collection<Snowflake, IWeebResolvedMember> = new Collection<Snowflake, IWeebResolvedMember>();
-		const promises: Promise<void>[] = [];
 
 		for (const word of input) {
 			// Ignore 2 or 1 char long "names"
 			if (word.length < 3) continue;
 
-			const promise: Promise<void> = this.resolver.resolveMember(word, guild)
-				.then(async (member: GuildMember) => {
-					const { partnerId, permLevel }: UserModel = await member.user.fetchModel();
+			const member: GuildMember = await this.resolver.resolveMember(word, guild);
+			if (!member) continue;
 
-					// A bit ugly, neither case nor if else if would be much better though.
-					const name: string =
-						member.id === author.id
-							? 'themself'
-							: member.id === this.client.user.id
-								? 'me'
-								: WeebCommand.mentionRegex.test(word)
-									? member.displayName
-									: member.toString();
+			const { partnerId, permLevel }: UserModel = await member.user.fetchModel();
 
-					resolved.set(member.id, {
-						member,
-						name,
-						partnerId,
-						perm: permLevel(member),
-					});
-				})
-				.catch(() => undefined);
+			// A bit ugly, neither case nor if else if would be much better though.
+			const name: string =
+				member.id === author.id
+					? 'themself'
+					: member.id === this.client.user.id
+						? 'me'
+						: WeebCommand.mentionRegex.test(word)
+							? member.displayName
+							: member.toString();
 
-			promises.push(promise);
+			resolved.set(member.id, {
+				member,
+				name,
+				partnerId,
+				perm: permLevel(member),
+			});
 		}
-
-		await Promise.all(promises);
 
 		return resolved;
 	}

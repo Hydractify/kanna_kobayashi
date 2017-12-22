@@ -26,8 +26,8 @@ class EvalCommand extends Command {
 			examples: ['You should know how to use this.'],
 			exp: 0,
 			name: 'eval',
-			usage: 'eval <...string>',
 			permLevel: PermLevels.DEV,
+			usage: 'eval <...string>',
 		});
 
 		Osu.Api();
