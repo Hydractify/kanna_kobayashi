@@ -120,10 +120,10 @@ export class User extends Model<User> {
 	 * optionally based on a member passed.
 	 */
 	public permLevel(member?: GuildMember): PermLevels {
-		if (User.type === UserTypes.DEV) {
+		if (this.type === UserTypes.DEV) {
 			return PermLevels.DEV;
 		}
-		if (User.type === UserTypes.TRUSTED) {
+		if (this.type === UserTypes.TRUSTED) {
 			return PermLevels.TRUSTED;
 		}
 
