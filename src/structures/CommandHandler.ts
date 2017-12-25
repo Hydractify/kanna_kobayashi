@@ -241,7 +241,7 @@ export class CommandHandler {
 		}
 
 		if (command.permLevel > authorModel.permLevel(message.member)) {
-			message.reply(`you do not have the require permission level to use **${command.name}**!`);
+			message.reply(`you do not have the required permission level to use **${command.name}**!`);
 
 			return false;
 		}
