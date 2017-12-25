@@ -24,7 +24,7 @@ export class MessageEmbed extends DJSMessageEmbed {
 	/**
 	 * Split up a long string into multiple fields for the embed.
 	 */
-	public splitToFields(text: string, title: string = '\u200b', inline: boolean = false): this {
+	public splitToFields(title: string = '\u200b', text: string, inline: boolean = false): this {
 		const chunks: RegExpMatchArray = text.match(/(.|[\r\n]){1,1024}/g);
 
 		for (const [i, chunk] of chunks.entries()) {
