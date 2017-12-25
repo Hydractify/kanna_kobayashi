@@ -1,7 +1,7 @@
 // tslint:disable member-ordering
 
 import { GuildMember, Role } from 'discord.js';
-import { Multi, RedisClient } from 'redis-p';
+import { RedisClient } from 'redis-p';
 import {
 	AfterCreate,
 	AfterSave,
@@ -76,7 +76,8 @@ export class User extends Model<User> {
 		if (data.partnerSince) data.partnerSince = data.partnerSince.valueOf();
 
 		for (const [k, v] of Object.entries(data)) {
-			if (v === null) {
+			// tslint:disable-next-line:no-null-keyword
+			if ([null, undefined].includes(v)) {
 				delete data[k];
 				nullKeys.push(k);
 			}
@@ -86,11 +87,10 @@ export class User extends Model<User> {
 			return this.redis.hmset(`users:${user.id}`, data);
 		}
 
-		const multi: Multi = this.redis.multi();
-		multi.hmset(`users:${user.id}`, data);
-		multi.hdel(`users:${user.id}`, ...nullKeys);
-
-		return multi.exec();
+		return this.redis.multi()
+			.hmset(`users:${user.id}`, data)
+			.hdel(`users:${user.id}`, ...nullKeys)
+			.exec();
 	}
 
 	/**
@@ -195,19 +195,19 @@ export class User extends Model<User> {
 
 	@BelongsToMany(() => Item, {
 		as: 'badges',
-		otherKey: 'item_id',
-		through: (): typeof Model => UserItem,
 		foreignKey: 'user_id',
+		otherKey: 'item_id',
 		scope: { type: ItemTypes.BADGE },
+		through: (): typeof Model => UserItem,
 	})
 	public readonly badges: Item[];
 
 	@BelongsToMany(() => Item, {
 		as: 'items',
-		otherKey: 'item_id',
-		through: (): typeof Model => UserItem,
 		foreignKey: 'user_id',
+		otherKey: 'item_id',
 		scope: { type: ItemTypes.ITEM },
+		through: (): typeof Model => UserItem,
 	})
 	public readonly items: Item[];
 
@@ -216,9 +216,9 @@ export class User extends Model<User> {
 	 */
 	@BelongsToMany(() => User, {
 		as: 'reps',
+		foreignKey: 'rep_id',
 		otherKey: 'repper_id',
 		through: (): typeof Model => UserReputation,
-		foreignKey: 'rep_id',
 	})
 	public readonly reps: User[];
 
@@ -227,9 +227,9 @@ export class User extends Model<User> {
 	 */
 	@BelongsToMany(() => User, {
 		as: 'repped',
+		foreignKey: 'repper_id',
 		otherKey: 'rep_id',
 		through: (): typeof Model => UserReputation,
-		foreignKey: 'repper_id',
 	})
 	public readonly repped: User[];
 }
