@@ -28,11 +28,16 @@ class ReloadCommand extends Command {
 	public async run(message: Message, [commandName]: string[]): Promise<Message | Message[]> {
 		if (!commandName) return message.reply('you should supply a command to reload.');
 
-		const results: string[] = await this.client.shard.broadcastEval(`this.commandHandler.reloadCommand('${commandName}')`)
+		// TODO: Make this somehow better. Some proxy can probably do wonders here.
+		const results: string[] = await this.client.shard.broadcastEval([
+			`this.commandHandler.reloadCommand('${commandName}')`,
+			'.then(() => ([this.shard.id, null]))',
+			'.catch(e => ([this.shard.id, e]));',
+		].join(''))
 			.then((result: [number, boolean | IPlainError][]) =>
 				result.map(
-					([id, other]: [number, boolean | IPlainError]) =>
-						`Shard: ${id} - ${typeof other === 'boolean' ? other ? 'Success' : 'Not found' : `\`${other.message}\``}`,
+					([id, error]: [number, IPlainError]) =>
+						`Shard: ${id} - ${error ? `\`${error.message}\`` : 'Success'}`,
 				),
 		);
 
