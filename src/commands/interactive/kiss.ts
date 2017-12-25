@@ -62,64 +62,65 @@ class KissCommand extends WeebCommand {
 			}
 
 			const target: IWeebResolvedMember = members.first();
+			if ([message.author.id, authorModel.partnerId].includes(target.member.id)) {
+				return true;
+			}
 
-			if (message.author.id !== target.partnerId) {
-				const breakMessage: Message = await message.reply(
-					'do you want to break with your current partner? (**Y**es or **N**o) <:KannaWtf:320406412133924864>',
-				) as Message;
+			const breakMessage: Message = await message.reply(
+				'do you want to break with your current partner? (**Y**es or **N**o) <:KannaWtf:320406412133924864>',
+			) as Message;
 
-				const filter: CollectorFilter = (msg: Message): boolean => msg.author.id === message.author.id
-					&& /^(y|n|yes|no)/i.test(msg.content);
-				const collectedMessage: Message = await message.channel.awaitMessages(filter, { time: 1e4, max: 1 })
-					.then((collected: Collection<Snowflake, Message>) => collected.first());
+			const filter: CollectorFilter = (msg: Message): boolean => msg.author.id === message.author.id
+				&& /^(y|n|yes|no)/i.test(msg.content);
+			const collectedMessage: Message = await message.channel.awaitMessages(filter, { time: 1e4, max: 1 })
+				.then((collected: Collection<Snowflake, Message>) => collected.first());
 
-				if (!collectedMessage) {
-					await message.channel.send([
-						`${message.author}... since you did not respond properly,`,
-						'I had to cancel the command <:KannaWtf:320406412133924864>',
-					].join(' '));
-					await breakMessage.delete();
+			if (!collectedMessage) {
+				await message.channel.send([
+					`${message.author}... since you did not respond properly,`,
+					'I had to cancel the command <:KannaWtf:320406412133924864>',
+				].join(' '));
+				await breakMessage.delete();
 
-					return false;
-				}
+				return false;
+			}
 
-				// TODO: Make this not a mess, and remove code duplication.
-				if (/^(y|yes)/i.test(collectedMessage.content)) {
-					const partner: UserModel = await authorModel.$get<UserModel>('partner') as UserModel;
-					const { partnerId } = partner;
+			// TODO: Make this not a mess, and remove code duplication.
+			if (/^(y|yes)/i.test(collectedMessage.content)) {
+				const partner: UserModel = await authorModel.$get<UserModel>('partner') as UserModel;
+				const { partnerId } = authorModel;
 
-					const transaction: Transaction = await this.sequelize.transaction();
-					partner.partnerId = undefined;
-					partner.partnerSince = undefined;
-					partner.partnerMarried = undefined;
+				const transaction: Transaction = await this.sequelize.transaction();
+				partner.partnerId = undefined;
+				partner.partnerSince = undefined;
+				partner.partnerMarried = undefined;
 
-					authorModel.partnerId = undefined;
-					authorModel.partnerSince = undefined;
-					authorModel.partnerMarried = undefined;
-
-					await Promise.all([
-						authorModel.save({ transaction }),
-						partner.save({ transaction }),
-					]);
-
-					await transaction.commit();
-
-					await Promise.all([
-						message.reply(`you successfully broke up with <@${partnerId}>`),
-						breakMessage.delete(),
-					]);
-
-					return true;
-				}
+				authorModel.partnerId = undefined;
+				authorModel.partnerSince = undefined;
+				authorModel.partnerMarried = undefined;
 
 				await Promise.all([
-					message.reply('s-successfully canceled the command! <:KannaWtf:320406412133924864>'),
+					authorModel.save({ transaction }),
+					partner.save({ transaction }),
+				]);
+
+				await transaction.commit();
+
+				await Promise.all([
+					message.reply(`you successfully broke up with <@${partnerId}>`),
 					breakMessage.delete(),
 				]);
 
-				return false;
-			} // Different Partner
-		} // No parther
+				return true;
+			}
+
+			await Promise.all([
+				message.reply('s-successfully canceled the command! <:KannaWtf:320406412133924864>'),
+				breakMessage.delete(),
+			]);
+
+			return false;
+		} // Has a partner
 
 		// Only one target?
 		if (members.size === 1) {
