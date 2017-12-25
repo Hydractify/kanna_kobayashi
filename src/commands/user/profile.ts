@@ -23,6 +23,8 @@ class ProfileCommand extends Command {
 	}
 
 	public async parseArgs(message: Message, [input]: string[]): Promise<string | [User]> {
+		if (!input) return [message.author];
+
 		const user: User = await this.resolver.resolveMember(input, message.guild, false)
 			.then((member: GuildMember) => member
 				? member.user
