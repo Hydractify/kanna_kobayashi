@@ -16,7 +16,7 @@ import { MessageEmbed } from './MessageEmbed';
 
 // tslint:disable-next-line:variable-name
 const Api: () => APIRouter = buildRouter({
-	baseURL: `https://anilist.co/api/`,
+	baseURL: `https://anilist.co/api`,
 });
 const { anilist } = require('../../data');
 Object.assign(anilist, { grant_type: 'client_credentials' });
