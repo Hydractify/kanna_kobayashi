@@ -130,7 +130,7 @@ export abstract class WeebCommand extends Command {
 			const member: GuildMember = await this.resolver.resolveMember(word, guild);
 			if (!member) continue;
 
-			const { partnerId, permLevel }: UserModel = await member.user.fetchModel();
+			const userModel: UserModel = await member.user.fetchModel();
 
 			// A bit ugly, neither case nor if else if would be much better though.
 			const name: string =
@@ -145,8 +145,8 @@ export abstract class WeebCommand extends Command {
 			resolved.set(member.id, {
 				member,
 				name,
-				partnerId,
-				perm: permLevel(member),
+				partnerId: userModel.partnerId,
+				perm: userModel.permLevel(member),
 			});
 		}
 
