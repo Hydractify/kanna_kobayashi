@@ -43,6 +43,7 @@ export class Guild extends Model<Guild> {
 	public quiz: Quiz;
 
 	@Column({
+		defaultValue: [],
 		field: 'self_role_ids',
 		type: DataType.ARRAY(DataType.STRING('20')),
 	})
