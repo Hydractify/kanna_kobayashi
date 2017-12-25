@@ -51,7 +51,7 @@ export abstract class WeebCommand extends Command {
 		message: Message,
 		args: string[],
 	): Promise<string | [Collection<Snowflake, IWeebResolvedMember>]> {
-		if (!args.length) return 'you must meantion someone <:KannaAyy:315270615844126720>';
+		if (!args.length) return 'you must mention someone <:KannaAyy:315270615844126720>';
 
 		const members: Collection<Snowflake, IWeebResolvedMember> = await this.resolveMembers(args, message);
 		if (!members.size) return `I could not find anyone with ${args.join(' ')}`;
