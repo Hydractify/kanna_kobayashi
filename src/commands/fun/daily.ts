@@ -4,7 +4,6 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-
 class DailyCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
@@ -20,7 +19,7 @@ class DailyCommand extends Command {
 	}
 
 	public run(message: Message, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const grantedCoins: number = authorModel.tier * this.coins;
+		const grantedCoins: number = (authorModel.tier || 1) * this.coins;
 
 		return message.reply(`here are your daily **${grantedCoins}** <:coin:330926092703498240>!`);
 	}
