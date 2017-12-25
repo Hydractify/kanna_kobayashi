@@ -8,7 +8,7 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 class AvatarCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['av'],
+			aliases: ['av', 'image'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
 			description: 'Display the avatar of a user',
