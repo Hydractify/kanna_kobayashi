@@ -170,22 +170,22 @@ export class CommandHandler {
 
 		if (!await this._canCallCommand(message, authorModel, command)) return;
 
-		// tslint:disable-next-line:no-any
-		const parsedArgs: any[] | string = await command.parseArgs(message, args, { authorModel, commandName, args });
-
-		if (!(parsedArgs instanceof Array)) {
-			message.reply(parsedArgs);
-
-			return;
-		}
-
-		await authorModel.$create('CommandLog', {
-			commandName: command.name,
-			guildId: message.guild.id,
-			userId: message.author.id,
-		});
-
 		try {
+			// tslint:disable-next-line:no-any
+			const parsedArgs: any[] | string = await command.parseArgs(message, args, { authorModel, commandName, args });
+
+			if (!(parsedArgs instanceof Array)) {
+				message.reply(parsedArgs);
+
+				return;
+			}
+
+			await authorModel.$create('CommandLog', {
+				commandName: command.name,
+				guildId: message.guild.id,
+				userId: message.author.id,
+			});
+
 			await command.run(message, parsedArgs, { authorModel, commandName, args });
 		} catch (error) {
 			this.logger.error(error);
