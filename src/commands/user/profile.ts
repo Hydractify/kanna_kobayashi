@@ -90,9 +90,9 @@ class ProfileCommand extends Command {
 			.setThumbnail(message.guild.iconURL())
 			.setAuthor(`${titleCase(user.username)}'s Profile`, user.displayAvatarURL())
 			.setDescription('\u200b')
-			.addField('Level', `${userModel.level} (${userModel.exp} exp)`, true)
+			.addField('Level', `${userModel.level} (${userModel.exp || 0} exp)`, true)
 			.addField('Reputation', reputation, true)
-			.addField('Kanna Coins', `${userModel.coins} <:coin:330926092703498240>`, true)
+			.addField('Kanna Coins', `${userModel.coins || 0} <:coin:330926092703498240>`, true)
 			.addField('Items', this.mapItems(userModel.items), true)
 			.addField('Badges', this.mapItems(userModel.badges), true)
 			.addField('Relationship', partnerString, true);
