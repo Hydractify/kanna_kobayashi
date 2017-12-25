@@ -298,7 +298,7 @@ export class CommandHandler {
 
 	private _matchCommand(message: Message, guildModel: GuildModel):
 		[Command, string, string[]] | [undefined, undefined, undefined] {
-		const prefixes: string[] = this._prefixes.concat(guildModel.prefix);
+		const prefixes: string[] = guildModel.prefix ? this._prefixes.concat(guildModel.prefix) : this._prefixes;
 		const match: RegExpExecArray = new RegExp(`^(${prefixes.join('|')})`, 'i').exec(message.content);
 
 		if (!match) return [undefined, undefined, undefined];
