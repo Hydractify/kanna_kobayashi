@@ -62,7 +62,7 @@ export class CommandHandler {
 
 		// Automatically wrap all received messages in a raven context
 		client.on('message', wrap(this.handle.bind(this)));
-		client.once('ready', () => this._prefixes.push(`<@!?${this.client.user.id}>`));
+		client.once('ready', () => this._prefixes.push(`<@!?${this.client.user.id}> `));
 	}
 
 	public async loadCategoriesIn(path: string): Promise<void> {
