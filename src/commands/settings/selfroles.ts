@@ -34,7 +34,7 @@ class SelfRolesCommand extends Command {
 				role = type;
 				type = 'toggle';
 			} else if (authorModel.permLevel(message.member) < PermLevels.HUMANTAMER) {
-				return `you do not have the required permission level to set or remove self assignable roles!`;
+				return 'you do not have the required permission level to add or remove self assignable roles!';
 			}
 
 			if (!role) {
@@ -64,7 +64,7 @@ class SelfRolesCommand extends Command {
 				role = message.guild.roles.get(roleId);
 				// TODO: Remove from database.
 				if (!role) continue;
-				roles.push(`\`${role.name}\``);
+				roles.push(`\`@${role.name}\``);
 
 			}
 
@@ -83,9 +83,20 @@ class SelfRolesCommand extends Command {
 				return message.reply(`the \`@${role.name}\` role is already self assignable.`);
 			}
 
+			if (message.member.highestRole.position >= role.position) {
+				return message.reply('you may only add roles which are positioned below your highest role!');
+			}
+
 			// A bit ugly, but sequelize really wants us to _assign_ the property
 			message.guild.model.selfRoleIds = roles.concat(role.id);
 			await message.guild.model.save();
+
+			if (message.guild.me.highestRole.position >= role.position) {
+				return message.reply([
+					`added the \`@${role.name}\` role to the self assignable roles!`,
+					'Note: The role is not below my highest role, I can not assign or remove it!',
+				]);
+			}
 
 			return message.reply(`added the \`@${role.name}\` role to the self assignable roles!`);
 		}
