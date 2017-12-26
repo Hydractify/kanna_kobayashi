@@ -10,7 +10,7 @@ import { mapIterable, titleCase } from '../../util/Util';
 class UserInfoCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['whois', 'ust', 'uu'],
+			aliases: ['whois', 'ust', 'uu', 'uinfo'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
 			description: 'Display information about a specific user.',
@@ -58,7 +58,7 @@ class UserInfoCommand extends Command {
 			.addField('Status', titleCase((member || user).presence.status), true)
 			.addField('Game', (member || user).presence.activity ? (member || user).presence.activity.name : 'Nothing', true)
 			.addField(
-			'Shard guilds on this shard',
+			'Shared guilds on this shard',
 			this.client.guilds.filter((guild: Guild) => guild.members.has(user.id)).size,
 			true,
 		)
@@ -70,7 +70,7 @@ class UserInfoCommand extends Command {
 				.addField('Roles', rolesString);
 		}
 
-		embed.addField('Avatar', `[Link](${user.displayAvatarURL})`)
+		embed.addField('Avatar', `[Link](${user.displayAvatarURL()})`)
 			.setImage(user.displayAvatarURL());
 
 		return message.channel.send(embed);
