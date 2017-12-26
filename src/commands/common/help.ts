@@ -71,15 +71,17 @@ class HelpCommand extends Command {
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user.displayAvatarURL())
-			.setDescription('\u200b')
+			.setDescription(command.description)
 			.setURL('http://kannathebot.me/guild')
-			.setThumbnail(message.guild.iconURL())
-			.addField('Aliases', `kanna ${command.aliases.join('\nkanna ')}`)
-			.addField('Usage', `kanna ${command.usage}`)
+			.setThumbnail(message.guild.iconURL());
+		if (command.aliases.length) {
+			embed.addField('Aliases', `kanna ${command.aliases.join('\nkanna ')}`);
+		}
+
+		embed.addField('Usage', `kanna ${command.usage}`)
 			.addField('Example(s)', `kanna ${command.examples.join('\nkanna ')}`)
-			.addField('Description', command.description)
-			.addField('Permissions Level Required', command.permLevel)
-			.addField('Enabled', command.enabled ? 'Yes' : 'No');
+			.addField('Permissions Level Required', command.permLevel, true)
+			.addField('Enabled', command.enabled ? 'Yes' : 'No', true);
 
 		return message.channel.send(embed);
 	}
