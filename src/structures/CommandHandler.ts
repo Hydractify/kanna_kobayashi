@@ -1,19 +1,13 @@
-import { Collection, GuildMember, Message, Permissions, PermissionString, TextChannel } from 'discord.js';
+import { Collection, GuildMember, Message, TextChannel } from 'discord.js';
 import { readdir } from 'fs';
-import { duration } from 'moment';
-// tslint:disable-next-line:no-import-side-effect
-import 'moment-duration-format';
 import { extname, join } from 'path';
 import { captureException, wrap } from 'raven';
 import { promisify } from 'util';
 
-import { CommandLog } from '../models/CommandLog';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
-import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
 import { Loggable } from '../util/LoggerDecorator';
-import { titleCase } from '../util/Util';
 import { Client } from './Client';
 import { Command } from './Command';
 import { Logger } from './Logger';
@@ -59,7 +53,7 @@ export class CommandHandler {
 		this.client = client;
 
 		this.resolver = new Resolver(this);
-		this._prefixes = ['kanna ', 'k!'];
+		this._prefixes = ['kanna ', 'k!', '-'];
 
 		// Automatically wrap all received messages in a raven context
 		client.on('message', wrap(this.handle.bind(this)));
@@ -160,16 +154,14 @@ export class CommandHandler {
 		const guildModel: GuildModel = message.guild.model || await message.guild.fetchModel();
 		const [command, commandName, args]: [Command, string, string[]]
 			| [undefined, undefined, undefined] = this._matchCommand(message, guildModel);
-
 		if (!command) return;
 
 		const [authorModel, ownerModel] = await this._fetchModels(message);
 		if (authorModel.type === UserTypes.BLACKLISTED) return;
-		if (ownerModel.type === UserTypes.BLACKLISTED
-			|| (ownerModel.type !== UserTypes.WHITELISTED && message.guild.isBotFarm)
-		) return;
+		if (ownerModel.type === UserTypes.BLACKLISTED) return;
+		if (ownerModel.type !== UserTypes.WHITELISTED && message.guild.isBotFarm) return;
 
-		if (!await this._canCallCommand(message, authorModel, command)) return;
+		if (!await command.canCall(message, authorModel)) return;
 
 		try {
 			// tslint:disable-next-line:no-any
@@ -217,73 +209,6 @@ export class CommandHandler {
 				].join('\n'),
 			);
 		}
-	}
-
-	private async _canCallCommand(message: Message, authorModel: UserModel, command: Command): Promise<boolean> {
-		const permissions: Permissions = (message.channel as TextChannel).permissionsFor(message.guild.me);
-		if (!permissions.has('SEND_MESSAGES')) {
-			message.author.send('I do not have permission to send in the channel of your command!')
-				.catch(() => undefined);
-
-			return false;
-		}
-
-		const missing: PermissionString[] = permissions.missing(command.clientPermissions) as PermissionString[];
-		if (missing.length) {
-			const missingPermsString: string = missing.map((perm: string) =>
-				titleCase(perm.replace(/_/g, ' ')),
-			).join(', ');
-
-			message.reply(
-				`I require the following permissions to execute the **${command.name}** command: **${missingPermsString}**!`,
-			);
-
-			return false;
-		}
-
-		const permLevel: PermLevels = authorModel.permLevel(message.member);
-		if (command.patreonOnly && authorModel.tier <= 0 && permLevel >= PermLevels.TRUSTED) {
-			message.reply(`**${command.name}** is for patreons only!`);
-
-			return false;
-		}
-
-		if (command.permLevel > permLevel) {
-			message.reply(`you do not have the required permission level to use **${command.name}**!`);
-
-			return false;
-		}
-
-		if (!command.enabled) {
-			message.reply(`**${command.name}** is currently disabled!`);
-
-			return false;
-		}
-
-		const [commandLog] = await authorModel.$get<CommandLog>('CommandLogs', {
-			limit: 1,
-			order: [['run', 'desc']],
-			where: { commandName: command.name },
-		}) as CommandLog[];
-
-		const timeLeft: number = commandLog
-			? (commandLog.run.getTime() + command.cooldown) - Date.now()
-			: 0;
-
-		if (![UserTypes.DEV, UserTypes.TRUSTED].includes(authorModel.type)
-			&& timeLeft > 0) {
-			const timeLeftString: string = duration(timeLeft, 'milliseconds')
-				.format('d [days], h [hours], m [minutes], s [seconds]');
-
-			message.reply([
-				`**${command.name}** is on cooldown!`,
-				`Please wait **${timeLeftString}** and try again!`,
-			].join('\n'));
-
-			return false;
-		}
-
-		return true;
 	}
 
 	private _fetchModels(message: Message): Promise<[UserModel, UserModel, GuildMember, GuildMember]> {

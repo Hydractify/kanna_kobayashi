@@ -1,8 +1,15 @@
-import { Message, Permissions, PermissionString } from 'discord.js';
+import { Message, Permissions, PermissionString, TextChannel } from 'discord.js';
+import { duration } from 'moment';
+// tslint:disable-next-line:no-import-side-effect
+import 'moment-duration-format';
 
+import { CommandLog } from '../models/CommandLog';
+import { User as UserModel } from '../models/User';
 import { ICommandInfo } from '../types/ICommandInfo';
 import { ICommandRunInfo } from '../types/ICommandRunInfo';
 import { PermLevels } from '../types/PermLevels';
+import { UserTypes } from '../types/UserTypes';
+import { titleCase } from '../util/Util';
 import { Client } from './Client';
 import { CommandHandler } from './CommandHandler';
 import { Resolver } from './Resolver';
@@ -140,6 +147,73 @@ export abstract class Command {
 		this.usage = usage;
 		this.patreonOnly = patreonOnly;
 		this.permLevel = permLevel;
+	}
+
+	public async canCall(message: Message, authorModel: UserModel): Promise<boolean> {
+		const permissions: Permissions = (message.channel as TextChannel).permissionsFor(message.guild.me);
+		if (!permissions.has('SEND_MESSAGES')) {
+			message.author.send('I do not have permission to send in the channel of your command!')
+				.catch(() => undefined);
+
+			return false;
+		}
+
+		const missing: PermissionString[] = permissions.missing(this.clientPermissions) as PermissionString[];
+		if (missing.length) {
+			const missingPermsString: string = missing.map((perm: string) =>
+				titleCase(perm.replace(/_/g, ' ')),
+			).join(', ');
+
+			message.reply(
+				`I require the following permissions to execute the **${this.name}** command: **${missingPermsString}**!`,
+			);
+
+			return false;
+		}
+
+		const permLevel: PermLevels = authorModel.permLevel(message.member);
+		if (this.patreonOnly && authorModel.tier <= 0 && permLevel < PermLevels.TRUSTED) {
+			message.reply(`**${this.name}** is for patreons only!`);
+
+			return false;
+		}
+
+		if (this.permLevel > permLevel) {
+			message.reply(`you do not have the required permission level to use **${this.name}**!`);
+
+			return false;
+		}
+
+		if (!this.enabled) {
+			message.reply(`**${this.name}** is currently disabled!`);
+
+			return false;
+		}
+
+		const [commandLog] = await authorModel.$get<CommandLog>('CommandLogs', {
+			limit: 1,
+			order: [['run', 'desc']],
+			where: { commandName: this.name },
+		}) as CommandLog[];
+
+		const timeLeft: number = commandLog
+			? (commandLog.run.getTime() + this.cooldown) - Date.now()
+			: 0;
+
+		if (![UserTypes.DEV, UserTypes.TRUSTED].includes(authorModel.type)
+			&& timeLeft > 0) {
+			const timeLeftString: string = duration(timeLeft, 'milliseconds')
+				.format('d [days], h [hours], m [minutes], s [seconds]');
+
+			message.reply([
+				`**${this.name}** is on cooldown!`,
+				`Please wait **${timeLeftString}** and try again!`,
+			].join('\n'));
+
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
