@@ -10,6 +10,7 @@ import { promisify } from 'util';
 import { CommandLog } from '../models/CommandLog';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
+import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
 import { Loggable } from '../util/LoggerDecorator';
 import { titleCase } from '../util/Util';
@@ -240,7 +241,14 @@ export class CommandHandler {
 			return false;
 		}
 
-		if (command.permLevel > authorModel.permLevel(message.member)) {
+		const permLevel: PermLevels = authorModel.permLevel(message.member);
+		if (command.patreonOnly && authorModel.tier <= 0 && permLevel >= PermLevels.TRUSTED) {
+			message.reply(`**${command.name}** is for patreons only!`);
+
+			return false;
+		}
+
+		if (command.permLevel > permLevel) {
 			message.reply(`you do not have the required permission level to use **${command.name}**!`);
 
 			return false;

@@ -58,6 +58,7 @@ export class User extends Model<User> {
 
 		data.coins = Number(data.coins) || 0;
 		data.exp = Number(data.exp) || 0;
+		data.tier = Number(data.tier) || 0;
 
 		return new this(data, { isNewRecord });
 	}
@@ -166,6 +167,9 @@ export class User extends Model<User> {
 	})
 	public type: UserTypes;
 
+	/**
+	 * Patreon tier
+	 */
 	@Column(DataType.INTEGER)
 	public tier: number;
 

@@ -64,6 +64,10 @@ export abstract class Command {
 	 */
 	public readonly name: string;
 	/**
+	 * Whether this command is patreon only
+	 */
+	public readonly patreonOnly: boolean;
+	/**
 	 * Permission level required to use the command
 	 */
 	public readonly permLevel: PermLevels;
@@ -89,8 +93,9 @@ export abstract class Command {
 		examples,
 		exp = 850,
 		name,
-		usage,
+		patreonOnly = false,
 		permLevel = PermLevels.EVERYONE,
+		usage,
 	}: ICommandInfo) {
 		// Assert correct type
 		if (!(handler instanceof CommandHandler)) {
@@ -133,6 +138,7 @@ export abstract class Command {
 		this.name = name;
 		this.resolver = handler.resolver;
 		this.usage = usage;
+		this.patreonOnly = patreonOnly;
 		this.permLevel = permLevel;
 	}
 

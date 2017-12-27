@@ -8,7 +8,6 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { PermLevels } from '../../types/PermLevels';
 import { ISauceNaoResult } from '../../types/saucenao/ISauceNaoResult';
 import { Redis } from '../../util/RedisDecorator';
 
@@ -43,8 +42,7 @@ class SauceNaoCommand extends Command {
 			],
 			exp: 0,
 			name: 'saucenao',
-			// TODO: Replace with Patreon tier once implemented.
-			permLevel: PermLevels.DEV,
+			patreonOnly: true,
 			usage: 'saucenao [URL|MessageID]',
 		});
 	}
@@ -100,8 +98,7 @@ class SauceNaoCommand extends Command {
 
 		if (response instanceof Buffer) {
 			// Responding with JSON is overrated, just send html instead
-			const responseArray: string[] = response.toString().split('\n');
-			const responseString: string = responseArray[responseArray.length - 1];
+			const responseString: string = response.toString().split('\n').pop();
 
 			return responseString[0].toLowerCase() + responseString.slice(1);
 		}

@@ -19,7 +19,7 @@ class DailyCommand extends Command {
 	}
 
 	public run(message: Message, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const grantedCoins: number = (authorModel.tier || 1) * this.coins;
+		const grantedCoins: number = (authorModel.tier + 1) * this.coins;
 
 		return message.reply(`here are your daily **${grantedCoins}** <:coin:330926092703498240>!`);
 	}
