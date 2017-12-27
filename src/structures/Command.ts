@@ -149,45 +149,33 @@ export abstract class Command {
 		this.permLevel = permLevel;
 	}
 
-	public async canCall(message: Message, authorModel: UserModel): Promise<boolean> {
-		const permissions: Permissions = (message.channel as TextChannel).permissionsFor(message.guild.me);
-		if (!permissions.has('SEND_MESSAGES')) {
-			message.author.send('I do not have permission to send in the channel of your command!')
-				.catch(() => undefined);
-
-			return false;
-		}
-
-		const missing: PermissionString[] = permissions.missing(this.clientPermissions) as PermissionString[];
+	/**
+	 * Determines whether the command may be called by the executing user.
+	 * Resolves with true on success or with a reason string on failure.
+	 */
+	public async canCall(message: Message, authorModel: UserModel): Promise<true | string> {
+		const missing: PermissionString[] = (message.channel as TextChannel)
+			.permissionsFor(message.guild.me)
+			.missing(this.clientPermissions) as PermissionString[];
 		if (missing.length) {
 			const missingPermsString: string = missing.map((perm: string) =>
 				titleCase(perm.replace(/_/g, ' ')),
 			).join(', ');
 
-			message.reply(
-				`I require the following permissions to execute the **${this.name}** command: **${missingPermsString}**!`,
-			);
-
-			return false;
+			return `I require the following permissions to execute the **${this.name}** command: **${missingPermsString}**!`;
 		}
 
 		const permLevel: PermLevels = authorModel.permLevel(message.member);
 		if (this.patreonOnly && authorModel.tier <= 0 && permLevel < PermLevels.TRUSTED) {
-			message.reply(`**${this.name}** is for patreons only!`);
-
-			return false;
+			return `**${this.name}** is for patreons only!`;
 		}
 
 		if (this.permLevel > permLevel) {
-			message.reply(`you do not have the required permission level to use **${this.name}**!`);
-
-			return false;
+			return `you do not have the required permission level to use **${this.name}**!`;
 		}
 
 		if (!this.enabled) {
-			message.reply(`**${this.name}** is currently disabled!`);
-
-			return false;
+			return `**${this.name}** is currently disabled!`;
 		}
 
 		const [commandLog] = await authorModel.$get<CommandLog>('CommandLogs', {
@@ -205,12 +193,7 @@ export abstract class Command {
 			const timeLeftString: string = duration(timeLeft, 'milliseconds')
 				.format('d [days], h [hours], m [minutes], s [seconds]');
 
-			message.reply([
-				`**${this.name}** is on cooldown!`,
-				`Please wait **${timeLeftString}** and try again!`,
-			].join('\n'));
-
-			return false;
+			return `**${this.name}** is on cooldown!\nPlease wait **${timeLeftString}** and try again!`;
 		}
 
 		return true;

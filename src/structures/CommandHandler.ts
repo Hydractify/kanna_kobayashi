@@ -161,7 +161,20 @@ export class CommandHandler {
 		if (ownerModel.type === UserTypes.BLACKLISTED) return;
 		if (ownerModel.type !== UserTypes.WHITELISTED && message.guild.isBotFarm) return;
 
-		if (!await command.canCall(message, authorModel)) return;
+		if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) {
+			message.author.send('I do not have permission to send in the channel of your command!')
+				.catch(() => undefined);
+
+			return;
+		}
+
+		const canCallRes: true | string = await command.canCall(message, authorModel);
+
+		if (typeof canCallRes === 'string') {
+			message.reply(canCallRes);
+
+			return;
+		}
 
 		try {
 			// tslint:disable-next-line:no-any
