@@ -10,7 +10,7 @@ class BanCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['banne', 'exile'],
-			clientPermissions: ['BAN_MEMBERS', 'USE_EXTERNAL_EMOJIS'],
+			clientPermissions: ['BAN_MEMBERS'],
 			coins: 0,
 			description: 'Ban a member... Or a lot of them!',
 			examples: ['ban wizard', 'ban wizard anxeal space'],

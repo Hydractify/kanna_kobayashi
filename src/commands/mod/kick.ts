@@ -9,7 +9,7 @@ import { FlagCollection, flagsText, parseFlags } from '../../util/Util';
 class KickCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			clientPermissions: ['KICK_MEMBERS', 'USE_EXTERNAL_EMOJIS'],
+			clientPermissions: ['KICK_MEMBERS'],
 			coins: 0,
 			description: 'Kick a member... Or a lot of them!',
 			examples: ['kick wizard', 'kick wizard anxeal space'],
