@@ -1,3 +1,6 @@
+// tslint:disable-next-line:no-import-side-effect no-submodule-imports
+import 'source-map-support/register';
+
 import { config } from 'raven';
 const { ravenToken } = require('../data');
 config(process.env.NODE_ENV !== 'dev' && ravenToken, {

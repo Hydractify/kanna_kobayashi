@@ -1,3 +1,6 @@
+// tslint:disable-next-line:no-import-side-effect no-submodule-imports
+import 'source-map-support/register';
+
 import { Shard, ShardingManager } from 'discord.js';
 import { join } from 'path';
 
