@@ -30,7 +30,6 @@ class OsuUserCommand extends Command {
 		let mode: OsuMode = OsuMode.OSU;
 		if (modeOrOption) {
 			modeOrOption = modeOrOption.toUpperCase();
-			// tslint:disable-next-line:no-any
 			const tempMode: OsuMode = OsuMode[modeOrOption as any] as any;
 			if (tempMode) mode = tempMode;
 			else option = modeOrOption;

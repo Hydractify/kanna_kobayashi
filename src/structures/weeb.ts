@@ -27,6 +27,5 @@ export const fetchRandom: (options: IFetchRandomOptions) => Promise<RandomImageR
 	= (options: IFetchRandomOptions): Promise<RandomImageResult> => {
 		if (!options.type && !options.tags) throw new Error('One of "type" or "tags" is required to fetch a random image!');
 
-		// tslint:disable-next-line:no-any
 		return api().images.random.get<RandomImageResult>({ query: options as any });
 	};

@@ -1,4 +1,4 @@
-// tslint:disable:no-any member-ordering
+// tslint:disable:member-ordering
 
 import * as moment from 'moment';
 import { inspect } from 'util';

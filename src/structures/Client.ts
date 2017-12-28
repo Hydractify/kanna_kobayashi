@@ -94,12 +94,10 @@ export class Client extends DJSClient {
 
 			.addField('Total Members', guild.memberCount, true)
 			.addField('Humans', guild.memberCount - botCount, true)
-			// tslint:disable-next-line:no-any
 			.addField('Bots', botCount, true) as any)
 
 			._apiTransform();
 
-		// tslint:disable-next-line:no-any
 		(this as any).api.channels('303180857030606849').messages.post({ data: { embed } });
 	}
 

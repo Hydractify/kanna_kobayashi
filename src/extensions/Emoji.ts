@@ -4,10 +4,9 @@ class EmojiExtension {
 	public toJSON(this: Emoji): object {
 		return {
 			id: this.id,
+			managed: this.managed,
 			name: this.name,
 			require_colons: this.requiresColons,
-			managed: this.managed,
-			// tslint:disable-next-line:no-any
 			roles: (this as any)._roles,
 		};
 	}

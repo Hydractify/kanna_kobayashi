@@ -38,7 +38,6 @@ class EvalCommand extends Command {
 		let code: string = args.join(' ');
 		if (code.includes('await')) code = `(async()=>{${code}})()`;
 		try {
-			// tslint:disable-next-line:no-any
 			let evaled: any = commandName === 'broadcasteval'
 				? await this.client.shard.broadcastEval(code)
 				// tslint:disable-next-line:no-eval

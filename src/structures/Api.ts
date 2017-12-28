@@ -1,4 +1,4 @@
-// tslint:disable no-any comment-format
+// tslint:disable comment-format
 
 // https://github.com/hydrabolt/discord.js/blob/27ccad1f1c209d1222d5846e44aa2caba2ed536d/src/rest/APIRouter.js
 

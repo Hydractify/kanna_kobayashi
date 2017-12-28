@@ -1,5 +1,3 @@
-// tslint:disable:no-any
-
 import { ShardClientUtil, Util } from 'discord.js';
 
 class ShardClientUtilExtension {

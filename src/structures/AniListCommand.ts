@@ -248,7 +248,6 @@ export abstract class AniListCommand extends Command {
 		const token: string = await this.retrieveToken();
 		search = encodeURIComponent(search);
 
-		// tslint:disable-next-line:no-any
 		const response: any = await Api()(this.type).search(search).get({ query: { access_token: token } });
 
 		if (response.error) {

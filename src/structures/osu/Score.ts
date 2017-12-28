@@ -126,7 +126,6 @@ export class Score {
 		if (!this._enabledMods) return 'None';
 		const enabledMods: Set<string> = new Set<string>();
 
-		// tslint:disable-next-line:no-any
 		let mods: [string, number][] = Object.entries(BeatmapMods) as any;
 		mods = mods.slice(mods.length / 2);
 

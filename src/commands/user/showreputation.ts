@@ -32,7 +32,6 @@ class ShowReputationCommand extends Command {
 			where: { repId: member.id },
 			attributes: ['type'],
 			group: ['type'],
-			// tslint:disable-next-line:no-any
 		}).then((results: any) => {
 			const reps: { [key: string]: number } = {};
 			for (const result of results) reps[result.type] = result.count;

@@ -91,12 +91,10 @@ class ItemCommand extends Command {
 		const modelData: { [key: string]: string | boolean | number } = {};
 
 		for (const [name, data] of parsed) {
-			// tslint:disable-next-line:no-any
 			const { type }: any = (Item.prototype as any).rawAttributes[name] || {};
 			// Provided flag is not an attributte of Item
 			if (!type) continue;
 
-			// tslint:disable-next-line:no-any
 			if (type instanceof (BOOLEAN as any)) {
 				if ((data as string).toLowerCase() === 'true') {
 					modelData[name] = true;
@@ -288,7 +286,6 @@ class ItemCommand extends Command {
 
 	private structure(message: Message, args: string[], authorModel: UserModel): Promise<Message | Message[]> {
 		const structure: string[] = ['Item {'];
-		// tslint:disable-next-line:no-any
 		for (const [name, { type }] of Object.entries((Item.prototype as any).rawAttributes)) {
 			structure.push(`\t${name}: ${type instanceof ENUM ? inspect(type.values) : type.constructor.name},`);
 		}

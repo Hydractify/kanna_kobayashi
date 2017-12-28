@@ -212,7 +212,6 @@ export abstract class Command {
 	 * Should return a string with a message to the user if resolving failed.
 	 * @virtual
 	 */
-	// tslint:disable:no-any
 	public parseArgs(message: Message, args: string[], info: ICommandRunInfo): Promise<any[] | string> | any[] | string {
 		return args;
 	}

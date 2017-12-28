@@ -32,7 +32,6 @@ class OsuBeatmapCommand extends Command {
 		let mode: OsuMode = OsuMode.OSU;
 		if (modeOrOption) {
 			modeOrOption = modeOrOption.toUpperCase();
-			// tslint:disable-next-line:no-any
 			const tmpMode: OsuMode = OsuMode[modeOrOption as any] as any;
 			if (tmpMode) mode = tmpMode;
 			else option = modeOrOption;

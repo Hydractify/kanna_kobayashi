@@ -36,7 +36,6 @@ class SetGameCommand extends Command {
 		return this.setGame(args.join(' '), stream);
 	}
 
-	// tslint:disable-next-line:no-any
 	private setGame(game: string, stream?: string): Promise<any[]> {
 		return this.client.shard.broadcastEval(`this.user.setGame(\`${game} [\${this.shard.id}]\`${stream || ''});`);
 	}

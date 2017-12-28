@@ -64,7 +64,6 @@ export abstract class ImageEmbedCommand extends Command {
 	 * Default basic implementation for an image embed command.
 	 * @virtual
 	 */
-	// tslint:disable-next-line:no-any
 	public run(message: Message, _: any[], { authorModel }: ICommandRunInfo): any {
 		const embed: MessageEmbed = this.imageEmbed(message, authorModel);
 

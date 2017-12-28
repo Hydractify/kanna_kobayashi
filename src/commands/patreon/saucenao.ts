@@ -93,7 +93,6 @@ class SauceNaoCommand extends Command {
 			return 'I reached the limit for source lookups, try it again in approximately one hour.';
 		}
 
-		// tslint:disable-next-line:no-any
 		const response: ISauceNaoResult<any> | Buffer = await Api().get({ query: { url } });
 
 		if (response instanceof Buffer) {
@@ -144,7 +143,6 @@ class SauceNaoCommand extends Command {
 		let image: { height?: number; proxyURL?: string; url: string; width?: number } = message.attachments.first();
 		if (image && image.height) return image.url;
 
-		// tslint:disable-next-line:no-any
 		const embed: MessageEmbed = message.embeds[0] as any;
 		if (embed && (embed.thumbnail || embed.image)) {
 			image = embed.thumbnail || embed.image;

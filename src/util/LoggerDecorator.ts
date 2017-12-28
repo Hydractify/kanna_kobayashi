@@ -1,4 +1,4 @@
-// tslint:disable:ban-types only-arrow-functions no-any
+// tslint:disable:ban-types only-arrow-functions
 import { Logger } from '../structures/Logger';
 import { LogLevel } from '../types/LogLevel';
 

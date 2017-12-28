@@ -90,11 +90,9 @@ export class Item extends Model<Item> {
 	 * **Only present if fetched via association!**
 	 */
 	public get userItem(): UserItem {
-		// tslint:disable-next-line:no-any
 		return (this as any).UserItem;
 	}
 	public set userItem(value: UserItem) {
-		// tslint:disable-next-line:no-any
 		(this as any).UserItem = value;
 	}
 }

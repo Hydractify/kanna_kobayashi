@@ -50,7 +50,6 @@ class MarketCommand extends Command {
 				required: false,
 				where: { id: message.author.id },
 			}],
-			// tslint:disable-next-line:no-any
 			where: where(fn('lower', col('name')), args.join(' ').toLowerCase()) as any,
 		});
 
