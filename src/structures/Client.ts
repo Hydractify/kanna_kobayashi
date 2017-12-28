@@ -19,6 +19,7 @@ import { generateColor } from '../util/generateColor';
 import { ListenerUtil } from '../util/ListenerUtil';
 import { CommandHandler } from './CommandHandler';
 import { Loggable, Logger } from './Logger';
+import { WebhookLogger } from './WebhookLogger';
 
 const { on, once, registerListeners }: typeof ListenerUtil = ListenerUtil;
 const { dbots, dbotsorg }: {
@@ -35,6 +36,10 @@ export class Client extends DJSClient {
 	 * Command handler of the client
 	 */
 	public readonly commandHandler: CommandHandler;
+	/**
+	 * Like the Logger but also sends messages to a webhook
+	 */
+	public readonly webhook: WebhookLogger = WebhookLogger.instance;
 
 	/**
 	 * Reference to the logger
@@ -55,7 +60,9 @@ export class Client extends DJSClient {
 
 	@once('ready')
 	protected _onceReady(): void {
-		this.logger.info('READY', `Logged in as ${this.user.tag} (${this.user.id})`);
+		(this as any).ws.connection.on('close', this._onDisconnect.bind(this));
+
+		this.webhook.info('Ready', `Logged in as ${this.user.tag} (${this.user.id})`);
 		if (this.shard.id === 0 && this.user.id === '297459926505095180') {
 			this.setInterval(this._updateBotLists.bind(this), 30 * 60 * 1000);
 		}
@@ -63,12 +70,12 @@ export class Client extends DJSClient {
 
 	@on('disconnect')
 	protected _onDisconnect({ code, reason }: { code: number; reason: string }): void {
-		this.logger.warn('DISCONNECT', `Bot disconnected.\nCode:${code} | ${reason || 'No reason available'}`);
+		this.webhook.warn('Disconnect', `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
 	}
 
 	@on('error')
 	protected _onError(error: Error): void {
-		this.logger.error('CLIENT', error);
+		this.webhook.error('Client Error', error);
 	}
 
 	@on('guildCreate', false)
@@ -126,17 +133,17 @@ export class Client extends DJSClient {
 
 	@on('reconnecting')
 	protected _onReconnecting(): void {
-		this.logger.info('RECONNECTING', 'Reconnecting...');
+		this.webhook.info('Reconnecting');
 	}
 
 	@on('resumed')
 	protected _onResume(replayed: number): void {
-		this.logger.info('RESUMED', `Replayed ${replayed} events.`);
+		this.webhook.info('Resumed', `Replayed \`${replayed}\` events.`);
 	}
 
 	@on('warn')
 	protected _onWarn(warning: string): void {
-		this.logger.warn('CLIENT', warning);
+		this.webhook.warn('Client Warn', warning);
 	}
 
 	private async _updateBotLists(): Promise<void> {
@@ -145,6 +152,7 @@ export class Client extends DJSClient {
 				.then((res: number[]) => res.reduce((prev: number, cur: number) => prev + cur)),
 		};
 
+		// No webhook, this will just spam
 		this.logger.debug('BotLists', `Updating guild count at bot lists to ${body.server_count}.`);
 
 		post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
@@ -156,7 +164,7 @@ export class Client extends DJSClient {
 					tags: { target: 'bots.discord.pw' },
 					extra: { server_count: body.server_count },
 				});
-				this.logger.error('[BotLists]: Updating bots.discord\'s guild count failed:', error);
+				this.webhook.error('BotLists', 'Updating bots.discord\'s guild count failed:', error);
 			});
 
 		post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
@@ -168,7 +176,7 @@ export class Client extends DJSClient {
 					tags: { target: 'discordbots.org' },
 					extra: { server_count: body.server_count },
 				});
-				this.logger.error('[BotLists]: Updating discordbots\'s guild count failed:', error);
+				this.webhook.error('BotLists', 'Updating discordbots\'s guild count failed:', error);
 			});
 	}
 }

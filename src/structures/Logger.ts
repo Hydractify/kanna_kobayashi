@@ -11,6 +11,8 @@ export { Loggable } from '../util/LoggerDecorator';
  * Singleton Logger
  */
 export class Logger {
+	protected ['constructor']: typeof Logger;
+
 	/**
 	 * Singleton Logger instance
 	 */
@@ -21,24 +23,24 @@ export class Logger {
 	/**
 	 * Logger instance
 	 */
-	private static _instance: Logger;
+	protected static _instance: Logger;
 
 	/**
 	 * Current log level
 	 */
-	private _logLevel: LogLevel;
+	protected _logLevel: LogLevel;
 
 	/**
 	 * Instantiate the Logger singleton.
 	 */
-	private constructor() {
-		if (Logger._instance) {
+	protected constructor() {
+		if (this.constructor._instance) {
 			throw new Error('Can not create multiple instances of Logger singleton.');
 		}
 
 		this._logLevel = LogLevel.SILLY;
 
-		Logger._instance = this;
+		this.constructor._instance = this;
 	}
 
 	/**
@@ -93,7 +95,7 @@ export class Logger {
 	/**
 	 * Convert any data to a string
 	 */
-	private _prepareText(data: any[]): string {
+	protected _prepareText(data: any[]): string {
 		const cleaned: string[] = [];
 		for (let arg of data) {
 			if (typeof arg !== 'string') {
@@ -109,7 +111,7 @@ export class Logger {
 	/**
 	 * Write to the output stream
 	 */
-	private _write(level: LogLevel, tag: string, data: any[]): void {
+	protected _write(level: LogLevel, tag: string, data: any[]): void {
 		if (this._logLevel < level) return;
 		const out: NodeJS.Socket = level > LogLevel.WARN
 			? process.stdout
