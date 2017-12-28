@@ -161,8 +161,8 @@ export class Client extends DJSClient {
 			.then(() => this.logger.info('BotLists', 'Updated bots.discord\'s guild count.'))
 			.catch((error: Error) => {
 				captureException(error, {
-					tags: { target: 'bots.discord.pw' },
 					extra: { server_count: body.server_count },
+					tags: { target: 'bots.discord.pw' },
 				});
 				this.webhook.error('BotLists', 'Updating bots.discord\'s guild count failed:', error);
 			});
@@ -173,8 +173,8 @@ export class Client extends DJSClient {
 			.then(() => this.logger.info('BotLists', 'Updated discordbots\' guild count.'))
 			.catch((error: Error) => {
 				captureException(error, {
-					tags: { target: 'discordbots.org' },
 					extra: { server_count: body.server_count },
+					tags: { target: 'discordbots.org' },
 				});
 				this.webhook.error('BotLists', 'Updating discordbots\'s guild count failed:', error);
 			});
