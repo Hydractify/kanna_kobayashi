@@ -85,14 +85,17 @@ export class Item extends Model<Item> {
 	})
 	public unique: boolean;
 
+	// tslint:disable-next-line:variable-name
+	private UserItem: UserItem;
+
 	/**
 	 * Additional meta data about an item, such as the holder id and the item count
 	 * **Only present if fetched via association!**
 	 */
 	public get userItem(): UserItem {
-		return (this as any).UserItem;
+		return this.UserItem;
 	}
 	public set userItem(value: UserItem) {
-		(this as any).UserItem = value;
+		this.UserItem = value;
 	}
 }

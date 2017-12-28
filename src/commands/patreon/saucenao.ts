@@ -143,7 +143,7 @@ class SauceNaoCommand extends Command {
 		let image: { height?: number; proxyURL?: string; url: string; width?: number } = message.attachments.first();
 		if (image && image.height) return image.url;
 
-		const embed: MessageEmbed = message.embeds[0] as any;
+		const embed: MessageEmbed = message.embeds[0] as MessageEmbed;
 		if (embed && (embed.thumbnail || embed.image)) {
 			image = embed.thumbnail || embed.image;
 			if (image.height) return image.url;
