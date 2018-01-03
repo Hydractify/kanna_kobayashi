@@ -1,5 +1,5 @@
 import { Collection, CollectorFilter, Message, Snowflake } from 'discord.js';
-import { Sequelize, Transaction } from 'sequelize';
+import { Transaction } from 'sequelize';
 
 import { User as UserModel } from '../../models/User';
 import { CommandHandler } from '../../structures/CommandHandler';
@@ -7,13 +7,8 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
-import { Sequelize as SequelizeDecorator } from '../../util/SequelizeDecorator';
 
-@SequelizeDecorator
 class KissCommand extends WeebCommand {
-
-	private readonly sequelize: Sequelize;
-
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],

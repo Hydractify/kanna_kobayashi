@@ -11,7 +11,6 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { UserTypes } from '../../types/UserTypes';
 import { Loggable } from '../../util/LoggerDecorator';
-import { Sequelize as SequelizeDecorator } from '../../util/SequelizeDecorator';
 import { FlagCollection, parseFlags, titleCase } from '../../util/Util';
 
 //
@@ -20,10 +19,8 @@ import { FlagCollection, parseFlags, titleCase } from '../../util/Util';
 //
 
 @Loggable
-@SequelizeDecorator
 class ItemCommand extends Command {
 	private logger: Logger;
-	private sequelize: Sequelize;
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {

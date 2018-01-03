@@ -1,7 +1,9 @@
-import { Message, Permissions, PermissionString, TextChannel } from 'discord.js';
+import { Message, Permissions, PermissionString, TextChannel, User } from 'discord.js';
 import { duration } from 'moment';
 // tslint:disable-next-line:no-import-side-effect
 import 'moment-duration-format';
+import { RedisClient } from 'redis-p';
+import { Sequelize } from 'sequelize-typescript';
 
 import { CommandLog } from '../models/CommandLog';
 import { User as UserModel } from '../models/User';
@@ -9,6 +11,8 @@ import { ICommandInfo } from '../types/ICommandInfo';
 import { ICommandRunInfo } from '../types/ICommandRunInfo';
 import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
+import { Redis } from '../util/RedisDecorator';
+import { Sequelize as sequelize } from '../util/SequelizeDecorator';
 import { titleCase } from '../util/Util';
 import { Client } from './Client';
 import { CommandHandler } from './CommandHandler';
@@ -17,6 +21,8 @@ import { Resolver } from './Resolver';
 /**
  * Represents an abstract Command
  */
+@Redis
+@sequelize
 export abstract class Command {
 	/**
 	 * Array of aliases for the command
@@ -86,6 +92,15 @@ export abstract class Command {
 	 * String describing how this command is meant to use
 	 */
 	public readonly usage: string;
+
+	/**
+	 * Reference to the redis client
+	 */
+	protected redis: RedisClient;
+	/**
+	 * Reference to the sequelize connection
+	 */
+	protected sequelize: Sequelize;
 
 	/**
 	 * Instantiates a new command

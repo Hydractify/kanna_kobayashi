@@ -1,19 +1,12 @@
 import { GuildMember, Message, User } from 'discord.js';
-import { RedisClient } from 'redis-p';
-import { Sequelize, Transaction } from 'sequelize';
+import { Transaction } from 'sequelize';
 
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { Redis } from '../../util/RedisDecorator';
-import { Sequelize as SequelizeDecorator } from '../../util/SequelizeDecorator';
 
-@Redis
-@SequelizeDecorator
 class DonateCommand extends Command {
-	private readonly redis: RedisClient;
-	private readonly sequelize: Sequelize;
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {

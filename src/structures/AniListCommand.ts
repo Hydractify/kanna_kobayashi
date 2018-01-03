@@ -1,5 +1,4 @@
 import { Collection, Message } from 'discord.js';
-import { RedisClient } from 'redis-p';
 
 import { User as UserModel } from '../models/User';
 import { AnimeData } from '../types/anilist/AnimeData';
@@ -7,7 +6,6 @@ import { AniType } from '../types/anilist/AniType';
 import { CharData } from '../types/anilist/CharData';
 import { MangaData } from '../types/anilist/MangaData';
 import { ICommandInfo } from '../types/ICommandInfo';
-import { Redis } from '../util/RedisDecorator';
 import { chunkArray, replaceMap, titleCase } from '../util/Util';
 import { APIRouter, buildRouter } from './Api';
 import { Command } from './Command';
@@ -26,7 +24,6 @@ type AllTypes = AnimeData | CharData | MangaData;
 /**
  * Abstract command to provide Anilist functionality for commands in an easy manner.
  */
-@Redis
 export abstract class AniListCommand extends Command {
 
 	/**
@@ -43,10 +40,6 @@ export abstract class AniListCommand extends Command {
 		'`': '\'',
 	};
 
-	/**
-	 * Reference to the redis client
-	 */
-	protected redis: RedisClient;
 	/**
 	 * Type of resources the command is intended for.
 	 */

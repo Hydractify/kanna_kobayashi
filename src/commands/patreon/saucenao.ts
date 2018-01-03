@@ -26,10 +26,7 @@ const Api: () => APIRouter = buildRouter({
 	},
 });
 
-@Redis
 class SauceNaoCommand extends Command {
-
-	private readonly redis: RedisClient;
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['sauce', 'source'],

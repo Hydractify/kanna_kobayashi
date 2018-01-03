@@ -1,6 +1,5 @@
 import { Collection, CollectorFilter, Message, Snowflake } from 'discord.js';
-import { RedisClient } from 'redis-p';
-import { col, fn, Sequelize, Transaction, where } from 'sequelize';
+import { col, fn, Transaction, where } from 'sequelize';
 import { Model } from 'sequelize-typescript';
 
 import { Item } from '../../models/Item';
@@ -8,16 +7,8 @@ import { User } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { Redis } from '../../util/RedisDecorator';
-import { Sequelize as SequelizeDecorator } from '../../util/SequelizeDecorator';
 
-@Redis
-@SequelizeDecorator
 class MarketCommand extends Command {
-
-	private readonly redis: RedisClient;
-	private readonly sequelize: Sequelize;
-
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['shop'],

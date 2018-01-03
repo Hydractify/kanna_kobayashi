@@ -1,16 +1,12 @@
 import { Collection, CollectorFilter, Message, Snowflake, User } from 'discord.js';
-import { Sequelize, Transaction } from 'sequelize';
+import { Transaction } from 'sequelize';
 
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { Sequelize as SequelizeDecorator } from '../../util/SequelizeDecorator';
 
-@SequelizeDecorator
 class ProposeCommand extends Command {
-	private sequelize: Sequelize;
-
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['marry'],
