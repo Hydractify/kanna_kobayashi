@@ -1,6 +1,5 @@
 import { Message, MessageAttachment } from 'discord.js';
 import { extname } from 'path';
-import { RedisClient } from 'redis-p';
 import { parse } from 'url';
 
 import { APIRouter, buildRouter } from '../../structures/Api';
@@ -9,7 +8,6 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { ISauceNaoResult } from '../../types/saucenao/ISauceNaoResult';
-import { Redis } from '../../util/RedisDecorator';
 
 const { sauceNaoToken } = require('../../../data');
 // tslint:disable-next-line:variable-name

@@ -2,7 +2,7 @@ import { Message, Permissions, PermissionString, TextChannel, User } from 'disco
 import { duration } from 'moment';
 // tslint:disable-next-line:no-import-side-effect
 import 'moment-duration-format';
-import { RedisClient } from 'redis-p';
+import { RedisClient, Multi } from 'redis-p';
 import { Sequelize } from 'sequelize-typescript';
 
 import { CommandLog } from '../models/CommandLog';
@@ -220,6 +220,38 @@ export abstract class Command {
 	 */
 	public async free(): Promise<void> {
 		delete require.cache[require.resolve(this.location)];
+	}
+
+	/**
+	 * Grant a user coins and experience of the command.
+	 *
+	 * Returns the new level if user level'd up, or void if not.
+	 */
+	public async grantRewards(user: User, userModel: UserModel): Promise<number | void> {
+		if (!this.exp && !this.coins) return;
+
+		const { level } = userModel;
+		const multi: Multi = this.redis.multi();
+		const fields: { coins?: number; exp?: number } = {};
+
+		if (this.exp) {
+			multi.hincrby(`users:${user.id}`, 'exp', this.exp);
+			userModel.exp += this.exp;
+			fields.exp = this.exp;
+		}
+
+		if (this.coins) {
+			multi.hincrby(`users:${user.id}`, 'coins', this.coins);
+			// Model will be discarded directly anyway, no need to add coins to it
+			fields.coins = this.coins;
+		}
+
+		await Promise.all([
+			multi.exec(),
+			userModel.increment(fields),
+		]);
+
+		if (userModel.level > level) return userModel.level;
 	}
 
 	/**
