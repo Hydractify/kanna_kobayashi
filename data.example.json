@@ -1,11 +1,15 @@
 {
-	"ravenToken": "",
-	"clientToken": "",
 	"anilist": {
 		"client_id": "",
 		"client_secret": ""
 	},
+	"clientToken": "",
 	"dbots": "",
 	"dbotsorg": "",
-	"weebToken": "Bearer <token>"
+	"ravenToken": "",
+	"weebToken": "Bearer <Token>",
+	"webhook": {
+		"id:": "",
+		"secret": ""
+	}
 }
