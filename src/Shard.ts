@@ -4,6 +4,12 @@ import 'source-map-support/register';
 import { Shard, ShardingManager } from 'discord.js';
 import { join } from 'path';
 
+import { Logger } from './structures/Logger';
+
+process.on('unhandledRejection', (error: Error) => {
+	Logger.instance.error('REJECTION', error);
+});
+
 import { WebhookLogger } from './structures/WebhookLogger';
 
 const { clientToken }: { clientToken: string } = require('../data');
