@@ -4,8 +4,8 @@ import 'source-map-support/register';
 import { config } from 'raven';
 const { ravenToken } = require('../data');
 config(process.env.NODE_ENV !== 'dev' && ravenToken, {
-	captureUnhandledRejections: true,
 	autoBreadcrumbs: true,
+	captureUnhandledRejections: true,
 }).install();
 
 import { extendAll } from './extensions/Extension';
