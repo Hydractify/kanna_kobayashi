@@ -35,8 +35,10 @@ class DiscriminatorCommand extends Command {
 			return [
 				`That is not a valid discriminator, ${message.author}!`,
 				'A valid discriminator must be a sequenze of 4 numbers except `0000`.',
-			];
+			].join(' ');
 		}
+
+		return [discrim];
 	}
 
 	public async run(message: Message, [discrim]: string[]): Promise<Message | Message[]> {

@@ -24,7 +24,7 @@ class RemoveReputationCommand extends Command {
 
 		const member: GuildMember = await this.resolver.resolveMember(target, message.guild, false);
 		if (!member) return `I could not find a non-bot member with the name or id ${target}.`;
-		if (member.id === message.author.id) return 'you can not add a reputation to yourself.';
+		if (member.id === message.author.id) return 'you can not add a negative reputation to yourself.';
 		const already: UserReputation = await UserReputation.findOne<UserReputation>({
 			where: {
 				repId: member.id,

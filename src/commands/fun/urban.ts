@@ -22,7 +22,7 @@ class UrbanCommand extends Command {
 	public parseArgs(message: Message, args: string[]): string | string[] {
 		if (!args.length) {
 			return [
-				`Hey ${message.author}... You are supposed to tell me what to search`,
+				`you are supposed to tell me what to search!`,
 				`(\`kanna ${this.usage}\`) <:KannaWtf:320406412133924864>`,
 			].join(' ');
 		}

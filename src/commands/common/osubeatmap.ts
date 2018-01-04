@@ -20,7 +20,6 @@ class OsuBeatmapCommand extends Command {
 			name: 'osubeatmap',
 			usage: 'osubeatmap <ID> [Mode] [\'best\']',
 		});
-
 	}
 
 	public parseArgs(

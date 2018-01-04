@@ -1,14 +1,10 @@
 import { Message } from 'discord.js';
-import { RedisClient } from 'redis-p';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { Redis } from '../../util/RedisDecorator';
 
-@Redis
 class GambleCommand extends Command {
-	private readonly redis: RedisClient;
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {

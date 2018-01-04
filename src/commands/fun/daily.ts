@@ -23,7 +23,7 @@ class DailyCommand extends Command {
 
 		await Promise.all([
 			this.redis.hincrby(`users:${message.author.id}`, 'coins', grantedCoins),
-			authorModel.increment('coins', { by: grantedCoins }),
+			authorModel.increment({ coins: grantedCoins }),
 		]);
 
 		return message.reply(`here are your daily **${grantedCoins}** <:coin:330926092703498240>!`);
