@@ -14,11 +14,11 @@ class OsuBeatmapCommand extends Command {
 		super(handler, {
 			aliases: ['beatmap', 'osuset', 'set'],
 			coins: 0,
-			exp: 0,
-			usage: 'osubeatmap <ID> [Mode] [\'best\']',
-			description: 'See how much time it takes me to receive your message!',
-			name: 'osubeatmap',
+			description: 'Search for Osu! Beatmaps!',
 			examples: ['osubeatmap 577427', 'osubeatmap 577427 best', 'osubeatmap 577427 taiko best'],
+			exp: 0,
+			name: 'osubeatmap',
+			usage: 'osubeatmap <ID> [Mode] [\'best\']',
 		});
 
 	}
