@@ -155,10 +155,16 @@ export class User extends Model<User> {
 	})
 	public readonly commandLogs: CommandLog[];
 
-	@Column
+	@Column({
+		defaultValue: 0,
+		type: DataType.INTEGER,
+	})
 	public coins: number;
 
-	@Column
+	@Column({
+		defaultValue: 0,
+		type: DataType.INTEGER,
+	})
 	public exp: number;
 
 	@Column({
