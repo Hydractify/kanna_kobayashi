@@ -25,6 +25,8 @@ export class WebhookLogger extends Logger {
 
 	protected _write(level: LogLevel, tag: string, data: any[]): void {
 		super._write(level, `Webhook][${tag}`, data);
+		if (this._logLevel < level) return;
+
 		const cleaned: string = this._prepareText(data);
 
 		const embed: MessageEmbed = new MessageEmbed()

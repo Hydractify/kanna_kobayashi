@@ -29,7 +29,7 @@
 		"build": "tsc -p ./",
 		"watch": "tsc -w -p ./",
 		"test": "tslint -p ./",
-		"start": "export NODE_ENV=prod|| set NODE_ENV=prod && cd bin && node ./shard.js",
+		"start": "export NODE_ENV=production|| set NODE_ENV=production&& cd bin && node ./shard.js",
 		"dev": "export DEBUG=*|| set DEBUG=*&& export NODE_ENV=dev|| set NODE_ENV=dev&& cd bin && node ./shard.js"
 	},
 	"repository": {

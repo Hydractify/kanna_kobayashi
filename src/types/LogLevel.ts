@@ -1,13 +1,13 @@
 import { ColorResolvable } from 'discord.js';
 
 export enum LogLevel {
+	NONE,
 	ERROR,
 	WARN,
 	INFO,
 	VERBOSE,
 	DEBUG,
 	SILLY,
-	NONE,
 }
 
 export const colors: IColor = {
