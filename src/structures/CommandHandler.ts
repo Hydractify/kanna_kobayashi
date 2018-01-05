@@ -53,7 +53,9 @@ export class CommandHandler {
 		this.client = client;
 
 		this.resolver = new Resolver(this);
-		this._prefixes = ['kanna ', 'k!', '-'];
+		this._prefixes = ['kanna ', 'k!'];
+
+		if (process.env.NODE_ENV === 'dev') this._prefixes.push('-');
 
 		// Automatically wrap all received messages in a raven context
 		client.on('message', wrap(this.handle.bind(this)));
