@@ -9,7 +9,7 @@
 	"ravenToken": "",
 	"weebToken": "Bearer <Token>",
 	"webhook": {
-		"id:": "",
+		"id": "",
 		"secret": ""
 	}
 }
