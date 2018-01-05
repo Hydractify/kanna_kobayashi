@@ -46,19 +46,20 @@ class GambleCommand extends Command {
 		else if (chance >= 60) boost = 1;
 
 		let reply: string;
+		let gambled: number;
 		if (!boost) {
-			amount = -amount;
+			gambled = -amount;
 			reply = `you lost **${amount}** coins! <:KannaAyy:315270615844126720>`;
 		} else {
-			amount = amount * boost;
+			gambled = amount * boost;
 			reply = `you got **${amount}** coins! <:KannaWtf:320406412133924864>`;
 		}
 
-		await authorModel.increment({ coins: amount });
+		await authorModel.increment({ coins: gambled });
 
 		await this.redis
 		.multi()
-		.hincrby(`users:${message.author.id}`, 'coins', amount)
+		.hincrby(`users:${message.author.id}`, 'coins', gambled)
 		.exec();
 
 		return message.reply(reply);
