@@ -40,6 +40,11 @@ class GambleCommand extends Command {
 		let chance: number = Math.floor((Math.random() * 100));
 		if (authorModel.tier) chance = chance * authorModel.tier;
 
+		await Promise.all([
+			this.redis.hincrby(`users:${message.author.id}`, 'coins', -amount),
+			authorModel.increment({ coins: -amount }),
+		]);
+
 		let boost: number = 0;
 		if (chance === 100) boost = 5;
 		else if (chance >= 80) boost = 2;
@@ -55,12 +60,10 @@ class GambleCommand extends Command {
 			reply = `you got **${amount}** coins! <:KannaWtf:320406412133924864>`;
 		}
 
-		await authorModel.increment({ coins: gambled });
-
-		await this.redis
-		.multi()
-		.hincrby(`users:${message.author.id}`, 'coins', gambled)
-		.exec();
+		await Promise.all([
+			this.redis.hincrby(`users:${message.author.id}`, 'coins', gambled),
+			authorModel.increment({ coins: gambled }),
+		]);
 
 		return message.reply(reply);
 	}
