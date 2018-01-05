@@ -46,18 +46,18 @@ class GambleCommand extends Command {
 		]);
 
 		let boost: number = 0;
-		if (chance === 100) boost = 5;
-		else if (chance >= 80) boost = 2;
-		else if (chance >= 60) boost = 1;
+		if (chance === 100) boost = 7;
+		else if (chance >= 80) boost = 4;
+		else if (chance >= 60) boost = 2;
 
 		let reply: string;
 		let gambled: number;
 		if (!boost) {
-			gambled = -amount;
+			gambled = 0;
 			reply = `you lost **${amount}** coins! <:KannaAyy:315270615844126720>`;
 		} else {
 			gambled = amount * boost;
-			reply = `you got **${amount}** coins! <:KannaWtf:320406412133924864>`;
+			reply = `you got **${gambled}** coins! <:KannaWtf:320406412133924864>`;
 		}
 
 		await Promise.all([
