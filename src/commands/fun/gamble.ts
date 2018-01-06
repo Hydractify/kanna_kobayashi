@@ -5,7 +5,6 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class GambleCommand extends Command {
-
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			coins: 0,
@@ -34,38 +33,28 @@ class GambleCommand extends Command {
 
 	public async run(
 		message: Message,
-		[amount]: [number],
+		[wager]: [number],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		let chance: number = Math.floor((Math.random() * 100));
-		if (authorModel.tier) chance = chance * authorModel.tier;
+		const chance: number = Math.floor(Math.random() * 100) * (authorModel.tier || 1);
+
+		let multiplier: number = 0;
+		if (chance >= 100) multiplier = 7;
+		else if (chance >= 80) multiplier = 4;
+		else if (chance >= 60) multiplier = 2;
+
+		const won: number = wager * multiplier;
 
 		await Promise.all([
-			this.redis.hincrby(`users:${message.author.id}`, 'coins', -amount),
-			authorModel.increment({ coins: -amount }),
+			this.redis.hincrby(`users:${message.author.id}`, 'coins', won - wager),
+			authorModel.increment({ coins: won - wager }),
 		]);
 
-		let boost: number = 0;
-		if (chance === 100) boost = 7;
-		else if (chance >= 80) boost = 4;
-		else if (chance >= 60) boost = 2;
-
-		let reply: string;
-		let gambled: number;
-		if (!boost) {
-			gambled = 0;
-			reply = `you lost **${amount}** coins! <:KannaAyy:315270615844126720>`;
-		} else {
-			gambled = amount * boost;
-			reply = `you got **${gambled}** coins! <:KannaWtf:320406412133924864>`;
-		}
-
-		await Promise.all([
-			this.redis.hincrby(`users:${message.author.id}`, 'coins', gambled),
-			authorModel.increment({ coins: gambled }),
-		]);
-
-		return message.reply(reply);
+		return message.reply(
+			won
+				? `you got **${won - wager}** coins! <:KannaAyy:315270615844126720>`
+				: `you lost **${wager}** coins! <:KannaWtf:320406412133924864>`,
+		);
 	}
 }
 
