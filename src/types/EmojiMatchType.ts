@@ -1,4 +1,4 @@
-enum EmojiMatchType {
+export enum EmojiMatchType {
 	EXACT,
 	INEXCACT,
 }

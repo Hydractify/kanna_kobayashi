@@ -5,6 +5,7 @@ import { Client } from '../../structures/Client';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { EmojiMatchType } from '../../types/EmojiMatchType';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class EmojiInfoCommand extends Command {
@@ -29,23 +30,14 @@ class EmojiInfoCommand extends Command {
 	public async parseArgs(message: Message, [emojiName]: string[]): Promise<string | [Emoji]> {
 		if (!emojiName) return 'you have to give me something to search for!';
 
-		let [, emoji]: [EmojiMatchType, Emoji] = this.searchEmoji(emojiName);
-
-		if (emoji) {
-			return [emoji];
-		}
-
 		const results: [EmojiMatchType, Emoji][] = await this.client.shard.broadcastEval(
 			// tslint:disable-next-line:no-shadowed-variable
-			(client: Client, [name, shardId, emojiName]: [string, number, string]) => {
-				if (client.shard.id === shardId) return undefined;
-
-				return (client.commandHandler.resolveCommand(name) as EmojiInfoCommand)
-					.searchEmoji(emojiName);
-			},
+			(client: Client, [name, shardId, emojiName]: [string, number, string]) =>
+				(client.commandHandler.resolveCommand(name) as EmojiInfoCommand).searchEmoji(emojiName),
 			[this.name, this.client.shard.id, emojiName],
 		);
 
+		let emoji: Emoji;
 		for (const result of results) {
 			if (!result) continue;
 			let type: EmojiMatchType;
@@ -53,13 +45,11 @@ class EmojiInfoCommand extends Command {
 			if (type === EmojiMatchType.EXACT) break;
 		}
 
-		if (emoji) {
-			// Guild is not on this shard
-			return [new Emoji(this.client, emoji, undefined)];
-		}
+		// Guild is not on this shard
+		if (emoji) return [new Emoji(this.client, emoji, undefined)];
 
 		const match: RegExpMatchArray = emojiName.match(/<:([A-z\d_]{2,32}):(\d{17,19})>/);
-		if (!match) return 'I could not find any emoji by that name or id!';
+		if (!match) return 'I could not find a custom emoji by that name or id!';
 
 		// Guild is not on any shard, but exists
 		return [new Emoji(this.client, { name: match[1], id: match[2] }, undefined)];
@@ -89,7 +79,7 @@ class EmojiInfoCommand extends Command {
 
 		if (inExactMatch) return [EmojiMatchType.INEXCACT, inExactMatch];
 
-		return undefined;
+		return [undefined, undefined];
 	}
 }
 
