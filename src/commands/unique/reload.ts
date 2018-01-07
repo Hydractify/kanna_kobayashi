@@ -1,5 +1,6 @@
 import { Message } from 'discord.js';
 
+import { Client } from '../../structures/Client';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { IPlainError } from '../../types/IPlainError';
@@ -28,20 +29,22 @@ class ReloadCommand extends Command {
 	public async run(message: Message, [commandName]: string[]): Promise<Message | Message[]> {
 		if (!commandName) return message.reply('you should supply a command to reload.');
 
-		// TODO: Make this somehow better. Some proxy can probably do wonders here.
-		const results: string[] = await this.client.shard.broadcastEval([
-			`this.commandHandler.reloadCommand('${commandName}')`,
-			'.then(() => ([this.shard.id, null]))',
-			'.catch(e => ([this.shard.id, e]));',
-		].join(''))
-			.then((result: [number, boolean | IPlainError][]) =>
-				result.map(
-					([id, error]: [number, IPlainError]) =>
-						`Shard: ${id} - ${error ? `\`${error.message}\`` : 'Success'}`,
+		const results: [number, IPlainError | undefined][] = await this.client.shard.broadcastEval(
+			// tslint:disable-next-line:no-shadowed-variable
+			(client: Client, [commandName]: string[]) =>
+				client.commandHandler.reloadCommand(commandName)
+					.then(() =>
+						([client.shard.id, undefined]),
+				).catch((e: IPlainError) =>
+					([client.shard.id, require('discord.js').Util.makePlainError(e)]),
 				),
-		);
+			[commandName],
+		) as any;
 
-		return message.channel.send(results.join('\n'));
+		return message.channel.send(results.map(
+			([id, error]: [number, IPlainError | undefined]) =>
+				`Shard: ${id} - ${error ? `\`${error.message}\`` : 'Success'}`,
+		).join('\n'));
 	}
 }
 

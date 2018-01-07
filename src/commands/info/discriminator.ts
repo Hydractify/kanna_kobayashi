@@ -1,5 +1,6 @@
 import { Message, Util } from 'discord.js';
 
+import { Client } from '../../structures/Client';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 
@@ -42,9 +43,11 @@ class DiscriminatorCommand extends Command {
 	}
 
 	public async run(message: Message, [discrim]: string[]): Promise<Message | Message[]> {
-		const users: string[] = await this.client.shard
-			.broadcastEval(`this.commandHandler.resolveCommand('${this.name}').filterAndMap('${discrim}');`)
-			.then((res: string[][]) => [...new Set([].concat(...res))]);
+		const users: string[] = await this.client.shard.broadcastEval(
+			(client: Client, [name, disc]: string[]) =>
+				(client.commandHandler.resolveCommand(name) as DiscriminatorCommand).filterAndMap(disc),
+			[this.name, discrim],
+		).then((res: string[][]) => [...new Set([].concat(...res))]);
 
 		if (!users.length) {
 			return message.reply(

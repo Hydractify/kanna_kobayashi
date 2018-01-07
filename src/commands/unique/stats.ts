@@ -1,6 +1,7 @@
 import { Message } from 'discord.js';
 import * as moment from 'moment';
 
+import { Client } from '../../structures/Client';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
@@ -25,17 +26,16 @@ class StatsCommand extends Command {
 
 	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
 		const { guilds, users, other } = await
-			this.client.shard.broadcastEval([
-				'({',
-				'guilds: this.guilds.size,',
-				'users: this.users.size,',
-				'other: {',
-				// tslint:disable-next-line:no-invalid-template-strings
-				'ram: `${(process.memoryUsage().heapUsed / 1024 / 1204).toFixed(2)} MB`,',
-				'shardId: this.shard.id',
-				'}',
-				'})',
-			].join('')).then((res: IShardData[]) =>
+			this.client.shard.broadcastEval(
+				(client: Client) => ({
+					guilds: client.guilds.size,
+					users: client.users.size,
+					other: {
+						ram: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
+						shardId: client.shard.id,
+					},
+				}),
+			).then((res: IShardData[]) =>
 				res.reduce(
 					(previous: IShardData<IShardDataOther[]>, current: IShardData) => {
 						previous.guilds += current.guilds;

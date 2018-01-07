@@ -1,4 +1,7 @@
-import { ShardClientUtil, Util } from 'discord.js';
+import { Client, ShardClientUtil, Util } from 'discord.js';
+import { inspect } from 'util';
+
+const broadcastEval: (script: string) => Promise<any[]> = ShardClientUtil.prototype.broadcastEval;
 
 class ShardClientUtilExtension {
 	public async _handleMessage(this: any, message: { [key: string]: string }): Promise<void> {
@@ -21,7 +24,28 @@ class ShardClientUtilExtension {
 			}
 		}
 	}
+
+	public async broadcastEval<T, V = any>(
+		fn: (client: Client, args?: V[]) => T,
+		args: V[] = [],
+	): Promise<T[]> {
+		let stringified: string;
+		if (typeof fn === 'string') {
+			stringified = fn;
+		} else {
+			stringified = fn.toString();
+
+			if (!/(^function|^\(.*\) =>)/.test(stringified)) {
+				stringified = `function ${stringified}`;
+			}
+
+			stringified = `(${stringified})(this, ${inspect(args)})`;
+		}
+
+		return broadcastEval.call(this, stringified);
+	}
 }
+
 
 export { ShardClientUtilExtension as Extension };
 export { ShardClientUtil as Target };

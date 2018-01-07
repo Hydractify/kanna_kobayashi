@@ -1,6 +1,7 @@
 import { Emoji, Message } from 'discord.js';
 import * as moment from 'moment';
 
+import { Client } from '../../structures/Client';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
@@ -35,10 +36,14 @@ class EmojiInfoCommand extends Command {
 		}
 
 		const results: [EmojiMatchType, Emoji][] = await this.client.shard.broadcastEval(
-			[
-				`if (this.shard.id === ${this.client.shard.id}) null;`,
-				`else this.commandHandler.commands.get('emojiinfo').searchEmoji('${emojiName}');`,
-			].join('\n'),
+			// tslint:disable-next-line:no-shadowed-variable
+			(client: Client, [name, shardId, emojiName]: [string, number, string]) => {
+				if (client.shard.id === shardId) return undefined;
+
+				return (client.commandHandler.resolveCommand(name) as EmojiInfoCommand)
+					.searchEmoji(emojiName);
+			},
+			[this.name, this.client.shard.id, emojiName],
 		);
 
 		for (const result of results) {
