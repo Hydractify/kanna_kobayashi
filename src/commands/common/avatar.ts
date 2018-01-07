@@ -22,12 +22,10 @@ class AvatarCommand extends Command {
 	public async parseArgs(message: Message, [input]: string[]): Promise<[User] | string> {
 		if (!input) return [message.author];
 
-		let { user }: GuildMember = await this.resolver.resolveMember(input, message.guild);
-		if (user) {
-			return [user];
-		}
+		const member: GuildMember = await this.resolver.resolveMember(input, message.guild);
+		if (member) return [member.user];
 
-		user = await this.resolver.resolveUser(input);
+		const user: User = await this.resolver.resolveUser(input);
 
 		return user
 			? [user]
