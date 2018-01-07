@@ -1,4 +1,4 @@
-import { WebhookClient } from 'discord.js';
+import { MessageAttachment, WebhookClient, WebhookMessageOptions } from 'discord.js';
 
 import { colors, LogLevel } from '../types/LogLevel';
 import { Logger } from './Logger';
@@ -32,20 +32,26 @@ export class WebhookLogger extends Logger {
 		const embed: MessageEmbed = new MessageEmbed()
 			.setTimestamp()
 			.setColor(colors[level][2])
-			.setDescription(cleaned)
 			.setFooter(
 			'SHARD_ID' in process.env
 				? `Shard ${process.env.SHARD_ID}`
-				: 'ShardingManager',
-			'https://a.safe.moe/lwS5D.png',
+				: 'Sharding Manager',
 		);
-
-		if (tag) embed.setTitle(tag);
-
-		webhook.send({
+		const options: WebhookMessageOptions = {
 			avatarURL: 'https://a.safe.moe/lwS5D.png',
 			username: 'Kanna Status',
 			embeds: [embed],
-		});
+		};
+
+		if (cleaned.length <= 2048) {
+			embed.setDescription(cleaned);
+		} else {
+			embed.setDescription('Data is too long, falling back to file.');
+			options.files = [new MessageAttachment(Buffer.from(cleaned), 'file.txt')];
+		}
+
+		if (tag) embed.setTitle(tag);
+
+		webhook.send(options);
 	}
 }
