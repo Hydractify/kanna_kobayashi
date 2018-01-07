@@ -1,5 +1,5 @@
 import { GuildMember, Message } from 'discord.js';
-import { BOOLEAN, col, ENUM, fn, INTEGER, Sequelize, Transaction, where } from 'sequelize';
+import { BOOLEAN, col, ENUM, fn, INTEGER, Transaction, where } from 'sequelize';
 import { inspect } from 'util';
 
 import { Item } from '../../models/Item';
