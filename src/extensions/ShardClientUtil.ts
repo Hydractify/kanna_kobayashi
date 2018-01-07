@@ -46,6 +46,5 @@ class ShardClientUtilExtension {
 	}
 }
 
-
 export { ShardClientUtilExtension as Extension };
 export { ShardClientUtil as Target };

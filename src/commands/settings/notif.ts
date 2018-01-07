@@ -1,9 +1,8 @@
-import { Message } from 'discord.js';
+import { GuildChannel, Message } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { PermLevels } from '../../types/PermLevels';
-import { GuildChannel } from 'discord.js';
 
 class NotifCommand extends Command {
 	public constructor(handler: CommandHandler) {

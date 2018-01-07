@@ -2,7 +2,7 @@ import { Message, Permissions, PermissionString, TextChannel, User } from 'disco
 import { duration } from 'moment';
 // tslint:disable-next-line:no-import-side-effect
 import 'moment-duration-format';
-import { RedisClient, Multi } from 'redis-p';
+import { Multi, RedisClient } from 'redis-p';
 import { Sequelize } from 'sequelize-typescript';
 
 import { CommandLog } from '../models/CommandLog';

@@ -6,9 +6,9 @@ import { BeatmapLanguage } from '../../types/osu/BeatmapLanguage';
 import { BeatmapState } from '../../types/osu/BeatmapState';
 import { OsuMode } from '../../types/osu/OsuMode';
 import { Redis } from '../../util/RedisDecorator';
+import { titleCase } from '../../util/Util';
 import { Api } from './';
 import { Score } from './Score';
-import { titleCase } from '../../util/Util';
 
 /**
  * Represents an osu! beatmap.

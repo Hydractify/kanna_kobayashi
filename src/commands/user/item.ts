@@ -164,9 +164,9 @@ class ItemCommand extends Command {
 		const item: Item = await Item.findOne({
 			include: [{
 				as: 'holders',
-				through: { attributes: ['count'] },
 				model: UserModel,
 				required: false,
+				through: { attributes: ['count'] },
 				where: { id: message.author.id },
 			}],
 			where: where(fn('lower', col('name')), args.join(' ').toLowerCase()) as {},

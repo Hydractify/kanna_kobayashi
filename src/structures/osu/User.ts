@@ -32,9 +32,8 @@ export class User {
 				username: data.username,
 			})
 			.set(`osu:usernames:${data.username.toLowerCase()}`, data.user_id)
-			.exec();
-			//TODO: Figure out why this does not return a promise
-			// .catch(() => undefined);
+			.exec()
+			.catch(() => undefined);
 
 		return new this(data);
 	}
