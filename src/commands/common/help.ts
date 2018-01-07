@@ -39,11 +39,11 @@ class HelpCommand extends Command {
 
 		if (!name || name === 'all') return this._sendEmbed(message, authorModel);
 
-		return this._findCategory(message, name, authorModel)
-			|| this._findCommand(message, name, authorModel);
+		return this._findCommand(message, name, authorModel)
+			|| this._findCategory(message, name, authorModel);
 	}
 
-	private _findCategory(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[]> | void {
+	private _findCategory(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[]> {
 		let embed: MessageEmbed;
 		for (const command of this.handler._commands.values()) {
 			if (command.category.toLowerCase() === name) {
@@ -59,14 +59,16 @@ class HelpCommand extends Command {
 			}
 		}
 
-		if (embed) message.channel.send(embed);
+		if (embed) return message.channel.send(embed);
+
+		return message.reply(`I could not find a command matching **${name}** <:KannaAyy:315270615844126720>`);
 	}
 
-	private _findCommand(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[]> {
+	private _findCommand(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[] | void> {
 		const command: Command = this.handler.resolveCommand(name);
 
 		if (!command) {
-			return message.reply(`I could not find a command matching **${name}** <:KannaAyy:315270615844126720>`);
+			return undefined;
 		}
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
