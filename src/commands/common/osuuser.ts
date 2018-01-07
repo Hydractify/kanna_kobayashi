@@ -18,7 +18,7 @@ class OsuUserCommand extends Command {
 			exp: 0,
 			usage: 'osucommand <UsernameOrID> [Mode] [\'top\'|\'recent\']',
 			description: 'Show basic information, or best or recent plays about a user.',
-			name: 'osucommand',
+			name: 'osuuser',
 			examples: ['osu SpaceEEC', 'osu SpaceEEC best', 'osu SpaceEEC recent', 'osu SpaceEEC taiko'],
 		});
 
@@ -101,9 +101,10 @@ class OsuUserCommand extends Command {
 		for (const score of scores) {
 			const beatmap: Beatmap = await score.fetchBeatmap();
 			const mods: string = score.enabledMods;
+			const pp: string = score.pp ? ` -- **${score.pp.toFixed(2)}**` : '';
 			embed.addField(
 				`${beatmap.artist} - ${beatmap.title} [${beatmap.version}]${mods ? ` +${mods}` : ''}`,
-				`${score.rank} -- [URL](${beatmap.versionURL()}) -- ${score.date.fromNow()} -- **${score.pp.toFixed(2)}pp**`,
+				`${score.rank} -- [URL](${beatmap.versionURL()}) -- ${score.date.fromNow() + pp}`,
 			);
 		}
 

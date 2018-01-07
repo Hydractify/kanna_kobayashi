@@ -58,9 +58,9 @@ export class Score {
 	 */
 	public readonly pp: number;
 	/**
-	 * Global rank achieved with the score
+	 * Grade achieved with the score (`SS`, `B`, etc)
 	 */
-	public readonly rank: number;
+	public readonly rank: string;
 	/**
 	 * Score achieved in the score
 	 */
@@ -112,7 +112,7 @@ export class Score {
 		this._enabledMods = Number(data.enabled_mods);
 		this.userId = data.user_id;
 		this.date = utc(`${data.date}+08:00`);
-		this.rank = Number(data.rank);
+		this.rank = data.rank;
 		this.pp = data.pp ? Number(data.pp) : undefined;
 
 		this._beatmap = beatmap;
@@ -123,7 +123,7 @@ export class Score {
 	 * Enabled mods
 	 */
 	public get enabledMods(): string {
-		if (!this._enabledMods) return 'None';
+		if (!this._enabledMods) return '';
 		const enabledMods: Set<string> = new Set<string>();
 
 		let mods: [string, number][] = Object.entries(BeatmapMods) as any;
@@ -189,7 +189,7 @@ export class Score {
 	public async fetchBeatmap(mode: OsuMode = this.mode): Promise<Beatmap> {
 		if (this._beatmap) return this._beatmap;
 
-		this._beatmap = require('./Beatmap').fetch(this.beatmapId, mode);
+		this._beatmap = await require('./Beatmap').Beatmap.fetch(this.beatmapId, mode);
 
 		return this._beatmap;
 	}
@@ -200,7 +200,7 @@ export class Score {
 	public async fetchUser(): Promise<User> {
 		if (this._user) return this._user;
 
-		this._user = require('./User').fetchBasic(this.userId);
+		this._user = await require('./User').User.fetchBasic(this.userId);
 
 		return this._user;
 	}

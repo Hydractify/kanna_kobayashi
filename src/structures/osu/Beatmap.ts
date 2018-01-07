@@ -8,6 +8,7 @@ import { OsuMode } from '../../types/osu/OsuMode';
 import { Redis } from '../../util/RedisDecorator';
 import { Api } from './';
 import { Score } from './Score';
+import { titleCase } from '../../util/Util';
 
 /**
  * Represents an osu! beatmap.
@@ -239,6 +240,27 @@ export class Beatmap {
 		this.passCount = Number(data.passcount);
 		// Taiko has no max combo for some reason
 		this.maxCombo = data.max_combo ? Number(data.max_combo) : undefined;
+	}
+
+	/**
+	 * Human readable representation of the language of the song of the beatmap
+	 */
+	public get languageString(): string {
+		return titleCase(BeatmapLanguage[this.language]);
+	}
+
+	/**
+	 * Human readable representation of the genre of the song of the beatmap
+	 */
+	public get genreString(): string {
+		return titleCase(BeatmapGenre[this.genre]);
+	}
+
+	/**
+	 * Human readable representation of the state of the beatmap
+	 */
+	public get stateString(): string {
+		return titleCase(BeatmapState[this.approved]);
 	}
 
 	/**

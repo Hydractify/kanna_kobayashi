@@ -130,14 +130,14 @@ class OsuBeatmapCommand extends Command {
 			.addField('Passes | Plays', `${beatmap.passCount.toLocaleString()} | ${beatmap.playCount.toLocaleString()}`, true)
 
 			.addField('BPM', beatmap.bpm, true)
-			.addField('Language', beatmap.language, true)
-			.addField('Genre', beatmap.genre, true)
+			.addField('Language', beatmap.languageString, true)
+			.addField('Genre', beatmap.genreString, true)
 
 			.addField('Favorites', beatmap.favoriteCount.toLocaleString(), true)
 			.addField(
 			'State',
 			[
-				`${beatmap.approved}`,
+				`${beatmap.stateString}`,
 				beatmap.approvedAt ? `, as of:\n${beatmap.approvedAt.format('DD/MM/YYYY (hh:mm)')}` : '',
 			].join(''),
 			true)
@@ -153,15 +153,15 @@ class OsuBeatmapCommand extends Command {
 			.setAuthor(`${first.artist} -- ${first.title}`, undefined, first.setURL)
 
 			.addField('Creator', first.creator, true)
-			.addField('Language', first.language, true)
-			.addField('Genre', first.genre, true)
+			.addField('Language', first.languageString, true)
+			.addField('Genre', first.genreString, true)
 
 			.addField('Tags', first.tags || 'none')
 
 			.addField(
 			'State',
 			[
-				`${first.approved}`,
+				`${first.stateString}`,
 				first.approvedAt ? `, as of:\n${first.approvedAt.format('DD/MM/YYYY (hh:mm)')}` : '',
 			].join(''),
 			true)
