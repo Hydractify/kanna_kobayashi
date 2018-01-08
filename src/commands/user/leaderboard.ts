@@ -41,7 +41,9 @@ class LeaderboardCommand extends Command {
 		.setDescription(`These are the top 5 users with the highest ${input} yet`);
 		for (let i: number = 0; i < userModels.length; i++) {
 			const userModel: User = userModels[i];
-			const user: DJSUser = message.client.users.get(userModel.id);
+			let user: DJSUser = message.client.users.get(userModel.id);
+			if (!user) user = await message.client.users.fetch(userModel.id);
+
 			embed.addField(
 				`${i + 1}. ${user.tag}`,
 				[
