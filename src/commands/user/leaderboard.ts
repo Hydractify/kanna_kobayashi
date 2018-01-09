@@ -22,9 +22,17 @@ class LeaderboardCommand extends Command {
 		});
 	}
 
+	public async orderRep(
+		message: Message,
+		input: string,
+		authorModel: User,
+	): Promise<Message | Message[]> {
+		return message.reply('wip o3o');
+	}
+
 	public parseArgs(message: Message, [input]: string[]): string | string[] {
-		if (['level', 'coins', 'rep'].includes(input)) return [input];
-		if (!input) return ['level'];
+		if (['exp', 'coins', 'rep'].includes(input)) return [input];
+		if (!input) return ['exp'];
 
 		return `you must give me a valid method! (\`${this.usage}\`)`;
 	}
@@ -32,9 +40,11 @@ class LeaderboardCommand extends Command {
 	public async run(
 		message: Message,
 		[input]: string[],
-		{ authorModel, commandName }: ICommandRunInfo,
+		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const userModels: User[] = await User.findAll({ limit: 5, order: [['exp', 'desc']]});
+		if (input === 'rep') return this.orderRep(message, input, authorModel);
+
+		const userModels: User[] = await User.findAll({ limit: 5, order: [[input, 'desc']]});
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 		.setTitle(`${titleCase(input)} Leaderboard`)

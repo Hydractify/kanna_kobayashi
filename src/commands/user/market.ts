@@ -37,8 +37,8 @@ class MarketCommand extends Command {
 			include: [{
 				as: 'holders',
 				model: User,
-				through: { attributes: ['count'] },
 				required: false,
+				through: { attributes: ['count'] },
 				where: { id: message.author.id },
 			}],
 			where: where(fn('lower', col('name')), args.join(' ').toLowerCase()) as any,

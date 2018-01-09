@@ -43,15 +43,14 @@ class ProfileCommand extends Command {
 			include: [
 				{
 					as: 'items',
-					through: { attributes: ['count'] },
-					model: Item,
 					required: false,
+					through: { attributes: ['count'] },
 				},
 				{
 					as: 'badges',
-					through: { attributes: ['count'] },
 					model: Item,
 					required: false,
+					through: { attributes: ['count'] },
 				},
 				{
 					as: 'partner',
@@ -64,9 +63,9 @@ class ProfileCommand extends Command {
 
 		// Get User's reputation
 		const { POSITIVE: positive = 0, NEGATIVE: negative = 0 } = await UserReputation.count({
-			where: { repId: user.id },
 			attributes: ['type'],
 			group: ['type'],
+			where: { repId: user.id },
 		}).then((results: any) => {
 			const reps: { [key: string]: number } = {};
 			for (const result of results) reps[result.type] = result.count;
