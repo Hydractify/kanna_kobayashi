@@ -74,7 +74,7 @@ class SelfRolesCommand extends Command {
 
 			roles.unshift('Self assignable roles are: ');
 
-			return message.reply(`${mapIterable(roles).slice(1)}\``);
+			return message.reply(`${mapIterable(roles).slice(0, -1)}\``);
 		}
 
 		if (type === 'add') {
