@@ -11,9 +11,9 @@ class LoliMemeCommand extends ImageEmbedCommand {
 				'http://kannathebot.me/memes/loli/1.png',
 				'http://kannathebot.me/memes/loli/2.gif',
 			],
+			messageContent: '**Wooo... A human!** <:KannaOh:315264555859181568>',
 			name: 'loli',
 			usage: 'loli',
-			messageContent: '**Wooo... A human!** <:KannaOh:315264555859181568>',
 		});
 	}
 }

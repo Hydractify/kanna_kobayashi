@@ -16,8 +16,8 @@ class BanCommand extends Command {
 			examples: ['ban wizard', 'ban wizard anxeal space'],
 			exp: 0,
 			name: 'ban',
-			usage: 'ban <...Member> [\'--reason\' reason]',
 			permLevel: PermLevels.HUMANTAMER,
+			usage: 'ban <...Member> [\'--reason\' reason]',
 		});
 	}
 

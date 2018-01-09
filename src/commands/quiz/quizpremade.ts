@@ -20,8 +20,8 @@ class QuizPremadeCommand extends Command {
 			examples: ['quizpremade'],
 			exp: 0,
 			name: 'quizpremade',
-			usage: 'quizpremade',
 			permLevel: PermLevels.DRAGONTAMER,
+			usage: 'quizpremade',
 		});
 
 		this.emojis = [

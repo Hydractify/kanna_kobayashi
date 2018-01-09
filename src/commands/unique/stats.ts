@@ -29,11 +29,11 @@ class StatsCommand extends Command {
 			this.client.shard.broadcastEval(
 				(client: Client) => ({
 					guilds: client.guilds.size,
-					users: client.users.size,
 					other: {
 						ram: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
 						shardId: client.shard.id,
 					},
+					users: client.users.size,
 				}),
 			).then((res: IShardData[]) =>
 				res.reduce(

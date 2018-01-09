@@ -16,8 +16,8 @@ class ReloadCommand extends Command {
 			examples: ['You should know how to use this.'],
 			exp: 0,
 			name: 'reload',
-			usage: 'You should know how to use this.',
 			permLevel: PermLevels.DEV,
+			usage: 'You should know how to use this.',
 		});
 	}
 	public parseArgs(message: Message, args: string[]): string | string[] {

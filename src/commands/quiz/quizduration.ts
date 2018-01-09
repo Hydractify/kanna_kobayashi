@@ -17,8 +17,8 @@ class QuizDurationCommand extends Command {
 			],
 			exp: 0,
 			name: 'quizduration',
-			usage: 'quizduration <\'view\'|\'set\'> [Minutes]',
 			permLevel: PermLevels.DRAGONTAMER,
+			usage: 'quizduration <\'view\'|\'set\'> [Minutes]',
 		});
 	}
 
@@ -69,8 +69,8 @@ class QuizDurationCommand extends Command {
 			await quiz.save();
 		} else {
 			await message.guild.model.$create('quiz', {
-				guildId: message.guild.id,
 				duration: time,
+				guildId: message.guild.id,
 			});
 		}
 

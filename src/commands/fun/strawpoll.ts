@@ -77,9 +77,9 @@ class StrawPollCommand extends Command {
 		const poll: IStrawPollPoll = await post(this.apiURL)
 			.set('Content-Type', 'application/json')
 			.send({
-				title,
 				multi: multi[0].toLowerCase() === 'y',
 				options,
+				title,
 			})
 			.then<IStrawPollPoll>((res: Result) => res.body instanceof Buffer ? undefined : res.body);
 

@@ -18,8 +18,8 @@ class ExecCommand extends Command {
 			examples: ['echo hi'],
 			exp: 0,
 			name: 'exec',
-			usage: 'exec <command>',
 			permLevel: PermLevels.DEV,
+			usage: 'exec <command>',
 		});
 	}
 

@@ -16,9 +16,9 @@ class HungryMemeCommand extends ImageEmbedCommand {
 				'http://kannathebot.me/memes/hungry/6.jpg',
 				'http://kannathebot.me/memes/hungry/7.jpg',
 			],
+			messageContent: '**Feed me!** <:KannaOh:315264555859181568>',
 			name: 'hungry',
 			usage: 'hungry',
-			messageContent: '**Feed me!** <:KannaOh:315264555859181568>',
 		});
 	}
 }

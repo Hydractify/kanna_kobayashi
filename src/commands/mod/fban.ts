@@ -16,8 +16,8 @@ class ForceBanCommand extends Command {
 			examples: ['fban 218348062828003328'],
 			exp: 0,
 			name: 'forceban',
-			usage: 'forceban <ID> [...Reason]',
 			permLevel: PermLevels.HUMANTAMER,
+			usage: 'forceban <ID> [...Reason]',
 		});
 	}
 

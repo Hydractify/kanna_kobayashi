@@ -15,8 +15,8 @@ class WhitelistCommand extends Command {
 			examples: ['whitelist @space#0302'],
 			exp: 0,
 			name: 'whitelist',
-			usage: 'whitelist <User> [\'remove\']',
 			permLevel: PermLevels.DEV,
+			usage: 'whitelist <User> [\'remove\']',
 		});
 	}
 

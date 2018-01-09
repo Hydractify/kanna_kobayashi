@@ -21,8 +21,8 @@ class QuizNameCommand extends Command {
 			],
 			exp: 0,
 			name: 'quizname',
-			usage: 'quizname <set|view> [...Name]',
 			permLevel: PermLevels.DRAGONTAMER,
+			usage: 'quizname <set|view> [...Name]',
 		});
 	}
 

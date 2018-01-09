@@ -18,8 +18,8 @@ class QuizStartCommand extends Command {
 			examples: ['qstart'],
 			exp: 0,
 			name: 'quizstart',
-			usage: 'qstart',
 			permLevel: PermLevels.DRAGONTAMER,
+			usage: 'qstart',
 		});
 	}
 

@@ -9,10 +9,9 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 class ShowReputationCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			clientPermissions: ['EMBED_LINKS'],
 			aliases: ['showrep'],
+			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			cooldown: 0,
 			description: 'Shows the reputation of a member.',
 			examples: ['showrep @space#0302'],
 			exp: 0,
@@ -29,9 +28,9 @@ class ShowReputationCommand extends Command {
 		if (!member) return `I could not find a non-bot member by **${args.join(' ')}**.`;
 
 		const { POSITIVE: positive = 0, NEGATIVE: negative = 0 } = await UserReputation.count({
-			where: { repId: member.id },
 			attributes: ['type'],
 			group: ['type'],
+			where: { repId: member.id },
 		}).then((results: any) => {
 			const reps: { [key: string]: number } = {};
 			for (const result of results) reps[result.type] = result.count;

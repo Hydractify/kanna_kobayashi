@@ -15,8 +15,8 @@ class BlacklistCommand extends Command {
 			examples: ['blacklist @space#0302'],
 			exp: 0,
 			name: 'blacklist',
-			usage: 'blacklist <User> [\'remove\']',
 			permLevel: PermLevels.DEV,
+			usage: 'blacklist <User> [\'remove\']',
 		});
 	}
 

@@ -15,11 +15,11 @@ class OsuUserCommand extends Command {
 		super(handler, {
 			aliases: ['osu'],
 			coins: 0,
-			exp: 0,
-			usage: 'osucommand <UsernameOrID> [Mode] [\'top\'|\'recent\']',
 			description: 'Show basic information, or best or recent plays about a user.',
-			name: 'osuuser',
 			examples: ['osu SpaceEEC', 'osu SpaceEEC best', 'osu SpaceEEC recent', 'osu SpaceEEC taiko'],
+			exp: 0,
+			name: 'osuuser',
+			usage: 'osucommand <UsernameOrID> [Mode] [\'top\'|\'recent\']',
 		});
 
 	}

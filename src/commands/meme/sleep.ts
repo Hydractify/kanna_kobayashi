@@ -4,6 +4,7 @@ import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 class SleepMemeCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			aliases: ['bosssleeppls'],
 			description: 'It is time to sleep!',
 			examples: ['sleep'],
 			images: [
@@ -16,7 +17,6 @@ class SleepMemeCommand extends ImageEmbedCommand {
 			],
 			name: 'sleep',
 			usage: 'sleep',
-			aliases: ['bosssleeppls'],
 		});
 	}
 }

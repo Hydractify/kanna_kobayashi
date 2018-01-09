@@ -21,8 +21,8 @@ class DeleteMessagesCommand extends Command {
 			],
 			exp: 0,
 			name: 'delete',
-			usage: 'delete <Number|MessageID> [\'--user\' <User>|\'--bots\'] [<\'--before\'|\'--after\'> <MessageID>]',
 			permLevel: PermLevels.HUMANTAMER,
+			usage: 'delete <Number|MessageID> [\'--user\' <User>|\'--bots\'] [<\'--before\'|\'--after\'> <MessageID>]',
 		});
 	}
 

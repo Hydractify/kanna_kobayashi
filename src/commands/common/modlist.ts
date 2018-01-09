@@ -32,10 +32,10 @@ class ModListCommand extends Command {
 
 	public modList(message: Message, members: GuildMemberStore, authorModel: UserModel): Promise<Message | Message[]> {
 		const mods: { [key: string]: Set<string> } = {
-			online: new Set<string>(),
-			idle: new Set<string>(),
 			dnd: new Set<string>(),
+			idle: new Set<string>(),
 			offline: new Set<string>(),
+			online: new Set<string>(),
 		};
 
 		for (const member of members.values()) {

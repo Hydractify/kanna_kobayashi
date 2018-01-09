@@ -7,8 +7,8 @@ class ComfyMemeCommand extends ImageEmbedCommand {
 			baseURL: 'http://kannathebot.me/memes/comfy/',
 			description: 'So... soft... _falls asleep_',
 			examples: ['comfy'],
-			name: 'comfy',
 			maxNumber: 2,
+			name: 'comfy',
 			usage: 'comfy',
 		});
 	}

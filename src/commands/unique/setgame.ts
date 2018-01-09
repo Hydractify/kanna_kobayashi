@@ -14,8 +14,8 @@ class SetGameCommand extends Command {
 			examples: ['setgame Some cool game'],
 			exp: 0,
 			name: 'setgame',
-			usage: 'setgame [\'stream\'] [...Game]',
 			permLevel: PermLevels.DEV,
+			usage: 'setgame [\'stream\'] [...Game]',
 		});
 	}
 
@@ -40,8 +40,8 @@ class SetGameCommand extends Command {
 
 	private setActivity(client: Client, [game, stream]: string[]): Promise<Presence> {
 		return client.user.setActivity(`${game} [${client.shard.id}]`, {
-			url: stream,
 			type: stream ? 'STREAMING' : 'PLAYING',
+			url: stream,
 		});
 	}
 }

@@ -13,33 +13,33 @@ export enum ItemRarities {
 	/**
 	 * Immortal
 	 */
-	IMM = 'IMM',
+	IMM = 'Immortal',
 	/**
 	 * Chaos
 	 */
-	CH = 'CH',
+	CH = 'Chaos',
 	/**
 	 * Harmony
 	 */
-	HM = 'HM',
+	HM = 'Harmony',
 	/**
-	 * Dragon size
+	 * Dragon Scale
 	 */
-	DSIZE = 'DSIZE',
+	DS = 'Dragon Scale',
 	/**
 	 * Ultra Rare
 	 */
-	UR = 'UR',
+	UR = 'Ultra Rare',
 	/**
 	 * Rare
 	 */
-	R = 'R',
+	R = 'Rare',
 	/**
 	 * Uncommon
 	 */
-	UC = 'UC',
+	UC = 'Uncommon',
 	/**
 	 * Common
 	 */
-	C = 'C',
+	C = 'Common',
 }

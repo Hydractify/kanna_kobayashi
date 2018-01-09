@@ -18,8 +18,8 @@ class LookupCommand extends Command {
 				'lookup discord.gg/uBdXdE9',
 			],
 			exp: 0,
-			usage: 'lookup <invite>',
 			name: 'lookup',
+			usage: 'lookup <invite>',
 		});
 	}
 

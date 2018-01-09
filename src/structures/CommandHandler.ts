@@ -22,6 +22,10 @@ const readdirAsync = promisify(readdir);
 @Loggable('HANDLER')
 export class CommandHandler {
 	/**
+	 * Collection of all registered commands
+	 */
+	public readonly _commands: Collection<string, Command> = new Collection<string, Command>();
+	/**
 	 * Instantiating client
 	 */
 	public readonly client: Client;
@@ -34,10 +38,6 @@ export class CommandHandler {
 	 * Collection of all registered aliases, pointing to their command's name
 	 */
 	private readonly _aliases: Collection<string, string> = new Collection<string, string>();
-	/**
-	 * Collection of all registered commands
-	 */
-	private readonly _commands: Collection<string, Command> = new Collection<string, Command>();
 	/**
 	 * Array of always valid prefixes
 	 */

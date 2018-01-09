@@ -15,8 +15,8 @@ class KickCommand extends Command {
 			examples: ['kick wizard', 'kick wizard anxeal space'],
 			exp: 0,
 			name: 'kick',
-			usage: 'kick <...Member> [\'--reason\' reason]',
 			permLevel: PermLevels.HUMANTAMER,
+			usage: 'kick <...Member> [\'--reason\' reason]',
 		});
 	}
 
