@@ -1,36 +1,14 @@
 {
-	"extends": [
-		// fun :^)
-		"tslint:all"
-	],
+	"extends": ["tslint:latest"],
 	"rules": {
-		"curly": [
-			true,
-			"ignore-same-line"
-		],
-		"quotemark": [
-			true,
-			"single"
-		],
-		"linebreak-style": false,
-		"indent": [
-			true,
-			"tabs"
-		],
-		"no-var-requires": false,
-		"no-require-imports": false,
-		"variable-name": [
-			true,
-			"ban-keywords",
-			"check-format",
-			"allow-leading-underscore"
-		],
-		"prefer-function-over-method": false,
-		"no-magic-numbers": false,
 		"array-type": [true, "array"],
-		"no-inferrable-types": false,
-		"no-parameter-reassignment": false,
+		"curly": [true, "ignore-same-line"],
+		"object-literal-key-quotes": [true, "as-needed"],
+		"quotemark": [true, "single", "avoid-template"],
+		"indent": [true, "tabs", 4],
 		"radix": false,
-		"no-any": false
+		"no-var-requires": false,
+		"interface-name": [true, "always-prefix"],
+		"variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
 	}
 }
