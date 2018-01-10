@@ -1,4 +1,4 @@
-import { Role, Message } from 'discord.js';
+import { Message, Role } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';

@@ -33,8 +33,8 @@ class KissCommand extends WeebCommand {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
 		const baseString: string = this.computeBaseString(message, members, {
 			action: 'kissed',
-			bot: `W-what?! PERVERT PERVERT PERVERT AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA CALL THE POLICE!`,
-			dev: `W-why?!`,
+			bot: 'W-what?! PERVERT PERVERT PERVERT AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA CALL THE POLICE!',
+			dev: 'W-why?!',
 			trusted: `**${members.first().name}**... My developers can trust you, but i do not!`,
 		});
 

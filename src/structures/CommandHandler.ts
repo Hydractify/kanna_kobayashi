@@ -116,7 +116,7 @@ export class CommandHandler {
 
 	public async reloadCommand(command: string | Command): Promise<void> {
 		if (!(command instanceof Command)) command = this.resolveCommand(command);
-		if (!command) throw new Error(`Could not find the specified command!`);
+		if (!command) throw new Error('Could not find the specified command!');
 
 		// On error this will have been run regardless, may lead to unexpected consequences.
 		// TODO: Somehow fix this if it's necessary?

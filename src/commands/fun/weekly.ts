@@ -13,8 +13,8 @@ class WeeklyCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['wk'],
-			coins: 0,
 			clientPermissions: ['EMBED_LINKS'],
+			coins: 0,
 			description: 'Get your weekly Dragon Scale!',
 			examples: ['weekly'],
 			exp: 0,

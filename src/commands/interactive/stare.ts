@@ -27,7 +27,7 @@ class StareCommand extends WeebCommand {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
 		const baseString: string = this.computeBaseString(message, members, {
 			action: 'is staring at',
-			bot: `_runs_`,
+			bot: '_runs_',
 			dev: `**${members.first().name}**... Run!`,
 			trusted: `**${members.first().name}**... Run!`,
 		});

@@ -57,7 +57,7 @@ class QuizDurationCommand extends Command {
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
 
 		if (option === 'view') {
-			if (!quiz) return message.reply(`there is no quiz set up.`);
+			if (!quiz) return message.reply('there is no quiz set up.');
 
 			return message.reply(
 				`the current length of quizzes are ${quiz.duration} minute${quiz.duration === 1 ? '' : 's'}.`,

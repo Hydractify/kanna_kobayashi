@@ -231,7 +231,7 @@ class ItemCommand extends Command {
 
 		const type: string = item.type === 'BADGE' ? 'Badge' : 'Item';
 
-		const [sourceItem]: Item[] = await authorModel.$get<Item>(`{type}s`, { where: { id: item.id } }) as Item[];
+		const [sourceItem]: Item[] = await authorModel.$get<Item>(`${type}s`, { where: { id: item.id } }) as Item[];
 		if (!sourceItem) return message.reply(`you don't have the \`${item.name}\` ${type.toLowerCase()}!`);
 
 		if (!item.tradable) {

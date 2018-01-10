@@ -23,7 +23,7 @@ class ChooseCommand extends Command {
 			: args;
 
 		if (!options.length) return `you have to give me something to choose from! (\`${this.usage}\`)`;
-		if (options.length === 1) return `you should at least give me two options to choose from!`;
+		if (options.length === 1) return 'you should at least give me two options to choose from!';
 
 		return options;
 	}

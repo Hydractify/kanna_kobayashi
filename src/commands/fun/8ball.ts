@@ -26,7 +26,7 @@ class EigthBallCommand extends Command {
 	}
 
 	public parseArgs(message: Message, args: string[]): string[] | string {
-		if (!args.length) return `you have to ask a question! 👀`;
+		if (!args.length) return 'you have to ask a question! 👀';
 
 		return args;
 	}

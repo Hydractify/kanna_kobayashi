@@ -27,7 +27,7 @@ class QuizStartCommand extends Command {
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
 		if (!quiz || !quiz.name || !quiz.photo) {
 			return message.reply([
-				`this guild does not have a quiz set up!`,
+				'this guild does not have a quiz set up!',
 				'You can use one of the a pre made ones,'
 				+ ' or add your own by setting a photo and an answer! <:KannaAyy:315270615844126720>',
 			].join('\n'));

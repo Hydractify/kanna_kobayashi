@@ -56,7 +56,7 @@ class QuizNameCommand extends Command {
 		if (option === 'view') {
 			if (!quiz) return message.reply('there is no quiz set up.');
 			if (!quiz.name) {
-				return message.reply(`the set up quiz has no answer associated with it.`);
+				return message.reply('the set up quiz has no answer associated with it.');
 			}
 
 			if (quiz.photo) {

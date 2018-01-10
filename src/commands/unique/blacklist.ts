@@ -29,7 +29,7 @@ class BlacklistCommand extends Command {
 
 		const targetModel: UserModel = await user.fetchModel();
 		if (['DEV', 'TRUSTED'].includes(targetModel.type)) {
-			return message.reply(`devs or trusted users can not be blacklisted. Maybe entered the wrong user?`);
+			return message.reply('devs or trusted users can not be blacklisted. Maybe entered the wrong user?');
 		}
 
 		if (targetModel.type === UserTypes.BLACKLISTED) {

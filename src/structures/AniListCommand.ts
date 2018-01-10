@@ -14,7 +14,7 @@ import { MessageEmbed } from './MessageEmbed';
 
 // tslint:disable-next-line:variable-name
 const Api: () => APIRouter = buildRouter({
-	baseURL: `https://anilist.co/api`,
+	baseURL: 'https://anilist.co/api',
 });
 const { anilist } = require('../../data');
 Object.assign(anilist, { grant_type: 'client_credentials' });
@@ -218,7 +218,7 @@ export abstract class AniListCommand extends Command {
 	 * Retrieve the currently valid token for anilist, requests a new token if necessary
 	 */
 	protected async retrieveToken(): Promise<string> {
-		let token: string = await this.redis.get(`anilist:token`);
+		let token: string = await this.redis.get('anilist:token');
 
 		if (!token) {
 			const data: {

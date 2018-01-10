@@ -49,7 +49,7 @@ class CryCommand extends WeebCommand {
 
 		const baseString: string = this.computeBaseString(message, members, {
 			action: `is ${action} with`,
-			bot: `W-what did i do?!`,
+			bot: 'W-what did i do?!',
 			dev: `What did you do **${members.first().name}**?!`,
 			trusted: `Why **${members.first().name}?`,
 		});
