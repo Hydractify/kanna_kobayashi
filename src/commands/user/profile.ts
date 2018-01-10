@@ -1,8 +1,8 @@
 import { GuildMember, Message, User } from 'discord.js';
+import { QueryTypes } from 'sequelize';
 
 import { Item } from '../../models/Item';
 import { User as UserModel } from '../../models/User';
-import { UserReputation } from '../../models/UserReputation';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
@@ -37,6 +37,11 @@ class ProfileCommand extends Command {
 	}
 
 	public async run(message: Message, [user]: [User]): Promise<Message | Message[]> {
+		const embed: MessageEmbed = await this.fetchEmbed(message, user);
+		return message.channel.send(embed);
+	}
+
+	public async fetchEmbed(message: Message, user: User): Promise<MessageEmbed> {
 		// No redis caching here because of includes, which wouldn't work then :c
 		// Better than a bunch of single queries tho
 		const [userModel] = await UserModel.findCreateFind({
@@ -53,28 +58,21 @@ class ProfileCommand extends Command {
 					required: false,
 					through: { attributes: ['count'] },
 				},
-				{
-					as: 'partner',
-					model: UserModel,
-					required: false,
-				},
 			],
 			where: { id: user.id },
 		});
 
 		// Get User's reputation
-		const { POSITIVE: positive = 0, NEGATIVE: negative = 0 } = await UserReputation.count({
-			attributes: ['type'],
-			group: ['type'],
-			where: { repId: user.id },
-		}).then((results: any) => {
-			const reps: { [key: string]: number } = {};
-			for (const result of results) reps[result.type] = result.count;
-
-			return reps;
-		});
-
-		const reputation: number = positive - negative;
+		const [{ reputation }]: [{ reputation: number }] = await this.sequelize.query(
+			`SELECT
+				sum(("user_reputations"."type"='POSITIVE')::int) - sum(("user_reputations"."type"='NEGATIVE')::int) AS reputation
+			FROM "user_reputations"
+			WHERE "user_reputations"."rep_id"=?;`,
+			{
+				replacements: [user.id],
+				type: QueryTypes.SELECT,
+			},
+		);
 
 		const partner: User = userModel.partnerId
 			? this.client.users.get(userModel.partnerId)
@@ -85,7 +83,7 @@ class ProfileCommand extends Command {
 			? `${userModel.partnerMarried ? 'Married' : 'Together'} with **${partner.tag}**`
 			: 'Single';
 
-		const embed: MessageEmbed = MessageEmbed.common(message, userModel)
+		return MessageEmbed.common(message, userModel)
 			.setThumbnail(message.guild.iconURL())
 			.setAuthor(`${titleCase(user.username)}'s Profile`, user.displayAvatarURL())
 			.setDescription('\u200b')
@@ -95,8 +93,6 @@ class ProfileCommand extends Command {
 			.addField('Items', this.mapItems(userModel.items), true)
 			.addField('Badges', this.mapItems(userModel.badges), true)
 			.addField('Relationship', partnerString, true);
-
-		return message.channel.send(embed);
 	}
 
 	/**
