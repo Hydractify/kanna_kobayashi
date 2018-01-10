@@ -37,7 +37,7 @@ class ExecCommand extends Command {
 			return statusMessage.edit(response);
 		}
 
-		statusMessage.edit('Executed...');
+		await statusMessage.edit('Executed...');
 
 		return message.channel.send(new MessageAttachment(Buffer.from(response), 'output.txt'));
 	}
