@@ -3,7 +3,6 @@ import { inspect, InspectOptions } from 'util';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
-import * as Osu from '../../structures/osu';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 
@@ -25,8 +24,6 @@ class EvalCommand extends Command {
 			permLevel: PermLevels.DEV,
 			usage: 'eval <...string>',
 		});
-
-		Osu.Api();
 	}
 
 	public async run(message: Discord.Message, args: string[], { commandName }: ICommandRunInfo)
@@ -39,11 +36,16 @@ class EvalCommand extends Command {
 				// tslint:disable-next-line:no-eval
 				: await eval(code);
 
-			if (typeof evaled !== 'string') {
-				evaled = inspect(evaled, this._inspect);
+			if (typeof evaled !== 'string') evaled = inspect(evaled, this._inspect);
+
+			if (evaled.length > 1990) {
+				return await message.channel.send(
+					'Result is too long, sending as file instead.',
+					new Discord.MessageAttachment(Buffer.from(evaled), 'file.txt'),
+				);
 			}
 
-			return message.channel.send(evaled || '\u200b', { code: 'js' });
+			return await message.channel.send(evaled || '\u200b', { code: 'js' });
 		} catch (error) {
 			return message.channel.send(
 				[
@@ -56,10 +58,10 @@ class EvalCommand extends Command {
 		}
 	}
 
-	private get depth(): number {
+	protected get depth(): number {
 		return this._inspect.depth;
 	}
-	private set depth(value: number) {
+	protected set depth(value: number) {
 		this._inspect.depth = value;
 	}
 }
