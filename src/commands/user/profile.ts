@@ -43,6 +43,7 @@ class ProfileCommand extends Command {
 			include: [
 				{
 					as: 'items',
+					model: Item,
 					required: false,
 					through: { attributes: ['count'] },
 				},
