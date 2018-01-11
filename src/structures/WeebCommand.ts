@@ -109,11 +109,11 @@ export abstract class WeebCommand extends Command {
 		if (members && members.size === 1) {
 			const { member, perm }: IWeebResolvedMember = members.first();
 
- 			if (dev && perm === PermLevels.DEV) {
+			if (dev && perm === PermLevels.DEV) {
 				embed.setDescription(dev);
 			} else if (trusted && perm === PermLevels.TRUSTED) {
-				embed.setDescription(trusted);
-			} else if (bot && message.client.user.id === member.id) {
+			embed.setDescription(trusted);
+				} else if (bot && message.client.user.id === member.id) {
 				embed.setDescription(bot);
 			}
 		}

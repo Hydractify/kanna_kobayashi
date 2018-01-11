@@ -17,8 +17,8 @@ class RoleInfoCommand extends Command {
 			].join('\n'),
 			examples: ['roleinfo admin'],
 			exp: 0,
-			usage: 'roleinfo',
 			name: 'roleinfo',
+			usage: 'roleinfo',
 		});
 	}
 

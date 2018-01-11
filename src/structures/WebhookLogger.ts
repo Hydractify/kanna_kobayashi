@@ -39,8 +39,8 @@ export class WebhookLogger extends Logger {
 		);
 		const options: WebhookMessageOptions = {
 			avatarURL: 'https://a.safe.moe/lwS5D.png',
-			username: 'Kanna Status',
 			embeds: [embed],
+			username: 'Kanna Status',
 		};
 
 		if (cleaned.length <= 2048) {

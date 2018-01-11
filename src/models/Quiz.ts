@@ -3,8 +3,8 @@ import { AllowNull, Column, DataType, Model, PrimaryKey, Table, Validate } from 
 @Table({
 	createdAt: false,
 	name: {
-		singular: 'quiz',
 		plural: 'quizzes',
+		singular: 'quiz',
 	},
 	tableName: 'quizzes',
 	updatedAt: false,

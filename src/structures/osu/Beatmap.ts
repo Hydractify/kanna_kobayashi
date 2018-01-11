@@ -26,8 +26,8 @@ export class Beatmap {
 				query: {
 					a: 1,
 					b: id,
-					m: mode,
 					limit: 1,
+					m: mode,
 				},
 			});
 
@@ -286,8 +286,8 @@ export class Beatmap {
 		const scores: { [key: string]: string }[] = await Api().get_scores.get({
 			query: {
 				b: this.id,
-				m: mode,
 				limit,
+				m: mode,
 			},
 		});
 

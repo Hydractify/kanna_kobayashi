@@ -43,9 +43,9 @@ export class Item extends Model<Item> {
 
 	@BelongsToMany(() => User, {
 		as: 'holders',
+		foreignKey: 'item_id',
 		otherKey: 'user_id',
 		through: (): typeof Model => UserItem,
-		foreignKey: 'item_id',
 	})
 	public holders: User[];
 

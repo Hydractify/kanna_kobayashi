@@ -14,8 +14,8 @@ class LeaderboardCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['lb'],
-			coins: 0,
 			clientPermissions: ['EMBED_LINKS'],
+			coins: 0,
 			description: 'See the best of the best!',
 			examples: [
 				'leaderboard level',

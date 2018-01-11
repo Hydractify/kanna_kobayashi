@@ -4,9 +4,9 @@ import { AllowNull, Column, CreatedAt, DataType, Model, Table } from 'sequelize-
  * Keeps track of command usages
  */
 @Table({
+	tableName: 'command_logs',
 	underscored: true,
 	updatedAt: false,
-	tableName: 'command_logs',
 })
 export class CommandLog extends Model<CommandLog> {
 	/**

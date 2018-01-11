@@ -17,9 +17,9 @@ export class User {
 	public static async fetch(query: string | number, mode: OsuMode = OsuMode.OSU): Promise<User> {
 		const [data]: { [key: string]: string }[] = await Api().get_user.get({
 			query: {
-				u: query,
 				limit: 1,
 				m: mode,
+				u: query,
 			},
 		});
 
@@ -227,10 +227,10 @@ export class User {
 		: Promise<Score[]> {
 		const scores: { [key: string]: string }[] = await Api()[`get_user_${type}`].get({
 			query: {
-				u: this.id,
-				type: 'id',
-				m: mode,
 				limit,
+				m: mode,
+				type: 'id',
+				u: this.id,
 			},
 		});
 
