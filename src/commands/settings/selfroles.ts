@@ -9,7 +9,7 @@ import { mapIterable } from '../../util/Util';
 class SelfRolesCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['selfroles'],
+			aliases: ['selfroles', 'sr'],
 			coins: 0,
 			description: [
 				'Assign yourself a role, remove it or display all available ones.',
@@ -17,13 +17,14 @@ class SelfRolesCommand extends Command {
 			].join('\n'),
 			examples: [
 				'selfroles',
-				'selfroles add member',
-				'selfroles remove member',
-				'selfrole member',
+				'selfroles add role',
+				'selfroles remove role',
+				'selfroles toggle role',
+				'selfrole role',
 			],
 			exp: 0,
 			name: 'selfrole',
-			usage: 'selfrole [\'add\'|\'remove\'|Role] [Role]',
+			usage: 'selfrole [\'add\'|\'remove\'|\'toggle\'|Role] [Role]',
 		});
 	}
 
@@ -72,7 +73,7 @@ class SelfRolesCommand extends Command {
 				return message.reply('there are no self assignable roles set up!');
 			}
 
-			roles.unshift('Self assignable roles are: ');
+			roles.unshift('self assignable roles are: ');
 
 			return message.reply(`${mapIterable(roles).slice(0, -1)}\``);
 		}

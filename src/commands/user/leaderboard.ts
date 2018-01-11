@@ -15,6 +15,7 @@ class LeaderboardCommand extends Command {
 		super(handler, {
 			aliases: ['lb'],
 			coins: 0,
+			clientPermissions: ['EMBED_LINKS'],
 			description: 'See the best of the best!',
 			examples: [
 				'leaderboard level',
