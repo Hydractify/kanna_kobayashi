@@ -9,6 +9,7 @@ import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 class PokeCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			action: 'poked',
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'G-get someone\'s attention!',
 			emoji: '<:KannaAyy:315270615844126720>',
@@ -24,13 +25,12 @@ class PokeCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
-		const baseString: string = this.computeBaseString(message, members, {
-			action: 'poked',
+		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `W-what did i do this time **${message.member.displayName}**!`,
 			dev: `Notice him **${members.first().name}**!`,
 			trusted: `_stares at **${members.first().name}**`,
 		});
+		const baseString: string = this.computeBaseString(message, members);
 
 		return message.channel.send(baseString, embed);
 	}

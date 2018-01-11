@@ -9,6 +9,7 @@ import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 class TickleCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			action: 'tickled',
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Tickle someone!',
 			emoji: '<:KannaAyy:315270615844126720>',
@@ -24,13 +25,12 @@ class TickleCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
-		const baseString: string = this.computeBaseString(message, members, {
-			action: 'tickled',
+		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'P-please stop!',
 			dev: `Tickle **${members.first().name}** harder!`,
 			trusted: `Poor **${members.first().name}**`,
 		});
+		const baseString: string = this.computeBaseString(message, members);
 
 		return message.channel.send(baseString, embed);
 	}

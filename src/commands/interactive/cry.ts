@@ -9,6 +9,7 @@ import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 class CryCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			action: 'is upset with',
 			aliases: ['sad', 'upset'],
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Show how much you are sad... `Hope you do not use this command often -Att. Wizardλ#5679`',
@@ -37,22 +38,21 @@ class CryCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
-		const action: string = commandName === 'upset' ? commandName : this.name;
+		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
+			bot: 'W-what did i do?!',
+			dev: `What did you do **${members ? members.first().name : undefined}**!?`,
+			trusted: `Why **${members ? members.first().name : undefined}?`,
+		});
 
 		if (!members) {
+			this.action = this.action.replace(' with', '');
 			return message.channel.send(
-				`<:FeelsKannaMan:341054171212152832> | **${message.member.displayName}** is ${action}...`,
+				`<:FeelsKannaMan:341054171212152832> | **${message.member.displayName}** ${this.action}...`,
 				embed,
 			);
 		}
 
-		const baseString: string = this.computeBaseString(message, members, {
-			action: `is ${action} with`,
-			bot: 'W-what did i do?!',
-			dev: `What did you do **${members.first().name}**?!`,
-			trusted: `Why **${members.first().name}?`,
-		});
+		const baseString: string = this.computeBaseString(message, members);
 
 		return message.channel.send(baseString, embed);
 	}

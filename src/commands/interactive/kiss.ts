@@ -11,6 +11,7 @@ import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 class KissCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			action: 'kissed',
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'K-kiss someone! ',
 			emoji: '<:KannaLewd:320406420824653825>',
@@ -26,17 +27,19 @@ class KissCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
+		if (members && members.size === 1) {
+			if (members.has(message.client.user.id)) return message.reply('h-hentai da! <:KannaLewd:320406420824653825>')
+		}
 
 		const check: boolean = await this.ensureValidTargets(message, authorModel, members);
 		if (!check) return undefined;
 
-		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
-		const baseString: string = this.computeBaseString(message, members, {
-			action: 'kissed',
-			bot: 'W-what?! PERVERT PERVERT PERVERT AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA CALL THE POLICE!',
-			dev: 'W-why?!',
+		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
+			bot: 'W-what!?',
+			dev: 'W-why!?',
 			trusted: `**${members.first().name}**... My developers can trust you, but i do not!`,
 		});
+		const baseString: string = this.computeBaseString(message, members);
 
 		return message.channel.send(baseString, embed);
 	}

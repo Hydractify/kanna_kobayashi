@@ -9,6 +9,7 @@ import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 class StareCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			action: 'is staring at',
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Stare at someone <:KannaMad:315264558279426048>',
 			emoji: '<:KannaWtf:320406412133924864>',
@@ -24,13 +25,12 @@ class StareCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
-		const baseString: string = this.computeBaseString(message, members, {
-			action: 'is staring at',
+		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: '_runs_',
 			dev: `**${members.first().name}**... Run!`,
 			trusted: `**${members.first().name}**... Run!`,
 		});
+		const baseString: string = this.computeBaseString(message, members);
 
 		return message.channel.send(baseString, embed);
 	}

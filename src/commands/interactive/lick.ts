@@ -9,6 +9,7 @@ import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 class LickCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			action: 'licked',
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'L-lick someone!',
 			emoji: '<:KannaLewd:320406420824653825>',
@@ -24,13 +25,16 @@ class LickCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
-		const baseString: string = this.computeBaseString(message, members, {
-			action: 'licked',
+		if (members && members.size == 1) {
+			if (members.has(message.client.user.id)) return message.reply('do not dare to touch that tongue on me! Hentai! ')
+		}
+
+		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'D-don\'t!',
-			dev: `W-why are you licking **${members.first().name}**?!`,
+			dev: `W-why are you licking **${members.first().name}**!?`,
 			trusted: 'P-pervert!',
 		});
+		const baseString: string = this.computeBaseString(message, members);
 
 		return message.channel.send(baseString, embed);
 	}

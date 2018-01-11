@@ -9,6 +9,7 @@ import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 class PatCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			action: 'patted',
 			aliases: ['patto'],
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Pat someone\'s head!',
@@ -25,13 +26,12 @@ class PatCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel);
-		const baseString: string = this.computeBaseString(message, members, {
-			action: 'patted',
+		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `You are so cute **${message.member.displayName}**!`,
 			dev: `Thanks for patting **${members.first().name}**!`,
 			trusted: `**${members.first().name}** deserved it :3`,
 		});
+		const baseString: string = this.computeBaseString(message, members);
 
 		return message.channel.send(baseString, embed);
 	}

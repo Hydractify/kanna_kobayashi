@@ -21,6 +21,11 @@ export abstract class WeebCommand extends Command {
 	protected static readonly mentionRegex: RegExp = /^<@!?\d{17,19}>$/;
 
 	/**
+	 *
+	 * The command's action
+	 */
+	protected action: string;
+	/**
 	 * Emoji used in the base string
 	 */
 	protected readonly emoji: string;
@@ -33,11 +38,13 @@ export abstract class WeebCommand extends Command {
 	 * Derive from WeebCommand.
 	 */
 	public constructor(handler: CommandHandler, options: ICommandInfo & {
+		action: string;
 		emoji: string;
 		type: string;
 	}) {
 		super(handler, options);
 
+		this.action = options.action;
 		this.emoji = options.emoji;
 		this.type = options.type;
 	}
@@ -65,29 +72,12 @@ export abstract class WeebCommand extends Command {
 	protected computeBaseString(
 		message: Message,
 		members: Collection<string, IWeebResolvedMember>,
-		{ action, dev, trusted, bot }: IWeebResponseTemplates,
 	): string {
 		let base: string = `${this.emoji} | `;
 
-		if (members.size === 1) {
-			const { name, member, perm }: IWeebResolvedMember = members.first();
+		if (members.size === 1) return `${base}**${message.member.displayName}** ${this.action} **${members.first().name}**`;
 
-			if (message.author.id === member.id) {
-				base = `${base}**${message.member.displayName}** ${action} **${name}**`;
-			} else if (dev && perm === PermLevels.DEV) {
-				base += dev;
-			} else if (trusted && perm === PermLevels.TRUSTED) {
-				base += trusted;
-			} else if (bot && message.client.user.id === member.id) {
-				base += bot;
-			} else {
-				base = `${base}**${message.member.displayName}** ${action} **${name}**`;
-			}
-
-			return base;
-		}
-
-		base += `**${message.member.displayName}** ${action}`;
+		base += `**${message.member.displayName}** ${this.action}`;
 		const names: string[] = members.map((member: IWeebResolvedMember) => member.name);
 
 		base += `**${names.slice(0, -1).join('**,')} and **${names[names.length - 1]}**`;
@@ -98,7 +88,12 @@ export abstract class WeebCommand extends Command {
 	/**
 	 * Fetch an embed with an image of the type of the class.
 	 */
-	protected async fetchEmbed(message: Message, model: UserModel): Promise<MessageEmbed> {
+	protected async fetchEmbed(
+		message: Message,
+		model: UserModel,
+		members: Collection<string, IWeebResolvedMember>,
+		{ dev, trusted, bot }: IWeebResponseTemplates,
+	): Promise<MessageEmbed> {
 		const { url }: RandomImageResult = await fetchRandom({
 			fileType: 'gif',
 			nsfw: false,
@@ -110,6 +105,18 @@ export abstract class WeebCommand extends Command {
 			model,
 			url,
 		);
+
+		if (members && members.size === 1) {
+			const { member, perm }: IWeebResolvedMember = members.first();
+
+ 			if (dev && perm === PermLevels.DEV) {
+				embed.setDescription(dev);
+			} else if (trusted && perm === PermLevels.TRUSTED) {
+				embed.setDescription(trusted);
+			} else if (bot && message.client.user.id === member.id) {
+				embed.setDescription(bot);
+			}
+		}
 
 		embed.footer.text += ' | Powered by weeb.sh';
 
