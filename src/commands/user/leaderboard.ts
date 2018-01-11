@@ -64,7 +64,7 @@ class LeaderboardCommand extends Command {
 				filter,
 				{ time: 3e4 },
 			).on('collect', async (reaction: MessageReaction) => {
-				reaction.remove(message.author).catch(() => undefined);
+				reaction.users.remove(message.author).catch(() => undefined);
 
 				if (reaction.emoji.name === '➡') {
 					// We are already on the last page
@@ -108,7 +108,7 @@ class LeaderboardCommand extends Command {
 				await leaderboardMessage.edit(embed);
 				reactionCollector.stop();
 			}).on('end', () => {
-				for (const reaction of reactions) reaction.remove().catch(() => undefined);
+				for (const reaction of reactions) reaction.users.remove().catch(() => undefined);
 				resolve();
 			});
 		});

@@ -146,7 +146,7 @@ class HelpCommand extends Command {
 		const reactionCollector: ReactionCollector = helpMessage.createReactionCollector(filter, { time: 3e4 })
 			.on('collect', (reaction: MessageReaction) => {
 				if (reaction.emoji.name === '➡') {
-					reaction.remove(message.author).catch(() => undefined);
+					reaction.users.remove(message.author).catch(() => undefined);
 					helpMessage.edit({ embed: selectEmbed(true) })
 						.catch((error: DiscordAPIError) => {
 							reactionCollector.stop();
@@ -155,7 +155,7 @@ class HelpCommand extends Command {
 				}
 
 				if (reaction.emoji.name === '⬅') {
-					reaction.remove(message.author).catch(() => undefined);
+					reaction.users.remove(message.author).catch(() => undefined);
 					helpMessage.edit({ embed: selectEmbed(false) })
 						.catch((error: DiscordAPIError) => {
 							reactionCollector.stop();

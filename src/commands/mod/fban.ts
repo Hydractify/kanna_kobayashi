@@ -47,7 +47,7 @@ class ForceBanCommand extends Command {
 		[user, reason]: [User, string],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		await message.guild.ban(user, { reason });
+		await message.guild.members.ban(user, { reason });
 
 		return message.reply(`successfully banned the user \`@${user.tag}\`!`);
 	}

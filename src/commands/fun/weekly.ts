@@ -1,7 +1,6 @@
 import { Message } from 'discord.js';
 import { get, Result } from 'snekfetch';
 
-import { Item } from '../../models/Item';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
