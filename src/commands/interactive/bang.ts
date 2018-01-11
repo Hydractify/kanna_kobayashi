@@ -6,17 +6,18 @@ import { WeebCommand } from '../../structures/WeebCommand';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class LickCommand extends WeebCommand {
+class BangCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			action: 'licked',
+			action: 'shot',
+			aliases: ['bang'],
 			clientPermissions: ['EMBED_LINKS'],
-			description: 'L-lick someone!',
-			emoji: '<:KannaLewd:320406420824653825>',
-			examples: ['lick kanna', 'lick kanna wizard'],
-			name: 'lick',
-			type: 'lick',
-			usage: 'lick <...User>',
+			description: 'Shoot someone that is bothering you!',
+			emoji: '<:KannaMad:315264558279426048>',
+			examples: ['shoot kanna', 'shoot kanna wizard'],
+			name: 'shoot',
+			type: 'bang',
+			usage: 'shoot <...User>',
 		});
 	}
 
@@ -25,14 +26,18 @@ class LickCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		if (members && members.size === 1) {
-			if (members.has(message.client.user.id)) return message.reply('do not dare to touch that tongue on me! Hentai! ');
+		if (members) {
+			if (members.has(message.client.user.id)) {
+				return message.reply([
+					'get away from me with at pistol!',
+					'  Else i will destroy you human! <:KannaMad:315264558279426048>',
+				].join(' '));
+			}
 		}
-
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
-			bot: 'D-don\'t!',
-			dev: `W-why are you licking **${members.first().name}**!?`,
-			trusted: 'P-pervert!',
+			bot: '',
+			dev: 'Master... Run!',
+			trusted: `_stares at **${message.author}**_`,
 		});
 		const baseString: string = this.computeBaseString(message, members);
 
@@ -40,4 +45,4 @@ class LickCommand extends WeebCommand {
 	}
 }
 
-export { LickCommand as Command };
+export { BangCommand as Command };
