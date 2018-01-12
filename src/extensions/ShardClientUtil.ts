@@ -29,11 +29,9 @@ class ShardClientUtilExtension {
 		fn: (client: Client, args?: V[]) => T,
 		args: V[] = [],
 	): Promise<T[]> {
-		let stringified: string;
-		if (typeof fn === 'string') {
-			stringified = fn;
-		} else {
-			stringified = fn.toString();
+		let stringified: any = fn;
+		if (typeof fn !== 'string') {
+			stringified = String(fn);
 
 			if (!/(^function|^\(.*\) =>)/.test(stringified)) {
 				stringified = `function ${stringified}`;
