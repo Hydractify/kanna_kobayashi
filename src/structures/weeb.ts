@@ -10,7 +10,7 @@ const api: () => APIRouter = buildRouter({
 });
 
 export interface IFetchRandomOptions {
-	fileType?: string;
+	filetype?: string;
 	hidden?: boolean;
 	nsfw?: boolean;
 	tags?: string;

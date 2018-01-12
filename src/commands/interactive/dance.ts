@@ -6,18 +6,17 @@ import { WeebCommand } from '../../structures/WeebCommand';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class BlushCommand extends WeebCommand {
+class DanceCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			action: 'is blushing because of',
-			aliases: ['embarassed'],
+			action: 'is dancing with',
 			clientPermissions: ['EMBED_LINKS'],
-			description: 'S-show how embarassed you are!',
-			emoji: '<:KannaAyy:315270615844126720>',
-			examples: ['blush', 'blush kanna', 'blush kanna wizard'],
-			name: 'blush',
-			type: 'blush',
-			usage: 'blush [...User]',
+			description: 'Dance! <:Awuu:389233504996556802>',
+			emoji: '<:Awuu:389233504996556802>',
+			examples: ['dance', 'dance kanna', 'dance kanna wizard'],
+			name: 'dance',
+			type: 'dance',
+			usage: 'dance [...User]',
 		});
 	}
 
@@ -38,18 +37,16 @@ class BlushCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		if (commandName === 'embarassed') this.action = this.action.replace('blushing', 'embarassed');
-
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
-			bot: 'B-baka! I-i did not mean to... make you blush',
-			dev: `${members ? members.first().name : undefined}... What did you do!?`,
-			trusted: `${message.author}... Y-you b-baka!`,
+			bot: 'Let\'s dance!',
+			dev: `**${members ? members.first().name : undefined}**... Dance!!`,
+			trusted: `Dance with us **${members ? members.first().name : undefined}!`,
 		});
 
 		if (!members) {
-			const action: string = this.action.replace(' because of', '');
+			const action: string = this.action.replace(' with', '');
 			return message.channel.send(
-				`<:FeelsKannaMan:341054171212152832> | **${message.member.displayName}** ${action}...`,
+				`<:FeelsKannaMan:341054171212152832> | **${message.member.displayName}** ${action}!`,
 				embed,
 			);
 		}
@@ -60,4 +57,4 @@ class BlushCommand extends WeebCommand {
 	}
 }
 
-export { BlushCommand as Command };
+export { DanceCommand as Command };

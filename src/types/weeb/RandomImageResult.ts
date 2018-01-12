@@ -3,7 +3,7 @@ import { IResult } from './IResult';
 export type RandomImageResult = {
 	account: string;
 	baseType: string;
-	fileType: string;
+	filetype: string;
 	hidden: boolean;
 	id: string;
 	mimeType: string;

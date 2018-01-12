@@ -95,7 +95,7 @@ export abstract class WeebCommand extends Command {
 		{ dev, trusted, bot }: IWeebResponseTemplates,
 	): Promise<MessageEmbed> {
 		const { url }: RandomImageResult = await fetchRandom({
-			fileType: 'gif',
+			filetype: 'gif',
 			nsfw: false,
 			type: this.type,
 		});
