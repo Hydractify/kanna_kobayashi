@@ -55,7 +55,7 @@ class HelpCommand extends Command {
 						.setDescription('\u200b');
 				}
 
-				embed.addField(`kanna ${command.name}`, command.usage, true);
+				embed.addField(`kanna ${command.name}`, `k!${command.usage}`, true);
 			}
 		}
 
