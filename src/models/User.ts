@@ -2,6 +2,7 @@
 
 import { GuildMember, Role } from 'discord.js';
 import { RedisClient } from 'redis-p';
+import { literal } from 'sequelize';
 import {
 	AfterCreate,
 	AfterSave,
@@ -145,6 +146,31 @@ export class User extends Model<User> {
 		return PermLevels.EVERYONE;
 	}
 
+	public async addItem(item: Item | string, count: number = 1): Promise<this> {
+		if (typeof item !== 'string') item = item.name;
+
+		const [affected]: [number] = await (UserItem as any)
+			.update({
+				count: literal(`count + ${count}`),
+			},
+			{
+				where: {
+					item_name: item,
+					user_id: this.id,
+				},
+			});
+
+		if (!affected) {
+			await UserItem.insertOrUpdate({
+				count,
+				item_name: item,
+				user_id: this.id,
+			});
+		}
+
+		return this;
+	}
+
 	@PrimaryKey
 	@Column
 	public readonly id: string;
@@ -206,7 +232,7 @@ export class User extends Model<User> {
 	@BelongsToMany(() => Item, {
 		as: 'badges',
 		foreignKey: 'user_id',
-		otherKey: 'item_id',
+		otherKey: 'item_name',
 		scope: { type: ItemTypes.BADGE },
 		through: (): typeof Model => UserItem,
 	})
@@ -215,7 +241,7 @@ export class User extends Model<User> {
 	@BelongsToMany(() => Item, {
 		as: 'items',
 		foreignKey: 'user_id',
-		otherKey: 'item_id',
+		otherKey: 'item_name',
 		scope: { type: ItemTypes.ITEM },
 		through: (): typeof Model => UserItem,
 	})

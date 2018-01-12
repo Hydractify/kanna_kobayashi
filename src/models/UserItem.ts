@@ -15,10 +15,10 @@ export class UserItem extends Model<UserItem> {
 
 	@PrimaryKey
 	@Column({
-		field: 'item_id',
-		type: DataType.INTEGER,
+		field: 'item_name',
+		type: DataType.STRING('32'),
 	})
-	public readonly itemId: number;
+	public readonly itemName: number;
 
 	@PrimaryKey
 	@Column({

@@ -4,8 +4,8 @@ import {
 	Column,
 	DataType,
 	Model,
+	PrimaryKey,
 	Table,
-	Unique,
 	Validate,
 } from 'sequelize-typescript';
 
@@ -43,15 +43,17 @@ export class Item extends Model<Item> {
 
 	@BelongsToMany(() => User, {
 		as: 'holders',
-		foreignKey: 'item_id',
+		foreignKey: 'item_name',
 		otherKey: 'user_id',
 		through: (): typeof Model => UserItem,
 	})
 	public holders: User[];
 
 	@AllowNull(false)
-	@Unique
-	@Column
+	@PrimaryKey
+	@Column({
+		type: DataType.STRING('32'),
+	})
 	public name: string;
 
 	@Column(DataType.INTEGER)
@@ -87,6 +89,21 @@ export class Item extends Model<Item> {
 
 	// tslint:disable-next-line:variable-name
 	private UserItem: UserItem;
+
+	public getCount(): number {
+		if (!this.UserItem) return null;
+
+		return this.UserItem.count;
+	}
+
+	public async setAndSaveCount(value: number): Promise<this> {
+		if (!this.UserItem) throw new Error(`This "${this.name}" is not associated with any user!`);
+
+		this.UserItem.count = value;
+		await this.UserItem.save();
+
+		return this;
+	}
 
 	/**
 	 * Additional meta data about an item, such as the holder id and the item count
