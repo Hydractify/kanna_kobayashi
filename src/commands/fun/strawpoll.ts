@@ -30,12 +30,13 @@ class StrawPollCommand extends Command {
 
 	public async run(message: Message, [id]: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
 		if (id) {
-			const fetchedPoll: IStrawPollPoll = await get(`${this.apiURL}/${id}`)
+			const { body: fetchedPoll }: Result<IStrawPollPoll> = await get(`${this.apiURL}/${id}`)
 				.set('Content-Type', 'application/json')
-				.then((res: Result) => res.body instanceof Buffer ? undefined : res.body)
 				.catch(() => undefined);
 			// 404 and json is overrated, better respond with 200 and html
-			if (!fetchedPoll) return message.reply('I could not find a strawpoll with that ID.');
+			if (!fetchedPoll || fetchedPoll instanceof Buffer) {
+				return message.reply('I could not find a strawpoll with that ID.');
+			}
 
 			return this.showPoll(message, fetchedPoll, authorModel);
 		}
@@ -74,14 +75,13 @@ class StrawPollCommand extends Command {
 
 		const [title, multi, ...options] = data;
 
-		const poll: IStrawPollPoll = await post(this.apiURL)
+		const { body: poll }: Result<IStrawPollPoll> = await post(this.apiURL)
 			.set('Content-Type', 'application/json')
 			.send({
 				multi: multi[0].toLowerCase() === 'y',
 				options,
 				title,
-			})
-			.then<IStrawPollPoll>((res: Result) => res.body instanceof Buffer ? undefined : res.body);
+			});
 
 		return this.showPoll(message, poll, authorModel);
 	}

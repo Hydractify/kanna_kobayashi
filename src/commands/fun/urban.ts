@@ -35,14 +35,15 @@ class UrbanCommand extends Command {
 		[original, query]: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const { list }: IUrbanDictionaryResponse = await get(`http://api.urbandictionary.com/v0/define?term=${query}`)
-			.then((res: Result) => res.body instanceof Buffer ? undefined : res.body);
+		const { body: { list } }: Result<IUrbanDictionaryResponse> = await get(
+			`http://api.urbandictionary.com/v0/define?term=${query}`,
+		);
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(
 			`Search result for ${original}`,
 			'https://d2gatte9o95jao.cloudfront.net/assets/store-mug-example-256@2x-34cb1d3724cbce5ce790228b5bf8eabe.png',
-			)
+		)
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL());
 		embed.footer.text += ' | Powered by urbandictionary';

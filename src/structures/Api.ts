@@ -55,7 +55,7 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 					if (options.data) request.send(options.data);
 
 					return request
-						.then<any>((res: snekfetch.Result) => res.body)
+						.then((res: snekfetch.Result) => res.body)
 						.catch((error: Error & snekfetch.Result) => {
 							if (!catchNotFound || error.status !== 404) throw error;
 						});
