@@ -1,10 +1,17 @@
 import { Client, ShardClientUtil, Util } from 'discord.js';
 import { inspect } from 'util';
+import { Loggable, Logger } from '../structures/Logger';
 
 const broadcastEval: (script: string) => Promise<any[]> = ShardClientUtil.prototype.broadcastEval;
 
+@Loggable('BROADCASTEVAL')
 class ShardClientUtilExtension {
-	public async _handleMessage(this: any, message: { [key: string]: string }): Promise<void> {
+	private logger: Logger;
+
+	public async _handleMessage(
+		this: { _respond: (type: string, val: object) => void; client: any },
+		message: { [key: string]: string },
+	): Promise<void> {
 		if (!message) return;
 		if (message._fetchProp) {
 			const props: string[] = message._fetchProp.split('.');
@@ -40,6 +47,7 @@ class ShardClientUtilExtension {
 			stringified = `(${stringified})(this, ${inspect(args)})`;
 		}
 
+		this.logger.debug(stringified);
 		return broadcastEval.call(this, stringified);
 	}
 }
