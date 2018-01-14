@@ -22,7 +22,8 @@ class WeebCommand extends Command {
 			name: 'weeb',
 			usage: 'weeb <Image|\'types\'>',
 		});
-		this.types = ['awoo',
+		this.types = [
+			'awoo',
 			'clagwimoth',
 			'insult',
 			'lewd',
