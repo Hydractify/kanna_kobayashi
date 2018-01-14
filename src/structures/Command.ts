@@ -1,4 +1,12 @@
-import { Message, Permissions, PermissionString, TextChannel, User } from 'discord.js';
+import {
+	Message,
+	MessageAttachment,
+	MessageOptions,
+	Permissions,
+	PermissionString,
+	TextChannel,
+	User,
+} from 'discord.js';
 import { duration } from 'moment';
 // tslint:disable-next-line:no-import-side-effect
 import 'moment-duration-format';
@@ -9,6 +17,7 @@ import { CommandLog } from '../models/CommandLog';
 import { User as UserModel } from '../models/User';
 import { ICommandInfo } from '../types/ICommandInfo';
 import { ICommandRunInfo } from '../types/ICommandRunInfo';
+import { MaybePromise } from '../types/MaybePromise';
 import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
 import { Redis } from '../util/RedisDecorator';
@@ -16,6 +25,7 @@ import { Sequelize as sequelize } from '../util/SequelizeDecorator';
 import { titleCase } from '../util/Util';
 import { Client } from './Client';
 import { CommandHandler } from './CommandHandler';
+import { MessageEmbed } from './MessageEmbed';
 import { Resolver } from './Resolver';
 
 /**
@@ -259,7 +269,11 @@ export abstract class Command {
 	 * Should return a string with a message to the user if resolving failed.
 	 * @virtual
 	 */
-	public parseArgs(message: Message, args: string[], info: ICommandRunInfo): Promise<any[] | string> | any[] | string {
+	public parseArgs(
+		message: Message,
+		args: string[],
+		info: ICommandRunInfo,
+	): MaybePromise<any[] | string | MessageOptions | MessageEmbed | MessageAttachment> {
 		return args;
 	}
 

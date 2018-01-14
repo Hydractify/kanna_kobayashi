@@ -1,4 +1,4 @@
-import { Collection, GuildMember, Message, TextChannel } from 'discord.js';
+import { Collection, GuildMember, Message, MessageAttachment, MessageOptions, TextChannel } from 'discord.js';
 import { readdir } from 'fs';
 import { extname, join } from 'path';
 import { captureException, context } from 'raven';
@@ -11,6 +11,7 @@ import { Loggable } from '../util/LoggerDecorator';
 import { Client } from './Client';
 import { Command } from './Command';
 import { Logger } from './Logger';
+import { MessageEmbed } from './MessageEmbed';
 import { Resolver } from './Resolver';
 
 // tslint:disable-next-line:typedef
@@ -179,7 +180,8 @@ export class CommandHandler {
 		}
 
 		try {
-			const parsedArgs: any[] | string = await command.parseArgs(message, args, { authorModel, commandName, args });
+			const parsedArgs: any[] | string | MessageOptions | MessageEmbed | MessageAttachment
+				= await command.parseArgs(message, args, { authorModel, commandName, args });
 
 			if (!(parsedArgs instanceof Array)) {
 				message.reply(parsedArgs);
