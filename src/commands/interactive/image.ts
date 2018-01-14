@@ -5,22 +5,22 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { fetchRandom } from '../../structures/weeb';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { IResult } from '../../types/weeb/IResult';
 import { RandomImageResult } from '../../types/weeb/RandomImageResult';
+import { chunkArray } from '../../util/Util';
 
-class WeebCommand extends Command {
+class ImageCommand extends Command {
 	/**
 	 * The allowed types to be requested to weeb.sh
 	 */
 	private types: string[];
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['images'],
+			aliases: ['weeb', 'images'],
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Get an image from the weeb.sh API!',
 			examples: ['weeb smug', 'weeb types'],
-			name: 'weeb',
-			usage: 'weeb <Image|\'types\'>',
+			name: 'image',
+			usage: 'image <ImageType|\'types\'>',
 		});
 		this.types = [
 			'awoo',
@@ -55,34 +55,36 @@ class WeebCommand extends Command {
 		];
 	}
 
-	public async parseArgs(message: Message, [input]: string[]): Promise<string | string[] | IResult[]> {
-		if (input === 'types') return ['types'];
+	public async parseArgs(message: Message, [input]: string[]): Promise<string | [string]> {
+		if (!input) return ['types'];
+		input = input.toLowerCase();
+		if (input === 'types' || this.types.includes(input)) return [input];
 
-		if (this.types.includes(input)) {
-			const typeIndex: number = this.types.indexOf(input);
-			const image: IResult = await fetchRandom({ type: this.types[typeIndex]});
-			return [image];
-		}
-
-		return `${input} is not a valid image nor method! (\`${this.usage}\`)`;
+		return `${input} is not a valid image type! (\`${this.usage}\`)`;
 	}
 
-	public run(
+	public async run(
 		message: Message,
-		[result]: any[] | RandomImageResult[],
+		[type]: [string],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel);
-		if (result === 'types') {
+		if (type === 'types') {
+			const types: string = chunkArray(this.types, 3)
+				.map((chunk: string[]) => chunk.join(', '))
+				.join(',\n');
+
 			embed
-			.setAuthor('Image Types', message.author.displayAvatarURL())
-			.setDescription(this.types.join(', '));
+				.setAuthor('Image Types', message.author.displayAvatarURL())
+				.setDescription(types);
 		} else {
-			embed.setImage(result.url);
+			const image: RandomImageResult = await fetchRandom({ type });
+
+			embed.setImage(image.url);
 		}
 
 		return message.reply(embed);
 	}
 }
 
-export { WeebCommand as Command };
+export { ImageCommand as Command };
