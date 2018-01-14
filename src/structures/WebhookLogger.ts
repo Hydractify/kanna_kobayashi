@@ -18,7 +18,7 @@ export class WebhookLogger extends Logger {
 	public constructor() {
 		super();
 
-		if (process.env.NODE_ENV !== 'production') {
+		if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev') {
 			this.setLogLevel(LogLevel.NONE);
 		}
 	}
