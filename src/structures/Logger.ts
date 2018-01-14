@@ -1,6 +1,7 @@
 // tslint:disable:member-ordering
 
 import * as moment from 'moment';
+import { captureBreadcrumb } from 'raven';
 import { inspect } from 'util';
 
 import { colors, LogLevel } from '../types/LogLevel';
@@ -108,17 +109,42 @@ export class Logger {
 		return cleaned.join(' ');
 	}
 
+	protected _capture(level: LogLevel, tag: string, data: string): void {
+		let sentryLevel: string;
+
+		switch (level) {
+			case LogLevel.WARN:
+				sentryLevel = 'warning';
+				break;
+			case LogLevel.SILLY:
+				sentryLevel = 'debug';
+				break;
+			case LogLevel.VERBOSE:
+				sentryLevel = 'debug';
+				break;
+			default:
+				sentryLevel = LogLevel[level].toLowerCase();
+				break;
+		}
+
+		captureBreadcrumb({
+			category: 'console',
+			level: sentryLevel,
+			message: data,
+		});
+	}
+
 	/**
 	 * Write to the output stream
 	 */
 	protected _write(level: LogLevel, tag: string, data: any[]): void {
+		const cleaned: string = this._prepareText(data);
+		this._capture(level, tag, cleaned);
+
 		if (this._logLevel < level) return;
 		const out: NodeJS.Socket = level > LogLevel.WARN
 			? process.stdout
 			: process.stderr;
-		const cleaned: string = this._prepareText(data);
-
-		// TODO: Maybe a webhook for warn/error messages?
 
 		out.write(
 			[

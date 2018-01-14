@@ -1,7 +1,7 @@
 import { Collection, GuildMember, Message, TextChannel } from 'discord.js';
 import { readdir } from 'fs';
 import { extname, join } from 'path';
-import { captureException, wrap } from 'raven';
+import { captureException, context } from 'raven';
 import { promisify } from 'util';
 
 import { Guild as GuildModel } from '../models/Guild';
@@ -57,8 +57,8 @@ export class CommandHandler {
 
 		if (process.env.NODE_ENV === 'dev') this._prefixes.push('-');
 
-		// Automatically wrap all received messages in a raven context
-		client.on('message', wrap(this.handle.bind(this)));
+		// Wrap all received messages in a seperate raven context
+		client.on('message', (message: Message) => context(this.handle.bind(this, message)));
 		client.once('ready', () => this._prefixes.push(`<@!?${this.client.user.id}> `));
 	}
 
@@ -200,21 +200,20 @@ export class CommandHandler {
 				await message.reply(`you advanced to level **${newLevel}**! <:KannaHugMe:299650645001240578>`);
 			}
 		} catch (error) {
-			this.logger.error(error);
-
 			captureException(error, {
 				extra: {
 					author: `${message.author.tag} (${message.author.id})`,
-					channel: `${message.channel.name} (${message.channel.id})`,
+					channel: `#${message.channel.name} (${message.channel.id})`,
 					content: message.content,
 					guild: `${message.guild.name} (${message.guild.id})`,
+					shard_id: String(this.client.shard.id),
 				},
 				tags: {
 					command: command.name,
-					shard_id: String(this.client.shard.id),
 				},
 			});
 
+			this.logger.error(error);
 			message.reply(
 				[
 					'**an errror occured! Please paste this to the official guild support channel!**'

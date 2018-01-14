@@ -3,9 +3,11 @@ import 'source-map-support/register';
 
 import { config } from 'raven';
 const { ravenToken } = require('../data');
-config(process.env.NODE_ENV !== 'dev' && ravenToken, {
+config(process.env.NODE_ENV && process.env.NODE_ENV !== 'dev' && ravenToken, {
 	autoBreadcrumbs: true,
 	captureUnhandledRejections: true,
+	environment: process.env.NODE_ENV,
+	release: require('../package.json').version,
 }).install();
 
 import { extendAll } from './extensions/Extension';
