@@ -2,7 +2,7 @@
 
 import { GuildMember, Role } from 'discord.js';
 import { RedisClient } from 'redis-p';
-import { literal } from 'sequelize';
+import { QueryTypes } from 'sequelize';
 import {
 	AfterCreate,
 	AfterSave,
@@ -18,6 +18,7 @@ import {
 	Table,
 } from 'sequelize-typescript';
 
+import { Items } from '../types/Items';
 import { ItemTypes } from '../types/ItemTypes';
 import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
@@ -28,6 +29,7 @@ import { Guild } from './Guild';
 import { Item } from './Item';
 import { UserItem } from './UserItem';
 import { UserReputation } from './UserReputation';
+import { enumKeyFromValue } from '../util/Util';
 
 @Redis(true)
 @Table({
@@ -146,29 +148,41 @@ export class User extends Model<User> {
 		return PermLevels.EVERYONE;
 	}
 
-	public async addItem(item: Item | string, count: number = 1): Promise<this> {
-		if (typeof item !== 'string') item = item.name;
+	/**
+	 * Adds or increments the count of an item a user has.
+	 * @param item An instanceof Item or an element of the Items enum
+	 * @param count Optional number of items to give, defaults to 1
+	 * @returns New item count
+	 */
+	public async addItem(item: Item | Items, count: number = 1): Promise<number> {
+		const itemName: string = typeof item === 'string'
+			? enumKeyFromValue(Items, item)
+			: item.name;
 
-		const [affected]: [number] = await (UserItem as any)
-			.update({
-				count: literal(`count + ${count}`),
-			},
+		const [{ count: newCount }]: [{ count: number }] = await this.sequelize.query(`
+		INSERT INTO "user_items" ("count", "item_name", "user_id")
+		VALUES(:count, :itemName, :userId)
+			ON CONFLICT ("item_name", "user_id")
+			DO UPDATE
+				SET "count"="user_items"."count"+:count
+				WHERE
+					"user_items"."item_name"=:itemName
+					AND "user_items"."user_id"=:userId
+		RETURNING "count";
+			`,
 			{
-				where: {
-					item_name: item,
-					user_id: this.id,
+				replacements: {
+					count,
+					itemName,
+					userId: this.id,
 				},
-			});
+				// Technically an upsert but sequelize
+				// maps select better more conveniently here
+				type: QueryTypes.SELECT,
+			},
+		);
 
-		if (!affected) {
-			await UserItem.insertOrUpdate({
-				count,
-				item_name: item,
-				user_id: this.id,
-			});
-		}
-
-		return this;
+		return newCount;
 	}
 
 	@PrimaryKey
@@ -202,7 +216,10 @@ export class User extends Model<User> {
 	/**
 	 * Patreon tier
 	 */
-	@Column(DataType.INTEGER)
+	@Column({
+		defaultValue: 0,
+		type: DataType.INTEGER,
+	})
 	public tier: number;
 
 	@HasOne(() => User, {

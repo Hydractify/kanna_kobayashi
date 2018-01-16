@@ -116,3 +116,19 @@ export const replaceMap: (input: string, map: { [key: string]: string }) => stri
 
 		return input.replace(new RegExp(regexes.join('|'), 'g'), (element: string) => map[element]);
 	};
+
+/**
+ * Fetch the key of a value from an enum
+ * (Since TS does not support that themselfes, probably dou possible clashes)
+ * @param _enum Enum type
+ * @param value Value to search for
+ * @returns Key or null if not found
+ */
+export const enumKeyFromValue: (_enum: any, value: string) => string
+	= <T>(_enum: T, value: string): string => {
+		for (const [key, val] of Object.entries(_enum)) {
+			if (val === value) return key;
+		}
+
+		return null;
+	};
