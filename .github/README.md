@@ -1,1 +1,1 @@
-# Master sucks, open *space* branch for v4.1
+# A proper README will be made once we completly finish v4.1.0
