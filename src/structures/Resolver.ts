@@ -95,8 +95,8 @@ export class Resolver {
 		for (const role of roles.values()) {
 			if (!allowEveryone && role.id === role.guild.id) continue;
 			const roleName: string = role.name.toLowerCase();
-			if (roleName === input) return role;
-			if (!match && roleName.includes(input)) includesMatch = role;
+			if (roleName === input || `@${roleName}` === input) return role;
+			if (!match && `@${roleName}`.includes(input)) includesMatch = role;
 		}
 
 		return includesMatch;
