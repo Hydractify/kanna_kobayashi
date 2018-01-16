@@ -5,41 +5,41 @@ export enum ItemRarities {
 	/**
 	 * Unknown
 	 */
-	'?' = '?',
+	'?',
 	/**
 	 * Limited
 	 */
-	LIMITED = 'LIMITED',
+	LIMITED,
 	/**
 	 * Immortal
 	 */
-	IMM = 'Immortal',
+	IMMORTAL,
 	/**
 	 * Chaos
 	 */
-	CH = 'Chaos',
+	CHAOS,
 	/**
 	 * Harmony
 	 */
-	HM = 'Harmony',
+	HARMONY,
 	/**
 	 * Dragon Scale
 	 */
-	DS = 'Dragon Scale',
+	DRAGON_SCALE,
 	/**
 	 * Ultra Rare
 	 */
-	UR = 'Ultra Rare',
+	ULTRA_RARE,
 	/**
 	 * Rare
 	 */
-	R = 'Rare',
+	RARE,
 	/**
 	 * Uncommon
 	 */
-	UC = 'Uncommon',
+	UNCOMMON,
 	/**
 	 * Common
 	 */
-	C = 'Common',
+	COMMON,
 }

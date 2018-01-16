@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import {
 	AllowNull,
 	BelongsToMany,
@@ -5,6 +6,7 @@ import {
 	DataType,
 	Model,
 	PrimaryKey,
+	Scopes,
 	Table,
 	Validate,
 } from 'sequelize-typescript';
@@ -14,6 +16,24 @@ import { ItemTypes } from '../types/ItemTypes';
 import { User } from './User';
 import { UserItem } from './UserItem';
 
+@Scopes({
+	coin: {
+		where: {
+			rarity: {
+				// rarity < 5
+				[Op.lt]: ItemRarities.DRAGON_SCALE,
+			},
+		},
+	},
+	scale: {
+		where: {
+			rarity: {
+				// rarity > 5
+				[Op.gt]: ItemRarities.DRAGON_SCALE,
+			},
+		},
+	},
+})
 @Table({
 	createdAt: false,
 	tableName: 'items',
@@ -60,10 +80,7 @@ export class Item extends Model<Item> {
 	public price: number;
 
 	@AllowNull(false)
-	@Column({
-		type: DataType.ENUM,
-		values: Object.keys(ItemRarities),
-	})
+	@Column(DataType.INTEGER)
 	public rarity: ItemRarities;
 
 	@AllowNull(false)
