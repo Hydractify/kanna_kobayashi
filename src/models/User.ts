@@ -24,12 +24,12 @@ import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
 import { generateColor } from '../util/generateColor';
 import { Redis } from '../util/RedisDecorator';
+import { enumKeyFromValue } from '../util/Util';
 import { CommandLog } from './CommandLog';
 import { Guild } from './Guild';
 import { Item } from './Item';
 import { UserItem } from './UserItem';
 import { UserReputation } from './UserReputation';
-import { enumKeyFromValue } from '../util/Util';
 
 @Redis(true)
 @Table({
@@ -177,7 +177,7 @@ export class User extends Model<User> {
 					userId: this.id,
 				},
 				// Technically an upsert but sequelize
-				// maps select better more conveniently here
+				// maps select more conveniently here
 				type: QueryTypes.SELECT,
 			},
 		);
