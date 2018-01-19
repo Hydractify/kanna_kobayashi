@@ -4,7 +4,7 @@
 	"description": "\\o/",
 	"main": "bin/shard.js",
 	"dependencies": {
-		"discord.js": "github:hydrabolt/discord.js",
+		"discord.js": "github:discordjs/discord.js",
 		"moment": "^2.20.1",
 		"moment-duration-format": "^1.3.0",
 		"pg": "^7.4.1",
