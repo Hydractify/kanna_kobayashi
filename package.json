@@ -26,13 +26,14 @@
 	},
 	"scripts": {
 		"build": "tsc -p ./",
+		"buildItems": "node ./bin/scripts/buildItems.js",
 		"watch": "tsc -w -p ./",
 		"test": "tslint -p ./",
 		"start": "cd bin && node ./shard.js",
 		"dev": "export DEBUG=*|| set DEBUG=*&& export NODE_ENV=dev|| set NODE_ENV=dev&& npm run start",
 		"prod": "export NODE_ENV=production|| set NODE_ENV=production&& npm run start",
 		"testing": "export NODE_ENV=testing|| set NODE_ENV=testing&& npm run start",
-		"typings": "node ./misc/typings.js",
+		"typings": "node ./bin/scripts/typings.js",
 		"postinstall": "npm run typings"
 	},
 	"repository": {
