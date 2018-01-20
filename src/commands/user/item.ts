@@ -79,54 +79,7 @@ class ItemCommand extends Command {
 		return this[method](message, args as string[], authorModel);
 	}
 
-	/**
-	 * Builds a model data object from parsed flags
-	 * @param parsed Parsed flags
-	 * @returns Model data object
-	 */
-	private _buildModel(parsed: FlagCollection): { [key: string]: string | boolean | number } {
-		const modelData: { [key: string]: string | boolean | number } = {};
-
-		for (const [name, data] of parsed) {
-			const { type }: any = (Item.prototype as any).rawAttributes[name] || {};
-			// Provided flag is not an attributte of Item
-			if (!type) continue;
-
-			if (type instanceof (BOOLEAN as any)) {
-				if ((data as string).toLowerCase() === 'true') {
-					modelData[name] = true;
-				} else if ((data as string).toLowerCase() === 'false') {
-					modelData[name] = false;
-				} else {
-					throw new Error(`Supplied "${name}" is not a boolean!`);
-				}
-			} else if (type instanceof ENUM) {
-				for (const value of type.values) {
-					// Enums should always be upper case
-					if (value === (data as string).toUpperCase()) {
-						modelData[name] = value;
-						break;
-					}
-				}
-
-				if (!modelData[name]) {
-					throw new Error(`Supplied "${name}" is not a member type of the enum!`);
-				}
-			} else if (type instanceof INTEGER) {
-				const integer: number = parseInt(data as string);
-				if (isNaN(integer)) {
-					throw new Error(`Supplied "${name}" is not an integer!`);
-				}
-				modelData[name] = integer;
-			} else {
-				modelData[name] = data;
-			}
-		}
-
-		return modelData;
-	}
-
-	private async create(message: Message, args: string[], authorModel: UserModel): Promise<Message | Message[]> {
+	protected async create(message: Message, args: string[], authorModel: UserModel): Promise<Message | Message[]> {
 		try {
 			const modelData: { [key: string]: string | number | boolean } = this._buildModel(parseFlags(args.join(' '), true));
 
@@ -160,7 +113,7 @@ class ItemCommand extends Command {
 		}
 	}
 
-	private async find(message: Message, args: string[], authorModel: UserModel): Promise<Message | Message[]> {
+	protected async find(message: Message, args: string[], authorModel: UserModel): Promise<Message | Message[]> {
 		const item: Item = await Item.findOne({
 			include: [{
 				as: 'holders',
@@ -208,7 +161,7 @@ class ItemCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	private async give(
+	protected async give(
 		message: Message,
 		[target, ...search]: string[],
 		authorModel: UserModel,
@@ -281,9 +234,9 @@ class ItemCommand extends Command {
 		}
 	}
 
-	private structure(message: Message, args: string[], authorModel: UserModel): Promise<Message | Message[]> {
+	protected structure(message: Message, args: string[], authorModel: UserModel): Promise<Message | Message[]> {
 		const structure: string[] = ['Item {'];
-		for (const [name, { type }] of Object.entries((Item.prototype as any).rawAttributes)) {
+		for (const [name, { type }] of Object.entries<any>((Item.prototype as any).rawAttributes)) {
 			structure.push(`\t${name}: ${type instanceof ENUM ? inspect(type.values) : type.constructor.name},`);
 		}
 		// Remove dangling comma
@@ -296,6 +249,54 @@ class ItemCommand extends Command {
 			'```',
 		]);
 	}
+
+	/**
+	 * Builds a model data object from parsed flags
+	 * @param parsed Parsed flags
+	 * @returns Model data object
+	 */
+	private _buildModel(parsed: FlagCollection): { [key: string]: string | boolean | number } {
+		const modelData: { [key: string]: string | boolean | number } = {};
+
+		for (const [name, data] of parsed) {
+			const { type }: any = (Item.prototype as any).rawAttributes[name] || {};
+			// Provided flag is not an attributte of Item
+			if (!type) continue;
+
+			if (type instanceof (BOOLEAN as any)) {
+				if ((data as string).toLowerCase() === 'true') {
+					modelData[name] = true;
+				} else if ((data as string).toLowerCase() === 'false') {
+					modelData[name] = false;
+				} else {
+					throw new Error(`Supplied "${name}" is not a boolean!`);
+				}
+			} else if (type instanceof ENUM) {
+				for (const value of type.values) {
+					// Enums should always be upper case
+					if (value === (data as string).toUpperCase()) {
+						modelData[name] = value;
+						break;
+					}
+				}
+
+				if (!modelData[name]) {
+					throw new Error(`Supplied "${name}" is not a member type of the enum!`);
+				}
+			} else if (type instanceof INTEGER) {
+				const integer: number = parseInt(data as string);
+				if (isNaN(integer)) {
+					throw new Error(`Supplied "${name}" is not an integer!`);
+				}
+				modelData[name] = integer;
+			} else {
+				modelData[name] = data;
+			}
+		}
+
+		return modelData;
+	}
+
 }
 
 export { ItemCommand as Command };
