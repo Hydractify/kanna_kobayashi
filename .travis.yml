@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+    - 9
+install: npm install
+jobs:
+    include:
+      -stage: test
+      node_js: 9
+      script: npm test
+      -stage: build
+      node_js: 9
+      script: npm run build
