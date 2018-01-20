@@ -4,9 +4,9 @@ node_js:
 install: npm install
 jobs:
     include:
-      -stage: test
-      node_js: 9
-      script: npm test
-      -stage: build
-      node_js: 9
-      script: npm run build
+      - stage: test
+        node_js: 9
+        script: npm test
+      - stage: build
+        node_js: 9
+        script: npm run build
