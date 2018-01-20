@@ -4,7 +4,7 @@ import { get } from 'snekfetch';
 
 import { Logger } from '../structures/Logger';
 
-const sourceURL = 'https://raw.githubusercontent.com/zajrik/discord.js-typings/master/index.d.ts';
+const sourceURL = 'https://raw.githubusercontent.com/discordjs/discord.js-typings/master/index.d.ts';
 const targetPath = join(__dirname, '..', '..', 'node_modules', 'discord.js', 'typings');
 
 if (!existsSync(targetPath)) {
