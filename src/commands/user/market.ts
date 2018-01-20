@@ -1,107 +1,103 @@
-import { Collection, CollectorFilter, Message, Snowflake } from 'discord.js';
-import { col, fn, Transaction, where } from 'sequelize';
+import { Message } from 'discord.js';
 import { Model } from 'sequelize-typescript';
 
 import { Item } from '../../models/Item';
-import { User } from '../../models/User';
+import { User as UserModel } from '../../models/User';
+
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { titleCase } from '../../util/Util';
 
 class MarketCommand extends Command {
+	/**
+	 * The Command's methods.
+	 */
+	private methods: string[];
+
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['shop'],
+			aliases: ['store'],
+			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'You can buy items or badges here.',
-			examples: ['market buy some item'],
+			cooldown: 10000,
+			description: 'This is the ~~black~~ market... Buy, sell, and see info about items and badges!',
+			examples: [
+				'market',
+				'market buy Dragon Scale',
+				'market sell Dragon Scale',
+				'market Dragon Scale',
+				'market show Dragon Scale',
+			],
 			exp: 0,
 			name: 'market',
-			usage: 'market <\'buy\'> <>',
+			usage: 'market []\'buy\'|\'sell\'|Item] [Item]',
 		});
+		this.methods = ['buy', 'sell', 'show', 'list'];
 	}
 
-	public parseArgs(message: Message, args: string[]): string | string[] {
-		if (!args.length) return `you must provide a method! (**\`${this.usage}\`**)`;
-		if (args[0].toLowerCase() !== 'buy') return `**${args[0]}** is not a method!`;
-
-		return args.slice(1);
-	}
-
-	public async run(
+	public async parseArgs(
 		message: Message,
-		args: string[],
+		[input, ...item]: string[],
+	): Promise<string | [string, (string[] | Item)]> {
+		if (!input || input === 'list') return ['list', item];
+
+		let resolvedItem: Item;
+		if (!this.methods.includes(input)) {
+			resolvedItem = await Item.findById(input);
+			if (!resolvedItem) return `**${input}** is not a valid method!`;
+
+			return ['show', resolvedItem];
+		}
+
+		if (!item) return `you must provide an item! (\`${this.usage}\`)`;
+
+		resolvedItem = await Item.findById(item.join(' '));
+		if (!resolvedItem) return `**${item}** is not an item!`;
+
+		return [input, resolvedItem];
+	}
+
+	public run(
+		message: Message,
+		[method, item, count]: [string, (string | Item), number],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const item: Item = await Item.findOne<Item>({
-			include: [{
-				as: 'holders',
-				model: User,
-				required: false,
-				through: { attributes: ['count'] },
-				where: { id: message.author.id },
-			}],
-			where: where(fn('lower', col('name')), args.join(' ').toLowerCase()) as any,
-		});
+		return this[method](message, item, count, authorModel);
+	}
 
-		if (!item) return message.reply('I could not find an item or badge with that name!');
-		if (!item.buyable) {
-			return message.reply(`the **${item.name}** ${item.type.toLowerCase()} is not to buy!`);
+	public async buy(message: Message, item: Item, count: number, authorModel: UserModel): Promise<Message | Message[]> {
+		if (!item.buyable) return message.reply('this is an unbuyable item!');
+
+		const hasItem = await item.hasHolder(authorModel);
+		if (item.unique && hasItem) {
+			return message.reply(`you can only have one **${titleCase(item.name)}** ${titleCase(item.type.toLowerCase())}!`);
+		}
+		if (item.unique) count = 1;
+
+		const superior: boolean = item.rarity > 5;
+		if (superior) {
+			const scale: Item = await Item.findById('dragon scale');
+
+			const hasScale: boolean = await Item.hasHolder(authorModel);
+			if (!hasScale) await authorModel.addItem(scale, 0);
+
+			const userScales = (await authorModel.$get('items', { where: { name: 'Dragon Scale' } })).UserItem.dataValues;
+			if (item.price > userScales.count) return message.reply('you have insufficient Dragon Scales to buy this item!');
+
+			await authorModel.addItem(item, count);
+			await authorModel.addItem(scale, -item.price);
+		} else {
+			if (item.price > authorModel.coins) return message.reply('you have insufficient coins to buy this item!');
+
+			authorModel.coins -= item.price;
+			await Promise.all([
+				await authorModel.addItem(item, count),
+				await authorModel.save(),
+			]);
 		}
 
-		const [already]: Item[] = await authorModel.$get<Item>(
-			`${item.type.toLowerCase()}s`,
-			{ where: { id: item.id } },
-		) as Item[];
-
-		if (item.unique && already) {
-			return message.reply(`you already own the unique **${item.name}** ${item.type.toLowerCase()}!`);
-		}
-
-		await message.channel.send([
-			`Is the **${item.name}** ${item.type.toLowerCase()} the one you are looking for, ${message.author}?`
-			+ ' <:KannaTea:366019180203343872>',
-			`That would cost you ${item.price} coins.`,
-			'(Answer with **Y**es or **N**o)',
-		]);
-
-		const filter: CollectorFilter = (msg: Message): boolean => msg.author.id === message.author.id
-			&& /^(y|n|yes|no)/i.test(msg.content);
-
-		const confirmation: Message = await message.channel.awaitMessages(filter, { time: 1e4, max: 1 })
-			.then((collected: Collection<Snowflake, Message>) => collected.first());
-
-		if (!confirmation) {
-			return message.channel.send([
-				`${message.author}... as you did not tell me yes or no,`,
-				'I had to cancel the command <:FeelsKannaMan:341054171212152832>',
-			].join(' '));
-		}
-
-		if (/^(y|yes)/i.test(confirmation.content)) {
-			if (authorModel.coins < item.price) {
-				return message.reply('you do not have enough coins to buy that item! <:KannaWtf:320406412133924864>');
-			}
-
-			const transaction: Transaction = await this.sequelize.transaction();
-
-			const promises: PromiseLike<Model<{}>>[] = [authorModel.increment({ coins: -item.price }, { transaction })];
-
-			if (already) promises.push(already.userItem.increment('count', { transaction }));
-			else promises.push(authorModel.$add(`${item.type.toLowerCase()}s`, item, { transaction }));
-
-			await Promise.all(promises);
-			await this.redis.hincrby(`users:${message.author.id}`, 'coins', -item.price);
-
-			await transaction.commit();
-
-			return message.reply([
-				`you successfully bought the following ${item.type.toLowerCase()}: ${item.name}!`,
-				already ? `You now own ${already.userItem.count} of them!` : '',
-			].join('\n'));
-		}
-
-		return message.reply('canceling command... <:FeelsKannaMan:341054171212152832>');
+		return message.reply(`thanks for buying **${count} ${titleCase(item.name)}**!`);
 	}
 }
 
