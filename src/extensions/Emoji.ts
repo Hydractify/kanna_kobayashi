@@ -1,7 +1,7 @@
-import { Emoji } from 'discord.js';
+import { GuildEmoji } from 'discord.js';
 
-class EmojiExtension {
-	public toJSON(this: Emoji): object {
+class GuildEmojiExtension {
+	public toJSON(this: GuildEmoji): object {
 		return {
 			id: this.id,
 			managed: this.managed,
@@ -12,5 +12,5 @@ class EmojiExtension {
 	}
 }
 
-export { EmojiExtension as Extension };
-export { Emoji as Target };
+export { GuildEmojiExtension as Extension };
+export { GuildEmoji as Target };

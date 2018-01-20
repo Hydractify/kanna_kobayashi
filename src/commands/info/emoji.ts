@@ -1,4 +1,4 @@
-import { Emoji, Message } from 'discord.js';
+import { GuildEmoji, Message } from 'discord.js';
 import * as moment from 'moment';
 
 import { Client } from '../../structures/Client';
@@ -27,17 +27,17 @@ class EmojiInfoCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: Message, [emojiName]: string[]): Promise<string | [Emoji]> {
+	public async parseArgs(message: Message, [emojiName]: string[]): Promise<string | [GuildEmoji]> {
 		if (!emojiName) return 'you have to give me something to search for!';
 
-		const results: [EmojiMatchType, Emoji][] = await this.client.shard.broadcastEval(
+		const results: [EmojiMatchType, GuildEmoji][] = await this.client.shard.broadcastEval(
 			// tslint:disable-next-line:no-shadowed-variable
 			(client: Client, [name, shardId, emojiName]: [string, number, string]) =>
 				(client.commandHandler.resolveCommand(name) as EmojiInfoCommand).searchEmoji(emojiName),
 			[this.name, this.client.shard.id, emojiName],
 		);
 
-		let emoji: Emoji;
+		let emoji: GuildEmoji;
 		for (const result of results) {
 			if (!result) continue;
 			let type: EmojiMatchType;
@@ -46,16 +46,20 @@ class EmojiInfoCommand extends Command {
 		}
 
 		// Guild is not on this shard
-		if (emoji) return [new Emoji(this.client, emoji, undefined)];
+		if (emoji) return [new GuildEmoji(this.client, emoji, undefined)];
 
 		const match: RegExpMatchArray = emojiName.match(/<:([A-z\d_]{2,32}):(\d{17,19})>/);
 		if (!match) return 'I could not find a custom emoji by that name or id!';
 
 		// Guild is not on any shard, but exists
-		return [new Emoji(this.client, { name: match[1], id: match[2] }, undefined)];
+		return [new GuildEmoji(this.client, { name: match[1], id: match[2] }, undefined)];
 	}
 
-	public async run(message: Message, [emoji]: [Emoji], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: Message,
+		[emoji]: [GuildEmoji],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]> {
 		const createdAtString: string = moment(emoji.createdTimestamp).format('MM/DD/YYYY (HH:mm)');
 		const createdBeforeString: string = moment(emoji.createdTimestamp).fromNow();
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
@@ -68,10 +72,10 @@ class EmojiInfoCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	public searchEmoji(emojiName: string): [EmojiMatchType, Emoji] {
+	public searchEmoji(emojiName: string): [EmojiMatchType, GuildEmoji] {
 		if (this.client.emojis.has(emojiName)) return [EmojiMatchType.EXACT, this.client.emojis.get(emojiName)];
 		const lowerCasedName: string = emojiName.toLowerCase();
-		let inExactMatch: Emoji;
+		let inExactMatch: GuildEmoji;
 		for (const emoji of this.client.emojis.values()) {
 			if (emoji.name === emojiName) return [EmojiMatchType.EXACT, emoji];
 			if (emoji.name.toLowerCase() === lowerCasedName) inExactMatch = emoji;
