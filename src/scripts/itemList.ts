@@ -10,7 +10,7 @@ const ITEMS: IItemStructure[] = [
 	{
 		buyable: false,
 		description: 'This is a bug... And... It looks tasty!',
-		name: 'Bug',
+		name: 'bug',
 		price: 50,
 		rarity: ItemRarities.COMMON,
 		tradable: false,
@@ -24,7 +24,7 @@ const ITEMS: IItemStructure[] = [
 	{
 		buyable: true,
 		description: 'Go out to catch bugs with this net!',
-		name: 'Bug Net',
+		name: 'bug net',
 		price: 500,
 		rarity: ItemRarities.RARE,
 		tradable: true,
@@ -39,7 +39,7 @@ const ITEMS: IItemStructure[] = [
 	{
 		buyable: true,
 		description: 'This is the Camera! Having one will make you able to use the `image` command!',
-		name: 'Camera',
+		name: 'camera',
 		price: 2,
 		rarity: ItemRarities.HARMONY,
 		tradable: true,
@@ -54,7 +54,7 @@ const ITEMS: IItemStructure[] = [
 	{
 		buyable: true,
 		description: 'This is the scale of a Dragon, worth more than you can imagine, take care of this precious item.',
-		name: 'Dragon Scale',
+		name: 'dragon Scale',
 		price: 1000,
 		rarity: ItemRarities.DRAGON_SCALE,
 		tradable: true,
@@ -72,7 +72,7 @@ const BADGES: IItemStructure[] = [
 	{
 		buyable: false,
 		description: 'If you have this badge, it means you are one of my developers!',
-		name: 'Developer',
+		name: 'developer',
 		price: null,
 		rarity: ItemRarities['?'],
 		tradable: false,
@@ -87,7 +87,7 @@ const BADGES: IItemStructure[] = [
 	{
 		buyable: false,
 		description: 'You are awesome for having this... You help me to grow!',
-		name: 'Staff',
+		name: 'staff',
 		price: null,
 		rarity: ItemRarities['?'],
 		tradable: false,
@@ -98,7 +98,7 @@ const BADGES: IItemStructure[] = [
 	{
 		buyable: false,
 		description: 'Wow... You are one of my partners if you have this!',
-		name: 'Partner',
+		name: 'partner',
 		price: null,
 		rarity: ItemRarities['?'],
 		tradable: false,
@@ -113,11 +113,11 @@ const BADGES: IItemStructure[] = [
 	{
 		buyable: false,
 		description: 'T-thanks for supporting me on Patreon!',
-		name: 'Patron',
+		name: 'patron',
 		price: null,
 		rarity: ItemRarities.IMMORTAL,
 		tradable: false,
-		type: 'BADGES',
+		type: ItemTypes.BADGE,
 		unique: true,
 	},
 ];
