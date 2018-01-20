@@ -33,8 +33,7 @@
 		"dev": "export DEBUG=*|| set DEBUG=*&& export NODE_ENV=dev|| set NODE_ENV=dev&& npm run start",
 		"prod": "export NODE_ENV=production|| set NODE_ENV=production&& npm run start",
 		"testing": "export NODE_ENV=testing|| set NODE_ENV=testing&& npm run start",
-		"typings": "node ./bin/scripts/typings.js",
-		"postinstall": "npm run typings"
+		"typings": "node ./bin/scripts/typings.js"
 	},
 	"repository": {
 		"type": "git",
