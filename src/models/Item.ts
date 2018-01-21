@@ -12,6 +12,7 @@ import {
 } from 'sequelize-typescript';
 
 import { ItemRarities } from '../types/ItemRarities';
+import { Items } from '../types/Items';
 import { ItemTypes } from '../types/ItemTypes';
 import { User } from './User';
 import { UserItem } from './UserItem';
@@ -20,16 +21,16 @@ import { UserItem } from './UserItem';
 	coin: {
 		where: {
 			rarity: {
-				// rarity < 5
-				[Op.lt]: ItemRarities.DRAGON_SCALE,
+				// rarity > 5
+				[Op.gt]: ItemRarities.DRAGON_SCALE,
 			},
 		},
 	},
 	scale: {
 		where: {
 			rarity: {
-				// rarity > 5
-				[Op.gt]: ItemRarities.DRAGON_SCALE,
+				// rarity < 5
+				[Op.lt]: ItemRarities.DRAGON_SCALE,
 			},
 		},
 	},
@@ -74,7 +75,7 @@ export class Item extends Model<Item> {
 	@Column({
 		type: DataType.STRING('32'),
 	})
-	public name: string;
+	public name: Items;
 
 	@Column(DataType.INTEGER)
 	public price: number;
@@ -108,7 +109,7 @@ export class Item extends Model<Item> {
 	private UserItem: UserItem;
 
 	public getCount(): number {
-		if (!this.UserItem) return null;
+		if (!this.UserItem) throw new Error(`This "${this.name}" is not associated with any user!`);
 
 		return this.UserItem.count;
 	}
