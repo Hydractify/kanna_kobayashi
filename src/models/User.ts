@@ -2,7 +2,7 @@
 
 import { GuildMember, Role } from 'discord.js';
 import { RedisClient } from 'redis-p';
-import { QueryTypes } from 'sequelize';
+import { QueryOptions, QueryTypes } from 'sequelize';
 import {
 	AfterCreate,
 	AfterSave,
@@ -24,7 +24,6 @@ import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
 import { generateColor } from '../util/generateColor';
 import { Redis } from '../util/RedisDecorator';
-import { enumKeyFromValue } from '../util/Util';
 import { CommandLog } from './CommandLog';
 import { Guild } from './Guild';
 import { Item } from './Item';
@@ -154,23 +153,24 @@ export class User extends Model<User> {
 	 * @param count Optional number of items to give, defaults to 1
 	 * @returns New item count
 	 */
-	public async addItem(item: Item | Items, count: number = 1): Promise<number> {
+	public async addItem(item: Item | Items, count: number = 1, options: QueryOptions = {}): Promise<number> {
 		const itemName: string = typeof item === 'string'
-			? enumKeyFromValue(Items, item)
+			? item
 			: item.name;
 
 		const [{ count: newCount }]: [{ count: number }] = await this.sequelize.query(`
-		INSERT INTO "user_items" ("count", "item_name", "user_id")
-		VALUES(:count, :itemName, :userId)
-			ON CONFLICT ("item_name", "user_id")
-			DO UPDATE
-				SET "count"="user_items"."count"+:count
-				WHERE
-					"user_items"."item_name"=:itemName
-					AND "user_items"."user_id"=:userId
-		RETURNING "count";
+			INSERT INTO "user_items" ("count", "item_name", "user_id")
+			VALUES(:count, :itemName, :userId)
+				ON CONFLICT ("item_name", "user_id")
+				DO UPDATE
+					SET "count"="user_items"."count"+:count
+					WHERE
+						"user_items"."item_name"=:itemName
+						AND "user_items"."user_id"=:userId
+			RETURNING "count";
 			`,
 			{
+				...options,
 				replacements: {
 					count,
 					itemName,
