@@ -1,5 +1,6 @@
 import { IItemStructure } from '../types/IItemStructure';
 import { ItemRarities } from '../types/ItemRarities';
+import { Items } from '../types/Items';
 import { ItemTypes } from '../types/ItemTypes';
 
 const ITEMS: IItemStructure[] = [
@@ -10,7 +11,7 @@ const ITEMS: IItemStructure[] = [
 	{
 		buyable: false,
 		description: 'This is a bug... And... It looks tasty!',
-		name: 'bug',
+		name: Items.BUG,
 		price: 50,
 		rarity: ItemRarities.COMMON,
 		tradable: false,
@@ -24,7 +25,7 @@ const ITEMS: IItemStructure[] = [
 	{
 		buyable: true,
 		description: 'Go out to catch bugs with this net!',
-		name: 'bug net',
+		name: Items.BUG_NET,
 		price: 500,
 		rarity: ItemRarities.RARE,
 		tradable: true,
@@ -39,7 +40,7 @@ const ITEMS: IItemStructure[] = [
 	{
 		buyable: true,
 		description: 'This is the Camera! Having one will make you able to use the `image` command!',
-		name: 'camera',
+		name: Items.CAMERA,
 		price: 2,
 		rarity: ItemRarities.HARMONY,
 		tradable: true,
@@ -54,7 +55,7 @@ const ITEMS: IItemStructure[] = [
 	{
 		buyable: true,
 		description: 'This is the scale of a Dragon, worth more than you can imagine, take care of this precious item.',
-		name: 'dragon Scale',
+		name: Items.DRAGON_SCALE,
 		price: 1000,
 		rarity: ItemRarities.DRAGON_SCALE,
 		tradable: true,
@@ -72,7 +73,7 @@ const BADGES: IItemStructure[] = [
 	{
 		buyable: false,
 		description: 'If you have this badge, it means you are one of my developers!',
-		name: 'developer',
+		name: Items.DEVELOPER,
 		price: null,
 		rarity: ItemRarities['?'],
 		tradable: false,
@@ -87,7 +88,7 @@ const BADGES: IItemStructure[] = [
 	{
 		buyable: false,
 		description: 'You are awesome for having this... You help me to grow!',
-		name: 'staff',
+		name: Items.STAFF,
 		price: null,
 		rarity: ItemRarities['?'],
 		tradable: false,
@@ -98,7 +99,7 @@ const BADGES: IItemStructure[] = [
 	{
 		buyable: false,
 		description: 'Wow... You are one of my partners if you have this!',
-		name: 'partner',
+		name: Items.PATRON,
 		price: null,
 		rarity: ItemRarities['?'],
 		tradable: false,
@@ -113,7 +114,7 @@ const BADGES: IItemStructure[] = [
 	{
 		buyable: false,
 		description: 'T-thanks for supporting me on Patreon!',
-		name: 'patron',
+		name: Items.PATRON,
 		price: null,
 		rarity: ItemRarities.IMMORTAL,
 		tradable: false,

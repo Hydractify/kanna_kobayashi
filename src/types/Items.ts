@@ -1,7 +1,10 @@
-/**
- * Keys being the database names
- * Values being the user friendly names
- */
 export enum Items {
-	DRAGON_SCALE = 'Dragon Scale',
+	BUG = 'bug',
+	BUG_NET = 'bug net',
+	CAMERA = 'camera',
+	DRAGON_SCALE = 'dragon scale',
+	DEVELOPER = 'developer',
+	STAFF = 'staff',
+	PARTNER = 'partner',
+	PATRON = 'patron',
 }

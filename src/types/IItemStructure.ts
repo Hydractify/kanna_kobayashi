@@ -1,10 +1,14 @@
+import { ItemRarities } from './ItemRarities';
+import { Items } from './Items';
+import { ItemTypes } from './ItemTypes';
+
 export interface IItemStructure {
 	buyable: boolean;
 	description: string;
-	name: string;
-	price: number | null;
-	rarity: number;
+	name: Items;
+	price: number;
+	rarity: ItemRarities;
 	tradable: boolean;
-	type: string;
+	type: ItemTypes;
 	unique: boolean;
 }
