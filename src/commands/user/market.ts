@@ -5,6 +5,7 @@ import { Item } from '../../models/Item';
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { Items } from '../../types/Items';
 import { titleCase } from '../../util/Util';
@@ -43,8 +44,13 @@ class MarketCommand extends Command {
 		message: Message,
 		[input, ...item]: string[],
 	): Promise<string | [string, Item, number] | [string]> {
-		if (!input || input === 'list') return ['list'];
+		if (!input || input.toLowerCase() === 'list') return ['list'];
+
 		input = input.toLowerCase();
+		for (const text of item) {
+			item[item.indexOf(text)] = text.toLowerCase();
+		}
+		console.log(item);
 
 		let resolvedItem: Item;
 		if (!this.methods.includes(input) || input === 'show') {
@@ -87,7 +93,9 @@ class MarketCommand extends Command {
 		count: number,
 		authorModel: UserModel,
 	): Promise<Message | Message[]> {
-		if (!item.buyable || item.name === Items.DRAGON_SCALE) {
+		if (Math.sign(count) === -1) return message.reply('you can not buy a negative ammount of an item!');
+
+		if (!item.buyable) {
 			return message.reply(`**${titleCase(item.name)}** is an unbuyable ${item.type.toLowerCase()}!`);
 		}
 
@@ -146,12 +154,65 @@ class MarketCommand extends Command {
 		return message.reply(`thanks for buying **${count} ${titleCase(item.name)}**!`);
 	}
 
-	protected sell(message: Message, item: Item, count: number, authorModel: UserModel): never {
-		throw new Error('stub');
+	protected async sell(
+		message: Message,
+		item: Item, count: number,
+		authorModel: UserModel,
+	): Promise<Message | Message[]> {
+		if (Math.sign(count) === -1) return message.reply('you can not sell a negative ammount of an item!');
+
+		if (!item.tradable) {
+			return message.reply(`**${titleCase(item.name)}** is an unsellable ${item.type.toLowerCase()}`);
+		}
+
+		const [userItem]: Item[] = await authorModel.$get<Item>('items', { where: { name: item.name } }) as Item[];
+		if (userItem.getCount() < count) {
+			return message.reply(
+				`you only have **${userItem.getCount()}** of the **${userItem.name}** ${userItem.type}!`,
+			);
+		}
+
+		const transaction: Transaction = await this.sequelize.transaction();
+		try {
+			authorModel.coins += item.price;
+			await Promise.all([
+				authorModel.addItem(item, -count, { transaction }),
+				authorModel.save({ transaction }),
+			]);
+
+			await transaction.commit();
+		} catch (error) {
+			authorModel.coins -= item.price;
+			await transaction.rollback();
+
+			throw error;
+		}
+
+		return message.reply(`thanks for selling **${count} ${titleCase(item.name)}**!`);
 	}
-	protected show(message: Message, item: Item, count: number, authorModel: UserModel): never {
-		throw new Error('stub');
+
+	protected async show(
+		message: Message,
+		item: Item,
+		count: number,
+		authorModel: UserModel,
+	): Promise<Message | Message[]> {
+		const embed: MessageEmbed = MessageEmbed.common(message, authorModel);
+
+		embed
+		.setAuthor(`${titleCase(item.name)}'s Info`, message.author.displayAvatarURL())
+		.setDescription(item.description)
+		.addField('Buyable', item.buyable ? 'Yes' : 'No', true)
+		.addField('Price', item.price, true)
+		.addField('Rarity', item.rarity, true)
+		.addField('Tradable/Sellable', item.tradable ? 'Yes' : 'No', true)
+		.addField('Type', titleCase(item.type.toLowerCase()), true)
+		.addField('Unique (Can only have one)', item.unique ? 'Yes' : 'No', true)
+		.addField('Total Holders', (await item.$count('holders', { where: { name: item.name } })));
+
+		return message.reply(embed);
 	}
+
 	protected list(message: Message, item: Item, count: number, authorModel: UserModel): never {
 		throw new Error('stub');
 	}
