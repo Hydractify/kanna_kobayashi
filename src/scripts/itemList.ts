@@ -96,10 +96,14 @@ const BADGES: IItemStructure[] = [
 		unique: true,
 	},
 
+	/**
+	 * Partner
+	 * How to get: Partner with the official server/bot
+	 */
 	{
 		buyable: false,
 		description: 'Wow... You are one of my partners if you have this!',
-		name: Items.PATRON,
+		name: Items.PARTNER,
 		price: null,
 		rarity: ItemRarities['?'],
 		tradable: false,
