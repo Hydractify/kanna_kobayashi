@@ -88,7 +88,7 @@ class ProfileCommand extends Command {
 			.setAuthor(`${titleCase(user.username)}'s Profile`, user.displayAvatarURL())
 			.setDescription('\u200b')
 			.addField('Level', `${userModel.level} (${userModel.exp || 0} exp)`, true)
-			.addField('Reputation', reputation, true)
+			.addField('Reputation', (reputation || 0).toLocaleString(), true)
 			.addField('Kanna Coins', `${userModel.coins || 0} <:coin:330926092703498240>`, true)
 			.addField('Items', this.mapItems(userModel.items), true)
 			.addField('Badges', this.mapItems(userModel.badges), true)
