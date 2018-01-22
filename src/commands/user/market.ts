@@ -7,6 +7,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { ItemRarities } from '../../types/ItemRarities';
 import { Items } from '../../types/Items';
 import { titleCase } from '../../util/Util';
 
@@ -42,18 +43,13 @@ class MarketCommand extends Command {
 
 	public async parseArgs(
 		message: Message,
-		[input, ...item]: string[],
+		args: string[],
 	): Promise<string | [string, Item, number] | [string]> {
+		const [input, ...item] = args.join(' ').toLowerCase().split(' ');
 		if (!input || input.toLowerCase() === 'list') return ['list'];
 
-		input = input.toLowerCase();
-		for (const text of item) {
-			item[item.indexOf(text)] = text.toLowerCase();
-		}
-		console.log(item);
-
 		let resolvedItem: Item;
-		if (!this.methods.includes(input) || input === 'show') {
+		if (!this.methods.includes(input)) {
 			resolvedItem = await Item.findById([input, ...item].join(' '));
 			if (!resolvedItem) return `**${input}** is not a valid method!`;
 
@@ -67,9 +63,9 @@ class MarketCommand extends Command {
 		// No number -> default to one
 		if (isNaN(count)) count = 1;
 		// A number -> remove it from the args array
-		else item = item.slice(0, -1);
+		else item.splice(-1, 1);
 
-		resolvedItem = await Item.findById(item.join(' ').toLowerCase());
+		resolvedItem = await Item.findById(item.join(' '));
 		if (!resolvedItem) return `**${item}** is not an item!`;
 
 		if (count <= 0) {
@@ -93,8 +89,6 @@ class MarketCommand extends Command {
 		count: number,
 		authorModel: UserModel,
 	): Promise<Message | Message[]> {
-		if (Math.sign(count) === -1) return message.reply('you can not buy a negative ammount of an item!');
-
 		if (!item.buyable) {
 			return message.reply(`**${titleCase(item.name)}** is an unbuyable ${item.type.toLowerCase()}!`);
 		}
@@ -156,11 +150,10 @@ class MarketCommand extends Command {
 
 	protected async sell(
 		message: Message,
-		item: Item, count: number,
+		item: Item,
+		count: number,
 		authorModel: UserModel,
 	): Promise<Message | Message[]> {
-		if (Math.sign(count) === -1) return message.reply('you can not sell a negative ammount of an item!');
-
 		if (!item.tradable) {
 			return message.reply(`**${titleCase(item.name)}** is an unsellable ${item.type.toLowerCase()}`);
 		}
@@ -168,7 +161,7 @@ class MarketCommand extends Command {
 		const [userItem]: Item[] = await authorModel.$get<Item>('items', { where: { name: item.name } }) as Item[];
 		if (userItem.getCount() < count) {
 			return message.reply(
-				`you only have **${userItem.getCount()}** of the **${userItem.name}** ${userItem.type}!`,
+				`you only have **${userItem.getCount()}** of the **${userItem.name}** ${titleCase(item.type).toLowerCase()}!`,
 			);
 		}
 
@@ -188,7 +181,7 @@ class MarketCommand extends Command {
 			throw error;
 		}
 
-		return message.reply(`thanks for selling **${count} ${titleCase(item.name)}**!`);
+		return message.reply(`thanks for selling **${count} ${titleCase(item.name).toLowerCase()}**!`);
 	}
 
 	protected async show(
@@ -197,18 +190,18 @@ class MarketCommand extends Command {
 		count: number,
 		authorModel: UserModel,
 	): Promise<Message | Message[]> {
-		const embed: MessageEmbed = MessageEmbed.common(message, authorModel);
+		const holderCount: number = await item.$count('holders') as any || 0;
 
-		embed
-		.setAuthor(`${titleCase(item.name)}'s Info`, message.author.displayAvatarURL())
-		.setDescription(item.description)
-		.addField('Buyable', item.buyable ? 'Yes' : 'No', true)
-		.addField('Price', item.price, true)
-		.addField('Rarity', item.rarity, true)
-		.addField('Tradable/Sellable', item.tradable ? 'Yes' : 'No', true)
-		.addField('Type', titleCase(item.type.toLowerCase()), true)
-		.addField('Unique (Can only have one)', item.unique ? 'Yes' : 'No', true)
-		.addField('Total Holders', (await item.$count('holders', { where: { name: item.name } })));
+		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
+			.setAuthor(`${titleCase(item.name)}'s Info`, message.author.displayAvatarURL())
+			.setDescription(item.description)
+			.addField('Buyable', item.buyable ? 'Yes' : 'No', true)
+			.addField('Price', item.price ? item.price.toLocaleString() : 'n/a', true)
+			.addField('Rarity', titleCase(ItemRarities[item.rarity].toLowerCase()), true)
+			.addField('Trade- or Sellable', item.tradable ? 'Yes' : 'No', true)
+			.addField('Type', titleCase(item.type.toLowerCase()), true)
+			.addField('Unique (May only have one)', item.unique ? 'Yes' : 'No', true)
+			.addField('Total Holders', holderCount.toLocaleString(), true);
 
 		return message.reply(embed);
 	}
