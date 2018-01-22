@@ -188,7 +188,6 @@ export class User extends Model<User> {
 	@PrimaryKey
 	@Column
 	public readonly id: string;
-
 	@HasMany(() => CommandLog, {
 		as: 'commandLogs',
 		foreignKey: 'user_id',
