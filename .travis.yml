@@ -13,7 +13,7 @@ jobs:
       - stage: build
         node_js: 9
         script: npm run build
-      -stage: webhook
+      - stage: webhook
         script:
           - chmod +x ./travis/webhook.sh
           - ./travis/webhook.sh
