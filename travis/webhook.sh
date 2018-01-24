@@ -20,13 +20,13 @@ read -d '' DATA<<-EOF
 	"embeds": [{
 		"author": {
 			"name": "Build #${TRAVIS_BUILD_NUMBER} ${STATUS} - ${AUTHOR_NAME}",
-			"url": "https://travis-ci.org/${REPO_OWNER}/${REPO_NAME}/builds/${TRAVIS_BUILD_ID}",
+			"url": "https://travis-ci.org/${TRAVIS_REPO_SLUG}/builds/${TRAVIS_BUILD_ID}",
 			"icon_url": "https://www.gravatar.com/avatar/${GRAVATAR_HASH}"
 		},
-		"title": "[${REPO_NAME}:${TRAVIS_BRANCH}]",
-		"url": "https://github.com/${REPO_OWNER}/${REPO_NAME}/tree/${TRAVIS_BRANCH}",
+		"title": "[${TRAVIS_REPO_SLUG}:${TRAVIS_BRANCH}]",
+		"url": "https://github.com/${TRAVIS_REPO_SLUG}/tree/${TRAVIS_BRANCH}",
 		"color": ${COLOR},
-		"description": "[\`${TRAVIS_COMMIT:0:7}\`](https://github.com/${REPO_OWNER}/${REPO_NAME}/commit/${TRAVIS_COMMIT}) - ${TRAVIS_COMMIT_MESSAGE}",
+		"description": "[\`${TRAVIS_COMMIT:0:7}\`](https://github.com/${TRAVIS_REPO_SLUG}/commit/${TRAVIS_COMMIT}) - ${TRAVIS_COMMIT_MESSAGE}",
 		"timestamp": "$(date --utc +%FT%TZ)"
 	}]
 }
