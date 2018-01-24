@@ -2,8 +2,9 @@ language: node_js
 node_js:
     - 9
 install: npm install
-after_success: ./travis/webhook.sh
-after_failure: ./travis/webhook.sh
+after_failure:
+  - chmod +x ./travis/webhook.sh
+  - ./travis/webhook.sh
 jobs:
     include:
       - stage: test
@@ -12,3 +13,7 @@ jobs:
       - stage: build
         node_js: 9
         script: npm run build
+      -stage: webhook
+        script:
+          - chmod +x ./travis/webhook.sh
+          - ./travis/webhook.sh
