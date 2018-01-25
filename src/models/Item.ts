@@ -21,8 +21,8 @@ import { UserItem } from './UserItem';
 	coin: {
 		where: {
 			rarity: {
-				// rarity > 5
-				[Op.gt]: ItemRarities.DRAGON_SCALE,
+				// rarity >= 5
+				[Op.gte]: ItemRarities.DRAGON_SCALE,
 			},
 		},
 	},
