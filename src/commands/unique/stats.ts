@@ -60,11 +60,11 @@ class StatsCommand extends Command {
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL())
 			.addField('Uptime <:hugme:299650645001240578>', uptime, true)
-			.addField('Guilds <:oh:315264555859181568>', guilds, true)
+			.addField('Guilds <:oh:315264555859181568>', guilds.toLocaleString(), true)
 			// Technically bots as well
-			.addField('Humans <:police:331923995278442497>', users, true)
+			.addField('Humans <:police:331923995278442497>', users.toLocaleString(), true)
 			.addField('Version <:isee:315264557843218432>', version, true)
-			.addField('Shards <:hmm:315264556282675200>', this.client.shard.count, true)
+			.addField('Shards <:hmm:315264556282675200>', this.client.shard.count.toLocaleString(), true)
 			.addField('RAM used <:tired:315264554600890390>', ram, true);
 
 		return message.channel.send(embed);
