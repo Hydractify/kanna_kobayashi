@@ -217,16 +217,7 @@ export class CommandHandler {
 
 			this.logger.error(error);
 			message.reply(
-				[
-					'**an errror occured! Please paste this to the official guild support channel!**'
-					+ ' <:KannaAyy:315270615844126720> https://discord.gg/uBdXdE9',
-					'',
-					'',
-					`\\\`${command.name}\\\``,
-					'\\`\\`\\`',
-					error.stack,
-					'\\`\\`\\`',
-				].join('\n'),
+					'**an errror occured, but rest assured! It has already been reported and will be fixed in no time!**',
 			);
 		}
 	}
