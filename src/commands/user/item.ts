@@ -141,8 +141,10 @@ class ItemCommand extends Command {
 				|| title === 'description') continue;
 
 			if (title === 'holders') {
-				if (item.holders.length) {
-					embed.addField('You own', item.userItem.count);
+				// Sequelize is weird
+				const [holder]: any = item.holders;
+				if (holder) {
+					embed.addField('You own', holder.UserItem.count);
 				}
 				continue;
 			}
