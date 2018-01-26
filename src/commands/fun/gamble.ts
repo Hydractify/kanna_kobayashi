@@ -24,7 +24,8 @@ class GambleCommand extends Command {
 		if (!input) return `you must give me an amount! (\`${this.usage}\`)`;
 
 		const amount: number = parseInt(input);
-		if (!amount) return `**${input}** is not a valid number or zero!`;
+		if (isNaN(amount)) return `**${input}** is not a valid number!`;
+		if (amount <= 0) return `**${input}** is not a positive number!`;
 
 		if (amount > authorModel.coins) return `you do not own **${amount}** coins!`;
 
