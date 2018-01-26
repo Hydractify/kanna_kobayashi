@@ -47,6 +47,9 @@ class AddReputationCommand extends Command {
 				'you successfully edited your reputation entry of',
 				`**${member.user.tag}** to be positive.`,
 			].join(' '));
+		} else {
+			// To ensure the user exists in the database
+			await member.user.fetchModel();
 		}
 
 		await UserReputation.create({ repId: member.id, repperId: message.author.id, type: 'POSITIVE' });
