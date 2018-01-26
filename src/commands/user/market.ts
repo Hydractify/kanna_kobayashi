@@ -1,4 +1,4 @@
-import { CollectorFilter, Message, MessageReaction, ReactionCollector, User } from 'discord.js';
+import { CollectorFilter, DiscordAPIError, Message, MessageReaction, ReactionCollector, User } from 'discord.js';
 import { Transaction } from 'sequelize';
 
 import { Item } from '../../models/Item';
@@ -9,8 +9,7 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { ItemRarities } from '../../types/ItemRarities';
 import { Items } from '../../types/Items';
-import { paginate, PaginatedPage } from '../../util/paginate';
-import { titleCase } from '../../util/Util';
+import { chunkArray, titleCase } from '../../util/Util';
 
 type Method = 'buy' | 'sell' | 'show' | 'list';
 
@@ -213,79 +212,75 @@ class MarketCommand extends Command {
 		count: number,
 		authorModel: UserModel,
 	): Promise<undefined> {
+		const [coins, scales] = await Promise.all([
+			Item.scope('coin').findAll({ where: { buyable: true } }),
+			Item.scope('scale').findAll({ where: { buyable: true } }),
+		]).then(
+			(itemChunks: Item[][]) => itemChunks.map((items: Item[]) => chunkArray(items, 10)),
+		);
+
+		let index: number = 0;
+		let superior: boolean = false;
+		let current: Item[][] = coins;
+		const market: Message = await message.reply(
+			this._buildEmbed(message, authorModel, index, coins, superior),
+		) as Message;
+
 		const emojis: string[] = ['🔘', '⬅', '➡'];
-
-		let [embed, page, maxPage]: [MessageEmbed, number, number] = await this._buildEmbed(message, authorModel, 1, false);
-		const market: Message = await message.reply(embed) as Message;
-
-		for (const emoji of emojis) market.react(emoji);
+		const reactions: MessageReaction[] = [];
 
 		const filter: CollectorFilter = (reaction: MessageReaction, user: User): boolean =>
 			emojis.includes(reaction.emoji.name) && user.id === message.author.id;
-		const collector: ReactionCollector = market.createReactionCollector(filter, { time: 3e4 });
 
-		let index: number = page;
-		let superior: boolean = false;
-		collector.on('collect', async (reaction) => {
-			if (reaction.emoji.name === '➡') {
-				if (maxPage < index) index += 1;
-				else index = 1;
+		const promise: Promise<undefined> = new Promise((resolve: () => void, reject: (error: Error) => void) => {
+			const reactionCollector: ReactionCollector = market.createReactionCollector(
+				filter,
+				{ time: 3e4 },
+			).on('collect', (reaction: MessageReaction, user: User) => {
+				if (reaction.emoji.name === '➡') {
+					if ((current.length - 1) > index)++index;
+					else index = 0;
+				} else if (reaction.emoji.name === '⬅') {
+					if (index <= 0) index = current.length - 1;
+					else --index;
+				} else if (reaction.emoji.name === '🔘') {
+					superior = !superior;
+					current = superior ? scales : coins;
+					index = 0;
+				}
 
-				[embed, page, maxPage] = await this._buildEmbed(
-					message,
-					authorModel,
-					index,
-					superior,
-				);
+				reaction.users.remove(user).catch(() => undefined);
+				market.edit(
+					this._buildEmbed(message, authorModel, index, current, superior),
+				).catch((error: DiscordAPIError) => {
+					reactionCollector.stop();
+					reject(error);
+				});
+			}).on('end', () => {
+				for (const reaction of reactions) reaction.users.remove().catch(() => undefined);
+				resolve();
+			});
 
-				await market.edit(embed);
-			}
-
-			if (reaction.emoji.name === '⬅') {
-				if ((index - 1) < 1) index = maxPage;
-				else index -= 1;
-
-				[embed, page, maxPage] = await this._buildEmbed(
-					message,
-					authorModel,
-					index,
-					superior,
-				);
-
-				await market.edit(embed);
-			}
-
-			if (reaction.emoji.name === '🔘') {
-				superior = !superior;
-
-				[embed, page, maxPage] = await this._buildEmbed(
-					message,
-					authorModel,
-					1,
-					superior,
-				);
-
-				await market.edit(embed);
-			}
 		});
 
-		return undefined;
+		for (const emoji of emojis) reactions.push(await market.react(emoji));
+
+		return promise;
 	}
 
-	protected async _buildEmbed(
+	private _buildEmbed(
 		message: Message,
 		authorModel: UserModel,
-		page: number,
+		index: number,
+		itemChunks: Item[][],
 		superior: boolean,
-	): Promise<[MessageEmbed, number, number]> {
+	): MessageEmbed {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-		.setTitle(`Kanna\'s Market (${superior ? 'Dragon Scale' : 'Coins'})`);
+			.setTitle(`Kanna\'s Market (${superior ? 'Dragon Scale' : 'Coins'})`);
 
-		let items: Item[];
-		items = await Item.scope(superior ? 'scale' : 'coin').findAll();
-		const { items: itemPage, maxPage, page: currentPage }: PaginatedPage<Item> = paginate(items, page, 10);
+		embed.footer.text += ` | Page ${index + 1} of ${itemChunks.length}`;
 
-		for (const item of itemPage) {
+		for (const item of itemChunks[index]) {
 			embed.addField(`${titleCase(item.name)}`, [
 				`Price: ${item.price ? item.price : 'n/a'}`,
 				`Rarity: ${titleCase(ItemRarities[item.rarity].replace(/_/, ' '))}`,
@@ -293,7 +288,7 @@ class MarketCommand extends Command {
 			].join('\n'), true);
 		}
 
-		return [embed, maxPage, currentPage];
+		return embed;
 	}
 }
 
