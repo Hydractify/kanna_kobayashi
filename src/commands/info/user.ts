@@ -41,7 +41,7 @@ class UserInfoCommand extends Command {
 		const member: GuildMember = message.guild.members.get(user.id) ||
 			await message.guild.members.fetch(user.id).catch(() => undefined);
 
-		const roles: Collection<Snowflake, Role> = member.roles.clone();
+		const roles: Collection<Snowflake, Role> = new Collection(member.roles.entries());
 		roles.delete(message.guild.id);
 		const rolesString: string = mapIterable(roles.values());
 

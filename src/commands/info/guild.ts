@@ -25,7 +25,7 @@ class GuildInfoCommand extends Command {
 		const { guild }: Message = message;
 		if (guild.memberCount > guild.members.size) await guild.members.fetch();
 
-		const roles: Collection<Snowflake, Role> = guild.roles.clone();
+		const roles: Collection<Snowflake, Role> = new Collection(guild.roles.entries());
 		// Get rid of @everyone
 		roles.delete(guild.id);
 		const rolesString: string = mapIterable(roles.values());
