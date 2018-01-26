@@ -25,15 +25,15 @@ class SetGameCommand extends Command {
 				.then((result: number[]) => result.reduce((acc: number, current: number) => acc + current));
 
 			await this.client.shard.broadcastEval(this.setActivity, [`k!help | on ${totalGuilds} guilds`]);
-		}
+		} else {
+			let stream: string;
+			if (args[0].toLowerCase() === 'stream') {
+				args = args.slice(1);
+				stream = ', \'https://twitch.tv/wizzardlink\'';
+			}
 
-		let stream: string;
-		if (args[0].toLowerCase() === 'stream') {
-			args = args.slice(1);
-			stream = ', \'https://twitch.tv/wizzardlink\'';
+			await this.client.shard.broadcastEval(this.setActivity, [args.join(' '), stream]);
 		}
-
-		await this.client.shard.broadcastEval(this.setActivity, [args.join(' '), stream]);
 
 		return message.channel.send('Updated presence status successfully on all shards!');
 	}
