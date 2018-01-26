@@ -50,7 +50,7 @@ class StatsCommand extends Command {
 		other.sort((a: IShardDataOther, b: IShardDataOther) => a.shardId - b.shardId);
 
 		const uptime: string = [
-			moment.duration(this.client.uptime).format('d[ Days], hh[h]:mm[m]:ss[s]'),
+			moment.duration(this.client.uptime).format('d[ Days], hh:mm:ss'),
 			`[${moment.duration(this.client.uptime).humanize()}]`,
 		].join(' ');
 		const ram: string[] = other.map((shard: IShardDataOther) => `Shard ${shard.shardId + 1}: ${shard.ram}`);
