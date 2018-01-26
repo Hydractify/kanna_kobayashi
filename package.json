@@ -11,16 +11,16 @@
 		"raven": "github:spaceeec/raven-node#pg_fix",
 		"redis-p": "github:appellation/redis-p",
 		"reflect-metadata": "^0.1.10",
-		"sequelize": "^4.31.2",
+		"sequelize": "^4.32.1",
 		"sequelize-typescript": "^0.6.2",
 		"snekfetch": "^3.6.1",
-		"source-map-support": "^0.5.0"
+		"source-map-support": "^0.5.3"
 	},
 	"devDependencies": {
 		"@types/moment-duration-format": "^1.3.8",
 		"@types/node": "^8.5.8",
 		"@types/raven": "^2.1.3",
-		"@types/sequelize": "^4.0.79",
+		"@types/sequelize": "^4.27.4",
 		"tslint": "^5.9.1",
 		"typescript": "^2.6.2"
 	},
