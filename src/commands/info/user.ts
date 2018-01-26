@@ -41,10 +41,6 @@ class UserInfoCommand extends Command {
 		const member: GuildMember = message.guild.members.get(user.id) ||
 			await message.guild.members.fetch(user.id).catch(() => undefined);
 
-		const roles: Collection<Snowflake, Role> = new Collection(member.roles.entries());
-		roles.delete(message.guild.id);
-		const rolesString: string = mapIterable(roles.values());
-
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`Info about ${user.tag}`, user.displayAvatarURL(), user.displayAvatarURL())
 			.setDescription('\u200b')
@@ -58,13 +54,17 @@ class UserInfoCommand extends Command {
 			.addField('Status', titleCase((member || user).presence.status), true)
 			.addField('Game', (member || user).presence.activity ? (member || user).presence.activity.name : 'Nothing', true)
 			.addField(
-			'Shared guilds on this shard',
-			this.client.guilds.filter((guild: Guild) => guild.members.has(user.id)).size,
-			true,
+				'Shared guilds on this shard',
+				this.client.guilds.filter((guild: Guild) => guild.members.has(user.id)).size,
+				true,
 		)
 			.addField('Registered account', this._formatTimespan(user.createdTimestamp));
 
 		if (member) {
+			const roles: Collection<Snowflake, Role> = new Collection(member.roles.entries());
+			roles.delete(message.guild.id);
+			const rolesString: string = mapIterable(roles.values());
+
 			embed
 				.addField('Joined this guild', this._formatTimespan(member.joinedTimestamp), true)
 				.addField('Roles', rolesString);
