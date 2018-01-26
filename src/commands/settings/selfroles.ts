@@ -85,7 +85,7 @@ class SelfRolesCommand extends Command {
 				return message.reply(`the \`@${role.name}\` role is already self assignable.`);
 			}
 
-			if (message.member.highestRole.position <= role.position) {
+			if (message.member.roles.highest.position <= role.position) {
 				return message.reply('you may only add roles which are positioned below your highest role!');
 			}
 
@@ -93,7 +93,7 @@ class SelfRolesCommand extends Command {
 			message.guild.model.selfRoleIds = roles.concat(role.id);
 			await message.guild.model.save();
 
-			if (message.guild.me.highestRole.position <= role.position) {
+			if (message.guild.me.roles.highest.position <= role.position) {
 				return message.reply([
 					`added the \`@${role.name}\` role to the self assignable roles!`,
 					'Note: The role is not below my highest role, I can not assign or remove it!',
@@ -124,16 +124,16 @@ class SelfRolesCommand extends Command {
 				return message.reply(`the \`@${role.name}\` role is not self assignable!`);
 			}
 
-			if (message.guild.me.highestRole.position <= role.position) {
+			if (message.guild.me.roles.highest.position <= role.position) {
 				return message.reply(`the \`@${role.name}\` role is self assigneable, but it is not lower than my highest role!`);
 			}
 
 			if (message.member.roles.has(role.id)) {
-				await message.member.removeRole(role);
+				await message.member.roles.remove(role);
 
 				return message.reply(`you no longer have the \`@${role.name}\` role!`);
 			} else {
-				await message.member.addRole(role);
+				await message.member.roles.add(role);
 
 				return message.reply(`you now have the \`@${role.name}\` role!`);
 			}
