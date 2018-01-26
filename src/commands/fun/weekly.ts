@@ -57,7 +57,7 @@ class WeeklyCommand extends Command {
 		const totalScales: number = authorModel.tier + 1;
 
 		const newCount: number = await authorModel.addItem(Items.DRAGON_SCALE, totalScales);
-		const suffix: string = `you now have ${newCount} Scale${newCount === 1 ? '' : 's'}!`;
+		const suffix: string = `you now have ${newCount} Dragon Scale${newCount === 1 ? '' : 's'}!`;
 
 		if (totalScales === 1) {
 			return message.reply(`here is your weekly Dragon Scale, ${suffix}`);
