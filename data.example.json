@@ -6,10 +6,12 @@
 	"clientToken": "",
 	"dbots": "",
 	"dbotsorg": "",
+	"osuToken": "",
 	"ravenToken": "",
-	"weebToken": "Bearer <Token>",
+	"sauceNaoToken": "",
 	"webhook": {
 		"id": "",
 		"secret": ""
-	}
+	},
+	"weebToken": "Bearer <Token>"
 }
