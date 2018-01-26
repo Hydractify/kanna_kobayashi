@@ -122,13 +122,6 @@ class HelpCommand extends Command {
 
 	private async _sendEmbed(message: Message, authorModel: UserModel): Promise<void> {
 		const embeds: MessageEmbed[] = this._mapCategories(message, authorModel);
-
-		const helpMessage: Message = await message.channel.send({ embed: embeds[0] }) as Message;
-		const emojis: string[] = ['⬅', '➡', '❎'];
-		for (const emoji of emojis) {
-			await helpMessage.react(emoji);
-		}
-
 		let page: number = 0;
 		const selectEmbed: (increment: boolean) => MessageEmbed = (increment: boolean): MessageEmbed => {
 			if (embeds[increment ? ++page : --page]) return embeds[page];
@@ -140,11 +133,18 @@ class HelpCommand extends Command {
 			return embeds[page];
 		};
 
+		const helpMessage: Message = await message.channel.send({ embed: embeds[0] }) as Message;
+		const emojis: string[] = ['⬅', '➡', '❎'];
+		const reactions: MessageReaction[] = [];
+
+		let timeout: NodeJS.Timer;
 		const filter: CollectorFilter = (reaction: MessageReaction, user: User): boolean =>
 			emojis.includes(reaction.emoji.name) && user.id === message.author.id;
-
-		const reactionCollector: ReactionCollector = helpMessage.createReactionCollector(filter, { time: 3e4 })
+		const reactionCollector: ReactionCollector = helpMessage.createReactionCollector(filter)
 			.on('collect', (reaction: MessageReaction) => {
+				if (timeout) clearTimeout(timeout);
+				timeout = setTimeout(() => reactionCollector.stop(), 6e4);
+
 				if (reaction.emoji.name === '➡') {
 					reaction.users.remove(message.author).catch(() => undefined);
 					helpMessage.edit({ embed: selectEmbed(true) })
@@ -152,24 +152,25 @@ class HelpCommand extends Command {
 							reactionCollector.stop();
 							throw error;
 						});
-				}
-
-				if (reaction.emoji.name === '⬅') {
+				} else if (reaction.emoji.name === '⬅') {
 					reaction.users.remove(message.author).catch(() => undefined);
 					helpMessage.edit({ embed: selectEmbed(false) })
 						.catch((error: DiscordAPIError) => {
 							reactionCollector.stop();
 							throw error;
 						});
-				}
-				if (reaction.emoji.name === '❎') {
-					reactionCollector.stop();
+				} else if (reaction.emoji.name === '❎') {
+					helpMessage.delete().catch(() => undefined);
 				}
 			})
 			.on('end', () => {
-				message.delete().catch(() => undefined);
-				helpMessage.delete().catch(() => undefined);
+				for (const reaction of reactions) {
+					reaction.users.remove().catch(() => undefined);
+				}
 			});
+
+		for (const emoji of emojis) reactions.push(await helpMessage.react(emoji));
+		timeout = setTimeout(() => reactionCollector.stop(), 6e4);
 
 		return undefined;
 	}
