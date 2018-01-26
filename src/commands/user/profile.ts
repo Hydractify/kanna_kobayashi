@@ -100,7 +100,7 @@ class ProfileCommand extends Command {
 	 * @param items Array of items to map
 	 */
 	private mapItems(items: Item[]): string {
-		if (!items.length) return 'None';
+		if (!items || !items.length) return 'None';
 
 		const formatted: string[] = [];
 		for (const item of items) {
