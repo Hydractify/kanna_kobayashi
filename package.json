@@ -1,6 +1,6 @@
 {
 	"name": "kanna-kobayashi",
-	"version": "4.1.0-space",
+	"version": "4.1.0",
 	"description": "\\o/",
 	"main": "bin/shard.js",
 	"dependencies": {
