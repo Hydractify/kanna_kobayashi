@@ -80,7 +80,8 @@ export abstract class WeebCommand extends Command {
 		base += `**${message.member.displayName}** ${this.action}`;
 		const names: string[] = members.map((member: IWeebResolvedMember) => member.name);
 
-		base += `**${names.slice(0, -1).join('**,')} and **${names[names.length - 1]}**`;
+		// TODO: Make 'me' and 'themself' be the last index
+		base += ` **${names.slice(0, -1).join('**, **')}** and **${names[names.length - 1]}**`;
 
 		return base;
 	}
