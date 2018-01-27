@@ -110,7 +110,7 @@ class MarketCommand extends Command {
 			if (!scale || item.price > scale.getCount()) {
 				return message.reply([
 					'you have insufficient Dragon Scales to buy this item!',
-					`You need ${item.price - scale.getCount()} more.`,
+					`You need ${item.price - (scale ? scale.getCount() : 0)} more.`,
 				].join('\n'));
 			}
 
