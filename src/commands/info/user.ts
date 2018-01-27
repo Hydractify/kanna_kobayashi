@@ -67,7 +67,7 @@ class UserInfoCommand extends Command {
 
 			embed
 				.addField('Joined this guild', this._formatTimespan(member.joinedTimestamp), true)
-				.addField('Roles', rolesString);
+				.addField('Roles', rolesString || 'None');
 		}
 
 		embed.addField('Avatar', `[Link](${user.displayAvatarURL()})`)
