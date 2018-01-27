@@ -24,7 +24,7 @@ class StrawPollCommand extends Command {
 			usage: 'strawpoll [ID]',
 		});
 
-		this.baseURL = 'http://strawpoll.me';
+		this.baseURL = 'http://www.strawpoll.me';
 		this.apiURL = `${this.baseURL}/api/v2/polls`;
 	}
 
@@ -77,6 +77,7 @@ class StrawPollCommand extends Command {
 
 		const { body: poll }: Result<IStrawPollPoll> = await post(this.apiURL)
 			.set('Content-Type', 'application/json')
+			.set('Accept', 'application/json')
 			.send({
 				multi: multi[0].toLowerCase() === 'y',
 				options,
