@@ -2,11 +2,11 @@ import { Message } from 'discord.js';
 
 import { AniListCommand } from '../../structures/AniListCommand';
 import { CommandHandler } from '../../structures/CommandHandler';
-import { AniType } from '../../types/anilist/AniType';
-import { CharData } from '../../types/anilist/CharData';
+import { ICharacter } from '../../types/anilist/ICharacter';
+import { MediaType } from '../../types/anilist/MediaType';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class AnimeCommand extends AniListCommand {
+class AnimeCommand extends AniListCommand<ICharacter> {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['char'],
@@ -14,7 +14,7 @@ class AnimeCommand extends AniListCommand {
 			description: 'Search for a specific character on anilist',
 			examples: ['character Kanna Kamui'],
 			name: 'character',
-			type: AniType.CHARACTER,
+			type: MediaType.CHARACTER,
 			usage: 'character <...Search>',
 		});
 	}
@@ -26,11 +26,11 @@ class AnimeCommand extends AniListCommand {
 	}
 
 	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const entries: CharData[] = await this.search<CharData>(args.join(' '));
+		const entries: ICharacter[] = await this.search(args.join(' '));
 
 		if (!entries) return message.reply('I could not find a single character matching your search!');
 
-		const entry: CharData = entries.length > 1
+		const entry: ICharacter = entries.length > 1
 			? await this.pick(message, authorModel, entries)
 			: entries[0];
 

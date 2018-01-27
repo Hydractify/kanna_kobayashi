@@ -1,10 +1,15 @@
 import { Collection, Message } from 'discord.js';
+import { readFile } from 'fs';
+import { join } from 'path';
+import { promisify } from 'util';
 
 import { User as UserModel } from '../models/User';
-import { AnimeData } from '../types/anilist/AnimeData';
-import { AniType } from '../types/anilist/AniType';
-import { CharData } from '../types/anilist/CharData';
-import { MangaData } from '../types/anilist/MangaData';
+import { ICharacter } from '../types/anilist/ICharacter';
+import { ICharacterName } from '../types/anilist/ICharacterName';
+import { IFuzzyDate } from '../types/anilist/IFuzzyDate';
+import { IMedia } from '../types/anilist/IMedia';
+import { MediaStatus } from '../types/anilist/MediaStatus';
+import { MediaType } from '../types/anilist/MediaType';
 import { ICommandInfo } from '../types/ICommandInfo';
 import { chunkArray, replaceMap, titleCase } from '../util/Util';
 import { APIRouter, buildRouter } from './Api';
@@ -12,19 +17,17 @@ import { Command } from './Command';
 import { CommandHandler } from './CommandHandler';
 import { MessageEmbed } from './MessageEmbed';
 
+const readFileAsync = promisify(readFile);
+
 // tslint:disable-next-line:variable-name
 const Api: () => APIRouter = buildRouter({
-	baseURL: 'https://anilist.co/api',
+	baseURL: 'https://graphql.anilist.co',
 });
-const { anilist } = require('../../data');
-Object.assign(anilist, { grant_type: 'client_credentials' });
-
-type AllTypes = AnimeData | CharData | MangaData;
 
 /**
  * Abstract command to provide Anilist functionality for commands in an easy manner.
  */
-export abstract class AniListCommand extends Command {
+export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Command {
 
 	/**
 	 * Object literal filled with chars to replace html entities with their actual representations
@@ -34,6 +37,7 @@ export abstract class AniListCommand extends Command {
 		'&amp;': '&',
 		'&gt;': '>',
 		'&lt;': '<',
+		'&mdash;' : '—',
 		'&quot;': '"',
 		'<br />': '\n',
 		'<br>': '\n',
@@ -43,12 +47,17 @@ export abstract class AniListCommand extends Command {
 	/**
 	 * Type of resources the command is intended for.
 	 */
-	protected readonly type: AniType;
+	protected readonly type: MediaType;
+
+	/**
+	 * Query of this command
+	 */
+	protected query: string;
 
 	/**
 	 * Derives from the AniListCommand class.
 	 */
-	protected constructor(handler: CommandHandler, options: ICommandInfo & { type: AniType }) {
+	protected constructor(handler: CommandHandler, options: ICommandInfo & { type: MediaType }) {
 		super(handler, options);
 
 		if (!options.type) {
@@ -56,83 +65,88 @@ export abstract class AniListCommand extends Command {
 		}
 
 		this.type = options.type;
-	}
 
-	/**
-	 * Whether the passed entry is an anime
-	 * Purely to satisfy TS.
-	 */
-	public isAnime(entry: AllTypes): entry is AnimeData {
-		return entry.series_type === 'anime';
+		if (this.type === MediaType.CHARACTER) {
+			readFileAsync(join(__dirname, '..', '..', 'static', 'anilist', 'character.graphql'), { encoding: 'utf-8' })
+				.then((query: string) => {
+					this.query = query;
+				});
+		} else {
+			readFileAsync(join(__dirname, '..', '..', 'static', 'anilist', 'media.graphql'), { encoding: 'utf-8' })
+				.then((query: string) => {
+					this.query = query;
+				});
+		}
 	}
 
 	/**
 	 * Whether the passed entry is a char
 	 * Purely to satisfy TS.
 	 */
-	public isChar(entry: AllTypes): entry is CharData {
-		return !Boolean(entry.series_type);
+	public isChar(entry: ICharacter | IMedia): entry is ICharacter {
+		return this.type === MediaType.CHARACTER;
 	}
 
 	/**
 	 * Build an embed for the passed type of data.
 	 */
-	protected buildEmbed(message: Message, authorModel: UserModel, entry: AllTypes): MessageEmbed {
+	protected buildEmbed(message: Message, authorModel: UserModel, entry: ICharacter | IMedia): MessageEmbed {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setThumbnail(entry.image_url_lge);
+			.setThumbnail(entry.image.large);
 
 		// Whether this entry is a character entry
 		if (this.isChar(entry)) {
-			embed.setTitle(`${entry.name_first || '\u200b'} ${entry.name_last || '\u200b'}`)
-				.setDescription(entry.name_japanese || '');
+			embed.setTitle(`${entry.name.first || '\u200b'} ${entry.name.last || '\u200b'}`)
+				.setDescription(entry.name.native || '');
 
-			if (entry.name_alt) embed.addField('Aliases:', entry.name_alt, true);
+			const { alternative }: ICharacterName = entry.name;
+			if (alternative && alternative[0]) embed.addField('Aliases:', alternative.join(', '), true);
 
-			return embed.splitToFields('Description', entry.info
-				? replaceMap(entry.info, AniListCommand.replaceChars)
+			return embed.splitToFields('Description', entry.description
+				? replaceMap(entry.description, AniListCommand.replaceChars)
 				: 'Not specified',
 			);
 		}
 
-		const desc: string[] = [entry.title_romaji];
+		const description: string[] = entry.title.romaji === entry.title.native
+			? []
+			: [entry.title.romaji];
 
-		if (entry.title_english !== entry.title_romaji) {
-			desc.push('', entry.title_english);
+		if (entry.title.english) {
+			description.push('', entry.title.english);
 		}
 
 		// 3 genres per row
 		const genres: string = chunkArray(entry.genres, 3).map((chunk: string[]) => chunk.join(', ')).join('\n');
 
 		embed
-			.setTitle(entry.title_japanese)
-			.setURL(`https://anilist.co/${this.type}/${entry.id}`)
-			.setDescription(desc)
+			.setTitle(entry.title.native)
+			.setURL(entry.siteUrl)
+			.setDescription(description)
 			.addField('Genres', genres || 'Not specified', true)
-			.addField('Rating | Type', `${entry.average_score} | ${entry.type}`, true);
+			.addField('Rating | Type', `${entry.averageScore || 'n/a'} | ${titleCase(this.type.toLowerCase())}`, true);
 
-		if (this.isAnime(entry)) {
+		if (this.type === MediaType.ANIME) {
 			embed.addField(
 				'Episodes',
-				entry.total_episodes,
+				entry.episodes || 'n/a',
 				true,
 			);
 		} else {
 			embed.addField(
-				'Chaprter | Volumes',
-				`${entry.total_chapters} | ${entry.total_volumes}`,
+				'Chapters | Volumes',
+				`${entry.chapters} | ${entry.volumes}`,
 				true,
 			);
 		}
 
-		if (entry.start_date_fuzzy) {
+		if (entry.startDate) {
 			let title: string = 'Start';
-			let value: string = this.formatFuzzy(entry.start_date_fuzzy);
+			let value: string = this.formatFuzzy(entry.startDate);
 
-			if (this.isAnime(entry)
-				? entry.airing_status === 'finished airing'
-				: entry.publishing_status === 'finished publishing') {
+			if (entry.status === MediaStatus.FINISHED) {
 				title = 'Period';
-				value += ` - ${this.formatFuzzy(entry.end_date_fuzzy) || 'Not specified'}`;
+				value += ` - ${this.formatFuzzy(entry.endDate)}`;
 			}
 
 			embed.addField(title, value, true);
@@ -140,19 +154,19 @@ export abstract class AniListCommand extends Command {
 
 		embed
 			.splitToFields(
-			'Description',
-			entry.description
-				? replaceMap(entry.description, AniListCommand.replaceChars)
-				: 'Not specified',
+				'Description',
+				entry.description
+					? replaceMap(entry.description, AniListCommand.replaceChars)
+					: 'Not specified',
 		)
 			.addField(
-			`${this.isAnime(entry) ? 'Airing' : 'Publishing'} status`,
-			titleCase(this.isAnime(entry) ? entry.airing_status : entry.publishing_status),
-			true,
+				`${this.type === MediaType.ANIME ? 'Airing' : 'Publishing'} Status`,
+				titleCase(entry.status.replace(/_/g, ' ').toLowerCase()),
+				true,
 		);
 
-		if (this.isAnime(entry) && entry.source) {
-			embed.addField('Origin', entry.source, true);
+		if (this.type === MediaType.ANIME && entry.source) {
+			embed.addField('Origin', titleCase(entry.source.replace(/_/g, ' ').toLowerCase()), true);
 		}
 
 		return embed;
@@ -161,36 +175,38 @@ export abstract class AniListCommand extends Command {
 	/**
 	 * Formats the fuzzy dates provided from anilist. (Using timestamps is way overrated.)
 	 */
-	protected formatFuzzy(input: string | number): string {
+	protected formatFuzzy(input: IFuzzyDate): string {
 		if (!input) return '';
-		if (typeof input !== 'string') input = String(input);
 
-		return `${input.substring(6, 8)}.${input.substring(4, 6)}.${input.substring(0, 4)}`;
+		return `${input.day || '??'}.${input.month || '??'}.${input.year || '????'}`;
 	}
 
 	/**
 	 * Prompts the user to pick one of the search results.
 	 */
-	protected async pick<T extends AllTypes>(message: Message, authorModel: UserModel, entries: T[]): Promise<T> {
+	protected async pick(
+		message: Message,
+		authorModel: UserModel,
+		entries: T[],
+	): Promise<T> {
 		const mapped: string[] = [];
 		const { length }: string = String(entries.length);
-		const type: string = entries[0].series_type || 'char';
 		let count: number = 0;
 
-		if (type === 'char') {
-			for (const entry of entries as CharData[]) {
-				mapped.push(`\`${String(++count).padEnd(length)}\` - ${entry.name_first} ${entry.name_last || ''}`);
+		if (this.type === MediaType.CHARACTER) {
+			for (const entry of entries as ICharacter[]) {
+				mapped.push(`\`${String(++count).padEnd(length)}\` - ${entry.name.first} ${entry.name.last || ''}`);
 			}
 		} else {
-			for (const entry of entries as (AnimeData | MangaData)[]) {
-				mapped.push(`\`${String(++count).padEnd(length)}\` - ${entry.title_english}`);
+			for (const entry of entries as IMedia[]) {
+				mapped.push(`\`${String(++count).padEnd(length)}\` - ${entry.title.english || entry.title.romaji}`);
 			}
 		}
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setTitle(`I found more than one ${type}`)
+			.setTitle(`I found more than one ${titleCase(this.type.toLowerCase())}`)
 			.setDescription(mapped.join('\n').slice(0, 2000))
 			.addField('Notice', [
-				`For which ${type} would you like to see additional information?`,
+				`For which ${titleCase(this.type.toLowerCase())} would you like to see additional information?`,
 				'Please respond with the number of the entry you would like to see, for example: `3`.',
 				'',
 				'To cancel this prompt respond with `cancel`, this prompt times out after `30` seconds.',
@@ -215,40 +231,49 @@ export abstract class AniListCommand extends Command {
 	}
 
 	/**
-	 * Retrieve the currently valid token for anilist, requests a new token if necessary
-	 */
-	protected async retrieveToken(): Promise<string> {
-		let token: string = await this.redis.get('anilist:token');
-
-		if (!token) {
-			const data: {
-				access_token: string;
-				expires_in: number;
-			} = await Api().auth.access_token.post({ data: anilist });
-
-			this.redis.set('anilist:token', data.access_token, 'EX', data.expires_in);
-
-			token = data.access_token;
-		}
-
-		return token;
-	}
-
-	/**
 	 * Search for the specified type on anilist, returns an array of results or `undefined` when nothing was found.
 	 */
-	protected async search<T extends AllTypes>(search: string): Promise<T[]> {
-		const token: string = await this.retrieveToken();
-		search = encodeURIComponent(search);
+	protected async search(query: string): Promise<T[]> {
+		const response: {
+			data?: {
+				result: {
+					results: T[];
+				};
+			};
+			errors?: {
+				message: string;
+				status: number;
+				locations: {
+					line: number;
+					column: number;
+				}[]
+				validation?: {
+					[name: string]: string[];
+				}
+			}[];
+		} = await Api().post({
+			data: {
+				query: this.query,
+				variables: { query, type: this.type },
+			},
+		});
 
-		const response: any = await Api()(this.type).search(search).get({ query: { access_token: token } });
+		if (response.errors) {
+			const error: Error = new Error();
+			Object.assign(error, response.errors.shift());
+			if (response.errors.length) {
+				(error as any).extra = response.errors;
+			}
 
-		if (response.error) {
-			if (response.error.messages[0] === 'No Results.') return undefined;
-
-			throw new Error(response.error.messages.join('\n'));
+			throw error;
 		}
 
-		return response;
+		if (!response.data.result.results.length) {
+			// Nothing found
+			return undefined;
+		}
+
+		return response.data.result.results;
 	}
+
 }

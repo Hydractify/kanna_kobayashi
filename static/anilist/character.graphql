@@ -1,0 +1,18 @@
+query ($query: String) {
+	result: Page(page: 1, perPage: 20) {
+		results: characters(search: $query) {
+			# id
+			name {
+				first
+				last
+				native
+				alternative
+			}
+			image {
+				large
+			}
+			description(asHtml: false)
+			siteUrl
+		}
+	}
+}

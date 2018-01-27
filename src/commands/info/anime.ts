@@ -2,18 +2,18 @@ import { Message } from 'discord.js';
 
 import { AniListCommand } from '../../structures/AniListCommand';
 import { CommandHandler } from '../../structures/CommandHandler';
-import { AnimeData } from '../../types/anilist/AnimeData';
-import { AniType } from '../../types/anilist/AniType';
+import { IMedia } from '../../types/anilist/IMedia';
+import { MediaType } from '../../types/anilist/MediaType';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class AnimeCommand extends AniListCommand {
+class AnimeCommand extends AniListCommand<IMedia> {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Search for a specific anime on anilist',
 			examples: ['anime Miss Kobayashi\'s Dragon Maid'],
 			name: 'anime',
-			type: AniType.ANIME,
+			type: MediaType.ANIME,
 			usage: 'anime <...Search>',
 		});
 	}
@@ -29,11 +29,11 @@ class AnimeCommand extends AniListCommand {
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const entries: AnimeData[] = await this.search<AnimeData>(args.join(' '));
+		const entries: IMedia[] = await this.search(args.join(' '));
 
 		if (!entries) return message.reply('I could not find a single anime matching your search!');
 
-		const entry: AnimeData = entries.length > 1
+		const entry: IMedia = entries.length > 1
 			? await this.pick(message, authorModel, entries)
 			: entries[0];
 

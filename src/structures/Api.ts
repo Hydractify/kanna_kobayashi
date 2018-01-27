@@ -92,7 +92,7 @@ interface IAPIRouteBuilder {
 }
 
 export interface IAPIOptions {
-	data?: string;
+	data?: any;
 	headers?: { [name: string]: string };
 	query?: { [name: string]: string | number | boolean };
 }

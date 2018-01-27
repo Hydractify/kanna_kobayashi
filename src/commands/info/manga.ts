@@ -2,18 +2,18 @@ import { Message } from 'discord.js';
 
 import { AniListCommand } from '../../structures/AniListCommand';
 import { CommandHandler } from '../../structures/CommandHandler';
-import { AniType } from '../../types/anilist/AniType';
-import { MangaData } from '../../types/anilist/MangaData';
+import { IMedia } from '../../types/anilist/IMedia';
+import { MediaType } from '../../types/anilist/MediaType';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class MangaCommand extends AniListCommand {
+class MangaCommand extends AniListCommand<IMedia> {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Search for a specific manga on anilist',
 			examples: ['manga Miss Kobayashi\'s Dragon Maid'],
 			name: 'manga',
-			type: AniType.MANGA,
+			type: MediaType.MANGA,
 			usage: 'manga <...Search>',
 		});
 	}
@@ -21,11 +21,11 @@ class MangaCommand extends AniListCommand {
 	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
 		if (!args.length) return message.reply('you have to tell me what manga you are looking for!');
 
-		const entries: MangaData[] = await this.search<MangaData>(args.join(' '));
+		const entries: IMedia[] = await this.search(args.join(' '));
 
 		if (!entries) return message.reply('I could not find a single manga matching your search!');
 
-		const entry: MangaData = entries.length > 1
+		const entry: IMedia = entries.length > 1
 			? await this.pick(message, authorModel, entries)
 			: entries[0];
 
