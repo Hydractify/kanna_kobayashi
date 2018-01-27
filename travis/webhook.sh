@@ -32,6 +32,8 @@ read -d '' DATA<<-EOF
 }
 EOF
 
+echo $DATA
+
 curl \
 -H Content-Type:application/json \
 -H User-Agent:bot \
