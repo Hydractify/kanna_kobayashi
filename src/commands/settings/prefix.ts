@@ -31,6 +31,8 @@ class PrefixCommand extends Command {
 				newPrefix = newPrefix.slice(1, -1);
 			}
 
+			if (newPrefix.length > 32) return 'the prefix you inputted is too long! Try a different one.';
+
 			// Set as new one
 			return [newPrefix];
 		}
