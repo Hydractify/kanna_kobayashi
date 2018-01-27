@@ -32,7 +32,7 @@ class StrawPollCommand extends Command {
 		if (id) {
 			const { body: fetchedPoll }: Result<IStrawPollPoll> = await get(`${this.apiURL}/${id}`)
 				.set('Content-Type', 'application/json')
-				.catch(() => undefined);
+				.catch(() => ({ body: undefined }));
 			// 404 and json is overrated, better respond with 200 and html
 			if (!fetchedPoll || fetchedPoll instanceof Buffer) {
 				return message.reply('I could not find a strawpoll with that ID.');
