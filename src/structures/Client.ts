@@ -125,7 +125,7 @@ export class Client extends DJSClient {
 
 		if (!channel.permissionsFor(member.guild.me).has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 
-		let message: string = guildModel[left ? 'farewellMessage' : 'welcomeMessage']
+		let message: string = guildModel[left ? 'farewellMessage' : 'welcomeMessage'];
 		if (!message) return;
 		message = message.replace(/\{\{member\}\}/g, member.user.tag);
 
