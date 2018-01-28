@@ -31,7 +31,7 @@ class DiscriminatorCommand extends Command {
 		if (!discrim) return 'you have to tell me a discriminator!';
 
 		if (discrim[0] === '#') discrim = discrim.slice(1);
-		if (discrim === '0000') return '`0000` is not a valid disriminator!';
+		if (discrim === '0000') return '`0000` is not a valid discriminator!';
 		if (!/^\d{4}$/.test(discrim)) {
 			return [
 				`That is not a valid discriminator, ${message.author}!`,
