@@ -79,6 +79,12 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		}
 	}
 
+	public async free(): Promise<void> {
+		delete require.cache[require.resolve(__filename)];
+
+		super.free();
+	}
+
 	/**
 	 * Whether the passed entry is a char
 	 * Purely to satisfy TS.
