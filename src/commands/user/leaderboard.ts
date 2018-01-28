@@ -144,9 +144,9 @@ class LeaderboardCommand extends Command {
 				embed.addField(
 					`${offset + i + 1}. ${tag}`,
 					[
-						`Level: ${user.level} (${user.exp} exp)`,
-						`Coins: ${user.coins}`,
-						`Reputation: ${user.reputation}`,
+						`Level: ${user.level.toLocaleString()} (${user.exp.toLocaleString()} exp)`,
+						`Coins: ${user.coins.toLocaleString()}`,
+						`Reputation: ${user.reputation.toLocaleString()}`,
 					].join('\n'),
 					true,
 				);
@@ -166,11 +166,14 @@ class LeaderboardCommand extends Command {
 				"user"."id",
 				COALESCE("user"."coins", 0) as "coins",
 				COALESCE("user"."exp", 0) as "exp",
-				sum(("user_reputations"."type"='POSITIVE')::int) - sum(("user_reputations"."type"='NEGATIVE')::int) AS reputation
-			FROM "user_reputations" LEFT OUTER JOIN "users" "user"
+				COALESCE(
+					sum(("user_reputations"."type"='POSITIVE')::int) - sum(("user_reputations"."type"='NEGATIVE')::int),
+					0
+				) AS reputation
+			FROM "user_reputations" RIGHT OUTER JOIN "users" "user"
 				ON "user"."id" = "user_reputations"."rep_id"
 			GROUP BY "user"."id"
-			ORDER BY ${type} DESC
+			ORDER BY "${type}" DESC
 			OFFSET ?
 			LIMIT 4;`,
 			{
