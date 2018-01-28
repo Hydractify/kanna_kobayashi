@@ -98,7 +98,8 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 	 */
 	protected buildEmbed(message: Message, authorModel: UserModel, entry: ICharacter | IMedia): MessageEmbed {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setThumbnail(entry.image.large);
+			.setThumbnail(entry.image.large)
+			.setURL(entry.siteUrl);
 
 		// Whether this entry is a character entry
 		if (this.isChar(entry)) {
@@ -110,6 +111,8 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 
 			return embed.splitToFields('Description', entry.description
 				? replaceMap(entry.description, AniListCommand.replaceChars)
+					// I don't ask why there are tons of spaces sometimes
+					.replace(/ +?~!.*?!~/g, ' `<Spoiler>`')
 				: 'Not specified',
 			);
 		}
@@ -127,7 +130,6 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 
 		embed
 			.setTitle(entry.title.native)
-			.setURL(entry.siteUrl)
 			.setDescription(description)
 			.addField('Genres', genres || 'Not specified', true)
 			.addField('Rating | Type', `${entry.averageScore || 'n/a'} | ${titleCase(this.type.toLowerCase())}`, true);
