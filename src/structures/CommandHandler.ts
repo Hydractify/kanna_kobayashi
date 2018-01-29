@@ -1,9 +1,10 @@
 import { Collection, GuildMember, Message, MessageAttachment, MessageOptions, TextChannel } from 'discord.js';
 import { readdir } from 'fs';
 import { extname, join } from 'path';
-import { captureException, context } from 'raven';
+import { captureException } from 'raven';
 import { promisify } from 'util';
 
+import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
 import { UserTypes } from '../types/UserTypes';
@@ -59,7 +60,7 @@ export class CommandHandler {
 			: ['kanna ', 'k!'];
 
 		// Wrap all received messages in a seperate raven context
-		client.on('message', (message: Message) => context(this.handle.bind(this, message)));
+		client.on('message', this.handle.bind(this));
 		client.once('ready', () => this._prefixes.push(`<@!?${this.client.user.id}> `));
 	}
 
@@ -149,6 +150,7 @@ export class CommandHandler {
 			|| this._commands.get(this._aliases.get(commandName));
 	}
 
+	@RavenContext
 	protected async handle(message: Message): Promise<void> {
 		if (message.author.bot ||
 			!(message.channel instanceof TextChannel)
