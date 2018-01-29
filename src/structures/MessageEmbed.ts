@@ -1,4 +1,4 @@
-import { Message, MessageEmbed as DJSMessageEmbed } from 'discord.js';
+import { MessageEmbed as DJSMessageEmbed, User } from 'discord.js';
 
 import { User as UserModel } from '../models/User';
 
@@ -7,7 +7,7 @@ export class MessageEmbed extends DJSMessageEmbed {
 	 * Build a common MessageEmbed instance from a message.
 	 * This will set the color and footer.
 	 */
-	public static common({ author, client }: Message, model: UserModel): MessageEmbed {
+	public static common({ author }: { author: User }, model: UserModel): MessageEmbed {
 		return new this()
 			.setColor(model.color)
 			.setFooter(`Requested by ${author.tag}`, author.displayAvatarURL());
@@ -16,7 +16,7 @@ export class MessageEmbed extends DJSMessageEmbed {
 	/**
 	 * Build an image MessageEmbed instance, inherited properties from a common one, adds an image.
 	 */
-	public static image(message: Message, model: UserModel, url: string): MessageEmbed {
+	public static image(message: { author: User }, model: UserModel, url: string): MessageEmbed {
 		return this.common(message, model)
 			.setImage(url);
 	}
