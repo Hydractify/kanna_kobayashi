@@ -164,7 +164,9 @@ export class Client extends DJSClient {
 		if (type !== 'MESSAGE_REACTION_ADD') return;
 
 		const channel: TextChannel = this.channels.get(data.channel_id) as TextChannel;
-		if (channel.messages.has(data.message_id)) return;
+		if (channel.messages.has(data.message_id)
+			|| !channel.permissionsFor(channel.guild.me).has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'])
+		) return;
 
 		const user: User = this.users.get(data.user_id);
 		const message = await channel.messages.fetch(data.message_id);
