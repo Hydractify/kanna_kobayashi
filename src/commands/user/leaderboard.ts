@@ -1,4 +1,4 @@
-import { CollectorFilter, DiscordAPIError, Message, MessageReaction, ReactionCollector, User } from 'discord.js';
+import { Guild, Message, MessageReaction, User } from 'discord.js';
 import { QueryTypes } from 'sequelize';
 
 import { User as UserModel } from '../../models/User';
@@ -7,10 +7,14 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { ILeaderBoardUser } from '../../types/ILeaderBoardUser';
+import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedController';
 import { titleCase } from '../../util/Util';
 import { Command as ProfileCommand } from './profile';
 
-class LeaderboardCommand extends Command {
+class LeaderboardCommand extends Command implements IResponsiveEmbedController {
+	public emojis: string[] = ['⬅', '1⃣', '2⃣', '3⃣', '4⃣', '➡'];
+	public types: string[] = ['exp', 'coins', 'reputation'];
+
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['lb'],
@@ -29,7 +33,7 @@ class LeaderboardCommand extends Command {
 
 	public parseArgs(message: Message, [input, offset]: string[]): string | [string, number] {
 		if (!input) return ['exp', 0];
-		if (['exp', 'coins', 'reputation'].includes(input.toLowerCase())) {
+		if (this.types.includes(input.toLowerCase())) {
 			if (!offset) return [input, 0];
 
 			const num: number = parseInt(offset);
@@ -41,124 +45,116 @@ class LeaderboardCommand extends Command {
 		return `you must give me a valid method! (\`${this.usage}\`)`;
 	}
 
+	public async onCollect({ message, emoji, users: reactors }: MessageReaction, user: User): Promise<Message> {
+		const [embed]: MessageEmbed[] = message.embeds as MessageEmbed[];
+		const [, type, match]: RegExpExecArray = /.+? \| (.+):(\d+) \|/
+			.exec(message.embeds[0].footer.text) || [] as any;
+		let offset: number = parseInt(match);
+
+		if (
+			match === undefined
+			|| isNaN(offset)
+			|| !this.types.includes(type)
+		) return;
+		reactors.remove(user);
+
+		if (emoji.name === '➡') {
+			// We are already on the last page
+			if (!embed.fields.length) return;
+			offset += 4;
+
+			const users: ILeaderBoardUser[] = await this._fetchTop(type, offset);
+			const newEmbed: MessageEmbed = await this._fetchEmbed(user, type, offset, message.guild, users);
+			return message.edit(newEmbed);
+		}
+		if (emoji.name === '⬅') {
+			// We are already on the first page
+			if (offset <= 0) return;
+			// Don't go further down than 0
+			offset = Math.max(offset - 4, 0);
+
+			const users: ILeaderBoardUser[] = await this._fetchTop(type, offset);
+			const newEmbed: MessageEmbed = await this._fetchEmbed(user, type, offset, message.guild, users);
+			return message.edit(newEmbed);
+		}
+
+		const [picked]: ILeaderBoardUser[] = await this._fetchTop(
+			type,
+			// 0 indexed
+			offset + parseInt(emoji.name[0]) - 1,
+			1,
+		);
+
+		// If we are on the last page we maybe have no user
+		if (!picked) return;
+
+		const pickedUser: User = this.client.users.get(picked.id)
+			|| await this.client.users.fetch(picked.id);
+
+		for (const reaction of message.reactions.values()) {
+			if (reaction.me) reaction.users.remove().catch(() => undefined);
+		}
+
+		return message.edit(await (this.handler.resolveCommand('profile') as ProfileCommand)
+			.fetchEmbed({ author: user, guild: message.guild }, pickedUser),
+		);
+	}
+
 	public async run(
 		message: Message,
 		[type, offset]: [string, number],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<void> {
-		const embedBuilder: (users: ILeaderBoardUser[], offset: number) => Promise<MessageEmbed>
-			= this._embedFunction(message, authorModel, type);
-
-		let users: ILeaderBoardUser[] = await this._fetchTop(type, offset);
-		let embed: MessageEmbed = await embedBuilder(users, offset);
+		const users: ILeaderBoardUser[] = await this._fetchTop(type, offset);
+		const embed: MessageEmbed = await this._fetchEmbed(message.author, type, offset, message.guild, users);
 		const leaderboardMessage: Message = await message.channel.send(embed) as Message;
 
-		const emojis: string[] = ['⬅', '1⃣', '2⃣', '3⃣', '4⃣', '➡'];
-		const reactions: MessageReaction[] = [];
-
-		const filter: CollectorFilter = (reaction: MessageReaction, user: User): boolean =>
-			emojis.includes(reaction.emoji.name) && user.id === message.author.id;
-
-		const promise: Promise<void> = new Promise<void>((resolve: () => void, reject: (error: Error) => void) => {
-			const reactionCollector: ReactionCollector = leaderboardMessage.createReactionCollector(
-				filter,
-				{ time: 3e4 },
-			).on('collect', async (reaction: MessageReaction) => {
-				reaction.users.remove(message.author).catch(() => undefined);
-
-				if (reaction.emoji.name === '➡') {
-					// We are already on the last page
-					if (!embed.fields.length) return;
-
-					offset += 4;
-					users = await this._fetchTop(type, offset);
-					embed = await embedBuilder(users, offset);
-					return leaderboardMessage.edit(embed)
-						.catch((error: DiscordAPIError) => {
-							reactionCollector.stop();
-							reject(error);
-						});
-				}
-
-				if (reaction.emoji.name === '⬅') {
-					// We are already on the first page
-					if (offset === 0) return;
-
-					// Don't go further down than 0
-					offset = Math.max(offset - 4, 0);
-					users = await this._fetchTop(type, offset);
-					embed = await embedBuilder(users, offset);
-					return leaderboardMessage.edit(embed)
-						.catch((error: DiscordAPIError) => {
-							reactionCollector.stop();
-							reject(error);
-						});
-				}
-
-				const picked: ILeaderBoardUser = users[parseInt(reaction.emoji.name[0]) - 1];
-				// If we are on the last page and somebody selects '4' we won't have a user
-				if (!picked) return;
-
-				const user: User = this.client.users.get(picked.id)
-					|| await this.client.users.fetch(picked.id);
-
-				// TODO: Make this not fetch everything again, somehow, if there is time, maybe.
-				embed = await (this.handler.resolveCommand('profile') as ProfileCommand).fetchEmbed(message, user);
-
-				await leaderboardMessage.edit(embed);
-				reactionCollector.stop();
-			}).on('end', () => {
-				for (const reaction of reactions) reaction.users.remove().catch(() => undefined);
-				resolve();
-			});
-		});
-
-		for (const emoji of emojis) reactions.push(await leaderboardMessage.react(emoji));
-
-		return promise;
+		for (const emoji of this.emojis) await leaderboardMessage.react(emoji);
 	}
-
-	private _embedFunction(
-		message: Message,
-		authorModel: UserModel,
+	private async _fetchEmbed(
+		author: User,
 		type: string,
-	): (users: ILeaderBoardUser[], offset: number) => Promise<MessageEmbed> {
-		return async (users: ILeaderBoardUser[], offset: number): Promise<MessageEmbed> => {
-			const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-				.setTitle(`${titleCase(type)} Leaderboard`);
+		offset: number,
+		guild: Guild,
+		users: ILeaderBoardUser[],
+	): Promise<MessageEmbed> {
+		const embed: MessageEmbed = MessageEmbed.common({ author }, await author.fetchModel())
+			.setTitle(`${titleCase(type)} Leaderboard`);
 
-			if (!users.length) return embed.setDescription(`There is no user with the rank #${offset}.`);
+		embed.footer.text += ` | ${type}:${offset} | Leaderboard`;
 
-			embed
-				.setDescription([
-					`Here are the users #${offset + 1} to #`,
-					Math.max(offset + 4, offset + users.length),
-					` with the highest ${type} as of now.`,
-				].join(''))
-				.setThumbnail(message.guild.iconURL());
-			for (let i: number = 0; i < users.length; ++i) {
-				const user: ILeaderBoardUser = users[i];
-				const { tag }: User = message.client.users.get(user.id)
-					|| await message.client.users.fetch(user.id);
+		if (!users.length) return embed.setDescription(`There is no user with the rank #${offset}.`);
 
-				embed.addField(
-					`${offset + i + 1}. ${tag}`,
-					[
-						`Level: ${user.level.toLocaleString()} (${user.exp.toLocaleString()} exp)`,
-						`Coins: ${user.coins.toLocaleString()}`,
-						`Reputation: ${user.reputation.toLocaleString()}`,
-					].join('\n'),
-					true,
-				);
-			}
+		embed
+			.setDescription([
+				`Here are the users #${offset + 1} to #`,
+				Math.max(offset + 4, offset + users.length),
+				` with the highest ${type} as of now.`,
+			].join(''))
+			.setThumbnail(guild.iconURL());
+		for (let i: number = 0; i < users.length; ++i) {
+			const user: ILeaderBoardUser = users[i];
+			const { tag }: User = this.client.users.get(user.id)
+				|| await this.client.users.fetch(user.id);
 
-			return embed;
-		};
+			embed.addField(
+				`${offset + i + 1}. ${tag}`,
+				[
+					`Level: ${user.level.toLocaleString()} (${user.exp.toLocaleString()} exp)`,
+					`Coins: ${user.coins.toLocaleString()}`,
+					`Reputation: ${user.reputation.toLocaleString()}`,
+				].join('\n'),
+				true,
+			);
+		}
+
+		return embed;
 	}
 
 	private async _fetchTop(
 		type: string,
 		offset: number,
+		limit: number = 4,
 	): Promise<ILeaderBoardUser[]> {
 		const users: ILeaderBoardUser[] = await this.sequelize.query(
 			// Not worth figuring out how to tell sequelize to build this query
@@ -175,9 +171,9 @@ class LeaderboardCommand extends Command {
 			GROUP BY "user"."id"
 			ORDER BY "${type}" DESC
 			OFFSET ?
-			LIMIT 4;`,
+			LIMIT ?;`,
 			{
-				replacements: [offset],
+				replacements: [offset, limit],
 				type: QueryTypes.SELECT,
 			},
 		);

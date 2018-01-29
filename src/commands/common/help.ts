@@ -1,10 +1,9 @@
 import {
 	Collection,
-	CollectorFilter,
-	DiscordAPIError,
+	Guild,
+	GuildMember,
 	Message,
 	MessageReaction,
-	ReactionCollector,
 	User,
 } from 'discord.js';
 
@@ -13,10 +12,13 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedController';
 import { PermLevels } from '../../types/PermLevels';
 import { titleCase } from '../../util/Util';
 
-class HelpCommand extends Command {
+class HelpCommand extends Command implements IResponsiveEmbedController {
+	public emojis: string[] = ['⬅', '➡'];
+
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['halp', 'commands'],
@@ -34,13 +36,48 @@ class HelpCommand extends Command {
 		});
 	}
 
-	public run(message: Message, [name]: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[] | void> {
+	public async run(
+		message: Message,
+		[name]: string[],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[] | void> {
 		if (name) name = name.toLowerCase();
 
-		if (!name || name === 'all') return this._sendEmbed(message, authorModel);
+		if (!name || name === 'all') {
+			const helpMessage: Message = await message.channel.send(this._mapCategories(message, authorModel)[0]) as Message;
+			for (const emoji of this.emojis) await helpMessage.react(emoji);
+
+			return;
+		}
 
 		return this._findCommand(message, name, authorModel)
 			|| this._findCategory(message, name, authorModel);
+	}
+
+	public async onCollect({ emoji, users, message }: MessageReaction, user: User): Promise<Message> {
+		const [, rawPage]: RegExpExecArray = /.+? \| Page (\d+) \|/.exec(message.embeds[0].footer.text) || [] as any;
+		if (!rawPage) return;
+
+		let page: number = parseInt(rawPage) - 1;
+		if (isNaN(page)) return;
+		users.remove(user).catch(() => undefined);
+
+		const embeds: MessageEmbed[] = this._mapCategories({
+			author: user,
+			guild: message.guild,
+			member: message.guild.member(user) || await message.guild.members.fetch(user),
+		}, await user.fetchModel());
+
+		if (emoji.name === '➡') {
+			++page;
+			if (page >= embeds.length) page = 0;
+
+		} else if (emoji.name === '⬅') {
+			if (page <= 0) page = embeds.length - 1;
+			else --page;
+		}
+
+		return message.edit(embeds[page]);
 	}
 
 	private _findCategory(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[]> {
@@ -88,7 +125,10 @@ class HelpCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	private _mapCategories(message: Message, authorModel: UserModel): MessageEmbed[] {
+	private _mapCategories(
+		{ author, member, guild }: { author: User, member: GuildMember, guild: Guild },
+		authorModel: UserModel,
+	): MessageEmbed[] {
 		// Map all commands to their appropiate categories
 		const categories: Collection<string, Command[]> = new Collection();
 		for (const command of this.handler._commands.values()) {
@@ -98,16 +138,18 @@ class HelpCommand extends Command {
 		}
 
 		// Cache permission level
-		const permLevel: PermLevels = authorModel.permLevel(message.member);
+		const permLevel: PermLevels = authorModel.permLevel(member);
 
 		// Make embeds out of them
 		const embeds: MessageEmbed[] = [];
 		for (const [category, commands] of categories) {
-			const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-				.setThumbnail(message.guild.iconURL())
+			const embed: MessageEmbed = MessageEmbed.common({ author }, authorModel)
+				.setThumbnail(guild.iconURL())
 				.setURL('http://kannathebot.me/guild')
 				.setAuthor(`${this.client.user.username}'s ${titleCase(category)} Commands`)
 				.setDescription('\u200b');
+
+			embed.footer.text += ` | Page ${embeds.length + 1} | Help`;
 
 			for (const command of commands) {
 				if (command.permLevel > permLevel) continue;
@@ -119,62 +161,6 @@ class HelpCommand extends Command {
 
 		return embeds;
 	}
-
-	private async _sendEmbed(message: Message, authorModel: UserModel): Promise<void> {
-		const embeds: MessageEmbed[] = this._mapCategories(message, authorModel);
-		let page: number = 0;
-		const selectEmbed: (increment: boolean) => MessageEmbed = (increment: boolean): MessageEmbed => {
-			if (embeds[increment ? ++page : --page]) return embeds[page];
-
-			page = page <= 0
-				? embeds.length - 1
-				: 0;
-
-			return embeds[page];
-		};
-
-		const helpMessage: Message = await message.channel.send({ embed: embeds[0] }) as Message;
-		const emojis: string[] = ['⬅', '➡', '❎'];
-		const reactions: MessageReaction[] = [];
-
-		let timeout: NodeJS.Timer;
-		const filter: CollectorFilter = (reaction: MessageReaction, user: User): boolean =>
-			emojis.includes(reaction.emoji.name) && user.id === message.author.id;
-		const reactionCollector: ReactionCollector = helpMessage.createReactionCollector(filter)
-			.on('collect', (reaction: MessageReaction) => {
-				if (timeout) clearTimeout(timeout);
-				timeout = setTimeout(() => reactionCollector.stop(), 6e4);
-
-				if (reaction.emoji.name === '➡') {
-					reaction.users.remove(message.author).catch(() => undefined);
-					helpMessage.edit({ embed: selectEmbed(true) })
-						.catch((error: DiscordAPIError) => {
-							reactionCollector.stop();
-							throw error;
-						});
-				} else if (reaction.emoji.name === '⬅') {
-					reaction.users.remove(message.author).catch(() => undefined);
-					helpMessage.edit({ embed: selectEmbed(false) })
-						.catch((error: DiscordAPIError) => {
-							reactionCollector.stop();
-							throw error;
-						});
-				} else if (reaction.emoji.name === '❎') {
-					helpMessage.delete().catch(() => undefined);
-				}
-			})
-			.on('end', () => {
-				for (const reaction of reactions) {
-					reaction.users.remove().catch(() => undefined);
-				}
-			});
-
-		for (const emoji of emojis) reactions.push(await helpMessage.react(emoji));
-		timeout = setTimeout(() => reactionCollector.stop(), 6e4);
-
-		return undefined;
-	}
-
 }
 
 export { HelpCommand as Command };

@@ -1,4 +1,4 @@
-import { GuildMember, Message, User } from 'discord.js';
+import { Guild, GuildMember, Message, User } from 'discord.js';
 import { QueryTypes } from 'sequelize';
 
 import { Item } from '../../models/Item';
@@ -41,7 +41,7 @@ class ProfileCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	public async fetchEmbed(message: Message, user: User): Promise<MessageEmbed> {
+	public async fetchEmbed({ author, guild }: { author: User, guild: Guild }, user: User): Promise<MessageEmbed> {
 		// No redis caching here because of includes, which wouldn't work then :c
 		// Better than a bunch of single queries tho
 		const [userModel] = await UserModel.findCreateFind({
@@ -83,8 +83,8 @@ class ProfileCommand extends Command {
 			? `${userModel.partnerMarried ? 'Married' : 'Together'} with **${partner.tag}**`
 			: 'Single';
 
-		return MessageEmbed.common(message, userModel)
-			.setThumbnail(message.guild.iconURL())
+		return MessageEmbed.common({ author }, userModel)
+			.setThumbnail(guild.iconURL())
 			.setAuthor(`${titleCase(user.username)}'s Profile`, user.displayAvatarURL())
 			.setDescription('\u200b')
 			.addField('Level', `${userModel.level} (${userModel.exp || 0} exp)`, true)

@@ -6,14 +6,18 @@ import {
 	GuildMember,
 	MessageEmbed,
 	MessageEmbedOptions,
+	MessageReaction,
 	TextChannel,
+	User,
 } from 'discord.js';
 import { join } from 'path';
 import { captureException } from 'raven';
 import { post } from 'snekfetch';
 
+import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
+import { IResponsiveEmbedController } from '../types/IResponsiveEmbedController';
 import { UserTypes } from '../types/UserTypes';
 import { generateColor } from '../util/generateColor';
 import { ListenerUtil } from '../util/ListenerUtil';
@@ -130,6 +134,44 @@ export class Client extends DJSClient {
 		message = message.replace(/\{\{member\}\}/g, member.user.tag);
 
 		channel.send(message);
+	}
+
+	@on('messageReactionAdd')
+	@RavenContext
+	protected _onMessageReactionAdd(reaction: MessageReaction, user: User): any {
+		if (
+			reaction.message.author.id !== this.user.id
+			|| !reaction.message.embeds.length
+			|| !reaction.message.embeds[0].footer
+		) return;
+
+		const [, tag, name]: RegExpExecArray = /^Requested by (.+?) \|.* (.+)$/.exec(reaction.message.embeds[0].footer.text)
+			|| [] as any;
+		if (!tag || !name) return;
+		const command: IResponsiveEmbedController = this.commandHandler.resolveCommand(name.toLowerCase()) as any;
+		if (!command) return;
+
+		if (command.emojis && command.onCollect) {
+			if (command.emojis.includes(reaction.emoji.name) && user.tag === tag) {
+				command.onCollect(reaction, user);
+			}
+		}
+	}
+
+	@on('raw')
+	@RavenContext
+	protected async _onRaw({ t: type, d: data }: any): Promise<void> {
+		if (type !== 'MESSAGE_REACTION_ADD') return;
+
+		const channel: TextChannel = this.channels.get(data.channel_id) as TextChannel;
+		if (channel.messages.has(data.message_id)) return;
+
+		const user: User = this.users.get(data.user_id);
+		const message = await channel.messages.fetch(data.message_id);
+
+		const reaction: MessageReaction = message.reactions.get(data.emoji.id || data.emoji.name);
+
+		this.emit('messageReactionAdd', reaction, user);
 	}
 
 	@on('reconnecting')

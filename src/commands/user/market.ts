@@ -1,4 +1,4 @@
-import { CollectorFilter, DiscordAPIError, Message, MessageReaction, ReactionCollector, User } from 'discord.js';
+import { Message, MessageReaction, User } from 'discord.js';
 import { Transaction } from 'sequelize';
 
 import { Item } from '../../models/Item';
@@ -7,13 +7,16 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedController';
 import { ItemRarities } from '../../types/ItemRarities';
 import { Items } from '../../types/Items';
-import { chunkArray, titleCase } from '../../util/Util';
+import { titleCase } from '../../util/Util';
 
 type Method = 'buy' | 'sell' | 'show' | 'list';
 
-class MarketCommand extends Command {
+class MarketCommand extends Command implements IResponsiveEmbedController {
+	public emojis: string[] = ['🔘', '⬅', '➡'];
+
 	/**
 	 * The Command's methods.
 	 */
@@ -73,6 +76,42 @@ class MarketCommand extends Command {
 		}
 
 		return [input, resolvedItem, count];
+	}
+
+	public async onCollect({ emoji, message, users }: MessageReaction, user: User): Promise<Message> {
+		users.remove(user).catch(() => undefined);
+		// tslint:disable-next-line:prefer-const
+		let [, type, rawIndex]: RegExpMatchArray = /Kanna's Market (?:.+ )?\(?(.+)\) \| Page (\d+)/
+			.exec(message.embeds[0].title) || [];
+		let index: number = parseInt(rawIndex) - 1;
+		if (!type || !rawIndex || isNaN(index)) return;
+		type = type[0].toLowerCase() + type.slice(1, -1);
+		let superior: boolean = type === 'scale';
+
+		if (emoji.name === '➡') {
+			if (!message.embeds[0].fields.length) return;
+			++index;
+		} else if (emoji.name === '⬅') {
+			if (index <= 0) return;
+			--index;
+		} else if (emoji.name === '🔘') {
+			superior = !superior;
+			index = 0;
+		}
+
+		const items: Item[] = await Item
+			.scope(superior ? 'scale' : 'coin')
+			.findAll({
+				limit: 10,
+				offset: index * 10,
+				where: {
+					buyable: true,
+				},
+			});
+
+		message.edit(
+			await this._buildEmbed(user, index, items, superior),
+		);
 	}
 
 	public run(
@@ -211,76 +250,39 @@ class MarketCommand extends Command {
 		item: Item,
 		count: number,
 		authorModel: UserModel,
-	): Promise<undefined> {
-		const [coins, scales] = await Promise.all([
-			Item.scope('coin').findAll({ where: { buyable: true } }),
-			Item.scope('scale').findAll({ where: { buyable: true } }),
-		]).then(
-			(itemChunks: Item[][]) => itemChunks.map((items: Item[]) => chunkArray(items, 10)),
-		);
-
-		let index: number = 0;
-		let superior: boolean = false;
-		let current: Item[][] = coins;
-		const market: Message = await message.reply(
-			this._buildEmbed(message, authorModel, index, coins, superior),
-		) as Message;
-
-		const emojis: string[] = ['🔘', '⬅', '➡'];
-		const reactions: MessageReaction[] = [];
-
-		const filter: CollectorFilter = (reaction: MessageReaction, user: User): boolean =>
-			emojis.includes(reaction.emoji.name) && user.id === message.author.id;
-
-		const promise: Promise<undefined> = new Promise((resolve: () => void, reject: (error: Error) => void) => {
-			const reactionCollector: ReactionCollector = market.createReactionCollector(
-				filter,
-				{ time: 3e4 },
-			).on('collect', (reaction: MessageReaction, user: User) => {
-				if (reaction.emoji.name === '➡') {
-					if ((current.length - 1) > index)++index;
-					else index = 0;
-				} else if (reaction.emoji.name === '⬅') {
-					if (index <= 0) index = current.length - 1;
-					else --index;
-				} else if (reaction.emoji.name === '🔘') {
-					superior = !superior;
-					current = superior ? scales : coins;
-					index = 0;
-				}
-
-				reaction.users.remove(user).catch(() => undefined);
-				market.edit(
-					this._buildEmbed(message, authorModel, index, current, superior),
-				).catch((error: DiscordAPIError) => {
-					reactionCollector.stop();
-					reject(error);
-				});
-			}).on('end', () => {
-				for (const reaction of reactions) reaction.users.remove().catch(() => undefined);
-				resolve();
+	): Promise<Message> {
+		const items: Item[] = await Item
+			.scope('coin')
+			.findAll({
+				limit: 10,
+				where: {
+					buyable: true,
+				},
 			});
 
-		});
+		const marketMessage: Message = await message.channel.send(
+			await this._buildEmbed(message.author, 0, items, false),
+		) as Message;
 
-		for (const emoji of emojis) reactions.push(await market.react(emoji));
+		for (const emoji of this.emojis) await marketMessage.react(emoji);
 
-		return promise;
+		return marketMessage;
 	}
 
-	private _buildEmbed(
-		message: Message,
-		authorModel: UserModel,
+	private async _buildEmbed(
+		author: User,
 		index: number,
-		itemChunks: Item[][],
+		items: Item[],
 		superior: boolean,
-	): MessageEmbed {
-		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setTitle(`Kanna\'s Market (${superior ? 'Dragon Scale' : 'Coins'})`);
+	): Promise<MessageEmbed> {
+		const embed: MessageEmbed = MessageEmbed.common({ author }, await author.fetchModel())
+			.setTitle(`Kanna\'s Market (${superior ? 'Dragon Scales' : 'Coins'}) | Page ${index + 1}`);
 
-		embed.footer.text += ` | Page ${index + 1} of ${itemChunks.length}`;
+		embed.footer.text += ' | Market';
 
-		for (const item of itemChunks[index]) {
+		if (!items.length) return embed.setDescription('Nothing to see here, you maybe want to go back.');
+
+		for (const item of items) {
 			embed.addField(`${titleCase(item.name)}`, [
 				`Price: ${item.price ? item.price : 'n/a'}`,
 				`Rarity: ${titleCase(ItemRarities[item.rarity].replace(/_/, ' '))}`,
