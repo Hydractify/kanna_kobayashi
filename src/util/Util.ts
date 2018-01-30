@@ -29,7 +29,7 @@ export const flagsText: symbol = Symbol.for('FlagsText');
 export const parseFlags: (input: string, lowerCase?: boolean) => FlagCollection
 	= (input: string, lowerCase: boolean = false): FlagCollection => {
 		const parsed: FlagCollection = new Collection();
-		const flagsRegex: RegExp = /--(w+)(.*?(?=--|$))/g;
+		const flagsRegex: RegExp = /--(\w+)(.*?(?=--|$))/g;
 
 		const index: number = input.indexOf('--');
 		if (index !== 0) {
