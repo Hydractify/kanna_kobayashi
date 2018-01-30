@@ -17,14 +17,21 @@ class BanCommand extends Command {
 			exp: 0,
 			name: 'ban',
 			permLevel: PermLevels.HUMANTAMER,
-			usage: 'ban <...Member> [\'--reason\' reason]',
+			usage: 'ban <...Member> [\'--reason\' reason & \'--days\' deletedays]',
 		});
 	}
 
 	public parseArgs(message: Message, args: string[]): string | [FlagCollection] {
 		if (!args.length) return 'you must provide me with at least one member to ban!';
+		const flags: FlagCollection = parseFlags(args.join(' '), true);
 
-		return [parseFlags(args.join(' '))];
+		const days: number = parseInt(flags.get('days') as string || '0');
+		if (isNaN(days)) return 'specified days is not a number';
+		if (days < 0 || days > 7) {
+			return 'specified days are out range, it is only possible to delete messages of the last 0-7 days!';
+		}
+
+		return [flags];
 	}
 
 	public async run(message: Message, [flags]: [FlagCollection]): Promise<Message | Message[]> {
@@ -63,19 +70,22 @@ class BanCommand extends Command {
 		}
 
 		if (/^(y|yes)/i.test(answer.content)) {
+			const days: number = parseInt(flags.get('days') as string || '0');
 			const reason: string = flags.get('reason') as string;
 			const banPromises: Promise<GuildMember>[] = [];
 			for (const member of members.values()) {
 				banPromises.push(
 					member.ban({
-						days: 2,
+						days,
 						reason,
 					}),
 				);
 			}
 			await Promise.all(banPromises);
 
-			return message.reply(`I successfully banned ${[...members].join(' ')}!`);
+			return message.reply(
+				`I successfully banned **${[...members].map((member: GuildMember) => member.user.tag).join('**, **')}**!`,
+			);
 		}
 
 		return message.channel.send('Ok, canceling the ban! <:KannaAyy:315270615844126720>');
