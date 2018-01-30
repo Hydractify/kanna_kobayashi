@@ -11,7 +11,7 @@ import {
 	User,
 } from 'discord.js';
 import { join } from 'path';
-import { captureException } from 'raven';
+import { captureBreadcrumb, captureException } from 'raven';
 import { post } from 'snekfetch';
 
 import { RavenContext } from '../decorators/RavenContext';
@@ -145,6 +145,12 @@ export class Client extends DJSClient {
 			|| !reaction.message.embeds[0].footer
 		) return;
 
+		captureBreadcrumb({
+			category: 'messageReactAdd',
+			data: reaction.message.embeds[0],
+			message: 'Info about the embed',
+		});
+
 		const [, tag, name]: RegExpExecArray = /^Requested by (.+?) \|.* (.+)$/.exec(reaction.message.embeds[0].footer.text)
 			|| [] as any;
 		if (!tag || !name) return;
@@ -162,6 +168,12 @@ export class Client extends DJSClient {
 	@RavenContext
 	protected async _onRaw({ t: type, d: data }: any): Promise<void> {
 		if (type !== 'MESSAGE_REACTION_ADD') return;
+
+		captureBreadcrumb({
+			category: type,
+			data,
+			message: 'Info about the raw event',
+		});
 
 		const channel: TextChannel = this.channels.get(data.channel_id) as TextChannel;
 		if (channel.messages.has(data.message_id)
