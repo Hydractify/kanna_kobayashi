@@ -39,7 +39,10 @@
 		"type": "git",
 		"url": "git+https://github.com/TheDragonProject/Kanna-Kobayashi.git"
 	},
-	"author": "Wizard",
+	"contributors": [
+		"Alexandre Cavalheiro <alexandre.cssilva@gmail.com>",
+		"SpaceEEC"
+	],
 	"license": "ISC",
 	"bugs": {
 		"url": "https://github.com/TheDragonProject/Kanna-Kobayashi/issues"
