@@ -1,4 +1,4 @@
-import { GuildMember, Message, User } from 'discord.js';
+import { Message, User } from 'discord.js';
 
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
@@ -25,7 +25,7 @@ class BalanceCommand extends Command {
 	): Promise<[UserModel, User] | UserModel[] | string> {
 		if (!input) return [authorModel];
 
-		const { user }: GuildMember = await this.resolver.resolveMember(input, message.guild);
+		const { user }: { user?: User } = await this.resolver.resolveMember(input, message.guild) || {};
 		if (!user) return `I could not find a non bot user with the name or id ${input}`;
 		const userModel: UserModel = await user.fetchModel();
 
