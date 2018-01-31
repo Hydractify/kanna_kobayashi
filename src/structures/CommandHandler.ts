@@ -152,9 +152,14 @@ export class CommandHandler {
 
 	@RavenContext
 	protected async handle(message: Message): Promise<void> {
-		if (message.author.bot ||
-			!(message.channel instanceof TextChannel)
-		) return;
+		if (message.author.id === this.client.user.id) {
+			if (message.embeds.length && message.embeds[0].footer
+				&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text)
+			) return;
+		}
+		message.channel.messages.delete(message.id);
+
+		if (message.author.bot || !(message.channel instanceof TextChannel)) return;
 
 		const guildModel: GuildModel = message.guild.model || await message.guild.fetchModel();
 		const [command, commandName, args]: [Command, string, string[]]
@@ -219,7 +224,7 @@ export class CommandHandler {
 
 			this.logger.error(error);
 			message.reply(
-					'**an errror occured, but rest assured! It has already been reported and will be fixed in no time!**',
+				'**an errror occured, but rest assured! It has already been reported and will be fixed in no time!**',
 			);
 		}
 	}

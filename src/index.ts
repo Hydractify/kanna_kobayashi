@@ -26,6 +26,9 @@ import { Redis } from './structures/Redis';
 PostgreSQL.instance.start();
 Redis.instance.start();
 
-const client: Client = new Client({ disableEveryone: true });
+const client: Client = new Client({
+	disableEveryone: true,
+	messageCacheMaxSize: 5,
+});
 
 client.login();
