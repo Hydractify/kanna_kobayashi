@@ -21,7 +21,7 @@ class KickCommand extends Command {
 	}
 
 	public parseArgs(message: Message, args: string[]): string | [FlagCollection] {
-		if (!args.length) return 'you must provide me with at least one member to ban!';
+		if (!args.length) return 'you must provide me with at least one member to kick!';
 
 		return [parseFlags(args.join(' '))];
 	}
@@ -63,11 +63,11 @@ class KickCommand extends Command {
 
 		if (/^(y|yes)/i.test(answer.content)) {
 			const reason: string = flags.get('reason') as string;
-			const banPromises: Promise<GuildMember>[] = [];
+			const kickPromises: Promise<GuildMember>[] = [];
 			for (const member of members.values()) {
-				banPromises.push(member.kick(reason));
+				kickPromises.push(member.kick(reason));
 			}
-			await Promise.all(banPromises);
+			await Promise.all(kickPromises);
 
 			return message.reply(`I successfully banned ${[...members].join(' ')}!`);
 		}
