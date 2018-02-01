@@ -185,6 +185,17 @@ export class Client extends DJSClient {
 
 		const reaction: MessageReaction = message.reactions.get(data.emoji.id || data.emoji.name);
 
+		if (!reaction) {
+			captureException(
+				new Error(`${data.emoji.id || data.emoji.name} not in message's reactions!`),
+				{
+					extra: { reactions: message.reactions.keyArray() },
+				},
+			);
+
+			return;
+		}
+
 		this.emit('messageReactionAdd', reaction, user);
 	}
 
