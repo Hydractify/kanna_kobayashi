@@ -203,6 +203,7 @@ export class Client extends DJSClient {
 		this.webhook.warn('Client Warn', warning);
 	}
 
+	@RavenContext
 	private async _updateBotLists(): Promise<void> {
 		const body: { server_count: number } = {
 			server_count: await this.shard.fetchClientValues('guilds.size')
