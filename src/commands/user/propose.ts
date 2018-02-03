@@ -10,7 +10,6 @@ class ProposeCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['marry'],
-			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
 			cooldown: 1e4,
 			description: 'Propose to someone... You love! <:KannaAyy:315270615844126720>',
@@ -46,7 +45,6 @@ class ProposeCommand extends Command {
 
 	/**
 	 * Verify that the mentioned user is the current partner or no parter is currently present at all.
-	 * If the mentioned user differs ask to break up.
 	 * Returns whether to start a new relationship with the mentioned user.
 	 * @param message Incoming message
 	 * @param mentionedUser Mentioned user
@@ -60,48 +58,8 @@ class ProposeCommand extends Command {
 
 		// Mentioned user is not the current user
 		if (partner.id !== mentionedUser.id) {
-			await message.reply(
-				'are you sure you want to break with you current partner? (**Y**es or **N**o) <:KannaWtf:320406412133924864>',
-			);
 
-			const breakUpFilter: CollectorFilter = (msg: Message): boolean => msg.author.id === mentionedUser.id
-				&& /^(y|n|yes|no)/i.test(msg.content);
-
-			const breakUpConfirmation: Message = await message.channel.awaitMessages(breakUpFilter, { time: 10000, max: 1 })
-				.then((collected: Collection<Snowflake, Message>) => collected.first());
-
-			if (!breakUpConfirmation) {
-				await message.channel.send([
-					`${message.author}... as you did not tell me yes or no,`,
-					'I had to cancel the command <:KannaWtf:320406412133924864>',
-				].join(' '));
-
-				return false;
-			}
-
-			// Break up -- remove both relations and reset other attributes
-			if (/^(y|yes)/i.test(breakUpConfirmation.content)) {
-				const transaction: Transaction = await this.sequelize.transaction();
-
-				partner.partnerId = undefined;
-				partner.partnerSince = undefined;
-				partner.partnerMarried = undefined;
-
-				authorModel.partnerId = undefined;
-				authorModel.partnerSince = undefined;
-				authorModel.partnerMarried = undefined;
-
-				await Promise.all([
-					authorModel.save({ transaction }),
-					partner.save({ transaction }),
-				]);
-
-				await transaction.commit();
-
-				return true;
-			}
-
-			await message.reply('cancelling the command... <:KannaWtf:320406412133924864>');
+			await message.reply('you are already in a relationship with somebody else... <:KannaWtf:320406412133924864>');
 
 			return false;
 		}
@@ -161,7 +119,7 @@ class ProposeCommand extends Command {
 			return false;
 		}
 
-		await message.reply('cancelling the command... <:KannaAyy:315270615844126720>');
+		await message.reply('canceling the command... <:KannaAyy:315270615844126720>');
 
 		return false;
 	}

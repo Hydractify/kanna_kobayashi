@@ -1,5 +1,4 @@
-import { Collection, CollectorFilter, Message, Snowflake } from 'discord.js';
-import { Transaction } from 'sequelize';
+import { Collection, Message, Snowflake } from 'discord.js';
 
 import { User as UserModel } from '../../models/User';
 import { CommandHandler } from '../../structures/CommandHandler';
@@ -37,14 +36,17 @@ class KissCommand extends WeebCommand {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'W-what!?',
 			dev: 'W-why!?',
-			trusted: `**${members.first().name}**... My developers can trust you, but i do not!`,
+			trusted: `**${members.first().name}**... My developers can trust you, but I do not!`,
 		});
 		const baseString: string = this.computeBaseString(message, members);
 
 		return message.channel.send(baseString, embed);
 	}
 
-	// TODO: Make this somehow better.
+	/**
+	 * Ensures valid targets.
+	 * @returns false on invalid targets
+	 */
 	private async ensureValidTargets(
 		message: Message,
 		authorModel: UserModel,
@@ -64,58 +66,7 @@ class KissCommand extends WeebCommand {
 				return true;
 			}
 
-			const breakMessage: Message = await message.reply(
-				'do you want to break with your current partner? (**Y**es or **N**o) <:KannaWtf:320406412133924864>',
-			) as Message;
-
-			const filter: CollectorFilter = (msg: Message): boolean => msg.author.id === message.author.id
-				&& /^(y|n|yes|no)/i.test(msg.content);
-			const collectedMessage: Message = await message.channel.awaitMessages(filter, { time: 1e4, max: 1 })
-				.then((collected: Collection<Snowflake, Message>) => collected.first());
-
-			if (!collectedMessage) {
-				await message.channel.send([
-					`${message.author}... since you did not respond properly,`,
-					'I had to cancel the command <:KannaWtf:320406412133924864>',
-				].join(' '));
-				await breakMessage.delete();
-
-				return false;
-			}
-
-			// TODO: Make this not a mess, and remove code duplication.
-			if (/^(y|yes)/i.test(collectedMessage.content)) {
-				const partner: UserModel = await authorModel.$get<UserModel>('partner') as UserModel;
-				const { partnerId } = authorModel;
-
-				const transaction: Transaction = await this.sequelize.transaction();
-				partner.partnerId = undefined;
-				partner.partnerSince = undefined;
-				partner.partnerMarried = undefined;
-
-				authorModel.partnerId = undefined;
-				authorModel.partnerSince = undefined;
-				authorModel.partnerMarried = undefined;
-
-				await Promise.all([
-					authorModel.save({ transaction }),
-					partner.save({ transaction }),
-				]);
-
-				await transaction.commit();
-
-				await Promise.all([
-					message.reply(`you successfully broke up with <@${partnerId}>`),
-					breakMessage.delete(),
-				]);
-
-				return true;
-			}
-
-			await Promise.all([
-				message.reply('s-successfully canceled the command! <:KannaWtf:320406412133924864>'),
-				breakMessage.delete(),
-			]);
+			await message.reply('you can only kiss your partner!');
 
 			return false;
 		} // Has a partner
@@ -144,11 +95,9 @@ class KissCommand extends WeebCommand {
 			// Proper grammar
 			const response: string = names.length === 1
 				? `**${names[0]} has`
-				: `**${names.slice(0, -1).join('**, **').slice(0, -2)} and **${names[names.length - 1]}** have`;
+				: `**${names.slice(0, -1).join('**, **')}** and **${names[names.length - 1]}** have`;
 
-			await message.reply(
-				`**${response} a partner! Canceling the command! <:KannaLewd:320406420824653825>`,
-			);
+			await message.reply(`**${response} a partner! Canceling the command! <:KannaLewd:320406420824653825>`);
 
 			return false;
 		}
