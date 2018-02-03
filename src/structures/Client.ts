@@ -187,19 +187,17 @@ export class Client extends DJSClient {
 		) return;
 
 		const user: User = this.users.get(data.user_id);
-		const message = await channel.messages.fetch(data.message_id);
+		const message = await channel.messages.fetch(data.message_id).catch(() => undefined);
+		if (!message) return;
 
-		const reaction: MessageReaction = message.reactions.get(data.emoji.id || data.emoji.name);
+		let reaction: MessageReaction = message.reactions.get(data.emoji.id || data.emoji.name);
 
 		if (!reaction) {
-			captureException(
-				new Error(`${data.emoji.id || data.emoji.name} not in message's reactions!`),
-				{
-					extra: { reactions: message.reactions.keyArray() },
-				},
-			);
-
-			return;
+			reaction = message.reactions.add({
+				count: 0,
+				emoji: data.emoji,
+				me: user.id === this.user.id,
+			});
 		}
 
 		this.emit('messageReactionAdd', reaction, user);
