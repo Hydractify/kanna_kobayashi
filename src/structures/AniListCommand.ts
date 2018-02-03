@@ -169,7 +169,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		)
 			.addField(
 				`${this.type === MediaType.ANIME ? 'Airing' : 'Publishing'} Status`,
-				titleCase(entry.status.replace(/_/g, ' ').toLowerCase()),
+				entry.status ? titleCase(entry.status.replace(/_/g, ' ').toLowerCase()) : 'n/a',
 				true,
 		);
 
