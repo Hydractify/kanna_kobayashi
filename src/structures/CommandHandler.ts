@@ -8,6 +8,7 @@ import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
 import { UserTypes } from '../types/UserTypes';
+import { ListenerUtil } from '../util/ListenerUtil';
 import { Loggable } from '../util/LoggerDecorator';
 import { Client } from './Client';
 import { Command } from './Command';
@@ -15,6 +16,7 @@ import { Logger } from './Logger';
 import { MessageEmbed } from './MessageEmbed';
 import { Resolver } from './Resolver';
 
+const { on, registerListeners }: typeof ListenerUtil = ListenerUtil;
 // tslint:disable-next-line:typedef
 const readdirAsync = promisify(readdir);
 
@@ -60,8 +62,9 @@ export class CommandHandler {
 			: ['kanna ', 'k!'];
 
 		// Wrap all received messages in a seperate raven context
-		client.on('message', this.handle.bind(this));
 		client.once('ready', () => this._prefixes.push(`<@!?${this.client.user.id}> `));
+
+		registerListeners(client, this);
 	}
 
 	public async loadCategoriesIn(path: string): Promise<void> {
@@ -150,6 +153,7 @@ export class CommandHandler {
 			|| this._commands.get(this._aliases.get(commandName));
 	}
 
+	@on('message')
 	@RavenContext
 	protected async handle(message: Message): Promise<void> {
 		if (message.author.id === this.client.user.id) {
