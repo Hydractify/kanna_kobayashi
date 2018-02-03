@@ -18,12 +18,12 @@ import {
 	Table,
 } from 'sequelize-typescript';
 
+import { Redis } from '../decorators/RedisDecorator';
 import { Items } from '../types/Items';
 import { ItemTypes } from '../types/ItemTypes';
 import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
 import { generateColor } from '../util/generateColor';
-import { Redis } from '../util/RedisDecorator';
 import { CommandLog } from './CommandLog';
 import { Guild } from './Guild';
 import { Item } from './Item';

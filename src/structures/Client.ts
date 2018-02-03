@@ -15,13 +15,13 @@ import { join } from 'path';
 import { captureBreadcrumb, captureException } from 'raven';
 import { post } from 'snekfetch';
 
+import { ListenerUtil } from '../decorators/ListenerUtil';
 import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
 import { IResponsiveEmbedController } from '../types/IResponsiveEmbedController';
 import { UserTypes } from '../types/UserTypes';
 import { generateColor } from '../util/generateColor';
-import { ListenerUtil } from '../util/ListenerUtil';
 import { CommandHandler } from './CommandHandler';
 import { Loggable, Logger } from './Logger';
 import { WebhookLogger } from './WebhookLogger';

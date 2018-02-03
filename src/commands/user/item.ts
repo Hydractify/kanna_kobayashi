@@ -2,6 +2,7 @@ import { GuildMember, Message } from 'discord.js';
 import { BOOLEAN, col, ENUM, fn, INTEGER, Transaction, where } from 'sequelize';
 import { inspect } from 'util';
 
+import { Loggable } from '../../decorators/LoggerDecorator';
 import { Item } from '../../models/Item';
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
@@ -10,7 +11,6 @@ import { Logger } from '../../structures/Logger';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { UserTypes } from '../../types/UserTypes';
-import { Loggable } from '../../util/LoggerDecorator';
 import { FlagCollection, parseFlags, titleCase } from '../../util/Util';
 
 //

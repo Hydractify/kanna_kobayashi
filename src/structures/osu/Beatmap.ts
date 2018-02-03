@@ -1,11 +1,11 @@
 import { Moment, utc } from 'moment';
 import { Multi, RedisClient } from 'redis-p';
 
+import { Redis } from '../../decorators/RedisDecorator';
 import { BeatmapGenre } from '../../types/osu/BeatmapGenre';
 import { BeatmapLanguage } from '../../types/osu/BeatmapLanguage';
 import { BeatmapState } from '../../types/osu/BeatmapState';
 import { OsuMode } from '../../types/osu/OsuMode';
-import { Redis } from '../../util/RedisDecorator';
 import { titleCase } from '../../util/Util';
 import { Api } from './';
 import { Score } from './Score';

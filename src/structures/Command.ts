@@ -13,6 +13,8 @@ import 'moment-duration-format';
 import { Multi, RedisClient } from 'redis-p';
 import { Sequelize } from 'sequelize-typescript';
 
+import { Redis } from '../decorators/RedisDecorator';
+import { Sequelize as sequelize } from '../decorators/SequelizeDecorator';
 import { CommandLog } from '../models/CommandLog';
 import { User as UserModel } from '../models/User';
 import { ICommandInfo } from '../types/ICommandInfo';
@@ -20,8 +22,6 @@ import { ICommandRunInfo } from '../types/ICommandRunInfo';
 import { MaybePromise } from '../types/MaybePromise';
 import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
-import { Redis } from '../util/RedisDecorator';
-import { Sequelize as sequelize } from '../util/SequelizeDecorator';
 import { titleCase } from '../util/Util';
 import { Client } from './Client';
 import { CommandHandler } from './CommandHandler';

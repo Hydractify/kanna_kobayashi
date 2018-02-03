@@ -6,7 +6,7 @@ import { inspect } from 'util';
 
 import { colors, LogLevel } from '../types/LogLevel';
 
-export { Loggable } from '../util/LoggerDecorator';
+export { Loggable } from '../decorators/LoggerDecorator';
 
 /**
  * Singleton Logger

@@ -4,12 +4,12 @@ import { extname, join } from 'path';
 import { captureException } from 'raven';
 import { promisify } from 'util';
 
+import { ListenerUtil } from '../decorators/ListenerUtil';
+import { Loggable } from '../decorators/LoggerDecorator';
 import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
 import { UserTypes } from '../types/UserTypes';
-import { ListenerUtil } from '../util/ListenerUtil';
-import { Loggable } from '../util/LoggerDecorator';
 import { Client } from './Client';
 import { Command } from './Command';
 import { Logger } from './Logger';
