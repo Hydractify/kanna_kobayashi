@@ -144,7 +144,11 @@ export class Client extends DJSClient {
 			reaction.message.author.id !== this.user.id
 			|| !reaction.message.embeds.length
 			|| !reaction.message.embeds[0].footer
-		) return;
+		) {
+			reaction.message.channel.messages.delete(reaction.message.id);
+
+			return;
+		}
 
 		captureBreadcrumb({
 			category: 'messageReactAdd',
@@ -154,15 +158,27 @@ export class Client extends DJSClient {
 
 		const [, tag, name]: RegExpExecArray = /^Requested by (.+?) \|.* (.+)$/.exec(reaction.message.embeds[0].footer.text)
 			|| [] as any;
-		if (!tag || !name) return;
-		const command: IResponsiveEmbedController = this.commandHandler.resolveCommand(name.toLowerCase()) as any;
-		if (!command) return;
+		if (!tag || !name) {
+			reaction.message.channel.messages.delete(reaction.message.id);
 
-		if (command.emojis && command.onCollect) {
-			if (command.emojis.includes(reaction.emoji.name) && user.tag === tag) {
-				command.onCollect(reaction, user);
-			}
+			return;
 		}
+
+		const command: IResponsiveEmbedController = this.commandHandler.resolveCommand(name.toLowerCase()) as any;
+		if (!command) {
+			reaction.message.channel.messages.delete(reaction.message.id);
+
+			return;
+		}
+
+		if (user.tag !== tag || !command.emojis || !command.onCollect
+			|| !command.emojis.includes(reaction.emoji.name)) {
+			reaction.message.channel.messages.delete(reaction.message.id);
+
+			return;
+		}
+
+		return command.onCollect(reaction, user);
 	}
 
 	@on('rateLimit')
