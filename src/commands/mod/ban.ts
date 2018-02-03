@@ -59,7 +59,7 @@ class BanCommand extends Command {
 		message.reply(`are you sure you want to ban ${[...members].join(' ')}? (**Y**es or **N**o)`);
 
 		const answer: Message = await message.channel.awaitMessages(
-			(msg: Message) => /^(y|n|yes|no)/i.test(msg.content),
+			(msg: Message) => message.author.id === msg.author.id && /^(y|n|yes|no)/i.test(msg.content),
 			{ time: 6e4, max: 1 },
 		).then((collected: Collection<Snowflake, Message>) => collected.first());
 
