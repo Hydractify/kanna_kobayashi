@@ -122,7 +122,7 @@ export class Client extends DJSClient {
 		const channel: GuildChannel = member.guild.channels.get(guildModel.notificationChannelId);
 
 		if (!(channel instanceof TextChannel)) {
-			guildModel.notificationChannelId = undefined;
+			guildModel.notificationChannelId = null;
 			guildModel.save();
 
 			return;

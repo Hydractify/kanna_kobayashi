@@ -80,9 +80,11 @@ export class User extends Model<User> {
 
 		for (const [k, v] of Object.entries(data)) {
 			// tslint:disable-next-line:no-null-keyword
-			if ([null, undefined].includes(v)) {
+			if (v === null) {
 				delete data[k];
 				nullKeys.push(k);
+			} else if (v === undefined) {
+				delete data[k];
 			}
 		}
 

@@ -30,7 +30,7 @@ class NotifCommand extends Command {
 				return message.reply(`the current channel for welcome and farewell messages is ${alreadyChannel}.`);
 			}
 			if (message.guild.model.notificationChannelId) {
-				message.guild.model.notificationChannelId = undefined;
+				message.guild.model.notificationChannelId = null;
 				await message.guild.model.save();
 			}
 
@@ -40,7 +40,7 @@ class NotifCommand extends Command {
 		// "false" passed, remove
 		if (target.toLowerCase() === 'false') {
 			if (message.guild.model.notificationChannelId) {
-				message.guild.model.notificationChannelId = undefined;
+				message.guild.model.notificationChannelId = null;
 				await message.guild.model.save();
 
 				return message.reply('the channel for welcome and farewell messages has been removed from the config.');

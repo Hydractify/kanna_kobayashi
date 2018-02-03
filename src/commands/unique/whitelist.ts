@@ -34,7 +34,7 @@ class WhitelistCommand extends Command {
 
 		if (targetModel.type === UserTypes.WHITELISTED) {
 			if (remove === 'remove') {
-				targetModel.type = undefined;
+				targetModel.type = null;
 				await targetModel.save();
 
 				return message.reply(`you removed **${user.tag}** from the whitelist.`);

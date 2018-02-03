@@ -61,7 +61,7 @@ class QuizStartCommand extends Command {
 			value: titleCase(quiz.name),
 		};
 
-		eventEmbed.author = undefined;
+		eventEmbed.author = null;
 
 		eventEmbed.setTitle(
 			answer
