@@ -33,9 +33,9 @@ export class WebhookLogger extends Logger {
 			.setTimestamp()
 			.setColor(colors[level][2])
 			.setFooter(
-			'SHARD_ID' in process.env
-				? `Shard ${process.env.SHARD_ID}`
-				: 'Sharding Manager',
+				'SHARD_ID' in process.env
+					? `Shard ${process.env.SHARD_ID}`
+					: 'Sharding Manager',
 		);
 		const options: WebhookMessageOptions = {
 			avatarURL: 'https://a.safe.moe/lwS5D.png',
@@ -52,6 +52,8 @@ export class WebhookLogger extends Logger {
 
 		if (tag) embed.setTitle(tag);
 
-		webhook.send(options);
+		webhook.send(options)
+			// Message is still in the console
+			.catch(() => undefined);
 	}
 }
