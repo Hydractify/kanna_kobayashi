@@ -242,8 +242,7 @@ export class CommandHandler {
 		];
 
 		if (!message.member) {
-			promises[2] = message.guild.members.fetch(message.author.id)
-				.then((member: GuildMember) => message.member = member);
+			promises[2] = message.guild.members.fetch(message.author.id);
 		}
 
 		if (!message.guild.owner) promises[3] = message.guild.members.fetch(message.guild.ownerID);
