@@ -69,10 +69,10 @@ class KickCommand extends Command {
 			}
 			await Promise.all(kickPromises);
 
-			return message.reply(`I successfully banned ${[...members].join(' ')}!`);
+			return message.reply(`I successfully kicked ${[...members].join(' ')}!`);
 		}
 
-		return message.channel.send('Ok, canceling the ban! <:KannaAyy:315270615844126720>');
+		return message.channel.send('Ok, canceling the kick! <:KannaAyy:315270615844126720>');
 	}
 }
 
