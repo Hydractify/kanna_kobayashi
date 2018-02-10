@@ -11,14 +11,13 @@ import { titleCase } from '../../util/Util';
 class CommandUsageCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['commandStats', 'usage'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
 			description: 'Displays stats about command usage',
-			examples: ['commandUsage'],
+			examples: ['usage'],
 			exp: 0,
-			name: 'commandUsage',
-			usage: 'commandUsage',
+			name: 'usage',
+			usage: 'usage',
 		});
 	}
 

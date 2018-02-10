@@ -20,7 +20,7 @@ class QuizPhotoCommand extends Command {
 				'quizphoto view',
 			],
 			exp: 0,
-			name: 'quizpphoto',
+			name: 'quizphoto',
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'quizphoto <set|view> [URL]',
 		});
