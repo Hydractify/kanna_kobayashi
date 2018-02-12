@@ -9,7 +9,7 @@ class DeleteMessagesCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['purge', 'del'],
-			clientPermissions: ['MANAGE_MESSAGES'],
+			clientPermissions: ['MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY'],
 			coins: 0,
 			description: 'Use this command to delete messages... Maybe to hide them... <:KannaISee:315264557843218432>',
 			examples: [
