@@ -26,7 +26,7 @@ class EvalCommand extends Command {
 		});
 	}
 
-	public async run(message: Discord.Message, args: string[], { commandName }: ICommandRunInfo)
+	public async run(message: Discord.Message, args: string[], { commandName, authorModel }: ICommandRunInfo)
 		: Promise<Discord.Message | Discord.Message[]> {
 		let code: string = args.join(' ');
 		if (code.includes('await')) code = `(async()=>{${code}})()`;
