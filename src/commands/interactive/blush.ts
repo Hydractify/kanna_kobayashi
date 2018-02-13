@@ -38,7 +38,9 @@ class BlushCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		if (commandName === 'embarassed') this.action = this.action.replace('blushing', 'embarassed');
+		let action: string = commandName === 'embarassed'
+			? this.action.replace('blushing', 'embarassed')
+			: this.action;
 
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'B-baka! I-i did not mean to... make you blush',
@@ -47,14 +49,14 @@ class BlushCommand extends WeebCommand {
 		});
 
 		if (!members) {
-			const action: string = this.action.replace(' because of', '');
+			action = action.replace(' because of', '');
 			return message.channel.send(
 				`<:FeelsKannaMan:341054171212152832> | **${message.member.displayName}** ${action}...`,
 				embed,
 			);
 		}
 
-		const baseString: string = this.computeBaseString(message, members);
+		const baseString: string = this.computeBaseString(message, members, action);
 
 		return message.channel.send(baseString, embed);
 	}

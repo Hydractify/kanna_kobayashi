@@ -72,12 +72,13 @@ export abstract class WeebCommand extends Command {
 	protected computeBaseString(
 		message: Message,
 		members: Collection<string, IWeebResolvedMember>,
+		action: string = this.action,
 	): string {
 		let base: string = `${this.emoji} | `;
 
-		if (members.size === 1) return `${base}**${message.member.displayName}** ${this.action} **${members.first().name}**`;
+		if (members.size === 1) return `${base}**${message.member.displayName}** ${action} **${members.first().name}**`;
 
-		base += `**${message.member.displayName}** ${this.action}`;
+		base += `**${message.member.displayName}** ${action}`;
 		const names: string[] = members.map((member: IWeebResolvedMember) => member.name);
 
 		// TODO: Make 'me' and 'themself' be the last index
@@ -113,8 +114,8 @@ export abstract class WeebCommand extends Command {
 			if (dev && perm === PermLevels.DEV) {
 				embed.setDescription(dev);
 			} else if (trusted && perm === PermLevels.TRUSTED) {
-			embed.setDescription(trusted);
-				} else if (bot && message.client.user.id === member.id) {
+				embed.setDescription(trusted);
+			} else if (bot && message.client.user.id === member.id) {
 				embed.setDescription(bot);
 			}
 		}

@@ -9,7 +9,7 @@ import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 class CuddleCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			action: '',
+			action: 'cuddled',
 			aliases: ['snuggle', 'snug'],
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Cuddle someone... <:KannaLewd:320406420824653825>',
@@ -26,13 +26,17 @@ class CuddleCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		this.action = commandName === 'cuddle' ? 'cuddled' : 'snuggled';
+		const action: string = commandName === 'cuddle' ? 'cuddled' : 'snuggled';
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `T-thanks **${message.member.displayName}**`,
-			dev: `${members ? members.first().name : undefined}-senpai... Y-you got ${this.action}!`,
+			dev: `${members ? members.first().name : undefined}-senpai... Y-you got ${action}!`,
 			trusted: `S-so cute **${members ? members.first().name : undefined}**`,
 		});
-		const baseString: string = this.computeBaseString(message, members);
+		const baseString: string = this.computeBaseString(
+			message,
+			members,
+			action,
+		);
 
 		return message.channel.send(baseString, embed);
 	}
