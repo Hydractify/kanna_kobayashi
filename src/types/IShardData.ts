@@ -1,10 +1,6 @@
-export interface IShardData<T = IShardDataOther> {
+export interface IShardData {
 	guilds: number;
-	other: T;
+	id: number;
+	ram: number;
 	users: number;
-}
-
-export interface IShardDataOther {
-	ram: string;
-	shardId: number;
 }
