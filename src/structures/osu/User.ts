@@ -181,7 +181,7 @@ export class User {
 			this.countS = Number(data.count_rank_s);
 			this.countA = Number(data.count_rank_a);
 			this.countryRank = Number(data.pp_country_rank);
-			// Technically a thing: this.events = data.events;		}
+			// Technically a thing: this.events = data.events;
 		}
 	}
 

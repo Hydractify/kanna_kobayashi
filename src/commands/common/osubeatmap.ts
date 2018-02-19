@@ -8,6 +8,7 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { Beatmap, Score } from '../../structures/osu';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { OsuMode } from '../../types/osu/OsuMode';
+import { titleCase } from '../../util/Util';
 
 class OsuBeatmapCommand extends Command {
 	public constructor(handler: CommandHandler) {
@@ -76,7 +77,7 @@ class OsuBeatmapCommand extends Command {
 			.setAuthor(`${beatmap.artist} -- ${beatmap.title} [${beatmap.version}]`, undefined, beatmap.versionURL())
 			.setThumbnail(beatmap.iconURL)
 			.setDescription([
-				`**Mode:** ${beatmap.mode}`,
+				`**Mode:** ${titleCase(OsuMode[beatmap.mode])}`,
 				`**Stars:** ${beatmap.difficultyRating.toFixed(2)}`,
 				`**CS:** ${beatmap.circleSize.toFixed(1)} **HP:** ${beatmap.healthDrain.toFixed(1)}`,
 				`**OD:** ${beatmap.overallDifficulty.toFixed(1)} **AR:** ${beatmap.approachRate.toFixed(1)}`,
@@ -107,26 +108,26 @@ class OsuBeatmapCommand extends Command {
 
 			.addField('Creator', beatmap.creator, true)
 			.addField(
-			'Stats',
-			[
-				`CS: ${beatmap.circleSize.toFixed(1)}`,
-				`HP: ${beatmap.healthDrain.toFixed(1)}`],
-			true)
+				'Stats',
+				[
+					`CS: ${beatmap.circleSize.toFixed(1)}`,
+					`HP: ${beatmap.healthDrain.toFixed(1)}`],
+				true)
 			.addField(
-			'\u200b',
-			[
-				`OD ${beatmap.overallDifficulty.toFixed(1)}`,
-				`AR: ${beatmap.approachRate.toFixed(1)}`,
-			],
-			true)
+				'\u200b',
+				[
+					`OD ${beatmap.overallDifficulty.toFixed(1)}`,
+					`AR: ${beatmap.approachRate.toFixed(1)}`,
+				],
+				true)
 
 			.addField('Tags', beatmap.tags || 'None')
 
 			.addField('Difficulty', `${beatmap.difficultyRating.toFixed(2)} Stars`, true)
 			.addField(
-			'Length (Drain)',
-			`${this.formatLength(beatmap.length)} (${this.formatLength(beatmap.playLength)})`,
-			true)
+				'Length (Drain)',
+				`${this.formatLength(beatmap.length)} (${this.formatLength(beatmap.playLength)})`,
+				true)
 			.addField('Passes | Plays', `${beatmap.passCount.toLocaleString()} | ${beatmap.playCount.toLocaleString()}`, true)
 
 			.addField('BPM', beatmap.bpm, true)
@@ -135,12 +136,12 @@ class OsuBeatmapCommand extends Command {
 
 			.addField('Favorites', beatmap.favoriteCount.toLocaleString(), true)
 			.addField(
-			'State',
-			[
-				`${beatmap.stateString}`,
-				beatmap.approvedAt ? `, as of:\n${beatmap.approvedAt.format('DD/MM/YYYY (hh:mm)')}` : '',
-			].join(''),
-			true)
+				'State',
+				[
+					`${beatmap.stateString}`,
+					beatmap.approvedAt ? `, as of:\n${beatmap.approvedAt.format('DD/MM/YYYY (hh:mm)')}` : '',
+				].join(''),
+				true)
 			.addField('ID | Set ID', `${beatmap.id} | ${beatmap.setId}`, true);
 
 		return message.channel.send(embed);
@@ -159,12 +160,12 @@ class OsuBeatmapCommand extends Command {
 			.addField('Tags', first.tags || 'none')
 
 			.addField(
-			'State',
-			[
-				`${first.stateString}`,
-				first.approvedAt ? `, as of:\n${first.approvedAt.format('DD/MM/YYYY (hh:mm)')}` : '',
-			].join(''),
-			true)
+				'State',
+				[
+					`${first.stateString}`,
+					first.approvedAt ? `, as of:\n${first.approvedAt.format('DD/MM/YYYY (hh:mm)')}` : '',
+				].join(''),
+				true)
 			.addField('BPM', first.bpm, true)
 			.addField('Set ID', first.setId, true)
 
@@ -178,7 +179,7 @@ class OsuBeatmapCommand extends Command {
 			embed.addField(
 				`${diff.version} -- ${diff.difficultyRating.toFixed(2)}\\⭐`,
 				[
-					`Mode: ${diff.mode}`,
+					`Mode: ${titleCase(OsuMode[diff.mode])}`,
 					`**CS:** ${diff.circleSize.toFixed(1)} **HP:** ${diff.healthDrain.toFixed(1)}`,
 					`**OD:** ${diff.overallDifficulty.toFixed(1)} **AR:** ${diff.approachRate.toFixed(1)}`,
 				],
