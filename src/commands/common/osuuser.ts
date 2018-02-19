@@ -104,7 +104,7 @@ class OsuUserCommand extends Command {
 			const pp: string = score.pp ? ` -- **${score.pp.toFixed(2)}**` : '';
 			embed.addField(
 				`${beatmap.artist} - ${beatmap.title} [${beatmap.version}]${mods ? ` +${mods}` : ''}`,
-				`${score.rank} -- [URL](${beatmap.versionURL()}) -- ${score.date.fromNow() + pp}`,
+				`${score.rankEmoji} -- [URL](${beatmap.versionURL()}) -- ${score.date.fromNow() + pp}`,
 			);
 		}
 

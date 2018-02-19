@@ -85,7 +85,7 @@ class OsuBeatmapCommand extends Command {
 		for (const score of scores) {
 			embed.addField(
 				// Already there, resolved instantly
-				`${(await score.fetchUser()).username} -- ${score.rank}`,
+				`${(await score.fetchUser()).username} -- ${score.rankEmoji}`,
 				[
 					`**Mods:** ${score.enabledMods || 'None'}`,
 					`**Accuracy:** ${(score.accuracy() * 100).toFixed(2)}%`,

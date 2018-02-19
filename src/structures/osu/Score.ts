@@ -9,6 +9,23 @@ import { User } from './User';
  * Represents a score achieved in an osu! beatmap.
  */
 export class Score {
+	/* tslint:disable:variable-name object-literal-sort-keys */
+	private static readonly RankEmojis: { [rank: string]: string } = {
+		// SS (Hidden/FL)
+		XH: '<:XSS:380477297884528640>',
+		// S (Hidden/FL)
+		SH: '<:XS:380476957831200772>',
+		// SS
+		X: '<:SS:380476658202836992>',
+		S: '<:S_:380476474714488843>',
+		A: '<:A_:380475521072365569>',
+		B: '<:B_:380475539820904450>',
+		C: '<:C_:380475959876517888>',
+		D: '<:D_:380476237526859778>',
+		F: '<:F_:380859218158419968>',
+	};
+	/* tslint:enable variable-name object-literal-sort-keys */
+
 	/**
 	 * Id of the beatmap the score was achieved in
 	 */
@@ -140,6 +157,10 @@ export class Score {
 		if (enabledMods.has('PF')) enabledMods.delete('SD');
 
 		return Array.from(enabledMods.values()).join(', ');
+	}
+
+	public get rankEmoji(): string {
+		return Score.RankEmojis[this.rank] || this.rank;
 	}
 
 	/**
