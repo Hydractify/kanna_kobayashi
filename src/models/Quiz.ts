@@ -76,12 +76,12 @@ export class Quiz extends Model<Quiz> {
 	})
 	@Column({
 		field: 'guild_id',
-		type: DataType.STRING('20'),
+		type: DataType.TEXT,
 	})
 	public readonly guildId: string;
 
 	@Column({
-		type: DataType.STRING,
+		type: DataType.TEXT,
 		set(this: Quiz, value: string): void {
 			this.setDataValue('name', value.toLowerCase());
 		},

@@ -16,14 +16,14 @@ export class UserItem extends Model<UserItem> {
 	@PrimaryKey
 	@Column({
 		field: 'item_name',
-		type: DataType.STRING('32'),
+		type: DataType.TEXT,
 	})
 	public readonly itemName: number;
 
 	@PrimaryKey
 	@Column({
 		field: 'user_id',
-		type: DataType.STRING('20'),
+		type: DataType.TEXT,
 	})
 	public readonly userId: string;
 }

@@ -15,7 +15,7 @@ export class CommandLog extends Model<CommandLog> {
 	@AllowNull(false)
 	@Column({
 		field: 'command_name',
-		type: DataType.STRING('30'),
+		type: DataType.TEXT,
 	})
 	public readonly commandName: string;
 
@@ -24,7 +24,7 @@ export class CommandLog extends Model<CommandLog> {
 	 */
 	@Column({
 		field: 'guild_id',
-		type: DataType.STRING('20'),
+		type: DataType.TEXT,
 	})
 	public readonly guildId: string;
 
@@ -40,7 +40,7 @@ export class CommandLog extends Model<CommandLog> {
 	@AllowNull(false)
 	@Column({
 		field: 'user_id',
-		type: DataType.STRING('20'),
+		type: DataType.TEXT,
 	})
 	public readonly userId: string;
 }

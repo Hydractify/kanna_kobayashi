@@ -11,12 +11,12 @@ import { Quiz } from './Quiz';
 export class Guild extends Model<Guild> {
 	@Column({
 		field: 'farewell_message',
-		type: DataType.STRING('1500'),
+		type: DataType.TEXT,
 	})
 	public farewellMessage: string;
 
 	@PrimaryKey
-	@Column(DataType.STRING('20'))
+	@Column(DataType.TEXT)
 	public readonly id: string;
 
 	@Column({
@@ -27,7 +27,7 @@ export class Guild extends Model<Guild> {
 
 	@Column({
 		field: 'notification_channel_id',
-		type: DataType.STRING('20'),
+		type: DataType.TEXT,
 	})
 	public notificationChannelId: string;
 
@@ -35,7 +35,7 @@ export class Guild extends Model<Guild> {
 		set(this: Guild, value: string): void {
 			this.setDataValue('prefix', value.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'));
 		},
-		type: DataType.STRING('32'),
+		type: DataType.TEXT,
 	})
 	public prefix: string;
 
@@ -45,19 +45,19 @@ export class Guild extends Model<Guild> {
 	@Column({
 		defaultValue: [],
 		field: 'self_role_ids',
-		type: DataType.ARRAY(DataType.STRING('20')),
+		type: DataType.ARRAY(DataType.TEXT),
 	})
 	public selfRoleIds: string[];
 
 	@Column({
 		field: 'tamer_role_id',
-		type: DataType.STRING('20'),
+		type: DataType.TEXT,
 	})
 	public tamerRoleId: string;
 
 	@Column({
 		field: 'welcome_message',
-		type: DataType.STRING('1500'),
+		type: DataType.TEXT,
 	})
 	public welcomeMessage: string;
 }

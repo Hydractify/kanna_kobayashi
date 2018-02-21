@@ -73,7 +73,7 @@ export class Item extends Model<Item> {
 	@AllowNull(false)
 	@PrimaryKey
 	@Column({
-		type: DataType.STRING('32'),
+		type: DataType.TEXT,
 	})
 	public name: Items;
 

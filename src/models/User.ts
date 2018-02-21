@@ -231,7 +231,7 @@ export class User extends Model<User> {
 
 	@Column({
 		field: 'partner_id',
-		type: DataType.STRING('20'),
+		type: DataType.TEXT,
 	})
 	public partnerId: string;
 

@@ -15,7 +15,7 @@ export class UserReputation extends Model<UserReputation> {
 	@PrimaryKey
 	@Column({
 		field: 'rep_id',
-		type: DataType.STRING('20'),
+		type: DataType.TEXT,
 	})
 	public readonly repId: string;
 
@@ -25,7 +25,7 @@ export class UserReputation extends Model<UserReputation> {
 	@PrimaryKey
 	@Column({
 		field: 'repper_id',
-		type: DataType.STRING('20'),
+		type: DataType.TEXT,
 	})
 	public readonly repperId: string;
 
