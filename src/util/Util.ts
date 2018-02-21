@@ -6,7 +6,7 @@ import { Collection } from 'discord.js';
 export const titleCase: (input: string) => string = (input: string): string => {
 	let titleCased: string = '';
 	for (const word of input.split(' ')) {
-		titleCased += `${word[0].toUpperCase() + word.slice(1).toLowerCase()} `;
+		titleCased += `${word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()} `;
 	}
 
 	return titleCased.slice(0, -1);
