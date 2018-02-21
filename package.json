@@ -6,23 +6,23 @@
 	"dependencies": {
 		"discord.js": "github:discordjs/discord.js",
 		"moment": "^2.20.1",
-		"moment-duration-format": "^2.2.1",
+		"moment-duration-format": "^2.2.2",
 		"pg": "^7.4.1",
 		"raven": "github:spaceeec/raven-node#pg_fix",
-		"redis-p": "github:appellation/redis-p",
+		"redis-p": "^0.1.8",
 		"reflect-metadata": "^0.1.12",
-		"sequelize": "^4.33.3",
+		"sequelize": "^4.33.4",
 		"sequelize-typescript": "^0.6.2",
 		"snekfetch": "^3.6.4",
 		"source-map-support": "^0.5.3"
 	},
 	"devDependencies": {
 		"@types/moment-duration-format": "^2.2.0",
-		"@types/node": "^9.4.5",
-		"@types/raven": "^2.1.4",
+		"@types/node": "^9.4.6",
+		"@types/raven": "^2.1.5",
 		"@types/sequelize": "4.0.79",
 		"tslint": "^5.9.1",
-		"typescript": "^2.7.1"
+		"typescript": "^2.7.2"
 	},
 	"scripts": {
 		"build": "tsc -p ./",
