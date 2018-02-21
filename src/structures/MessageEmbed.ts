@@ -34,3 +34,42 @@ export class MessageEmbed extends DJSMessageEmbed {
 		return this;
 	}
 }
+
+// Messing with original prototype instead of the extended one because d.js internally uses their own embed class
+const { _apiTransform }: { _apiTransform: () => object } = DJSMessageEmbed.prototype as any;
+Reflect.defineProperty(DJSMessageEmbed.prototype, '_apiTransform', {
+	value(this: MessageEmbed) {
+		// It's not possible to exceed the limit without fields
+		if (this.fields && this.fields.length) {
+			let count: number = 0;
+			// Max 256 chars
+			if (this.title) count += this.title.length;
+			// Max 2048 chars
+			if (this.description) count += this.description.length;
+			// Max 2048 chars
+			if (this.author && this.author.name) count += this.author.name.length;
+			// Max 2048 chars, yes you read correctly
+			if (this.footer && this.footer.text) count += this.footer.text.length;
+
+			for (let i: number = 0; i < this.fields.length; ++i) {
+				const field: { name: string; value: string } = this.fields[i];
+
+				count += field.name.length;
+				if (count >= 6000) {
+					this.fields = this.fields.slice(0, i);
+					this.fields[i - 1].value = `${this.fields[i - 1].value.slice(0, -3)}...`;
+					break;
+				}
+
+				count += field.value.length;
+				if (count >= 6000) {
+					this.fields = this.fields.slice(0, i + 1);
+					field.value = `${field.value.slice(0, 6000 - count - 3)}...`;
+					break;
+				}
+			}
+		}
+
+		return _apiTransform.call(this);
+	},
+});
