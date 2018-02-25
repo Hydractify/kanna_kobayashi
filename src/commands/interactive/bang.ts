@@ -12,7 +12,7 @@ class BangCommand extends WeebCommand {
 			action: 'shot',
 			aliases: ['bang'],
 			clientPermissions: ['EMBED_LINKS'],
-			description: 'Shoot someone that is bothering you!',
+			description: 'Shoot someone who is bothering you!',
 			emoji: '<:KannaMad:315264558279426048>',
 			examples: ['shoot kanna', 'shoot kanna wizard'],
 			name: 'shoot',
@@ -28,10 +28,9 @@ class BangCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		if (members) {
 			if (members.has(message.client.user.id)) {
-				return message.reply([
-					'get away from me with at pistol!',
-					'  Else i will destroy you human! <:KannaMad:315264558279426048>',
-				].join(' '));
+				return message.reply(
+					'get away from me with that pistol or I will destroy you, human! <:KannaMad:315264558279426048>',
+				);
 			}
 		}
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {

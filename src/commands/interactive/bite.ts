@@ -26,8 +26,8 @@ class CuddleCommand extends WeebCommand {
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
-			bot: `W-why you bit me **${message.member.displayName}**?`,
-			dev: `Why you bit ${members.first().name}!?`,
+			bot: `W-why did you bite me **${message.member.displayName}**?`,
+			dev: `Why did you bite ${members.first().name}!?`,
 			trusted: `${message.author}... Stop!`,
 		});
 		const baseString: string = this.computeBaseString(message, members);

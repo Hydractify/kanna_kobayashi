@@ -39,7 +39,7 @@ class CryCommand extends WeebCommand {
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
-			bot: 'W-what did i do?!',
+			bot: 'W-what did I do?!',
 			dev: `What did you do **${members ? members.first().name : undefined}**!?`,
 			trusted: `Why **${members ? members.first().name : undefined}?`,
 		});

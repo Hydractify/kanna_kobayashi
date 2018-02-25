@@ -26,10 +26,9 @@ class PunchCommand extends WeebCommand {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		if (members.has(message.client.user.id)) {
-			return message.reply([
-				`you can not ${this.name} me!`,
-				'Baka... <:FeelsKannaMan:341054171212152832>',
-			].join(' '));
+			return message.reply(
+				'you can not punch me! Baka... <:FeelsKannaMan:341054171212152832>',
+			);
 		}
 
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {

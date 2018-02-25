@@ -26,7 +26,7 @@ class PokeCommand extends WeebCommand {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
-			bot: `W-what did i do this time **${message.member.displayName}**!`,
+			bot: `W-what did I do this time **${message.member.displayName}**!`,
 			dev: `Notice him **${members.first().name}**!`,
 			trusted: `_stares at **${members.first().name}**`,
 		});
