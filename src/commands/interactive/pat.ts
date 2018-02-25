@@ -11,7 +11,6 @@ class PatCommand extends WeebCommand {
 		super(handler, {
 			action: 'patted',
 			aliases: ['patto'],
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Pat someone\'s head!',
 			emoji: '<:KannaLewd:320406420824653825>',
 			examples: ['pat kanna', 'pat kanna wizard'],

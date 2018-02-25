@@ -10,7 +10,6 @@ class TickleCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'tickled',
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Tickle someone!',
 			emoji: '<:KannaAyy:315270615844126720>',
 			examples: ['tickle kanna', 'tickle kanna wizard'],

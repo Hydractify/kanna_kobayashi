@@ -10,7 +10,6 @@ class SlapCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'slapped',
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Slap someone!',
 			emoji: '<:KannaWtf:320406412133924864>',
 			examples: ['slap kanna', 'slap kanna wizard'],

@@ -11,7 +11,6 @@ class CuddleCommand extends WeebCommand {
 		super(handler, {
 			action: 'cuddled',
 			aliases: ['snuggle', 'snug'],
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Cuddle someone... <:KannaLewd:320406420824653825>',
 			emoji: '<:KannaLewd:320406420824653825>',
 			examples: ['cuddle kanna', 'cuddle kanna wizard'],

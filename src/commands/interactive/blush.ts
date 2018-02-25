@@ -11,7 +11,6 @@ class BlushCommand extends WeebCommand {
 		super(handler, {
 			action: 'is blushing because of',
 			aliases: ['embarassed'],
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'S-show how embarassed you are!',
 			emoji: '<:KannaAyy:315270615844126720>',
 			examples: ['blush', 'blush kanna', 'blush kanna wizard'],

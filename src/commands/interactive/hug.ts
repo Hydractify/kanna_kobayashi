@@ -11,7 +11,6 @@ class HugCommand extends WeebCommand {
 		super(handler, {
 			action: 'hugged',
 			aliases: ['hwug'],
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Hug someone tight ❤',
 			emoji: '<:KannaAyy:315270615844126720>',
 			examples: ['hug kanna', 'hug kanna wizard'],

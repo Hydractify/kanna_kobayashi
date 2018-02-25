@@ -10,7 +10,6 @@ class PokeCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'poked',
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'G-get someone\'s attention!',
 			emoji: '<:KannaAyy:315270615844126720>',
 			examples: ['poke kanna', 'poke kanna wizard'],

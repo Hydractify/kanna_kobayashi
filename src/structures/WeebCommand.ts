@@ -42,6 +42,9 @@ export abstract class WeebCommand extends Command {
 		emoji: string;
 		type: string;
 	}) {
+		if (options.clientPermissions) options.clientPermissions.push('EMBED_LINKS');
+		else options.clientPermissions = ['EMBED_LINKS'];
+
 		super(handler, options);
 
 		this.action = options.action;

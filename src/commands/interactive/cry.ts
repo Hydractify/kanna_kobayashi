@@ -11,7 +11,6 @@ class CryCommand extends WeebCommand {
 		super(handler, {
 			action: 'is upset with',
 			aliases: ['sad', 'upset'],
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Show how much you are sad... `Hope you do not use this command often -Att. Wizardλ#5679`',
 			emoji: '<:FeelsKannaMan:341054171212152832>',
 			examples: ['cry', 'cry kanna', 'cry kanna wizard'],

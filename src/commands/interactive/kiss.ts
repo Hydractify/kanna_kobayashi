@@ -11,7 +11,6 @@ class KissCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'kissed',
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'K-kiss someone! ',
 			emoji: '<:KannaLewd:320406420824653825>',
 			examples: ['kiss kanna', 'kiss kanna wizard'],

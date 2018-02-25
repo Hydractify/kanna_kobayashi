@@ -11,7 +11,6 @@ class HighFiveCommand extends WeebCommand {
 		super(handler, {
 			action: 'high-fived',
 			aliases: ['high5'],
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'High-five with someone! :3',
 			emoji: '<:KannaHug:299650645001240578>',
 			examples: ['highfive kanna', 'highfive kanna wizard'],

@@ -10,7 +10,6 @@ class LickCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'licked',
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'L-lick someone!',
 			emoji: '<:KannaLewd:320406420824653825>',
 			examples: ['lick kanna', 'lick kanna wizard'],

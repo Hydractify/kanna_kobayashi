@@ -10,7 +10,6 @@ class CuddleCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'bit',
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Bite someone!',
 			emoji: '<:KannaAyy:315270615844126720>',
 			examples: ['bite kanna', 'bite kanna wizard'],

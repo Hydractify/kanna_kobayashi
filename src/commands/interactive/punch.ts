@@ -10,7 +10,6 @@ class PunchCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'punched',
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Punch someone!',
 			emoji: '<:KannaWtf:320406412133924864>',
 			examples: ['punch kanna', 'punch kanna wizard'],

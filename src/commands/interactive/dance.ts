@@ -10,7 +10,6 @@ class DanceCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'is dancing with',
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Dance! <:Awuu:389233504996556802>',
 			emoji: '<:Awuu:389233504996556802>',
 			examples: ['dance', 'dance kanna', 'dance kanna wizard'],

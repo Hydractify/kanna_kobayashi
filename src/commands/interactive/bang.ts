@@ -11,7 +11,6 @@ class BangCommand extends WeebCommand {
 		super(handler, {
 			action: 'shot',
 			aliases: ['bang'],
-			clientPermissions: ['EMBED_LINKS'],
 			description: 'Shoot someone who is bothering you!',
 			emoji: '<:KannaMad:315264558279426048>',
 			examples: ['shoot kanna', 'shoot kanna wizard'],
