@@ -118,7 +118,10 @@ class StrawPollCommand extends Command {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(title, 'https://a.safe.moe/WSpgs.png', `${this.baseURL}/${id}`)
 			.setTitle('Are multiple votes allowed?')
-			.setDescription(`${multi ? 'Yes ✅' : 'No ❌'}`)
+			.setDescription([
+				multi ? 'Yes ✅' : 'No ❌',
+				`[Vote!](${this.baseURL}/${id})`,
+			])
 			.setThumbnail(message.guild.iconURL());
 
 		const voteIterator: IterableIterator<number> = votes ? votes[Symbol.iterator]() : undefined;
