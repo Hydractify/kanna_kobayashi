@@ -41,38 +41,38 @@ class StrawPollCommand extends Command {
 			return this.showPoll(message, fetchedPoll, authorModel);
 		}
 
+		const messages: Message[] = [message];
 		const data: string[] = [];
 		for (const question of this.questions()) {
-			const promptMessage: Message = await message.reply(question) as Message;
 
-			const response: Message = await message.channel
-				.awaitMessages((msg: Message) => msg.author.id === message.author.id, { max: 1, time: 30 * 1000 })
-				.then((collected: Collection<Snowflake, Message>) => collected.first());
+			const [prompt, response] = await Promise.all([
+				message.reply(question) as Promise<Message>,
+				message.channel
+					.awaitMessages((msg: Message) => msg.author.id === message.author.id, { max: 1, time: 30 * 1000 })
+					.then((collected: Collection<Snowflake, Message>) => collected.first()),
+			]);
+			messages.push(prompt);
 
-			// No answer, aborting
 			if (!response) {
+				// No answer, aborting
+				await this.cleanup(message, messages);
 				return message.reply('aborting then.');
 			}
+			messages.push(response);
 
-			if (response.content.toLowerCase().startsWith('end')) {
+			if (response.content.toLowerCase() === 'end') {
 				// We already have 4 elements, continuing just fine
 				if (data.length > 3) break;
 
 				// We do not, abort
+				await this.cleanup(message, messages);
 				return message.reply('aborting then.');
-			}
-
-			// Clean up if we have permissions
-			if (response.deletable) {
-				await Promise.all([
-					response.delete(),
-					promptMessage.delete(),
-				]).catch(() => undefined);
 			}
 
 			data.push(response.content);
 		}
 
+		await this.cleanup(message, messages);
 		const [title, multi, ...options] = data;
 
 		const { body: poll }: Result<IStrawPollPoll> = await post(this.apiURL)
@@ -85,6 +85,12 @@ class StrawPollCommand extends Command {
 			});
 
 		return this.showPoll(message, poll, authorModel);
+	}
+
+	private cleanup(message: Message, messages: Message[]): undefined | Promise<Collection<Snowflake, Message>> {
+		if (message.guild.me.permissionsIn(message.channel).has('MANAGE_MESSAGES')) {
+			return message.channel.bulkDelete(messages);
+		}
 	}
 
 	private * questions(): IterableIterator<string> {
