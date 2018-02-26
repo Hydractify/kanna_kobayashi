@@ -25,6 +25,6 @@ manager.on('shardCreate', (shard: Shard) => {
 	webhook.info('Shard Create', `Shard \`${shard.id}\` created.`);
 	shard
 		.on('death', () => webhook.error('Shard Death', `Shard \`${shard.id}\` died.`))
-		.on('error', () => webhook.error('Shard Error', `Shard \`${shard.id}\`: `))
+		.on('error', (error: Error) => webhook.error('Shard Error', `Shard \`${shard.id}\`: `, error))
 		.on('spawn', () => webhook.info('Shard Spawn', `Shard \`${shard.id}\` spawned.`));
 });
