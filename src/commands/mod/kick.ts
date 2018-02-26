@@ -62,7 +62,7 @@ class KickCommand extends Command {
 		}
 
 		if (/^(y|yes)/i.test(answer.content)) {
-			const reason: string = flags.get('reason') as string;
+			const reason: string = `${message.author.tag}:${flags.get('reason') || 'No reason provided'}`;
 			const kickPromises: Promise<GuildMember>[] = [];
 			for (const member of members.values()) {
 				kickPromises.push(member.kick(reason));
