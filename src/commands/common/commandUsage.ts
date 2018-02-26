@@ -94,7 +94,7 @@ class CommandUsageCommand extends Command {
 			.map((entry: IEntry, i: number) => `${i + 1}. ${entry.name}: ${entry.count.toLocaleString()}`);
 
 		allTimeMapped.unshift(
-			`Count: ${allTimeCount.toLocaleString()}`,
+			`Count: ${Number(allTimeCount).toLocaleString()}`,
 			'\u200b',
 		);
 
@@ -102,7 +102,7 @@ class CommandUsageCommand extends Command {
 			.map((entry: IEntry, i: number) => `${i + 1}. ${entry.name}: ${entry.count.toLocaleString()}`);
 
 		lastHourMapped.unshift(
-			`Count: ${lastHourCount.toLocaleString()}`,
+			`Count: ${Number(lastHourCount).toLocaleString()}`,
 			'\u200b',
 		);
 
