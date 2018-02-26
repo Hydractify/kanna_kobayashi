@@ -24,7 +24,7 @@ class StrawPollCommand extends Command {
 			usage: 'strawpoll [ID]',
 		});
 
-		this.baseURL = 'http://www.strawpoll.me';
+		this.baseURL = 'https://www.strawpoll.me';
 		this.apiURL = `${this.baseURL}/api/v2/polls`;
 	}
 
