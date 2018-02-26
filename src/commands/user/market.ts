@@ -69,7 +69,7 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 		else item.splice(-1, 1);
 
 		resolvedItem = await Item.findById(item.join(' '));
-		if (!resolvedItem) return `**${item}** is not an item!`;
+		if (!resolvedItem) return `**${item.join(' ')}** is not an item!`;
 
 		if (count <= 0) {
 			return `please provide a positive amount of items to ${input}.`;
@@ -198,9 +198,10 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 		}
 
 		const [userItem]: Item[] = await authorModel.$get<Item>('items', { where: { name: item.name } }) as Item[];
+		if (!userItem) return message.reply(`you do not own the **${item.name}** ${item.type.toLowerCase()}`);
 		if (userItem.getCount() < count) {
 			return message.reply(
-				`you only have **${userItem.getCount()}** of the **${userItem.name}** ${titleCase(item.type).toLowerCase()}!`,
+				`you only have **${userItem.getCount()}** of the **${userItem.name}** ${item.type.toLowerCase()}!`,
 			);
 		}
 
