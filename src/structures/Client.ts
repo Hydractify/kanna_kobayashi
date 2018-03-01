@@ -84,7 +84,7 @@ export class Client extends DJSClient {
 	}
 
 	@on('guildCreate', false)
-	@on('guildLeave', true)
+	@on('guildDelete', true)
 	protected async _onGuild(guild: Guild, left: boolean): Promise<void> {
 		if (guild.memberCount !== guild.members.size) await guild.members.fetch();
 
