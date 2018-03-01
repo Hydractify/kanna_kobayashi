@@ -104,12 +104,12 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 
 	private _findCommand(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[] | void> {
 		const command: Command = this.handler.resolveCommand(name);
-		const commandEnabled: boolean = message.guild.model.disabledCommands.includes(command.name);
 
 		if (!command) {
 			return undefined;
 		}
 
+		const commandEnabled: boolean = message.guild.model.disabledCommands.includes(command.name);
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user.displayAvatarURL())
 			.setDescription(command.description)
