@@ -114,7 +114,7 @@ export class Client extends DJSClient {
 	}
 
 	@on('guildMemberAdd', false)
-	@on('guildMemberLeave', true)
+	@on('guildMemberRemove', true)
 	protected async _onGuildMember(member: GuildMember, left: boolean): Promise<void> {
 		const guildModel: GuildModel = await member.guild.fetchModel();
 
