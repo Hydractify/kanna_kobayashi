@@ -58,7 +58,7 @@ export class CommandHandler {
 
 		this.resolver = new Resolver(this);
 		this._prefixes = process.env.NODE_ENV === 'dev'
-			? ['-']
+			? ['kanna ', 'k!', '-']
 			: ['kanna ', 'k!'];
 
 		// Wrap all received messages in a seperate raven context
