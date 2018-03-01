@@ -57,7 +57,8 @@ class CommandStatusCommand extends Command {
 					'there are currently no commands server wide disabled.',
 					'',
 					'If you intended to get a list of available commands instead, try `k!help`.',
-				]);
+				].join('\n'));
+
 			}
 
 			return message.reply([
@@ -65,7 +66,7 @@ class CommandStatusCommand extends Command {
 				guildModel.disabledCommands.join(', '),
 				'',
 				'If you intended to get a list of available commands instead, try `k!help`.',
-			]);
+			].join('\n'));
 		}
 
 		const newStatus: boolean = commandName === 'enable';
