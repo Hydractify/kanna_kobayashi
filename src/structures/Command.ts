@@ -21,7 +21,6 @@ import { ICommandInfo } from '../types/ICommandInfo';
 import { ICommandRunInfo } from '../types/ICommandRunInfo';
 import { MaybePromise } from '../types/MaybePromise';
 import { PermLevels } from '../types/PermLevels';
-import { UserTypes } from '../types/UserTypes';
 import { titleCase } from '../util/Util';
 import { Client } from './Client';
 import { CommandHandler } from './CommandHandler';
@@ -203,22 +202,23 @@ export abstract class Command {
 			return `**${this.name}** is currently disabled!`;
 		}
 
-		const [commandLog] = await authorModel.$get<CommandLog>('CommandLogs', {
-			limit: 1,
-			order: [['run', 'desc']],
-			where: { commandName: this.name },
-		}) as CommandLog[];
+		if (permLevel < PermLevels.TRUSTED) {
+			const [commandLog] = await authorModel.$get<CommandLog>('CommandLogs', {
+				limit: 1,
+				order: [['run', 'DESC']],
+				where: { commandName: this.name },
+			}) as CommandLog[];
 
-		const timeLeft: number = commandLog
-			? (commandLog.run.getTime() + this.cooldown) - Date.now()
-			: 0;
+			const timeLeft: number = commandLog
+				? (commandLog.run.getTime() + this.cooldown) - Date.now()
+				: 0;
 
-		if (![UserTypes.DEV, UserTypes.TRUSTED].includes(authorModel.type)
-			&& timeLeft > 0) {
-			const timeLeftString: string = duration(timeLeft, 'milliseconds')
-				.format('d [days], h [hours], m [minutes], s [seconds]');
+			if (timeLeft > 0) {
+				const timeLeftString: string = duration(timeLeft, 'milliseconds')
+					.format('d [days], h [hours], m [minutes], s [seconds]');
 
-			return `**${this.name}** is on cooldown!\nPlease wait **${timeLeftString}** and try again!`;
+				return `**${this.name}** is on cooldown!\nPlease wait **${timeLeftString}** and try again!`;
+			}
 		}
 
 		return true;
