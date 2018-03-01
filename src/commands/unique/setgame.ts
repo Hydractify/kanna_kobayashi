@@ -13,6 +13,7 @@ class SetGameCommand extends Command {
 			description: 'Sets the game the bot is currently playing on all shards',
 			examples: ['setgame Some cool game'],
 			exp: 0,
+			guarded: true,
 			name: 'setgame',
 			permLevel: PermLevels.DEV,
 			usage: 'setgame [\'stream\'] [...Game]',

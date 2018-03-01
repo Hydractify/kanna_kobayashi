@@ -17,6 +17,7 @@ class ExecCommand extends Command {
 			description: 'Executes arbitrary input on the command line.',
 			examples: ['echo hi'],
 			exp: 0,
+			guarded: true,
 			name: 'exec',
 			permLevel: PermLevels.DEV,
 			usage: 'exec <command>',

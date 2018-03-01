@@ -30,6 +30,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 				'_PS: Use the arrow reactions to scroll through categories_',
 			].join('\n'),
 			examples: ['help ping', 'help'],
+			guarded: true,
 			name: 'help',
 			permLevel: 0,
 			usage: 'help [Command|Category]',
@@ -103,6 +104,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 
 	private _findCommand(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[] | void> {
 		const command: Command = this.handler.resolveCommand(name);
+		const commandEnabled: boolean = message.guild.model.disabledCommands.includes(command.name);
 
 		if (!command) {
 			return undefined;
@@ -120,7 +122,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		embed.addField('Usage', `kanna ${command.usage}`)
 			.addField('Example(s)', `kanna ${command.examples.join('\nkanna ')}`)
 			.addField('Permissions Level Required', command.permLevel, true)
-			.addField('Enabled', command.enabled ? 'Yes' : 'No', true);
+			.addField('Enabled', commandEnabled ? 'Yes' : 'No', true);
 
 		return message.channel.send(embed);
 	}

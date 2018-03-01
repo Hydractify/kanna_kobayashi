@@ -20,6 +20,13 @@ export class Guild extends Model<Guild> {
 	public readonly id: string;
 
 	@Column({
+		defaultValue: [],
+		field: 'disabled_commands',
+		type: DataType.ARRAY(DataType.TEXT),
+	})
+	public disabledCommands: string[];
+
+	@Column({
 		field: 'level_up_enabled',
 		type: DataType.BOOLEAN,
 	})

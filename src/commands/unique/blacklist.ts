@@ -14,6 +14,7 @@ class BlacklistCommand extends Command {
 			description: 'Blacklists a user, disallowing them and their guilds to use the bot.',
 			examples: ['blacklist @space#0302'],
 			exp: 0,
+			guarded: true,
 			name: 'blacklist',
 			permLevel: PermLevels.DEV,
 			usage: 'blacklist <User> [\'remove\']',

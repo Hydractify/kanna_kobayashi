@@ -62,10 +62,6 @@ export abstract class Command {
 	 */
 	public readonly description: string;
 	/**
-	 * Whether the command is enabled
-	 */
-	public readonly enabled: boolean;
-	/**
 	 * A few examples to describe how to use the command
 	 */
 	public readonly examples: string[];
@@ -73,6 +69,10 @@ export abstract class Command {
 	 * Amount of exp granted when using the command
 	 */
 	public readonly exp: number;
+	/**
+	 * Whether the command is guarded (May not be disabled)
+	 */
+	public readonly guarded: boolean;
 	/**
 	 * Instantiating command handler
 	 */
@@ -119,10 +119,10 @@ export abstract class Command {
 		clientPermissions = [],
 		coins = 10,
 		cooldown = 5000,
-		enabled = true,
 		description,
 		examples,
 		exp = 850,
+		guarded = false,
 		name,
 		patreonOnly = false,
 		permLevel = PermLevels.EVERYONE,
@@ -161,10 +161,10 @@ export abstract class Command {
 		this.client = handler.client;
 		this.coins = coins;
 		this.cooldown = cooldown;
-		this.enabled = enabled;
 		this.description = description;
 		this.examples = examples;
 		this.exp = exp;
+		this.guarded = guarded;
 		this.handler = handler;
 		this.name = name;
 		this.resolver = handler.resolver;
@@ -198,8 +198,8 @@ export abstract class Command {
 			return `you do not have the required permission level to use **${this.name}**!`;
 		}
 
-		if (!this.enabled) {
-			return `**${this.name}** is currently disabled!`;
+		if (!this.guarded && message.guild.model.disabledCommands.includes(this.name)) {
+			return `the **${this.name}** command is currently server wide disabled!`;
 		}
 
 		if (permLevel < PermLevels.TRUSTED) {

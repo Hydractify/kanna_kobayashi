@@ -14,6 +14,7 @@ class WhitelistCommand extends Command {
 			description: 'Whitelists a user, allowing their bot guilds to use the bot.',
 			examples: ['whitelist @space#0302'],
 			exp: 0,
+			guarded: true,
 			name: 'whitelist',
 			permLevel: PermLevels.DEV,
 			usage: 'whitelist <User> [\'remove\']',

@@ -16,6 +16,7 @@ class NotifCommand extends Command {
 				'notif false // to remove the channel',
 			],
 			exp: 0,
+			guarded: true,
 			name: 'notif-channel',
 			permLevel: PermLevels.HUMANTAMER,
 			usage: 'notif [Channel]',

@@ -15,6 +15,7 @@ class LevelUpCommand extends Command {
 				'levelup false',
 			],
 			exp: 0,
+			guarded: true,
 			name: 'levelup',
 			permLevel: PermLevels.HUMANTAMER,
 			usage: 'levelup [\'true\'|\'false\']',

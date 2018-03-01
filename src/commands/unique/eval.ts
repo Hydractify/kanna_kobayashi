@@ -20,6 +20,7 @@ class EvalCommand extends Command {
 			description: 'Evaluates arbitrary JavaScript code',
 			examples: ['You should know how to use this.'],
 			exp: 0,
+			guarded: true,
 			name: 'eval',
 			permLevel: PermLevels.DEV,
 			usage: 'eval <...string>',

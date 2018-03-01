@@ -8,9 +8,9 @@ export interface ICommandInfo {
 	coins?: number;
 	cooldown?: number;
 	description: string;
-	enabled?: boolean;
 	examples: string[];
 	exp?: number;
+	guarded?: boolean;
 	name: string;
 	patreonOnly?: boolean;
 	permLevel?: PermLevels;

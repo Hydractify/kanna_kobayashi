@@ -13,6 +13,7 @@ class InfoCommand extends Command {
 			description: 'All the useful links you need!',
 			examples: ['info'],
 			exp: 0,
+			guarded: true,
 			name: 'info',
 			usage: 'info',
 		});
