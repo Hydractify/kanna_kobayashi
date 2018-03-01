@@ -41,7 +41,7 @@ class CommandStatusCommand extends Command {
 		{ commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const guildModel: Guild = message.guild.model;
-		const status: boolean = !guildModel.disabledCommands.includes(command.name);
+		const status: boolean = command && !guildModel.disabledCommands.includes(command.name);
 
 		if (commandName === this.name) {
 			if (command) {
@@ -54,7 +54,7 @@ class CommandStatusCommand extends Command {
 
 			if (!guildModel.disabledCommands.length) {
 				return message.reply([
-					'there are currently not commands disabled.',
+					'there are currently no commands server wide disabled.',
 					'',
 					'If you intended to get a list of available commands instead, try `k!help`.',
 				]);
