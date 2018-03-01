@@ -77,13 +77,13 @@ class CommandUsageCommand extends Command {
 			if (entry.lastHour) lastHourCount = entry.lastHour;
 			if (entry.recent) {
 				lastHourTop5.push({
-					count: entry.recent,
+					count: Number(entry.recent),
 					name: titleCase(entry.name.replace(/([A-Z])/g, ' $1')),
 				});
 			}
 			if (entry.total) {
 				allTimeTop5.push({
-					count: entry.total,
+					count: Number(entry.total),
 					name: titleCase(entry.name.replace(/([A-Z])/g, ' $1')),
 				});
 			}
