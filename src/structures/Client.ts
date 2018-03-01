@@ -85,6 +85,7 @@ export class Client extends DJSClient {
 
 	@on('guildCreate', false)
 	@on('guildDelete', true)
+	@RavenContext
 	protected async _onGuild(guild: Guild, left: boolean): Promise<void> {
 		if (!left && guild.memberCount !== guild.members.size) await guild.members.fetch();
 
@@ -115,6 +116,7 @@ export class Client extends DJSClient {
 
 	@on('guildMemberAdd', false)
 	@on('guildMemberRemove', true)
+	@RavenContext
 	protected async _onGuildMember(member: GuildMember, left: boolean): Promise<void> {
 		const guildModel: GuildModel = await member.guild.fetchModel();
 
@@ -241,7 +243,7 @@ export class Client extends DJSClient {
 				.then((res: number[]) => res.reduce((prev: number, cur: number) => prev + cur)),
 		};
 
-		// No webhook, this will just spam
+		// No webhook, this would just spam
 		this.logger.debug('BotLists', `Updating guild count at bot lists to ${body.server_count}.`);
 
 		post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
