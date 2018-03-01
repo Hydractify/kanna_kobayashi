@@ -86,7 +86,7 @@ export class Client extends DJSClient {
 	@on('guildCreate', false)
 	@on('guildDelete', true)
 	protected async _onGuild(guild: Guild, left: boolean): Promise<void> {
-		if (guild.memberCount !== guild.members.size) await guild.members.fetch();
+		if (!left && guild.memberCount !== guild.members.size) await guild.members.fetch();
 
 		const totalGuilds: number = await this.shard.fetchClientValues('guilds.size')
 			.then((result: number[]) => result.reduce((prev: number, cur: number) => prev + cur));
