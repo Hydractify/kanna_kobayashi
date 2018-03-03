@@ -73,7 +73,7 @@ class ItemCommand extends Command {
 
 	public run(
 		message: Message,
-		[method, ...args]: ['create' | 'structure' | 'find' | 'give', string[]],
+		[method, args]: ['create' | 'structure' | 'find' | 'give', string[]],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		return this[method](message, args as string[], authorModel);
@@ -128,7 +128,7 @@ class ItemCommand extends Command {
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(
-			`Information about the ${item.type.toLowerCase()} "${item.name}"`,
+			`Information about the ${item.type.toLowerCase()} "${titleCase(item.name)}"`,
 			this.client.user.displayAvatarURL(),
 		)
 			.setThumbnail(message.guild.iconURL())
