@@ -7,7 +7,6 @@ import {
 	MessageEmbed,
 	MessageEmbedOptions,
 	MessageReaction,
-	RateLimitData,
 	TextChannel,
 	User,
 } from 'discord.js';
@@ -181,11 +180,6 @@ export class Client extends DJSClient {
 		}
 
 		return command.onCollect(reaction, user);
-	}
-
-	@on('rateLimit')
-	protected _onRateLimit(data: RateLimitData): void {
-		this.webhook.warn('Rate Limited', '```js\n', data, '```');
 	}
 
 	@on('raw')
