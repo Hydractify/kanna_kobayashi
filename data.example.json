@@ -1,8 +1,4 @@
 {
-	"anilist": {
-		"client_id": "",
-		"client_secret": ""
-	},
 	"clientToken": "",
 	"dbots": "",
 	"dbotsorg": "",
