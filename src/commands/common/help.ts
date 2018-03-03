@@ -120,7 +120,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		}
 
 		embed.addField('Usage', `kanna ${command.usage}`)
-			.addField('Example(s)', `kanna ${command.examples.join('\nkanna ')}`)
+			.addField(`Example${command.examples.length === 1 ? '' : 's'}`, `kanna ${command.examples.join('\nkanna ')}`)
 			.addField('Permissions Level Required', command.permLevel, true)
 			.addField('Enabled', commandEnabled ? 'Yes' : 'No', true);
 
