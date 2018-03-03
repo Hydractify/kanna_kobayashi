@@ -25,8 +25,8 @@ class QuizDurationCommand extends Command {
 	public parseArgs(message: Message, [option, time]: string[]): string | ['view' | 'set', number] {
 		if (!option) {
 			return [
-				'you also need to tell me whether you want to',
-				'`set` a new duration, or `view` the current one?',
+				'you need to tell me whether you want to',
+				'`set` a new duration, or `view` the current one.',
 			].join(' ');
 		}
 
@@ -41,7 +41,7 @@ class QuizDurationCommand extends Command {
 
 			if (isNaN(parsed)) return 'that does not look like a valid number!';
 
-			if (parsed <= 0) return 'the duration must be larger than 0!';
+			if (parsed <= 0) return 'I don\'t think a number smaller than 1 will do.';
 
 			return ['set', parsed];
 		}

@@ -22,8 +22,8 @@ class BalanceCommand extends Command {
 		message: Message,
 		[input]: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<[UserModel, User] | UserModel[] | string> {
-		if (!input) return [authorModel];
+	): Promise<[UserModel, User] | string> {
+		if (!input) return [authorModel, undefined];
 
 		const { user }: { user?: User } = await this.resolver.resolveMember(input, message.guild) || {};
 		if (!user) return `I could not find a non bot user with the name or id ${input}`;

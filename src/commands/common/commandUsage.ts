@@ -13,7 +13,7 @@ class CommandUsageCommand extends Command {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'Displays stats about command usage',
+			description: 'Stats about command usages',
 			examples: ['usage'],
 			exp: 0,
 			name: 'usage',

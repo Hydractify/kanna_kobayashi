@@ -9,7 +9,7 @@ class DiscriminatorCommand extends Command {
 		super(handler, {
 			aliases: ['discrim'],
 			coins: 0,
-			description: 'Searches for user with a certain discriminator',
+			description: 'Searche for users with a certain discriminator',
 			examples: ['discrim 0001'],
 			name: 'discriminator',
 			usage: 'discriminator <Discriminator>',

@@ -10,7 +10,7 @@ class SayDeleteCommand extends Command {
 			aliases: ['sayd'],
 			clientPermissions: ['MANAGE_MESSAGES'],
 			coins: 0,
-			description: 'Let the bot say something and delete your message afterwards.',
+			description: 'Let me say something and delete your message afterwards',
 			examples: ['sayd Hello world!'],
 			exp: 0,
 			name: 'saydelete',

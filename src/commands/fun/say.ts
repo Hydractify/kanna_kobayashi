@@ -9,7 +9,7 @@ class SayCommand extends Command {
 		super(handler, {
 			aliases: ['echo'],
 			coins: 0,
-			description: 'Let the bot say something.',
+			description: 'Let me say something',
 			examples: ['say Hello world!'],
 			exp: 0,
 			name: 'say',

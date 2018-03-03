@@ -9,7 +9,7 @@ class NotifCommand extends Command {
 		super(handler, {
 			aliases: ['notif', 'notifchannel', 'notif_channel'],
 			coins: 0,
-			description: 'Gets or sets a custom channel for welcome and farewell messages.',
+			description: 'Get or set a custom channel for welcome and farewell messages',
 			examples: [
 				'notif',
 				'notif #general',

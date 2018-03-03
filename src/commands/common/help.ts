@@ -26,7 +26,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 			coins: 0,
 			cooldown: 10000,
 			description: [
-				'See all the commands (or a specifc one) Kanna has!',
+				'Let me show you all the commands (or a specifc one), that I have!',
 				'_PS: Use the arrow reactions to scroll through categories_',
 			].join('\n'),
 			examples: ['help ping', 'help'],

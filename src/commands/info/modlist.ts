@@ -8,26 +8,24 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { mapIterable, titleCase } from '../../util/Util';
 
 class ModListCommand extends Command {
-	private statuses: Map<string, string>;
+	private statuses: Map<string, string> = new Map<string, string>([
+		['online', '<:online:339191830140944385>'],
+		['idle', '<:idle:339191829515993089>'],
+		['dnd', '<:dnd:339191829524381716>'],
+		['offline', '<:offline:339191829218066433>'],
+	]);
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['mods'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'See the mod list of the guild!',
+			description: 'In need of a list of mods for this guild?',
 			examples: ['modlist online', 'modlist dnd'],
 			exp: 0,
 			name: 'modlist',
 			usage: 'modlist [status]',
 		});
-
-		this.statuses = new Map<string, string>([
-			['online', '<:online:339191830140944385>'],
-			['idle', '<:idle:339191829515993089>'],
-			['dnd', '<:dnd:339191829524381716>'],
-			['offline', '<:offline:339191829218066433>'],
-		]);
 	}
 
 	public modList(message: Message, members: GuildMemberStore, authorModel: UserModel): Promise<Message | Message[]> {

@@ -14,8 +14,8 @@ class ExecCommand extends Command {
 		super(handler, {
 			coins: 0,
 			cooldown: 0,
-			description: 'Executes arbitrary input on the command line.',
-			examples: ['echo hi'],
+			description: 'Execute arbitrary input in a shell or terminal',
+			examples: ['exec echo hi'],
 			exp: 0,
 			guarded: true,
 			name: 'exec',

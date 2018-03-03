@@ -21,7 +21,7 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 	 * The Command's methods.
 	 */
 	// Can not be Method[] because ts is a bit too picky with Array#includes then
-	private methods: string[];
+	private methods: string[] = ['buy', 'sell', 'show', 'list'];
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {
@@ -41,7 +41,6 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 			name: 'market',
 			usage: 'market [\'buy\'|\'sell\'|\'show\'|Item] [Item] [Count]',
 		});
-		this.methods = ['buy', 'sell', 'show', 'list'];
 	}
 
 	public async parseArgs(

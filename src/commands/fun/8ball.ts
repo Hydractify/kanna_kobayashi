@@ -4,7 +4,14 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 
 class EigthBallCommand extends Command {
-	private _responses: string[];
+	private _responses: string[] = [
+		'I want it too! <:KannaHug:299650645001240578>',
+		'aye (Yes) <:KannaLolipop:315264556282675200>',
+		'aye... (No) <:FeelsKannaMan:341054171212152832>',
+		'do not do it! <:KannaAyy:315270615844126720>',
+		'why?! <:KannaWtf:320406412133924864>',
+		'I have to gather more information first <:KannaISee:315264557843218432>',
+	];
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {
@@ -14,15 +21,6 @@ class EigthBallCommand extends Command {
 			name: '8ball',
 			usage: '8ball <...question>',
 		});
-
-		this._responses = [
-			'I want it too! <:KannaHug:299650645001240578>',
-			'aye (Yes) <:KannaLolipop:315264556282675200>',
-			'aye... (No) <:FeelsKannaMan:341054171212152832>',
-			'do not do it! <:KannaAyy:315270615844126720>',
-			'why?! <:KannaWtf:320406412133924864>',
-			'I have to gather more information first <:KannaISee:315264557843218432>',
-		];
 	}
 
 	public parseArgs(message: Message, args: string[]): string[] | string {

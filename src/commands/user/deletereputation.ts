@@ -10,7 +10,7 @@ class DeleteReputationCommand extends Command {
 			aliases: ['delrep', 'deleterep'],
 			coins: 0,
 			cooldown: 0,
-			description: 'Deletes your reputation of a member.',
+			description: 'Delete your reputation of a member',
 			examples: ['delrep @space#0302'],
 			exp: 0,
 			name: 'deletereputation',

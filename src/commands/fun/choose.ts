@@ -7,7 +7,7 @@ class ChooseCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['choice'],
-			description: 'Let the bot choose one of the supplied options.',
+			description: 'Let me choose between things',
 			examples: ['choose Tohru|Kanna', 'choose Tohru Kanna'],
 			name: 'choose',
 			usage: 'choose <...Choices>',

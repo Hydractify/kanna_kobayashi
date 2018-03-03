@@ -13,8 +13,8 @@ class SelfRolesCommand extends Command {
 			clientPermissions: ['MANAGE_ROLES'],
 			coins: 0,
 			description: [
-				'Assign yourself a role, remove it or display all available ones.',
-				'If you are elevated you may also remove or add available roles.',
+				'Assign yourself a role, remove it or display all available ones',
+				'If you are elevated you may also remove or add available roles',
 			].join('\n'),
 			examples: [
 				'selfroles',

@@ -10,7 +10,7 @@ class AddReputationCommand extends Command {
 		super(handler, {
 			aliases: ['rep', 'addrep', '++'],
 			coins: 0,
-			description: 'Add a positive reputation to a member .',
+			description: 'Add a positive reputation to a member',
 			examples: ['addrep @space#0302'],
 			exp: 0,
 			name: 'addreputation',

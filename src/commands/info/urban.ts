@@ -12,7 +12,7 @@ class UrbanCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
-			description: 'Search up a definition for your query on urbandictonary.',
+			description: 'Look up a definition for a term on urbandictonary',
 			examples: ['urban test'],
 			name: 'urban',
 			usage: 'urban <...Term>',
@@ -22,7 +22,7 @@ class UrbanCommand extends Command {
 	public parseArgs(message: Message, args: string[]): string | string[] {
 		if (!args.length) {
 			return [
-				'you are supposed to tell me what to search!',
+				'you are supposed to tell me a term to lookup!',
 				`(\`kanna ${this.usage}\`) <:KannaWtf:320406412133924864>`,
 			].join(' ');
 		}

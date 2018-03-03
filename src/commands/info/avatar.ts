@@ -11,7 +11,7 @@ class AvatarCommand extends Command {
 			aliases: ['av', 'image'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'Display the avatar of a user',
+			description: 'Take a closer look at the avatar of a user',
 			examples: ['avatar @space#0302'],
 			exp: 0,
 			name: 'avatar',

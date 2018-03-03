@@ -13,7 +13,7 @@ class GuildInfoCommand extends Command {
 			aliases: ['gstats', 'ginfo', 'gg'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'Displays information about this guild',
+			description: 'Inspect information about this guild',
 			examples: ['ginfo'],
 			exp: 0,
 			name: 'guildinfo',

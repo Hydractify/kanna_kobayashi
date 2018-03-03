@@ -13,7 +13,7 @@ class UserInfoCommand extends Command {
 			aliases: ['whois', 'ust', 'uu', 'uinfo'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'Display information about a specific user.',
+			description: 'Display information about a specific user',
 			examples: ['userinfo @space#0302'],
 			exp: 0,
 			name: 'userinfo',

@@ -12,7 +12,7 @@ class LookupCommand extends Command {
 			aliases: ['ii', 'lookup'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'Looks up guild\'s info by an invite link or invite code.',
+			description: 'Look up a guild\'s info by an invite link or invite code',
 			examples: [
 				'lookup uBdXdE9',
 				'lookup discord.gg/uBdXdE9',

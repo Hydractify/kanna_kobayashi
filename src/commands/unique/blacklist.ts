@@ -11,7 +11,7 @@ class BlacklistCommand extends Command {
 		super(handler, {
 			coins: 0,
 			cooldown: 0,
-			description: 'Blacklists a user, disallowing them and their guilds to use the bot.',
+			description: 'Blacklist a user, disallowing them and their guilds to use the bot',
 			examples: ['blacklist @space#0302'],
 			exp: 0,
 			guarded: true,

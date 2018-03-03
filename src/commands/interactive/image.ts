@@ -12,7 +12,38 @@ class ImageCommand extends Command {
 	/**
 	 * The allowed types to be requested to weeb.sh
 	 */
-	private types: string[];
+	private types: string[] = [
+		'awoo',
+		'clagwimoth',
+		'insult',
+		'lewd',
+		'insult',
+		'megumin',
+		'neko',
+		'nom',
+		'owo',
+		'pout',
+		'shrug',
+		'slap',
+		'sleepy',
+		'smile',
+		'teehee',
+		'smug',
+		'thumbsup',
+		'triggered',
+		'wag',
+		'wasted',
+		'dab',
+		'banghead',
+		'nani',
+		'initial_d',
+		'delet_this',
+		'poi',
+		'thinking',
+		'greet',
+		'handholding',
+	];
+
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['weeb', 'images'],
@@ -22,37 +53,6 @@ class ImageCommand extends Command {
 			name: 'image',
 			usage: 'image <ImageType|\'types\'>',
 		});
-		this.types = [
-			'awoo',
-			'clagwimoth',
-			'insult',
-			'lewd',
-			'insult',
-			'megumin',
-			'neko',
-			'nom',
-			'owo',
-			'pout',
-			'shrug',
-			'slap',
-			'sleepy',
-			'smile',
-			'teehee',
-			'smug',
-			'thumbsup',
-			'triggered',
-			'wag',
-			'wasted',
-			'dab',
-			'banghead',
-			'nani',
-			'initial_d',
-			'delet_this',
-			'poi',
-			'thinking',
-			'greet',
-			'handholding',
-		];
 	}
 
 	public async parseArgs(message: Message, [input]: string[]): Promise<string | [string]> {

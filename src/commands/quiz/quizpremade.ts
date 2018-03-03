@@ -9,33 +9,31 @@ import { PermLevels } from '../../types/PermLevels';
 
 class QuizPremadeCommand extends Command {
 
-	private emojis: string[];
+	private emojis: string[] = [
+		'KannaMad:315264558279426048',
+		'1%E2%83%A3',
+		'2%E2%83%A3',
+		'3%E2%83%A3',
+		'4%E2%83%A3',
+		'5%E2%83%A3',
+		'6%E2%83%A3',
+		'7%E2%83%A3',
+		'8%E2%83%A3',
+		'9%E2%83%A3',
+	];
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['qpremade'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'USE_EXTERNAL_EMOJIS'],
 			coins: 0,
-			description: 'Choose one of the pre made quizzes of 10 characters from the series.',
+			description: 'Choose one of the pre made quizzes of 10 characters from the series',
 			examples: ['quizpremade'],
 			exp: 0,
 			name: 'quizpremade',
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'quizpremade',
 		});
-
-		this.emojis = [
-			'KannaMad:315264558279426048',
-			'1%E2%83%A3',
-			'2%E2%83%A3',
-			'3%E2%83%A3',
-			'4%E2%83%A3',
-			'5%E2%83%A3',
-			'6%E2%83%A3',
-			'7%E2%83%A3',
-			'8%E2%83%A3',
-			'9%E2%83%A3',
-		];
 	}
 
 	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {

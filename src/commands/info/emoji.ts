@@ -14,7 +14,7 @@ class EmojiInfoCommand extends Command {
 			aliases: ['einfo', 'ee', 'emoji'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'Displays information about any custom emoji',
+			description: 'Search for information about any custom emoji',
 			examples: [
 				'emoji KannaWave',
 				'emoji 333771413842558976',

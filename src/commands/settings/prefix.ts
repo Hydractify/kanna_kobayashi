@@ -8,7 +8,7 @@ class PrefixCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			coins: 0,
-			description: 'Gets all available prefixes or sets a custom one.',
+			description: 'Get all available prefixes or set a custom one',
 			examples: [
 				'prefix',
 				'prefix "kamui "',

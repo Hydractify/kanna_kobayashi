@@ -43,10 +43,11 @@ class WeeklyCommand extends Command {
 		).addField(
 			'How to Upvote!',
 			[
-				'**1.** Login on [Discord Bot List](https://discordbots.org)',
-				'**2.** Open my [page](https://discordbots.org/bot/297459926505095180) there',
-				'**3.** Use the command again',
-				'**4.** Profit?',
+				'**1.** Login here: [Discord Bot List](https://discordbots.org)',
+				'**2.** Open my [page](https://discordbots.org/bot/297459926505095180)',
+				'**3.** Click **Vote** and confirm',
+				'**4.** Use the command again',
+				'**5.** Profit?',
 			],
 		);
 	}

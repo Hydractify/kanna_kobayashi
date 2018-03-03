@@ -14,7 +14,7 @@ class QuizStartCommand extends Command {
 			aliases: ['qstart'],
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
-			description: 'Starts a quiz event.',
+			description: 'Starts a quiz event',
 			examples: ['qstart'],
 			exp: 0,
 			name: 'quizstart',

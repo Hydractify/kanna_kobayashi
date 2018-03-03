@@ -15,7 +15,7 @@ class OsuUserCommand extends Command {
 		super(handler, {
 			aliases: ['osu'],
 			coins: 0,
-			description: 'Show basic information, or best or recent plays about a user.',
+			description: 'Search for basic information, or best or recent plays about any osu! user',
 			examples: ['osu SpaceEEC', 'osu SpaceEEC best', 'osu SpaceEEC recent', 'osu SpaceEEC taiko'],
 			exp: 0,
 			name: 'osuuser',

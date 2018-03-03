@@ -11,7 +11,7 @@ class CommandStatusCommand extends Command {
 		super(handler, {
 			aliases: ['disable', 'enable'],
 			coins: 0,
-			description: 'Enable, disable, or see the status of a command.',
+			description: 'Enable, disable, or see the status of a command',
 			examples: ['command', 'command say', 'disable say', 'enable say'],
 			exp: 0,
 			guarded: true,

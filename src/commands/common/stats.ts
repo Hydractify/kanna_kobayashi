@@ -16,7 +16,7 @@ class StatsCommand extends Command {
 			aliases: ['kannastats', 'bstats'],
 			coins: 0,
 			cooldown: 0,
-			description: 'Shows stats about the bot.',
+			description: 'Stats about the bot',
 			examples: ['stats'],
 			exp: 0,
 			name: 'stats',

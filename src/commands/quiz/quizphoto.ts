@@ -29,7 +29,7 @@ class QuizPhotoCommand extends Command {
 	public parseArgs(message: Message, [option, photo]: string[]): string | ['view' | 'set', string] {
 		if (!option) {
 			return [
-				'you also need to tell me whether you want to',
+				'you need to tell me whether you want to',
 				'`set` a new photo, or `view` the current one?',
 			].join(' ');
 		}

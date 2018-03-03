@@ -8,7 +8,7 @@ class LevelUpCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			coins: 0,
-			description: 'Gets or sets whether level up message should be sent in this guild.',
+			description: 'Get or set whether level up message should be sent in this guild',
 			examples: [
 				'levelup',
 				'levelup true',

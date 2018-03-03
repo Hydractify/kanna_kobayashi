@@ -11,7 +11,7 @@ class WhitelistCommand extends Command {
 		super(handler, {
 			coins: 0,
 			cooldown: 0,
-			description: 'Whitelists a user, allowing their bot guilds to use the bot.',
+			description: 'Whitelist a user, allowing their bot guilds to use the bot',
 			examples: ['whitelist @space#0302'],
 			exp: 0,
 			guarded: true,

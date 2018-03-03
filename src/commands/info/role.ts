@@ -12,8 +12,8 @@ class RoleInfoCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			coins: 0,
 			description: [
-				'Displays information about the provided role',
-				'Avoid role mentions as this will notify all members of the role.',
+				'Inspect a role further',
+				'Note: Avoid role mentions as this will notify all members of the role',
 			].join('\n'),
 			examples: ['roleinfo admin'],
 			exp: 0,

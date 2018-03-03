@@ -7,7 +7,6 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class DonateCommand extends Command {
-
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['give', 'transfer', 'trade'],
