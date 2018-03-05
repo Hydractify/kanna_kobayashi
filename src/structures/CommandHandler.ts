@@ -197,7 +197,7 @@ export class CommandHandler {
 		const canCallRes: true | string = await command.canCall(message, authorModel);
 
 		if (typeof canCallRes === 'string') {
-			message.reply(canCallRes);
+			await message.reply(canCallRes);
 
 			return;
 		}
@@ -207,7 +207,7 @@ export class CommandHandler {
 				= await command.parseArgs(message, args, { authorModel, commandName, args });
 
 			if (!(parsedArgs instanceof Array)) {
-				message.reply(parsedArgs);
+				await message.reply(parsedArgs);
 
 				return;
 			}
@@ -241,7 +241,7 @@ export class CommandHandler {
 			this.logger.error(error);
 			message.reply(
 				'**an errror occured, but rest assured! It has already been reported and will be fixed in no time!**',
-			);
+			).catch(() => null);
 		}
 	}
 
