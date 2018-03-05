@@ -1,4 +1,12 @@
-import { Collection, GuildMember, Message, MessageAttachment, MessageOptions, TextChannel } from 'discord.js';
+import {
+	Collection,
+	DMChannel,
+	GuildMember,
+	Message,
+	MessageAttachment,
+	MessageOptions,
+	TextChannel,
+} from 'discord.js';
 import { readdir } from 'fs';
 import { extname, join } from 'path';
 import { captureException } from 'raven';
@@ -156,6 +164,10 @@ export class CommandHandler {
 	@on('message')
 	@RavenContext
 	protected async handle(message: Message): Promise<void> {
+		if (message.channel instanceof DMChannel) {
+			this.client.channels.remove(message.channel.id);
+			await message.channel.delete();
+		}
 		if (message.author.id === this.client.user.id) {
 			if (message.embeds.length && message.embeds[0].footer
 				&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text)
