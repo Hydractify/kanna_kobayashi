@@ -15,7 +15,7 @@ export const titleCase: (input: string) => string = (input: string): string => {
 /**
  * Type declaration for the returned Collection
  */
-export type FlagCollection = Collection<string | symbol, string | boolean>;
+export type FlagCollection = Collection<string | symbol, string | true>;
 /**
  * Symbol used to store all text unrelated to flags when parsing flags
  */
@@ -28,7 +28,7 @@ export const flagsText: symbol = Symbol.for('FlagsText');
  */
 export const parseFlags: (input: string, lowerCase?: boolean) => FlagCollection
 	= (input: string, lowerCase: boolean = false): FlagCollection => {
-		const parsed: FlagCollection = new Collection();
+		const parsed: FlagCollection = new Collection<string | symbol, string | true>();
 		const flagsRegex: RegExp = /--(\w+)(.*?(?=--|$))/g;
 
 		const index: number = input.indexOf('--');
@@ -50,7 +50,7 @@ export const parseFlags: (input: string, lowerCase?: boolean) => FlagCollection
 				: match[1]
 			).trim();
 
-			const content: string | boolean = match[2].trim() || true;
+			const content: string | true = match[2].trim() || true;
 
 			parsed.set(flag, content);
 		}
