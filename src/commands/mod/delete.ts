@@ -22,7 +22,11 @@ class DeleteMessagesCommand extends Command {
 			exp: 0,
 			name: 'delete',
 			permLevel: PermLevels.HUMANTAMER,
-			usage: 'delete <Number|MessageID> [\'--user\' <User>|\'--bots\'] [<\'--before\'|\'--after\'> <MessageID>]',
+			usage: [
+				'delete <Number|MessageID>',
+				'[\'--user\' <User>|\'--bots\'|\'--users\']',
+				'[<\'--before\'|\'--after\'> <MessageID>]',
+			].join(' '),
 		});
 	}
 
@@ -64,9 +68,12 @@ class DeleteMessagesCommand extends Command {
 		}
 
 		if (flags.has('user')) {
-			const member: GuildMember = await this.resolver.resolveMember(flags.get('user') as string, message.guild);
+			const user: string | true = flags.get('user');
+			if (user === true) return 'please specify a user after `--user`';
 
-			if (!member) return `I could not find a user with ${flags.get('user')}`;
+			const member: GuildMember = await this.resolver.resolveMember(user, message.guild);
+
+			if (!member) return `I could not find a user with ${user}`;
 
 			messages = messages.filter((msg: Message) => msg.author.id === member.id);
 		} else if (flags.has('bots') || flags.has('users')) {
