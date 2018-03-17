@@ -186,7 +186,7 @@ class ItemCommand extends Command {
 
 		const type: string = item.type === 'BADGE' ? 'Badge' : 'Item';
 
-		const [sourceItem]: Item[] = await authorModel.$get<Item>(`${type}s`, { where: { id: item.id } }) as Item[];
+		const [sourceItem]: Item[] = await authorModel.$get<Item>(`${type}s`, { where: { name: item.name } }) as Item[];
 		if (!sourceItem) return message.reply(`you don't have the \`${item.name}\` ${type.toLowerCase()}!`);
 
 		if (!item.tradable) {
@@ -194,7 +194,7 @@ class ItemCommand extends Command {
 		}
 
 		const targetModel: UserModel = await member.user.fetchModel();
-		const [targetItem]: Item[] = await targetModel.$get<Item>(`${type}s`, { where: { id: item.id } }) as Item[];
+		const [targetItem]: Item[] = await targetModel.$get<Item>(`${type}s`, { where: { name: item.name } }) as Item[];
 		if (targetItem && item.unique) {
 			return message.reply(`**${member.user.tag}** already has the unique \`${item.name}\` ${type.toLowerCase()}!`);
 		}
