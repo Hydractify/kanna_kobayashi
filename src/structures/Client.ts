@@ -63,6 +63,7 @@ export class Client extends DJSClient {
 	}
 
 	@once('ready')
+	@RavenContext
 	protected _onceReady(): void {
 		(this as any).ws.connection.on('close', this._onDisconnect.bind(this));
 
@@ -73,11 +74,13 @@ export class Client extends DJSClient {
 	}
 
 	@on('disconnect')
+	@RavenContext
 	protected _onDisconnect({ code, reason }: { code: number; reason: string }): void {
 		this.webhook.warn('Disconnect', `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
 	}
 
 	@on('error')
+	@RavenContext
 	protected _onError(error: Error): void {
 		this.webhook.error('Client Error', error);
 	}
@@ -231,16 +234,19 @@ export class Client extends DJSClient {
 	}
 
 	@on('reconnecting')
+	@RavenContext
 	protected _onReconnecting(): void {
 		this.webhook.info('Reconnecting');
 	}
 
 	@on('resumed')
+	@RavenContext
 	protected _onResume(replayed: number): void {
 		this.webhook.info('Resumed', `Replayed \`${replayed}\` events.`);
 	}
 
 	@on('warn')
+	@RavenContext
 	protected _onWarn(warning: string): void {
 		this.webhook.warn('Client Warn', warning);
 	}
