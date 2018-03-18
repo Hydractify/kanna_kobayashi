@@ -33,9 +33,13 @@ class BalanceCommand extends Command {
 	}
 
 	public run(message: Message, [model, user]: [UserModel, User]): Promise<Message | Message[]> {
-		if (!user) return message.reply(`you have a total of **${model.coins}** <:coin:330926092703498240>!`);
+		if (!user) {
+			return message.reply(`you have a total of **${model.coins.toLocaleString()}** <:coin:330926092703498240>!`);
+		}
 
-		return message.reply(`**${user.tag}** has a total of **${model.coins}** <:coin:330926092703498240>!`);
+		return message.reply(
+			`**${user.tag}** has a total of **${model.coins.toLocaleString()}** <:coin:330926092703498240>!`,
+		);
 	}
 }
 
