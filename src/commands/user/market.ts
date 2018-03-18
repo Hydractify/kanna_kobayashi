@@ -148,7 +148,7 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 			if (!scale || item.price > scale.getCount()) {
 				return message.reply([
 					'you have insufficient Dragon Scales to buy this item!',
-					`You need ${item.price - (scale ? scale.getCount() : 0)} more.`,
+					`You need ${(item.price - (scale ? scale.getCount() : 0)).toLocaleString()} more.`,
 				].join('\n'));
 			}
 
@@ -159,16 +159,16 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 				]),
 			);
 		} else {
-			if (item.price > authorModel.coins) {
+			if ((item.price * count) > authorModel.coins) {
 				return message.reply([
 					'you have insufficient coins to buy this item!',
-					`You need ${item.price - authorModel.coins} more.`,
+					`You need ${(item.price * count - authorModel.coins).toLocaleString()} more.`,
 				].join('\n'));
 			}
 
 			const transaction: Transaction = await this.sequelize.transaction();
 			try {
-				authorModel.coins -= item.price;
+				authorModel.coins -= item.price * count;
 				await Promise.all([
 					authorModel.addItem(item, count, { transaction }),
 					authorModel.save({ transaction }),
@@ -176,14 +176,14 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 
 				await transaction.commit();
 			} catch (error) {
-				authorModel.coins += item.price;
+				authorModel.coins += item.price * count;
 				await transaction.rollback();
 
 				throw error;
 			}
 		}
 
-		return message.reply(`thanks for buying **${count} ${titleCase(item.name)}**!`);
+		return message.reply(`thank you for buying **${count} ${titleCase(item.name)}**!`);
 	}
 
 	protected async sell(
@@ -206,7 +206,7 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 
 		const transaction: Transaction = await this.sequelize.transaction();
 		try {
-			authorModel.coins += item.price;
+			authorModel.coins += item.price * count;
 			await Promise.all([
 				authorModel.addItem(item, -count, { transaction }),
 				authorModel.save({ transaction }),
@@ -214,13 +214,13 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 
 			await transaction.commit();
 		} catch (error) {
-			authorModel.coins -= item.price;
+			authorModel.coins -= item.price * count;
 			await transaction.rollback();
 
 			throw error;
 		}
 
-		return message.reply(`thanks for selling **${count} ${titleCase(item.name).toLowerCase()}**!`);
+		return message.reply(`thank you for selling **${count} ${titleCase(item.name).toLowerCase()}**!`);
 	}
 
 	protected async show(
