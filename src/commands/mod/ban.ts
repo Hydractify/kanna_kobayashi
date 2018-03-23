@@ -70,7 +70,7 @@ class BanCommand extends Command {
 		}
 
 		if (/^(y|yes)/i.test(answer.content)) {
-			const days: number = parseInt(flags.get('days') as string || '0');
+			const days: number = parseInt(flags.get('days') as string || '1');
 			const reason: string = `${message.author.tag}:${flags.get('reason') || 'No reason provided'}`;
 			const banPromises: Promise<GuildMember>[] = [];
 			for (const member of members.values()) {
