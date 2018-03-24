@@ -16,7 +16,7 @@ class WhitelistCommand extends Command {
 			exp: 0,
 			guarded: true,
 			name: 'whitelist',
-			permLevel: PermLevels.DEV,
+			permLevel: PermLevels.TRUSTED,
 			usage: 'whitelist <User> [\'remove\']',
 		});
 	}

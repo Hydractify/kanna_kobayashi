@@ -16,7 +16,7 @@ class BlacklistCommand extends Command {
 			exp: 0,
 			guarded: true,
 			name: 'blacklist',
-			permLevel: PermLevels.DEV,
+			permLevel: PermLevels.TRUSTED,
 			usage: 'blacklist <User> [\'remove\']',
 		});
 	}

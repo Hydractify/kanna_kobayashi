@@ -17,7 +17,7 @@ class ReloadCommand extends Command {
 			exp: 0,
 			guarded: true,
 			name: 'reload',
-			permLevel: PermLevels.DEV,
+			permLevel: PermLevels.TRUSTED,
 			usage: 'You should know how to use this.',
 		});
 	}
