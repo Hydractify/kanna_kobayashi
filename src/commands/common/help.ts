@@ -88,7 +88,10 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 				if (!embed) {
 					embed = MessageEmbed.common(message, authorModel)
 						.setAuthor(`${this.client.user.username}'s ${titleCase(name)} Commands`)
-						.setDescription('[Having trouble using the help command? Read the wiki!](https://github.com/TheDragonProject/Kanna-Kobayashi/wiki)')
+						.setDescription([
+							'[Having trouble using the help command? Read the wiki!]',
+							'(https://github.com/TheDragonProject/Kanna-Kobayashi/wiki)',
+						].join(''))
 						.setThumbnail(message.guild.iconURL())
 						.setURL('http://kannathebot.me/guild')
 						.setDescription('\u200b');
