@@ -32,7 +32,7 @@ class SlapCommand extends WeebCommand {
 
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: '',
-			dev: `**${message.author}**... P-please, do not hurt him!`,
+			dev: `**${message.author}**... P-please, do not hurt then!`,
 			trusted: `W-what did you do to deserve that **${members.first().name}**!?`,
 		});
 		const baseString: string = this.computeBaseString(message, members);
