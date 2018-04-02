@@ -23,10 +23,10 @@ class InfoCommand extends Command {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`${this.client.user.username} info`, this.client.user.displayAvatarURL())
 			.setDescription('\u200b')
-			.addField('Invite', 'http://kannathebot.me/invite', true)
-			.addField('Patreon', 'http://kannathebot.me/patreon', true)
+			.addField('Invite', 'https://thedragonproject.network/invite', true)
+			.addField('Patreon', 'https://www.patreon.com/kannathebot', true)
 			.addField('Official Guild', 'https://discord.gg/uBdXdE9', true)
-			.addField('Official Website', 'http://kannathebot.me', true)
+			.addField('Official Website', 'https://thedragonproject.network', true)
 			.setThumbnail(message.guild.iconURL());
 
 		return message.channel.send(embed);
