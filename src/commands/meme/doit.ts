@@ -6,7 +6,7 @@ class DoItMemeCommand extends ImageEmbedCommand {
 		super(handler, {
 			description: 'You have to do it... For me!',
 			examples: ['doit'],
-			images: ['http://kannathebot.me/memes/doit/1.jpg'],
+			images: ['https://thedragonproject.network/memes/doit/1.jpg'],
 			messageContent: '<:KannaMad:315264558279426048> | **Do it!**',
 			name: 'doit',
 			usage: 'dance',

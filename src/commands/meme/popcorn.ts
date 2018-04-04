@@ -7,7 +7,7 @@ class PopcornMemeCommand extends ImageEmbedCommand {
 			aliases: ['dreck'],
 			description: 'Popcorn!',
 			examples: ['popcorn'],
-			images: ['http://kannathebot.me/memes/popcorn/1.png'],
+			images: ['https://thedragonproject.network/memes/popcorn/1.png'],
 			name: 'popcorn',
 			usage: 'popcorn',
 		});

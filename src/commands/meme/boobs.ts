@@ -5,7 +5,7 @@ class BoobsMemeCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['boob'],
-			baseURL: 'http://kannathebot.me/memes/boobs/',
+			baseURL: 'https://thedragonproject.network/memes/boobs/',
 			description: 'Dragon Size! Wait... I am not a dragon?',
 			examples: ['boobs'],
 			maxNumber: 4,
