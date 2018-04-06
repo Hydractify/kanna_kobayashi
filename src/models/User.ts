@@ -107,7 +107,7 @@ export class User extends Model<User> {
 	 * Current level of the User
 	 */
 	public get level(): number {
-		return Math.floor(Math.sqrt(this.exp / 1000)) + 1;
+		return Math.floor(Math.sqrt(this.exp / 25)) + 1;
 	}
 
 	/**

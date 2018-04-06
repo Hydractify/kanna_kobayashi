@@ -117,11 +117,11 @@ export abstract class Command {
 	protected constructor(handler: CommandHandler, {
 		aliases = [],
 		clientPermissions = [],
-		coins = 10,
+		coins = false,
 		cooldown = 5000,
 		description,
 		examples,
-		exp = 850,
+		exp = 5,
 		guarded = false,
 		name,
 		patreonOnly = false,
@@ -159,11 +159,11 @@ export abstract class Command {
 		this.aliases = aliases;
 		this.clientPermissions = clientPermissions;
 		this.client = handler.client;
-		this.coins = coins;
+		this.coins = typeof coins === 'number' ? coins * 4 : (coins ? 4 : 0);
 		this.cooldown = cooldown;
 		this.description = description;
 		this.examples = examples;
-		this.exp = exp;
+		this.exp = coins ? exp : 0;
 		this.guarded = guarded;
 		this.handler = handler;
 		this.name = name;
