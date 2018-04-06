@@ -10,13 +10,11 @@ class RoleInfoCommand extends Command {
 		super(handler, {
 			aliases: ['rr'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: [
 				'Inspect a role further',
 				'Note: Avoid role mentions as this will notify all members of the role',
 			].join('\n'),
 			examples: ['roleinfo admin'],
-			exp: 0,
 			name: 'roleinfo',
 			usage: 'roleinfo',
 		});

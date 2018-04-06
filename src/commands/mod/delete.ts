@@ -10,7 +10,6 @@ class DeleteMessagesCommand extends Command {
 		super(handler, {
 			aliases: ['purge', 'del'],
 			clientPermissions: ['MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY'],
-			coins: 0,
 			description: 'Use this command to delete messages... Maybe to hide them... <:KannaISee:315264557843218432>',
 			examples: [
 				'delete 30',
@@ -19,7 +18,6 @@ class DeleteMessagesCommand extends Command {
 				'delete 15 --bots --after 380985261447970816',
 				'delete 10 --user wizard --before 380986424125554688',
 			],
-			exp: 0,
 			name: 'delete',
 			permLevel: PermLevels.HUMANTAMER,
 			usage: [

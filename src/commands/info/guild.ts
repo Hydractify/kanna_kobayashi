@@ -12,10 +12,8 @@ class GuildInfoCommand extends Command {
 		super(handler, {
 			aliases: ['gstats', 'ginfo', 'gg'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Inspect information about this guild',
 			examples: ['ginfo'],
-			exp: 0,
 			name: 'guildinfo',
 			usage: 'ginfo',
 		});

@@ -10,11 +10,9 @@ class ProposeCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['marry'],
-			coins: 0,
 			cooldown: 1e4,
 			description: 'Propose to someone... You love! <:KannaAyy:315270615844126720>',
 			examples: ['propose Wizard'],
-			exp: 0,
 			name: 'propose',
 			usage: 'propose <User>',
 		});

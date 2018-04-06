@@ -19,13 +19,11 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		super(handler, {
 			aliases: ['lb'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'See the best of the best!',
 			examples: [
 				'leaderboard level',
 				'leaderboard level 15',
 			],
-			exp: 0,
 			name: 'leaderboard',
 			usage: 'leaderboard [\'exp\', \'level\', \'coins\', \'reputation\'] [offset]',
 		});

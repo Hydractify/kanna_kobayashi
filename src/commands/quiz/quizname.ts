@@ -13,13 +13,11 @@ class QuizNameCommand extends Command {
 		super(handler, {
 			aliases: ['qname'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Change or view the name of the current quiz character!',
 			examples: [
 				'quizname view',
 				'quizname set Dio Brando',
 			],
-			exp: 0,
 			name: 'quizname',
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'quizname <set|view> [...Name]',

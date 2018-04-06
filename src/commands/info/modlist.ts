@@ -19,10 +19,8 @@ class ModListCommand extends Command {
 		super(handler, {
 			aliases: ['mods'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'In need of a list of mods for this guild?',
 			examples: ['modlist online', 'modlist dnd'],
-			exp: 0,
 			name: 'modlist',
 			usage: 'modlist [status]',
 		});

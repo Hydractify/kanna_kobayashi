@@ -159,11 +159,11 @@ export abstract class Command {
 		this.aliases = aliases;
 		this.clientPermissions = clientPermissions;
 		this.client = handler.client;
-		this.coins = typeof coins === 'number' ? coins * 4 : (coins ? 4 : 0);
+		this.coins = coins ? 4 : 0;
 		this.cooldown = cooldown;
 		this.description = description;
 		this.examples = examples;
-		this.exp = coins ? exp : 0;
+		this.exp = exp;
 		this.guarded = guarded;
 		this.handler = handler;
 		this.name = name;

@@ -10,10 +10,8 @@ class DonateCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['give', 'transfer', 'trade'],
-			coins: 0,
 			description: 'Give money to someone!',
 			examples: ['give wizard 1000'],
-			exp: 0,
 			name: 'donate',
 			usage: 'donate <User> <Amount>',
 		});

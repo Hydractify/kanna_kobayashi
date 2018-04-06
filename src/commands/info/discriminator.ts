@@ -8,7 +8,6 @@ class DiscriminatorCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['discrim'],
-			coins: 0,
 			description: 'Searche for users with a certain discriminator',
 			examples: ['discrim 0001'],
 			name: 'discriminator',

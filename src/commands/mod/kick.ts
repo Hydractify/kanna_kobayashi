@@ -10,10 +10,8 @@ class KickCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			clientPermissions: ['KICK_MEMBERS'],
-			coins: 0,
 			description: 'Kick a member... Or a lot of them!',
 			examples: ['kick wizard', 'kick wizard anxeal space'],
-			exp: 0,
 			name: 'kick',
 			permLevel: PermLevels.HUMANTAMER,
 			usage: 'kick <...Member> [\'--reason\' reason]',

@@ -8,8 +8,8 @@ class LoliMemeCommand extends ImageEmbedCommand {
 			description: 'Protect all the lolis!',
 			examples: ['loli'],
 			images: [
-				'http://kannathebot.me/memes/loli/1.png',
-				'http://kannathebot.me/memes/loli/2.gif',
+				'https://thedragonproject.network/memes/loli/1.png',
+				'https://thedragonproject.network/memes/loli/2.gif',
 			],
 			messageContent: '**Wooo... A human!** <:KannaOh:315264555859181568>',
 			name: 'loli',

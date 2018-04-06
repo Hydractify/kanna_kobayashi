@@ -12,10 +12,8 @@ class CommandUsageCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Stats about command usages',
 			examples: ['usage'],
-			exp: 0,
 			name: 'usage',
 			usage: 'usage',
 		});

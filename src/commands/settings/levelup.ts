@@ -7,14 +7,12 @@ import { PermLevels } from '../../types/PermLevels';
 class LevelUpCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			description: 'Get or set whether level up message should be sent in this guild',
 			examples: [
 				'levelup',
 				'levelup true',
 				'levelup false',
 			],
-			exp: 0,
 			guarded: true,
 			name: 'levelup',
 			permLevel: PermLevels.HUMANTAMER,

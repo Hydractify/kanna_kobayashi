@@ -8,7 +8,6 @@ class DailyCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['dailies'],
-			coins: 0,
 			// One day 24 hours * 60 minutes * 60 second * 1000 milliseconds
 			cooldown: 24 * 60 * 60 * 1000,
 			description: 'Your daily 500 coins!',

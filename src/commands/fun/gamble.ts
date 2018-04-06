@@ -7,10 +7,8 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 class GambleCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			description: 'Gamble your coins to get more!',
 			examples: ['gamble 10000'],
-			exp: 0,
 			name: 'gamble',
 			usage: 'gamble <Amount>',
 		});

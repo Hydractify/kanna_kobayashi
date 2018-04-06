@@ -50,6 +50,8 @@ export abstract class WeebCommand extends Command {
 		this.action = options.action;
 		this.emoji = options.emoji;
 		this.type = options.type;
+
+		options.coins = true;
 	}
 
 	/**

@@ -14,10 +14,8 @@ class OsuBeatmapCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['beatmap', 'osuset', 'set'],
-			coins: 0,
 			description: 'Search for osu! Beatmaps!',
 			examples: ['osubeatmap 577427', 'osubeatmap 577427 best', 'osubeatmap 577427 taiko best'],
-			exp: 0,
 			name: 'osubeatmap',
 			usage: 'osubeatmap <ID> [Mode] [\'best\']',
 		});

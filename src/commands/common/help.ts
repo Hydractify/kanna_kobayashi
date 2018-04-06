@@ -23,7 +23,6 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		super(handler, {
 			aliases: ['halp', 'commands'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS'],
-			coins: 0,
 			cooldown: 10000,
 			description: [
 				'Let me show you all the commands (or a specifc one), that I have!',
@@ -93,7 +92,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 							'(https://github.com/TheDragonProject/Kanna-Kobayashi/wiki)',
 						].join(''))
 						.setThumbnail(message.guild.iconURL())
-						.setURL('http://kannathebot.me/guild')
+						.setURL('https://thedragonproject.network/guild')
 						.setDescription('\u200b');
 				}
 
@@ -117,7 +116,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user.displayAvatarURL())
 			.setDescription(command.description)
-			.setURL('http://kannathebot.me/guild')
+			.setURL('https://thedragonproject.network/guild')
 			.setThumbnail(message.guild.iconURL());
 		if (command.aliases.length) {
 			embed.addField('Aliases', `kanna ${command.aliases.join('\nkanna ')}`);
@@ -151,7 +150,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		for (const [category, commands] of categories) {
 			const embed: MessageEmbed = MessageEmbed.common({ author }, authorModel)
 				.setThumbnail(guild.iconURL())
-				.setURL('http://kannathebot.me/guild')
+				.setURL('https://thedragonproject.network/guild')
 				.setAuthor(`${this.client.user.username}'s ${titleCase(category)} Commands`)
 				.setDescription('\u200b');
 

@@ -11,10 +11,8 @@ class ForceBanCommand extends Command {
 		super(handler, {
 			aliases: ['fban'],
 			clientPermissions: ['BAN_MEMBERS'],
-			coins: 0,
 			description: 'Ban a user that is currently not in this guild!',
 			examples: ['fban 218348062828003328'],
-			exp: 0,
 			name: 'forceban',
 			permLevel: PermLevels.HUMANTAMER,
 			usage: 'forceban <ID> [...Reason]',

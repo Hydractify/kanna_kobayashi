@@ -8,10 +8,8 @@ class SayCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['echo'],
-			coins: 0,
 			description: 'Let me say something',
 			examples: ['say Hello world!'],
-			exp: 0,
 			name: 'say',
 			usage: 'say <...Message>',
 		});

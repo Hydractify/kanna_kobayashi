@@ -28,14 +28,12 @@ class SauceNaoCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['sauce', 'source'],
-			coins: 0,
 			description: 'Look up the source of an image!',
 			examples: [
 				'saucenao // with an uploaded picture in the same message',
 				'saucenao 379246454784524300 // message in the same channel with a picture',
 				'saucenao https://example.com/image.png',
 			],
-			exp: 0,
 			name: 'saucenao',
 			patreonOnly: true,
 			usage: 'saucenao [URL|MessageID]',

@@ -11,10 +11,8 @@ class BanCommand extends Command {
 		super(handler, {
 			aliases: ['banne', 'exile'],
 			clientPermissions: ['BAN_MEMBERS'],
-			coins: 0,
 			description: 'Ban a member... Or a lot of them!',
 			examples: ['ban wizard', 'ban wizard anxeal space'],
-			exp: 0,
 			name: 'ban',
 			permLevel: PermLevels.HUMANTAMER,
 			usage: 'ban <...Member> [\'--reason\' reason & \'--days\' deletedays]',

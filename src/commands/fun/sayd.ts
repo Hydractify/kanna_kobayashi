@@ -9,10 +9,8 @@ class SayDeleteCommand extends Command {
 		super(handler, {
 			aliases: ['sayd'],
 			clientPermissions: ['MANAGE_MESSAGES'],
-			coins: 0,
 			description: 'Let me say something and delete your message afterwards',
 			examples: ['sayd Hello world!'],
-			exp: 0,
 			name: 'saydelete',
 			usage: 'sayd <...Message>',
 		});

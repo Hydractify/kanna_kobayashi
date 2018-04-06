@@ -13,7 +13,6 @@ class EmojiInfoCommand extends Command {
 		super(handler, {
 			aliases: ['einfo', 'ee', 'emoji'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Search for information about any custom emoji',
 			examples: [
 				'emoji KannaWave',
@@ -21,7 +20,6 @@ class EmojiInfoCommand extends Command {
 				// Displays as regular emoji
 				'emojii <:KannaWave:315264556177948673>',
 			],
-			exp: 0,
 			name: 'emojiinfo',
 			usage: 'emoji <Emoji>',
 		});

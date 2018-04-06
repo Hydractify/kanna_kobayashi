@@ -12,7 +12,7 @@ const ITEMS: IItemStructure[] = [
 		buyable: false,
 		description: 'This is a bug... And... It looks tasty!',
 		name: Items.BUG,
-		price: 50,
+		price: 10,
 		rarity: ItemRarities.COMMON,
 		tradable: false,
 		type: ItemTypes.ITEM,

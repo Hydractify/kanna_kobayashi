@@ -4,7 +4,7 @@ import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 class ComfyMemeCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			baseURL: 'http://kannathebot.me/memes/comfy/',
+			baseURL: 'https://thedragonproject.network/memes/comfy/',
 			description: 'So... soft... _falls asleep_',
 			examples: ['comfy'],
 			maxNumber: 2,

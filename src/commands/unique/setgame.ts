@@ -8,11 +8,9 @@ class SetGameCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['sg'],
-			coins: 0,
 			cooldown: 0,
 			description: 'Set the game I am currently playing on all shards',
 			examples: ['setgame something'],
-			exp: 0,
 			guarded: true,
 			name: 'setgame',
 			permLevel: PermLevels.DEV,
