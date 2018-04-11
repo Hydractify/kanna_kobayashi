@@ -4,7 +4,7 @@ import { User as UserModel } from '../models/User';
 
 class UserExtension {
 	public fetchModel(this: User): Promise<UserModel> {
-		return UserModel.fetchOrCache(this.id);
+		return UserModel.fetch(this.id);
 	}
 
 	// tslint:disable:no-empty
