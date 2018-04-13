@@ -47,8 +47,8 @@ class DeleteMessagesCommand extends Command {
 		const amount: number = parseInt(first);
 		if (isNaN(amount)) return `**${first}** is not a number!`;
 
-		if (amount > 100 || amount < 2) {
-			return 'you must provide me an amount higher than 2 and lower than 100!';
+		if (amount > 100 || amount < 1) {
+			return 'you must provide me an amount between 1 and 100!';
 		}
 
 		const flags: FlagCollection = parseFlags(args.join(' '), true);
@@ -86,17 +86,26 @@ class DeleteMessagesCommand extends Command {
 		message: Message,
 		[toDelete]: [Message] | [Collection<Snowflake, Message>],
 	): Promise<Message | Message[]> {
-		if (toDelete instanceof Message) {
-			return toDelete.delete()
-				.then(() => message.reply(`I sucessfully deleted the message with the ID **${toDelete.id}**!`))
-				.catch(() => message.reply(
-					`I was not able to delete the message with the id **${toDelete.id}** message! <:FeelsKannaMan:341054171212152832>`,
-				));
+		if (toDelete instanceof Collection) {
+			if (toDelete.size === 1) return this.deleteOne(message, toDelete.first());
+			else return this.deleteMany(message, toDelete);
 		}
 
+		return this.deleteOne(message, toDelete);
+	}
+
+	private deleteOne(message: Message, toDelete: Message) {
+		return toDelete.delete()
+			.then(() => message.reply(`I sucessfully deleted the message with the ID **${toDelete.id}**!`))
+			.catch(() => message.reply(
+				`I was not able to delete the message with the id **${toDelete.id}** message! <:FeelsKannaMan:341054171212152832>`,
+			));
+	}
+
+	private deleteMany(message: Message, toDelete: Collection<Snowflake, Message>) {
 		return message.channel.bulkDelete(toDelete, true)
-			.then((deleted: Collection<Snowflake, Message>) =>
-				message.reply(`I sucessfully deleted **${deleted.size}** messages!`),
+			.then(() =>
+				message.reply(`I sucessfully deleted **${toDelete.size}** messages!`),
 		)
 			.catch(() =>
 				message.reply('something went wrong while deleting your messages, they might be older than 14 days.'),

@@ -92,8 +92,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 							'(https://github.com/TheDragonProject/Kanna-Kobayashi/wiki)',
 						].join(''))
 						.setThumbnail(message.guild.iconURL())
-						.setURL('https://thedragonproject.network/guild')
-						.setDescription('\u200b');
+						.setURL('https://thedragonproject.network/guild');
 				}
 
 				embed.addField(`kanna ${command.name}`, `k!${command.usage}`, true);

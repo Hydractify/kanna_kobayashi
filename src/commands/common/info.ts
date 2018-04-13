@@ -22,7 +22,7 @@ class InfoCommand extends Command {
 			.setAuthor(`${this.client.user.username} info`, this.client.user.displayAvatarURL())
 			.setDescription('\u200b')
 			.addField('Invite', 'https://thedragonproject.network/invite', true)
-			.addField('Patreon', 'https://thedragonproject.network/patreon', true)
+			.addField('Patreon', 'https://www.patreon.com/kannathebot', true)
 			.addField('Official Guild', 'https://discord.gg/uBdXdE9', true)
 			.addField('Official Website', 'https://thedragonproject.network', true)
 			.setThumbnail(message.guild.iconURL());

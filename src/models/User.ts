@@ -42,7 +42,7 @@ export class User extends Model<User> {
 	 * Fetch a model by id.
 	 * This will either come from redis, or from postgres if not available.
 	 */
-	public static async fetchOrCache(id: string): Promise<User> {
+	public static async fetch(id: string): Promise<User> {
 		const redisData: { [key: string]: string } = await this.redis.hgetall(`users:${id}`);
 		if (redisData) return User.fromRedis(redisData);
 

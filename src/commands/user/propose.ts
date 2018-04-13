@@ -1,4 +1,5 @@
 import { Collection, CollectorFilter, Message, Snowflake, User } from 'discord.js';
+import * as moment from 'moment';
 import { Transaction } from 'sequelize';
 
 import { User as UserModel } from '../../models/User';
@@ -64,10 +65,12 @@ class ProposeCommand extends Command {
 
 		// Are those two together for at least a month?
 		// Days * hours * minutes * seconds * milliseconds (large to small)
-		if ((partner.partnerSince.valueOf() + (30 * 24 * 60 * 60 * 1000)) > message.createdTimestamp) {
-			await message.reply(
+		const until = partner.partnerSince.valueOf() + (30 * 24 * 60 * 60 * 1000);
+		if (until > message.createdTimestamp) {
+			await message.reply([
 				'sorry but not enough time has passed since you two got together! <:KannaAyy:315270615844126720>',
-			);
+				`Try again in ${moment(until).fromNow()}.`,
+			].join('\n'));
 
 			return false;
 		}

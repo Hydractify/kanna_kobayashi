@@ -28,16 +28,18 @@ class WeeklyCommand extends Command {
 		input: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<MessageEmbed | undefined[]> {
-		const { body: voters }: Result<string[]> = await get(
-			'https://discordbots.org/api/bots/297459926505095180/votes?onlyids=true',
-		).set('Authorization', dbotsorg);
+		const { body }: Result<{ voted: number }> = await get(
+			'https://discordbots.org/api/bots/297459926505095180/check',
+		)
+			.query('userId', message.author.id)
+			.set('Authorization', dbotsorg);
 
-		if (voters.includes(message.author.id)) return [];
+		if (body.voted) return [];
 
 		return MessageEmbed.common(message, authorModel)
 			.setAuthor(`Wait a moment, ${message.author.username}!`, message.author.displayAvatarURL())
 			.setDescription(
-			'You have to upvote me on the [Discord Bot List](https://discordbots.org/bot/297459926505095180) first!',
+				'You have to upvote me on the [Discord Bot List](https://discordbots.org/bot/297459926505095180) first!',
 		).addField(
 			'How to Upvote!',
 			[
