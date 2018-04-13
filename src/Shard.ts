@@ -19,7 +19,7 @@ const manager: ShardingManager = new ShardingManager(join(__dirname, 'index.js')
 	token: clientToken,
 });
 
-manager.spawn();
+manager.spawn(manager.totalShards, 5500, false);
 
 manager.on('shardCreate', (shard: Shard) => {
 	webhook.info('Shard Create', `Shard \`${shard.id}\` created.`);
