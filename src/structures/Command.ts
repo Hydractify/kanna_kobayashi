@@ -50,7 +50,7 @@ export abstract class Command {
 	 */
 	public readonly clientPermissions: PermissionString[];
 	/**
-	 * Amount of coins granted when using the command
+	 * Base amount of coins that users receive
 	 */
 	public readonly coins: number;
 	/**
@@ -66,7 +66,7 @@ export abstract class Command {
 	 */
 	public readonly examples: string[];
 	/**
-	 * Amount of exp granted when using the command
+	 * Base amount of exp that users receive
 	 */
 	public readonly exp: number;
 	/**
@@ -94,6 +94,10 @@ export abstract class Command {
 	 */
 	public readonly permLevel: PermLevels;
 	/**
+	 * The rewards given to the user
+	 */
+	public readonly range: number;
+	/**
 	 * Reference to the resolver
 	 */
 	public readonly resolver: Resolver;
@@ -117,7 +121,7 @@ export abstract class Command {
 	protected constructor(handler: CommandHandler, {
 		aliases = [],
 		clientPermissions = [],
-		coins = false,
+		coins = 4,
 		cooldown = 5000,
 		description,
 		examples,
@@ -126,6 +130,7 @@ export abstract class Command {
 		name,
 		patreonOnly = false,
 		permLevel = PermLevels.EVERYONE,
+		range = 0,
 		usage,
 	}: ICommandInfo) {
 		// Assert correct type
@@ -159,7 +164,7 @@ export abstract class Command {
 		this.aliases = aliases;
 		this.clientPermissions = clientPermissions;
 		this.client = handler.client;
-		this.coins = coins ? 4 : 0;
+		this.coins = coins;
 		this.cooldown = cooldown;
 		this.description = description;
 		this.examples = examples;
@@ -168,9 +173,19 @@ export abstract class Command {
 		this.handler = handler;
 		this.name = name;
 		this.resolver = handler.resolver;
+		this.range = range;
 		this.usage = usage;
 		this.patreonOnly = patreonOnly;
 		this.permLevel = permLevel;
+
+		if (range > 1) {
+			const amountRange = (amount: number): number => {
+				return Math.floor(Math.random() * (amount * range - amount) + amount);
+			};
+
+			this.exp = amountRange(exp);
+			this.coins = amountRange(coins);
+		}
 	}
 
 	/**

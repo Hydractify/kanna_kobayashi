@@ -12,7 +12,6 @@ class UrbanCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
-			coins: true,
 			description: 'Look up a definition for a term on urbandictonary',
 			examples: ['urban test'],
 			name: 'urban',

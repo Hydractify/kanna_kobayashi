@@ -5,7 +5,7 @@ import { PermLevels } from './PermLevels';
 export interface ICommandInfo {
 	aliases?: string[];
 	clientPermissions?: PermissionString[];
-	coins?: number | boolean;
+	coins?: number;
 	cooldown?: number;
 	description: string;
 	examples: string[];
@@ -14,5 +14,6 @@ export interface ICommandInfo {
 	name: string;
 	patreonOnly?: boolean;
 	permLevel?: PermLevels;
+	rewards?: number;
 	usage: string;
 }

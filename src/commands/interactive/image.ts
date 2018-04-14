@@ -48,7 +48,6 @@ class ImageCommand extends Command {
 		super(handler, {
 			aliases: ['weeb', 'images'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: true,
 			description: 'Get an image from the weeb.sh API!',
 			examples: ['weeb smug', 'weeb types'],
 			name: 'image',

@@ -60,8 +60,6 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 	protected constructor(handler: CommandHandler, options: ICommandInfo & { type: MediaType }) {
 		super(handler, options);
 
-		options.coins = true;
-
 		if (!options.type) {
 			throw new Error(`${this.name} (deriving from AniListCommand is missing a type!`);
 		}
