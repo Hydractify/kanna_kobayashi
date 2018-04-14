@@ -137,7 +137,7 @@ declare module 'snekfetch' {
 		attach(name: string, data: string | object | Buffer, filename?: string): Snekfetch<T>;
 
 		end(): Promise<Snekfetch.Result<T>>;
-		end<U>(cb: (err: Error & Snekfetch.Result<any> | null, res: Snekfetch.Result<T> | Error | null) => U): Promise<U>;
+		end<U>(cb: (err: Error & Snekfetch.Result<T> | null, res: Snekfetch.Result<T> & Error | null) => U): Promise<U>;
 
 		query(name: string | { [key: string]: string }, value?: string): Snekfetch<T>;
 
@@ -146,9 +146,9 @@ declare module 'snekfetch' {
 		send(data?: any): Snekfetch<T>;
 
 		then(): Promise<Snekfetch.Result<T>>;
-		then<U>(resolver: (res: Snekfetch.Result<T>) => U, rejector?: (err: Error & Snekfetch.Result<any>) => any): Promise<U>;
+		then<U>(resolver: (res: Snekfetch.Result<T>) => U, rejector?: (err: Error & Snekfetch.Result<T>) => any): Promise<U>;
 
-		catch(rejector: (err: Error & Snekfetch.Result<any>) => any): Promise<Snekfetch.Result<T>>;
+		catch(rejector: (err: Error & Snekfetch.Result<T>) => any): Promise<Snekfetch.Result<T>>;
 	}
 
 	export = Snekfetch;

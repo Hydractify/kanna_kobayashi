@@ -69,7 +69,8 @@ class BanCommand extends Command {
 
 		if (/^(y|yes)/i.test(answer.content)) {
 			const days: number = parseInt(flags.get('days') as string || '1');
-			const reason: string = `${message.author.tag}:${flags.get('reason') || 'No reason provided'}`;
+			const reason: string =
+				`Banned by ${message.author.tag} with the reason: ${flags.get('reason') || 'No reason provided'}`;
 			const banPromises: Promise<GuildMember>[] = [];
 			for (const member of members.values()) {
 				banPromises.push(

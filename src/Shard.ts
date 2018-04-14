@@ -4,22 +4,21 @@ import 'source-map-support/register';
 import { Shard, ShardingManager } from 'discord.js';
 import { join } from 'path';
 
-import { Logger } from './structures/Logger';
-
-process.on('unhandledRejection', (error: Error) => {
-	Logger.instance.error('REJECTION', error);
-});
-
 import { WebhookLogger } from './structures/WebhookLogger';
 
-const { clientToken }: { clientToken: string } = require('../data');
 const webhook: WebhookLogger = WebhookLogger.instance;
 
-const manager: ShardingManager = new ShardingManager(join(__dirname, 'index.js'), {
-	token: clientToken,
+process.on('unhandledRejection', (error: Error) => {
+	webhook.error('REJECTION', error);
 });
 
-manager.spawn();
+const { clientToken: token }: { clientToken: string } = require('../data');
+
+const manager: ShardingManager = new ShardingManager(join(__dirname, 'index.js'), {
+	token,
+});
+
+manager.spawn(manager.totalShards, 5500, false);
 
 manager.on('shardCreate', (shard: Shard) => {
 	webhook.info('Shard Create', `Shard \`${shard.id}\` created.`);

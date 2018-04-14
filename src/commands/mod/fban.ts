@@ -34,7 +34,7 @@ class ForceBanCommand extends Command {
 				return 'that user is currently in this guild, use the regular ban command instead.';
 			}
 
-			return [user, `${message.author.tag}:${reason.join(' ') || 'No reason provided'}`];
+			return [user, `Banned by ${message.author.tag} with the reason:${reason.join(' ') || 'No reason provided'}`];
 		}
 
 		return 'no user with that id exists!';
