@@ -4,6 +4,7 @@ export enum Items {
 	CAMERA = 'camera',
 	DRAGON_SCALE = 'dragon scale',
 	DEVELOPER = 'developer',
+	MILIONAIRE = 'milionaire',
 	STAFF = 'staff',
 	PARTNER = 'partner',
 	PATRON = 'patron',

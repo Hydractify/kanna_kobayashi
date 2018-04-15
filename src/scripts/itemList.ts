@@ -12,7 +12,7 @@ const ITEMS: IItemStructure[] = [
 		buyable: false,
 		description: 'This is a bug... And... It looks tasty!',
 		name: Items.BUG,
-		price: 10,
+		price: 16,
 		rarity: ItemRarities.COMMON,
 		tradable: false,
 		type: ItemTypes.ITEM,
@@ -26,23 +26,8 @@ const ITEMS: IItemStructure[] = [
 		buyable: true,
 		description: 'Go out to catch bugs with this net!',
 		name: Items.BUG_NET,
-		price: 500,
+		price: 2500,
 		rarity: ItemRarities.RARE,
-		tradable: true,
-		type: ItemTypes.ITEM,
-		unique: true,
-	},
-
-	/**
-	 * Camera
-	 * Use: Allow the use of the image command
-	 */
-	{
-		buyable: true,
-		description: 'This is the Camera! Having one will make you able to use the `image` command!',
-		name: Items.CAMERA,
-		price: 2,
-		rarity: ItemRarities.HARMONY,
 		tradable: true,
 		type: ItemTypes.ITEM,
 		unique: true,
@@ -56,7 +41,7 @@ const ITEMS: IItemStructure[] = [
 		buyable: true,
 		description: 'This is the scale of a Dragon, worth more than you can imagine, take care of this precious item.',
 		name: Items.DRAGON_SCALE,
-		price: 1000,
+		price: 2000,
 		rarity: ItemRarities.DRAGON_SCALE,
 		tradable: true,
 		type: ItemTypes.ITEM,
@@ -76,6 +61,20 @@ const BADGES: IItemStructure[] = [
 		name: Items.DEVELOPER,
 		price: null,
 		rarity: ItemRarities['?'],
+		tradable: false,
+		type: ItemTypes.BADGE,
+		unique: true,
+	},
+
+	/**
+	 * Milionaire
+	 */
+	{
+		buyable: true,
+		description: 'Having this means you are a milionaire!',
+		name: Items.MILIONAIRE,
+		price: 1000000,
+		rarity: ItemRarities.CHAOS,
 		tradable: false,
 		type: ItemTypes.BADGE,
 		unique: true,
