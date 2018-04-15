@@ -18,14 +18,13 @@ class DailyCommand extends Command {
 	}
 
 	public async run(message: Message, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const grantedCoins: number = (authorModel.tier + 1) * 300;
 
 		await Promise.all([
-			this.redis.hincrby(`users:${message.author.id}`, 'coins', grantedCoins),
-			authorModel.increment({ coins: grantedCoins }),
+			this.redis.hincrby(`users:${message.author.id}`, 'coins', 200),
+			authorModel.increment({ coins: 200 }),
 		]);
 
-		return message.reply(`here are your daily **${grantedCoins}** <:coin:330926092703498240>!`);
+		return message.reply(`here are your daily **200** <:coin:330926092703498240>!`);
 	}
 }
 
