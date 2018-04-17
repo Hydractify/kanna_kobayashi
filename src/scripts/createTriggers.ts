@@ -3,7 +3,7 @@ import { PostgreSQL } from '../structures/PostgreSQL';
 
 const { instance }: { instance: PostgreSQL } = PostgreSQL;
 
-instance.start().then(() => {
+instance.start().then(() =>
 	instance.db.query(`
 	CREATE OR REPLACE FUNCTION user_items_remove_zeros() RETURNS TRIGGER AS
 	$BODY$
@@ -26,8 +26,8 @@ instance.start().then(() => {
 		ON user_items
 		FOR EACH ROW
 		EXECUTE PROCEDURE user_items_remove_zeros();
-	`);
-})
+	`),
+)
 	.then(
 		// Resolve
 		() => {
