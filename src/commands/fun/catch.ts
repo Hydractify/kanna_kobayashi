@@ -69,7 +69,6 @@ class CatchCommand extends Command {
 			throw error;
 		}
 
-
 		return message.channel.send([
 			`You ${bugAmount ? `got **${bugAmount}** bugs!` : 'did not get any bugs...'}`,
 			`And your Bug Net ${netBreak ? 'broke...' : 'did not break!'} <a:KannaRun:430496726139404299>`,
