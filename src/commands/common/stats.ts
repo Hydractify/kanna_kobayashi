@@ -53,7 +53,7 @@ class StatsCommand extends Command {
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL())
 			.addField('Uptime <:hugme:299650645001240578>', uptime, true)
-			.addField('Total Guilds <:oh:315264555859181568>', totalGuilds.toLocaleString(), true)
+			.addField('Total Servers <:oh:315264555859181568>', totalGuilds.toLocaleString(), true)
 			.addField('Total Users <:police:331923995278442497>', totalUsers.toLocaleString(), true)
 			.addField('Total Ram Used <:tired:315264554600890390>', `${totalRam.toFixed(2)} MB`, true)
 			.addField('Shards <:KannaLolipop:315264556282675200>', shardsInfo);

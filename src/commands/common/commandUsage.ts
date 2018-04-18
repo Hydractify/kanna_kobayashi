@@ -20,6 +20,10 @@ class CommandUsageCommand extends Command {
 	}
 
 	public async run(message: Message, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+		const sentMessage: Message = await message.channel.send([
+			'Fetching data... <a:KannaRun:430496726139404299>',
+		].join()) as Message;
+
 		const entries: {
 			name: string;
 			total: number;
@@ -110,7 +114,7 @@ class CommandUsageCommand extends Command {
 			.addField('All Time', allTimeMapped, true)
 			.addField('Last Hour', lastHourMapped, true);
 
-		return message.channel.send(embed);
+		return sentMessage.edit('\u200b', embed);
 	}
 }
 

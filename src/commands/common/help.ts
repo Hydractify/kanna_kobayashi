@@ -151,7 +151,10 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 				.setThumbnail(guild.iconURL())
 				.setURL('https://thedragonproject.network/guild')
 				.setAuthor(`${this.client.user.username}'s ${titleCase(category)} Commands`)
-				.setDescription('\u200b');
+				.setDescription([
+					'[Having trouble using the help command? Read the wiki!]',
+					'(https://github.com/TheDragonProject/Kanna-Kobayashi/wiki)',
+				].join(''));
 
 			embed.footer.text += ` | Page ${embeds.length + 1} | Help`;
 

@@ -19,12 +19,14 @@ class InfoCommand extends Command {
 
 	public run(message: Message, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setAuthor(`${this.client.user.username} info`, this.client.user.displayAvatarURL())
-			.setDescription('\u200b')
-			.addField('Invite', 'https://thedragonproject.network/invite', true)
-			.addField('Patreon', 'https://www.patreon.com/kannathebot', true)
-			.addField('Official Guild', 'https://discord.gg/uBdXdE9', true)
-			.addField('Official Website', 'https://thedragonproject.network', true)
+			.setAuthor(`${this.client.user.username} Information`, this.client.user.displayAvatarURL())
+			.setDescription([
+				'[Invite Link](https://thedragonproject.network/invite)',
+				'[Patreon](https://www.patreon.com/kannathebot)',
+				'[Support Server / Official Server](https://discord.gg/uBdXdE9)',
+				'[Official Weebsite](https://thedragonproject.network)',
+				'[Wiki / Kanna 101](https://github.com/TheDragonProject/wiki)',
+			].join('\n'))
 			.setThumbnail(message.guild.iconURL());
 
 		return message.channel.send(embed);
