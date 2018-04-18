@@ -13,10 +13,15 @@ config(process.env.NODE_ENV && process.env.NODE_ENV !== 'dev' && ravenToken, {
 import { extendAll } from './extensions/Extension';
 extendAll();
 
+// tslint:disable-next-line:no-submodule-imports no-implicit-dependencies
+const { TimeoutError } = require('generic-pool/lib/errors');
 import { Logger } from './structures/Logger';
 
 process.on('unhandledRejection', (error: Error) => {
-	Logger.instance.error('REJECTION', error);
+	const promise: Promise<void> = Logger.instance.error('REJECTION', error);
+	if (error instanceof TimeoutError) {
+		promise.then(() => process.exit(1));
+	}
 });
 
 import { Client } from './structures/Client';
