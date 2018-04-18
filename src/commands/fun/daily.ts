@@ -11,7 +11,7 @@ class DailyCommand extends Command {
 			coins: 0,
 			// One day 24 hours * 60 minutes * 60 second * 1000 milliseconds
 			cooldown: 24 * 60 * 60 * 1000,
-			description: 'Your daily 500 coins!',
+			description: 'Your daily 300 coins!',
 			examples: ['daily'],
 			name: 'daily',
 			usage: 'daily',
