@@ -212,6 +212,7 @@ export class Client extends DJSClient {
 		});
 
 		const channel: TextChannel = this.channels.get(data.channel_id) as TextChannel;
+		if (!channel) return;
 		if (channel.messages.has(data.message_id)
 			|| !channel.permissionsFor(channel.guild.me).has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'])
 		) return;
