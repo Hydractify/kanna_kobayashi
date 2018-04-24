@@ -36,4 +36,6 @@ const client: Client = new Client({
 	messageCacheMaxSize: 5,
 });
 
-client.login();
+client.login()
+	.catch((error: Error) => client.webhook.error('LOGIN', error))
+	.then(() => process.exit(1));
