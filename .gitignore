@@ -4,3 +4,8 @@ package-lock.json
 old/
 bin/
 src/commands/unique/test.ts
+.vscode/
+.vs/
+*.sln
+*.njsproj
+*.user
