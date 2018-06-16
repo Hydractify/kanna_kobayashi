@@ -10,7 +10,7 @@ import { mapIterable, titleCase } from '../../util/Util';
 class UserInfoCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['whois', 'ust', 'uu', 'uinfo'],
+			aliases: ['whois', 'uu', 'uinfo'],
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Display information about a specific user',
 			examples: ['userinfo @space#0302'],

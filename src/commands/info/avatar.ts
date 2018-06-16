@@ -31,7 +31,7 @@ class AvatarCommand extends Command {
 	}
 
 	public async run(message: Message, [user]: [User], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const embed: MessageEmbed = MessageEmbed.image(message, authorModel, user.displayAvatarURL())
+		const embed: MessageEmbed = MessageEmbed.image(message, authorModel, user.displayAvatarURL({ size: 2048 }))
 			.setAuthor(`${user.tag}'s avatar`, user.displayAvatarURL(), user.displayAvatarURL());
 
 		return message.channel.send(embed);
