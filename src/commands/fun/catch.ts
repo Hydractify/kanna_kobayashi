@@ -26,13 +26,11 @@ class CatchCommand extends Command {
 	}
 
 	public async run(message: Message, item: Item[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const chance = (amount: number): number => Math.floor(Math.random() * amount);
-
 		let bugAmount: number = 0;
 		let netBreak: boolean = false;
 
-		const breakChance: number = chance(1000);
-		const bugChance: number = chance(100);
+		const breakChance: number = Math.floor(Math.random() * 1000);
+		const bugChance: number = Math.floor(Math.random() * 100);
 
 		if (bugChance === 100) {
 			bugAmount = 6;
@@ -54,12 +52,14 @@ class CatchCommand extends Command {
 			netBreak = Boolean(breakChance > 850);
 		}
 
+		if (bugAmount && authorModel.voted) bugAmount += 2;
+
 		const transaction: Transaction = await this.sequelize.transaction();
 		try {
 			await Promise.all([
-				authorModel.addItem(Items.BUG_NET, netBreak ? -1 : 0),
-				authorModel.addItem(Items.BUG, bugAmount),
-				authorModel.save({ transaction  }),
+				netBreak ? authorModel.addItem(Items.BUG_NET, -1, { transaction }) : null,
+				authorModel.addItem(Items.BUG, bugAmount, { transaction }),
+				authorModel.save({ transaction }),
 			]);
 
 			await transaction.commit();
