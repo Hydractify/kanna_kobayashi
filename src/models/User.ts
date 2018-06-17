@@ -43,11 +43,13 @@ export class User extends Model<User> {
 	 * This will either come from redis, or from postgres if not available.
 	 */
 	public static async fetch(id: string): Promise<User> {
+		const voted: string = await this.redis.get(`dbl:${id}`);
 		const redisData: { [key: string]: string } = await this.redis.hgetall(`users:${id}`);
-		if (redisData) return User.fromRedis(redisData);
+		if (redisData) return User.fromRedis(redisData, Boolean(voted));
 
 		const [user, created]: [User, boolean] = await User.findCreateFind<User>({ where: { id } });
 		if (!created) this.updateRedis(user);
+		user.voted = Boolean(voted);
 
 		return user;
 	}
@@ -55,14 +57,17 @@ export class User extends Model<User> {
 	/**
 	 * Build a User model from redis data.
 	 */
-	public static fromRedis(data: { [key: string]: string | number | Date }, isNewRecord: boolean = false): User {
+	public static fromRedis(data: { [key: string]: string | number | Date }, voted: boolean): User {
 		if (data.partnerSince) data.partnerSince = new Date(Number(data.partnerSince));
 
 		data.coins = Number(data.coins) || 0;
 		data.exp = Number(data.exp) || 0;
 		data.tier = Number(data.tier) || 0;
 
-		return new this(data, { isNewRecord });
+		const user: User = new this(data, { isNewRecord: false });
+		user.voted = voted;
+
+		return user;
 	}
 
 	/**
@@ -79,7 +84,6 @@ export class User extends Model<User> {
 		if (data.partnerSince) data.partnerSince = data.partnerSince.valueOf();
 
 		for (const [k, v] of Object.entries(data)) {
-			// tslint:disable-next-line:no-null-keyword
 			if (v === null) {
 				delete data[k];
 				nullKeys.push(k);
@@ -141,7 +145,7 @@ export class User extends Model<User> {
 
 			const model: Guild = member.guild.model;
 			if ((model && model.tamerRoleId && member.roles.has(model.tamerRoleId))
-				|| member.roles.exists((role: Role) => role.name.toLowerCase() === 'dragon tamer')) {
+				|| member.roles.find((role: Role) => role.name.toLowerCase() === 'dragon tamer')) {
 				return PermLevels.DRAGONTAMER;
 			}
 		}
@@ -186,6 +190,8 @@ export class User extends Model<User> {
 
 		return newCount;
 	}
+
+	public voted: boolean;
 
 	@PrimaryKey
 	@Column
