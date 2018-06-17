@@ -259,6 +259,7 @@ class ItemCommand extends Command {
 		const modelData: { [key: string]: string | boolean | number } = {};
 
 		for (const [name, data] of parsed) {
+			if (typeof name === 'symbol') continue;
 			const { type }: any = (Item.prototype as any).rawAttributes[name] || {};
 			// Provided flag is not an attributte of Item
 			if (!type) continue;
