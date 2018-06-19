@@ -13,7 +13,7 @@ class SetGameCommand extends Command {
 			examples: ['setgame something'],
 			guarded: true,
 			name: 'setgame',
-			permLevel: PermLevels.DEV,
+			permLevel: PermLevels.TRUSTED,
 			usage: 'setgame [\'stream\'] [...Game]',
 		});
 	}
@@ -28,7 +28,7 @@ class SetGameCommand extends Command {
 			let stream: string;
 			if (args[0].toLowerCase() === 'stream') {
 				args = args.slice(1);
-				stream = ', \'https://twitch.tv/wizzardlink\'';
+				stream = ', \'https://twitch.tv/wizardlinkk\'';
 			}
 
 			await this.client.shard.broadcastEval(this.setActivity, [args.join(' '), stream]);
