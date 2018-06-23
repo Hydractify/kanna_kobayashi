@@ -12,7 +12,7 @@ class BangCommand extends WeebCommand {
 			action: 'shot',
 			aliases: ['bang'],
 			description: 'Shoot someone who is bothering you!',
-			emoji: '<:KannaMad:315264558279426048>',
+			emoji: '<:kannaMad:458776169924526093>',
 			examples: ['shoot kanna', 'shoot kanna wizard'],
 			name: 'shoot',
 			type: 'bang',
@@ -28,7 +28,7 @@ class BangCommand extends WeebCommand {
 		if (members) {
 			if (members.has(message.client.user.id)) {
 				return message.reply(
-					'get away from me with that pistol or I will destroy you, human! <:KannaMad:315264558279426048>',
+					`get away from me with that pistol or I will destroy you, human! ${this.emoji}`,
 				);
 			}
 		}

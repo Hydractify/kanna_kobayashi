@@ -26,9 +26,9 @@ class HighFiveCommand extends WeebCommand {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
-			bot: 'Yay! <:KannaHug:299650645001240578>',
-			dev: `High-five with me **${message.author}**! <:KannaHug:299650645001240578>`,
-			trusted: `High-five with me **${message.author}**! <:KannaHug:299650645001240578>`,
+			bot: `Yay! ${this.emoji}`,
+			dev: `High-five with me **${message.author}**! ${this.emoji}`,
+			trusted: `High-five with me **${message.author}**! ${this.emoji}`,
 		});
 		const baseString: string = this.computeBaseString(message, members);
 

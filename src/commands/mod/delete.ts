@@ -11,7 +11,7 @@ class DeleteMessagesCommand extends Command {
 			aliases: ['purge', 'del'],
 			clientPermissions: ['MANAGE_MESSAGES', 'READ_MESSAGE_HISTORY'],
 			coins: 0,
-			description: 'Use this command to delete messages... Maybe to hide them... <:KannaISee:315264557843218432>',
+			description: 'Use this command to delete messages... Maybe to hide them... <:kannaInteresting:458776135031980047>',
 			examples: [
 				'delete 30',
 				'delete 20 --bots',
@@ -35,7 +35,7 @@ class DeleteMessagesCommand extends Command {
 		[first, ...args]: string[],
 	): Promise<string | [Message] | [Collection<Snowflake, Message>]> {
 		if (!first) {
-			return 'you must provide me an amount of messages or a message ID to delete! <:KannaAyy:315270615844126720>';
+			return 'you must provide me an amount of messages or a message ID to delete! <:kannaShy:458779242696540170>';
 		}
 
 		const match: boolean = /^\d{17,19}$/.test(first);
@@ -100,7 +100,7 @@ class DeleteMessagesCommand extends Command {
 		return toDelete.delete()
 			.then(() => message.reply(`I sucessfully deleted the message with the ID **${toDelete.id}**!`))
 			.catch(() => message.reply(
-				`I was not able to delete the message with the id **${toDelete.id}** message! <:FeelsKannaMan:341054171212152832>`,
+				`I was not able to delete the message with the id **${toDelete.id}** message! <:kannaSad:458776254666244127>`,
 			));
 	}
 

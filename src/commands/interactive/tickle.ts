@@ -11,7 +11,7 @@ class TickleCommand extends WeebCommand {
 		super(handler, {
 			action: 'tickled',
 			description: 'Tickle someone!',
-			emoji: '<:KannaAyy:315270615844126720>',
+			emoji: '<:kannaShy:458779242696540170>',
 			examples: ['tickle kanna', 'tickle kanna wizard'],
 			name: 'tickle',
 			type: 'tickle',

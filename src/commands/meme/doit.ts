@@ -7,7 +7,7 @@ class DoItMemeCommand extends ImageEmbedCommand {
 			description: 'You have to do it... For me!',
 			examples: ['doit'],
 			images: ['https://thedragonproject.network/memes/doit/1.jpg'],
-			messageContent: '<:KannaMad:315264558279426048> | **Do it!**',
+			messageContent: '<:kannaMad:458776169924526093> | **Do it!**',
 			name: 'doit',
 			usage: 'dance',
 		});

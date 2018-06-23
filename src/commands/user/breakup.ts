@@ -21,9 +21,9 @@ class BreakUpCommand extends Command {
 	}
 
 	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		if (!authorModel.partnerId) return message.reply('you do not have a partner! <:KannaAyy:315270615844126720>');
+		if (!authorModel.partnerId) return message.reply('you do not have a partner! <:kannaShy:458779242696540170>');
 		const partnerModel: UserModel = await authorModel.$get<UserModel>('partner') as UserModel;
-		if (!partnerModel) return message.reply('you do not have a partner! <:KannaAyy:315270615844126720>');
+		if (!partnerModel) return message.reply('you do not have a partner! <:kannaShy:458779242696540170>');
 
 		await message.reply(`are you sure you want to break up with <@${partnerModel.id}>? (**Y**es or **N**o)`);
 
@@ -52,7 +52,7 @@ class BreakUpCommand extends Command {
 
 		await transaction.commit();
 
-		return message.reply('you successfully broke up with your current partner! <:KannaAyy:315270615844126720>');
+		return message.reply('you successfully broke up with your current partner! <:kannaShy:458779242696540170>');
 	}
 }
 

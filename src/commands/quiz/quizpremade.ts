@@ -43,7 +43,7 @@ class QuizPremadeCommand extends Command {
 			.addField(
 			'Dragons',
 			[
-				'<:KannaMad:315264558279426048> **Ilulu**',
+				'<:kannaMad:458776169924526093> **Ilulu**',
 				':one: **Tohru**',
 				':two: **Quetzalcoatl**',
 				':three: **Fafnir**',

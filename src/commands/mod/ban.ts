@@ -65,7 +65,7 @@ class BanCommand extends Command {
 
 		if (!answer) {
 			return message.reply(
-				'since you did not answer my question, I had to cancel the ban. <:KannaAyy:315270615844126720>',
+				'since you did not answer my question, I had to cancel the ban. <:kannaShy:458779242696540170>',
 			);
 		}
 
@@ -89,7 +89,7 @@ class BanCommand extends Command {
 			);
 		}
 
-		return message.channel.send('Ok, canceling the ban! <:KannaAyy:315270615844126720>');
+		return message.channel.send('Ok, canceling the ban! <:kannaShy:458779242696540170>');
 	}
 }
 

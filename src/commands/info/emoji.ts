@@ -19,7 +19,7 @@ class EmojiInfoCommand extends Command {
 				'emoji KannaWave',
 				'emoji 333771413842558976',
 				// Displays as regular emoji
-				'emojii <:KannaWave:315264556177948673>',
+				'emojii <:kannaWave:458777297219092481>',
 			],
 			exp: 0,
 			name: 'emojiinfo',

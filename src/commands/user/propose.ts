@@ -13,7 +13,7 @@ class ProposeCommand extends Command {
 			aliases: ['marry'],
 			coins: 0,
 			cooldown: 1e4,
-			description: 'Propose to someone... You love! <:KannaAyy:315270615844126720>',
+			description: 'Propose to someone... You love! <:kannaShy:458779242696540170>',
 			examples: ['propose Wizard'],
 			exp: 0,
 			name: 'propose',
@@ -60,7 +60,7 @@ class ProposeCommand extends Command {
 		// Mentioned user is not the current user
 		if (partner.id !== mentionedUser.id) {
 
-			await message.reply('you are already in a relationship with somebody else... <:KannaWtf:320406412133924864>');
+			await message.reply('you are already in a relationship with somebody else... <:kannaScared:458776266154180609>');
 
 			return false;
 		}
@@ -70,7 +70,7 @@ class ProposeCommand extends Command {
 		const until = partner.partnerSince.valueOf() + (30 * 24 * 60 * 60 * 1000);
 		if (until > message.createdTimestamp) {
 			await message.reply([
-				'sorry but not enough time has passed since you two got together! <:KannaAyy:315270615844126720>',
+				'sorry but not enough time has passed since you two got together! <:kannaShy:458779242696540170>',
 				`Try again in ${moment(until).fromNow()}.`,
 			].join('\n'));
 
@@ -96,7 +96,7 @@ class ProposeCommand extends Command {
 		if (!confirmation) {
 			await message.reply([
 				'looks like you got no response, so',
-				'I had to cancel the command <:FeelsKannaMan:341054171212152832>',
+				'I had to cancel the command <:kannaSad:458776254666244127>',
 			].join(' '));
 
 			return false;
@@ -116,13 +116,13 @@ class ProposeCommand extends Command {
 			await transaction.commit();
 
 			await message.channel.send(
-				`Congratulations ${message.author} and ${mentionedUser} for your marriage! <:KannaHug:299650645001240578>`,
+				`Congratulations ${message.author} and ${mentionedUser} for your marriage! <:kannaHug:460080146418892800>`,
 			);
 
 			return false;
 		}
 
-		await message.reply('canceling the command... <:KannaAyy:315270615844126720>');
+		await message.reply('canceling the command... <:kannaShy:458779242696540170>');
 
 		return false;
 	}
@@ -153,7 +153,7 @@ class ProposeCommand extends Command {
 		if (!confirmation) {
 			return message.reply([
 				'looks like you got no response, so',
-				'I had to cancel the command <:FeelsKannaMan:341054171212152832>',
+				'I had to cancel the command <:kannaSad:458776254666244127>',
 			].join(' '));
 		}
 
@@ -178,11 +178,11 @@ class ProposeCommand extends Command {
 
 			return message.channel.send([
 				`Congratulations ${message.author} and ${mentionedUser}! If you are still together in a month,`,
-				'you can use propose again to marry! <:KannaHello:345776146404605952>',
+				'you can use propose again to marry! <:kannaBlush:458776068279762954>',
 			].join(' '));
 		}
 
-		return message.reply('you got rejected. <:FeelsKannaMan:341054171212152832>');
+		return message.reply('you got rejected. <:kannaSad:458776254666244127>');
 	}
 }
 

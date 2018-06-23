@@ -12,7 +12,7 @@ class CryCommand extends WeebCommand {
 			action: 'is upset with',
 			aliases: ['sad', 'upset'],
 			description: 'Show how much you are sad... `Hope you do not use this command often -Att. Wizardλ#5679`',
-			emoji: '<:FeelsKannaMan:341054171212152832>',
+			emoji: '<:kannaSad:458776254666244127>',
 			examples: ['cry', 'cry kanna', 'cry kanna wizard'],
 			name: 'cry',
 			type: 'cry',
@@ -46,7 +46,7 @@ class CryCommand extends WeebCommand {
 		if (!members) {
 			const action: string = this.action.replace(' with', '');
 			return message.channel.send(
-				`<:FeelsKannaMan:341054171212152832> | **${message.member.displayName}** ${action}...`,
+				`<:kannaSad:458776254666244127> | **${message.member.displayName}** ${action}...`,
 				embed,
 			);
 		}

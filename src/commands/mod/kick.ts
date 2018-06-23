@@ -57,7 +57,7 @@ class KickCommand extends Command {
 
 		if (!answer) {
 			return message.reply(
-				'since you did not answer my question, I had to cancel the kick. <:KannaAyy:315270615844126720>',
+				'since you did not answer my question, I had to cancel the kick. <:kannaShy:458779242696540170>',
 			);
 		}
 
@@ -73,7 +73,7 @@ class KickCommand extends Command {
 			return message.reply(`I successfully kicked ${[...members].join(' ')}!`);
 		}
 
-		return message.channel.send('Ok, canceling the kick! <:KannaAyy:315270615844126720>');
+		return message.channel.send('Ok, canceling the kick! <:kannaShy:458779242696540170>');
 	}
 }
 

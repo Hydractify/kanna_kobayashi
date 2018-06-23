@@ -11,7 +11,7 @@ class SlapCommand extends WeebCommand {
 		super(handler, {
 			action: 'slapped',
 			description: 'Slap someone!',
-			emoji: '<:KannaWtf:320406412133924864>',
+			emoji: '<:kannaScared:458776266154180609>',
 			examples: ['slap kanna', 'slap kanna wizard'],
 			name: 'slap',
 			type: 'slap',
@@ -26,7 +26,7 @@ class SlapCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		if (members.has(message.client.user.id)) {
 			return message.reply(
-				'you can not slap me! Baka... <:FeelsKannaMan:341054171212152832>',
+				'you can not slap me! Baka... <:kannaSad:458776254666244127>',
 			);
 		}
 

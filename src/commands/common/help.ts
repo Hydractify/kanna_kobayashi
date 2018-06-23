@@ -102,7 +102,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 
 		if (embed) return message.channel.send(embed);
 
-		return message.reply(`I could not find a command matching **${name}** <:KannaAyy:315270615844126720>`);
+		return message.reply(`I could not find a command matching **${name}** <:kannaShy:458779242696540170>`);
 	}
 
 	private _findCommand(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[] | void> {
