@@ -37,5 +37,5 @@ const client: Client = new Client({
 });
 
 client.login()
-	.catch((error: Error) => client.webhook.error('LOGIN', error))
-	.then(() => process.exit(1));
+	.catch((error: Error) => client.webhook.error('LOGIN', error)
+		.then(() => process.exit(1), () => process.exit(1)));
