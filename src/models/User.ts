@@ -141,7 +141,7 @@ export class User extends Model<User> {
 
 			const model: Guild = member.guild.model;
 			if ((model && model.tamerRoleId && member.roles.has(model.tamerRoleId))
-				|| member.roles.exists((role: Role) => role.name.toLowerCase() === 'dragon tamer')) {
+				|| member.roles.find((role: Role) => role.name.toLowerCase() === 'dragon tamer')) {
 				return PermLevels.DRAGONTAMER;
 			}
 		}
