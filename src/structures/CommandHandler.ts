@@ -185,7 +185,6 @@ export class CommandHandler {
 		const [authorModel, ownerModel] = await this._fetchModels(message);
 		if (authorModel.type === UserTypes.BLACKLISTED) return;
 		if (ownerModel.type === UserTypes.BLACKLISTED) return;
-		if (ownerModel.type !== UserTypes.WHITELISTED && message.guild.isBotFarm) return;
 
 		if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) {
 			message.author.send('I do not have permission to send in the channel of your command!')
