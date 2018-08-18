@@ -11,8 +11,7 @@ import {
 	User,
 } from 'discord.js';
 import { join } from 'path';
-import { captureBreadcrumb, captureException } from 'raven';
-import { post } from 'snekfetch';
+import { captureBreadcrumb } from 'raven';
 
 import { ListenerUtil } from '../decorators/ListenerUtil';
 import { RavenContext } from '../decorators/RavenContext';
@@ -26,10 +25,6 @@ import { Loggable, Logger } from './Logger';
 import { WebhookLogger } from './WebhookLogger';
 
 const { on, once, registerListeners }: typeof ListenerUtil = ListenerUtil;
-const { dbots, dbotsorg }: {
-	dbots: string;
-	dbotsorg: string;
-} = require('../../data');
 
 /**
  * Extended discord.js client
