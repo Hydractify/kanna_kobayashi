@@ -66,11 +66,6 @@ export class Client extends DJSClient {
 	@RavenContext
 	protected _onceReady(): void {
 		(this as any).ws.connection.on('close', this._onDisconnect.bind(this));
-
-		this.webhook.info('Ready', `Logged in as ${this.user.tag} (${this.user.id})`);
-		if (this.shard.id === 0 && this.user.id === '297459926505095180') {
-			this.setInterval(this._updateBotLists.bind(this), 30 * 60 * 1000);
-		}
 	}
 
 	@on('disconnect')
@@ -250,40 +245,5 @@ export class Client extends DJSClient {
 	@RavenContext
 	protected _onWarn(warning: string): void {
 		this.webhook.warn('Client Warn', warning);
-	}
-
-	@RavenContext
-	private async _updateBotLists(): Promise<void> {
-		const body: { server_count: number } = {
-			server_count: await this.shard.fetchClientValues('guilds.size')
-				.then((res: number[]) => res.reduce((prev: number, cur: number) => prev + cur)),
-		};
-
-		// No webhook, this would just spam
-		this.logger.debug('BotLists', `Updating guild count at bot lists to ${body.server_count}.`);
-
-		post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
-			.set('Authorization', dbots)
-			.send(body)
-			.then(() => this.logger.info('BotLists', 'Updated bots.discord\'s guild count.'))
-			.catch((error: Error) => {
-				captureException(error, {
-					extra: { server_count: body.server_count },
-					tags: { target: 'bots.discord.pw' },
-				});
-				this.webhook.error('BotLists', 'Updating bots.discord\'s guild count failed:', error);
-			});
-
-		post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
-			.set('Authorization', dbotsorg)
-			.send(body)
-			.then(() => this.logger.info('BotLists', 'Updated discordbots\' guild count.'))
-			.catch((error: Error) => {
-				captureException(error, {
-					extra: { server_count: body.server_count },
-					tags: { target: 'discordbots.org' },
-				});
-				this.webhook.error('BotLists', 'Updating discordbots\'s guild count failed:', error);
-			});
 	}
 }
