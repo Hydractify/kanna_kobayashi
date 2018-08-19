@@ -11,7 +11,7 @@ class PokeCommand extends WeebCommand {
 		super(handler, {
 			action: 'poked',
 			description: 'G-get someone\'s attention!',
-			emoji: '<:KannaAyy:315270615844126720>',
+			emoji: '<:kannaBlush:458776068279762954>',
 			examples: ['poke kanna', 'poke kanna wizard'],
 			name: 'poke',
 			type: 'poke',

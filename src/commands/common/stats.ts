@@ -52,11 +52,11 @@ class StatsCommand extends Command {
 			.setAuthor(`${this.client.user.username}'s Stats (v${version})`, this.client.user.displayAvatarURL())
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL())
-			.addField('Uptime <:hugme:299650645001240578>', uptime, true)
-			.addField('Total Servers <:oh:315264555859181568>', totalGuilds.toLocaleString(), true)
-			.addField('Total Users <:police:331923995278442497>', totalUsers.toLocaleString(), true)
-			.addField('Total Ram Used <:tired:315264554600890390>', `${totalRam.toFixed(2)} MB`, true)
-			.addField('Shards <:KannaLolipop:315264556282675200>', shardsInfo);
+			.addField('Uptime <:kannaHug:460080146418892800>', uptime, true)
+			.addField('Total Servers <:kannaWow:458777326810038292>', totalGuilds.toLocaleString(), true)
+			.addField('Total Users <:kannaLolice:458776154057342976>', totalUsers.toLocaleString(), true)
+			.addField('Total Ram Used <:kannaTired:458777258694541313>', `${totalRam.toFixed(2)} MB`, true)
+			.addField('Shards <:kannaHungry:458776120092000258>', shardsInfo);
 
 		return message.channel.send(embed);
 	}

@@ -44,14 +44,14 @@ class ItemCommand extends Command {
 			case 'make':
 			case 'update':
 				if (authorModel.type !== UserTypes.DEV) {
-					return 'only developers can make or update items! <:KannaOmfg:315264558279426048>';
+					return 'only developers can make or update items! <:kannaMad:458776169924526093>';
 				}
 
 				return ['create', args];
 
 			case 'structure':
 				if (authorModel.type !== UserTypes.DEV) {
-					return 'only developers can see the structure of items! <:KannaOmfg:315264558279426048>';
+					return 'only developers can see the structure of items! <:kannaMad:458776169924526093>';
 				}
 
 				return ['structure', args];
@@ -88,7 +88,7 @@ class ItemCommand extends Command {
 
 				return message.reply([
 					`I have sucessfully updated the ${item.type[0] + item.type.slice(1).toLowerCase()}!`
-					+ ' Here it is... <:KannaAyy:315270615844126720>',
+					+ ' Here it is... <:kannaShy:458779242696540170>',
 					'```js',
 					'Item {',
 					` ${inspect(item.toJSON()).slice(1)}`,

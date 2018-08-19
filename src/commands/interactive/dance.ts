@@ -10,8 +10,8 @@ class DanceCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'is dancing with',
-			description: 'Dance! <:Awuu:389233504996556802>',
-			emoji: '<:Awuu:389233504996556802>',
+			description: 'Dance! <a:kannaRun:458776024012947456>',
+			emoji: '<a:kannaRun:458776024012947456>',
 			examples: ['dance', 'dance kanna', 'dance kanna wizard'],
 			name: 'dance',
 			type: 'dance',
@@ -45,7 +45,7 @@ class DanceCommand extends WeebCommand {
 		if (!members) {
 			const action: string = this.action.replace(' with', '');
 			return message.channel.send(
-				`<:FeelsKannaMan:341054171212152832> | **${message.member.displayName}** ${action}!`,
+				`<:kannaSad:458776254666244127> | **${message.member.displayName}** ${action}!`,
 				embed,
 			);
 		}

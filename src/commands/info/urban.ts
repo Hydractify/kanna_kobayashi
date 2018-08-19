@@ -23,7 +23,7 @@ class UrbanCommand extends Command {
 		if (!args.length) {
 			return [
 				'you are supposed to tell me a term to lookup!',
-				`(\`kanna ${this.usage}\`) <:KannaWtf:320406412133924864>`,
+				`(\`kanna ${this.usage}\`) <:kannaScared:458776266154180609>`,
 			].join(' ');
 		}
 
@@ -70,8 +70,8 @@ class UrbanCommand extends Command {
 			embed.splitToFields('Example', example);
 		}
 
-		embed.addField('Thumbs Up <:wave:341330512381607938>', thumbsUp, true)
-			.addField('Thumbs Down <:omfg:341330522028507139>', thumbsDown, true);
+		embed.addField('Thumbs Up <:kannaWow:458777326810038292>', thumbsUp, true)
+			.addField('Thumbs Down <:kannaMad:458776169924526093>', thumbsDown, true);
 
 		return message.channel.send(embed);
 	}

@@ -11,7 +11,7 @@ class LoliMemeCommand extends ImageEmbedCommand {
 				'https://thedragonproject.network/memes/loli/1.png',
 				'https://thedragonproject.network/memes/loli/2.gif',
 			],
-			messageContent: '**Wooo... A human!** <:KannaOh:315264555859181568>',
+			messageContent: '**Wooo... A human!** <:kannaWow:458777326810038292>',
 			name: 'loli',
 			usage: 'loli',
 		});

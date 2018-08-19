@@ -52,8 +52,8 @@ class GambleCommand extends Command {
 
 		return message.reply(
 			won
-				? `you got **${won - wager}** coins! <:KannaAyy:315270615844126720>`
-				: `you lost **${wager}** coins! <:KannaWtf:320406412133924864>`,
+				? `you got **${won - wager}** coins! <:kannaShy:458779242696540170>`
+				: `you lost **${wager}** coins! <:kannaScared:458776266154180609>`,
 		);
 	}
 }

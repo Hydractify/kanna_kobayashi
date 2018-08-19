@@ -11,7 +11,7 @@ class CuddleCommand extends WeebCommand {
 		super(handler, {
 			action: 'bit',
 			description: 'Bite someone!',
-			emoji: '<:KannaAyy:315270615844126720>',
+			emoji: '<:kannaShy:458779242696540170>',
 			examples: ['bite kanna', 'bite kanna wizard'],
 			name: 'bite',
 			type: 'bite',

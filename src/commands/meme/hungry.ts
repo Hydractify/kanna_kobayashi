@@ -16,7 +16,7 @@ class HungryMemeCommand extends ImageEmbedCommand {
 				'https://thedragonproject.network/memes/hungry/6.jpg',
 				'https://thedragonproject.network/memes/hungry/7.jpg',
 			],
-			messageContent: '**Feed me!** <:KannaOh:315264555859181568>',
+			messageContent: '**Feed me!** <:kannaWow:458777326810038292>',
 			name: 'hungry',
 			usage: 'hungry',
 		});

@@ -11,7 +11,7 @@ class PunchCommand extends WeebCommand {
 		super(handler, {
 			action: 'punched',
 			description: 'Punch someone!',
-			emoji: '<:KannaWtf:320406412133924864>',
+			emoji: '<:kannaScared:458776266154180609>',
 			examples: ['punch kanna', 'punch kanna wizard'],
 			name: 'punch',
 			type: 'punch',
@@ -26,7 +26,7 @@ class PunchCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		if (members.has(message.client.user.id)) {
 			return message.reply(
-				'you can not punch me! Baka... <:FeelsKannaMan:341054171212152832>',
+				'you can not punch me! <:kannaMad:458776169924526093>',
 			);
 		}
 

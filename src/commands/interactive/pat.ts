@@ -12,7 +12,7 @@ class PatCommand extends WeebCommand {
 			action: 'patted',
 			aliases: ['patto'],
 			description: 'Pat someone\'s head!',
-			emoji: '<:KannaLewd:320406420824653825>',
+			emoji: '<:kannaBlush:458776068279762954>',
 			examples: ['pat kanna', 'pat kanna wizard'],
 			name: 'pat',
 			type: 'pat',

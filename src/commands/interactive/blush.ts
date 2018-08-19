@@ -12,7 +12,7 @@ class BlushCommand extends WeebCommand {
 			action: 'is blushing because of',
 			aliases: ['embarassed'],
 			description: 'S-show how embarassed you are!',
-			emoji: '<:KannaAyy:315270615844126720>',
+			emoji: '<:kannaShy:458779242696540170>',
 			examples: ['blush', 'blush kanna', 'blush kanna wizard'],
 			name: 'blush',
 			type: 'blush',
@@ -50,7 +50,7 @@ class BlushCommand extends WeebCommand {
 		if (!members) {
 			action = action.replace(' because of', '');
 			return message.channel.send(
-				`<:FeelsKannaMan:341054171212152832> | **${message.member.displayName}** ${action}...`,
+				`<:kannaSad:458776254666244127> | **${message.member.displayName}** ${action}...`,
 				embed,
 			);
 		}

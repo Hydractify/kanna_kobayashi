@@ -12,7 +12,7 @@ class HugCommand extends WeebCommand {
 			action: 'hugged',
 			aliases: ['hwug'],
 			description: 'Hug someone tight ❤',
-			emoji: '<:KannaAyy:315270615844126720>',
+			emoji: '<:kannaShy:458779242696540170>',
 			examples: ['hug kanna', 'hug kanna wizard'],
 			name: 'hug',
 			type: 'hug',

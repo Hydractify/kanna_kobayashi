@@ -5,12 +5,12 @@ import { CommandHandler } from '../../structures/CommandHandler';
 
 class EigthBallCommand extends Command {
 	private _responses: string[] = [
-		'I want it too! <:KannaHug:299650645001240578>',
-		'aye! <:KannaLolipop:315264556282675200>',
-		'no... <:FeelsKannaMan:341054171212152832>',
-		'do not do it! <:KannaAyy:315270615844126720>',
-		'why?! <:KannaWtf:320406412133924864>',
-		'I have to gather more information first <:KannaISee:315264557843218432>',
+		'I want it too! <:kannaHug:460080146418892800>',
+		'aye! <:kannaHungry:458776120092000258>',
+		'no... <:kannaSad:458776254666244127>',
+		'do not do it! <:kannaShy:458779242696540170>',
+		'why?! <:kannaScared:458776266154180609>',
+		'I have to gather more information first <:kannaInteresting:458776135031980047>',
 	];
 
 	public constructor(handler: CommandHandler) {
@@ -24,7 +24,7 @@ class EigthBallCommand extends Command {
 	}
 
 	public parseArgs(message: Message, args: string[]): string[] | string {
-		if (!args.length) return 'you have to ask a question! <:SherlockKanna:430499051075665951>';
+		if (!args.length) return 'you have to ask a question! <:kannaDetective:460201630026170368>';
 
 		return args;
 	}

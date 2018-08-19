@@ -8,7 +8,7 @@ class RavioliMemeCommand extends ImageEmbedCommand {
 			description: 'Respect me!',
 			examples: ['ravioli'],
 			images: ['https://thedragonproject.network/memes/ravioli/1.png'],
-			messageContent: '**Ravioli ravioli all praise the Dragon... PRAISE ME HUMAN!** <:KannaOh:315264555859181568>',
+			messageContent: '**Ravioli ravioli all praise the Dragon... PRAISE ME HUMAN!** <:kannaWow:458777326810038292>',
 			name: 'ravioli',
 			usage: 'ravioli',
 		});

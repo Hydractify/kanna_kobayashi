@@ -222,7 +222,7 @@ export class CommandHandler {
 
 			const newLevel: number | void = await command.grantRewards(message.author, authorModel);
 			if (newLevel && guildModel.levelUpEnabled) {
-				await message.reply(`you advanced to level **${newLevel}**! <:KannaHugMe:299650645001240578>`);
+				await message.reply(`you advanced to level **${newLevel}**! <:kannaHug:460080146418892800>`);
 			}
 		} catch (error) {
 			captureException(error, {
