@@ -3,12 +3,18 @@ import { Message } from 'discord.js';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { resolveAmount } from '../../util/Util';
 
 class GambleCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			description: 'Gamble your coins to get more!',
-			examples: ['gamble 10000'],
+			examples: [
+				'gamble 1000', 'gamble 1k',
+				'gamble 1000000', 'gamble 1k',
+				'gamble 1000000000', 'gamble 1b',
+				'gamble 1234', 'gamble 1k234',
+			],
 			name: 'gamble',
 			usage: 'gamble <Amount>',
 		});
@@ -16,12 +22,12 @@ class GambleCommand extends Command {
 
 	public parseArgs(
 		message: Message,
-		[input]: string[],
+		input: string[],
 		{ authorModel }: ICommandRunInfo,
 	): string | [number] {
 		if (!input) return `you must give me an amount! (\`${this.usage}\`)`;
 
-		const amount: number = parseInt(input);
+		const amount: number = resolveAmount(input.join(' '));
 		if (isNaN(amount)) return `**${input}** is not a valid number!`;
 		if (amount <= 0) return `**${input}** is not a positive number!`;
 

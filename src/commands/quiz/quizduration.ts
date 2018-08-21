@@ -4,6 +4,7 @@ import { Quiz } from '../../models/Quiz';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { PermLevels } from '../../types/PermLevels';
+import { resolveDuration } from '../../util/Util';
 
 class QuizDurationCommand extends Command {
 	public constructor(handler: CommandHandler) {
@@ -13,6 +14,8 @@ class QuizDurationCommand extends Command {
 			examples: [
 				'qduration view',
 				'qduration set 5 // Is in minutes',
+				'qduration set 5m',
+				'qduration set 1h30m',
 			],
 			name: 'quizduration',
 			permLevel: PermLevels.DRAGONTAMER,
@@ -20,7 +23,7 @@ class QuizDurationCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, [option, time]: string[]): string | ['view' | 'set', number] {
+	public parseArgs(message: Message, [option, ...time]: string[]): string | ['view' | 'set', number] {
 		if (!option) {
 			return [
 				'you need to tell me whether you want to',
@@ -35,7 +38,7 @@ class QuizDurationCommand extends Command {
 		if (option === 'set') {
 			if (!time) return 'you also need to tell me how long quizzes should be.';
 
-			const parsed: number = parseInt(time.replace(/(m|minutes?)$/i, '').trim());
+			const parsed: number = resolveDuration(time.join(' '));
 
 			if (isNaN(parsed)) return 'that does not look like a valid number!';
 

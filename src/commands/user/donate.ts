@@ -5,13 +5,19 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { resolveAmount } from '../../util/Util';
 
 class DonateCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['give', 'transfer', 'trade'],
 			description: 'Give money to someone!',
-			examples: ['give wizard 1000'],
+			examples: [
+				'give wizard 1000', 'give wizard 1k',
+				'give wizard 1000000', 'give wizard 1k',
+				'give wizard 1000000000', 'give wizard 1b',
+				'give wizard 1234', 'give wizard 1k234',
+			],
 			name: 'donate',
 			usage: 'donate <User> <Amount>',
 		});
@@ -19,7 +25,7 @@ class DonateCommand extends Command {
 
 	public async parseArgs(
 		message: Message,
-		[input, amount]: string[],
+		[input, ...amount]: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<string | [User, number]> {
 		if (!input) return `you must give me a user! (\`${this.usage}\`)`;
@@ -33,7 +39,7 @@ class DonateCommand extends Command {
 
 		if (!target) return `I could not find a non bot user with the name or id ${input}.`;
 
-		const targetAmount: number = parseInt(amount);
+		const targetAmount: number = resolveAmount(amount.join(' '));
 		if (isNaN(targetAmount)) return 'that does not look like a valid number!';
 		if (targetAmount <= 0) return 'the amount has to be positive!';
 		if (authorModel.coins < targetAmount) return 'you do not have that amount of coins!';

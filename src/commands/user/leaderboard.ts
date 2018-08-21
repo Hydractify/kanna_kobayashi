@@ -8,7 +8,7 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { ILeaderBoardUser } from '../../types/ILeaderBoardUser';
 import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedController';
-import { titleCase } from '../../util/Util';
+import { resolveAmount, titleCase } from '../../util/Util';
 import { Command as ProfileCommand } from './profile';
 
 class LeaderboardCommand extends Command implements IResponsiveEmbedController {
@@ -23,6 +23,9 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 			examples: [
 				'leaderboard level',
 				'leaderboard level 15',
+				'leaderboard level 15k',
+				'leaderboard level 15023',
+				'leaderboard level 15k23',
 			],
 			name: 'leaderboard',
 			usage: 'leaderboard [\'exp\', \'level\', \'coins\', \'reputation\'] [offset]',
@@ -34,7 +37,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		if (this.types.includes(input.toLowerCase())) {
 			if (!offset) return [input, 0];
 
-			const num: number = parseInt(offset);
+			const num: number = resolveAmount(offset);
 			if (isNaN(num)) return 'the offset you provided is not a number!';
 
 			return [input, Math.max(0, num - 1)];

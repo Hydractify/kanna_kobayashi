@@ -132,3 +132,71 @@ export const enumKeyFromValue: (_enum: any, value: string) => string
 
 		return null;
 	};
+
+/**
+ * Resolves an input
+ * @param input Input to resolve
+ * @param regex Regex to apply, the first capture group is the amount, the second the modifier
+ * @param modifiers Dict of modifiers to apply
+ * @returns The resolved amount, or NaN if nothing was resolved.
+ */
+const _resolve: (regex: RegExp, modifiers: { [key: string]: number }, input: string) => number =
+	(regex: RegExp, modifiers: { [key: string]: number }, input: string): number => {
+		let valid: boolean = false;
+		let out: number = 0;
+		let res: RegExpExecArray;
+
+		// tslint:disable-next-line:no-conditional-assignment
+		while ((res = regex.exec(input)) !== null) {
+			valid = true;
+			out += parseInt(res[1]) * modifiers[res[2]];
+		}
+
+		return valid ? out : NaN;
+	};
+
+const amountRegex: RegExp = / *?(-?\d+) *?([mkb])?/gi;
+/* tslint:disable:object-literal-sort-keys */
+const amountModifiers: { [key: string]: number } = {
+	// billion
+	b: 1e9,
+	B: 1e9,
+	// million
+	m: 1e6,
+	M: 1e6,
+	// thousand
+	k: 1e3,
+	K: 1e3,
+	// undefined is valid, tslint
+	[undefined as any]: 1,
+};
+/* tslint:enable:object-literal-sort-keys */
+
+/**
+ * Resolves a string to an amount.
+ * @param value Input to resolve
+ * @returns A number if valid, or NaN if invalid
+ */
+export const resolveAmount: (value: string) => number = _resolve.bind(null, amountRegex, amountModifiers);
+
+const durationRegex: RegExp = / *?(\d+) *?([hms])?/gi;
+/* tslint:disable:object-literal-sort-keys */
+const durationModifiers: { [key: string]: number } = {
+	// hour
+	h: 60,
+	H: 60,
+	// minute
+	m: 1,
+	M: 1,
+	// second
+	// default to minute
+	[undefined as any]: 1,
+};
+/* tslint:enable:object-literal-sort-keys */
+
+/**
+ * Resolves a string to a duration.
+ * @param value Input to resolve
+ * @returns A duration in seconds
+ */
+export const resolveDuration: (value: string) => number = _resolve.bind(null, durationRegex, durationModifiers);
