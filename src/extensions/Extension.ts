@@ -7,7 +7,7 @@ import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
 
 export async function extendAll(): Promise<void> {
-	// This _HAS_ to be blocking duo race conditions with discord.js
+	// This _HAS_ to be blocking due race conditions with discord.js
 	const files: string[] = readdirSync(__dirname);
 	for (const file of files) {
 		if (extname(file) !== '.js') continue;

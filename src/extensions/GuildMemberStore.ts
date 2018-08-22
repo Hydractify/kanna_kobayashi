@@ -1,8 +1,12 @@
-import { Guild, GuildMemberStore } from 'discord.js';
+import { Collection, Guild, GuildMemberStore } from 'discord.js';
 
 const { fetch } = GuildMemberStore.prototype;
 
 class GuildMemberStoreExtension {
+	public static get [Symbol.species](): typeof Collection {
+		return Collection;
+	}
+
 	public async test() { return 'nope'; }
 	public async fetch(this: { guild: Guild } & GuildMemberStore, ...args: any[]): Promise<any> {
 		try {
