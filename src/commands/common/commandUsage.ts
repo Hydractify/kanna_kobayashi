@@ -27,14 +27,14 @@ class CommandUsageCommand extends Command {
 		const entries: {
 			name: string;
 			total: number;
-			allTime: number;
+			thisMonth: number;
 			recent: number;
 			lastHour: number;
 		}[] = await this.sequelize.query(`
 		SELECT
 			DISTINCT "command_logs"."command_name" as "name",
 			"total"."usages" AS "total",
-			"total"."all_time" AS "allTime",
+			"total"."this_month" AS "thisMonth",
 			"recent"."usages" AS "recent",
 			"recent"."last_hour" AS "lastHour"
 		FROM "command_logs"
@@ -42,7 +42,7 @@ class CommandUsageCommand extends Command {
 			SELECT
 				"command_logs"."command_name",
 				COUNT(*) AS "usages",
-				(SELECT count(*) FROM "command_logs") AS "all_time"
+				(SELECT count(*) FROM "command_logs") AS "this_month"
 			FROM "command_logs"
 			GROUP BY "command_logs"."command_name"
 			ORDER BY "usages" DESC
@@ -69,13 +69,13 @@ class CommandUsageCommand extends Command {
 			});
 
 		interface IEntry { count: number; name: string; }
-		let allTimeCount: number = 0;
+		let thisMonthCount: number = 0;
 		let lastHourCount: number = 0;
-		const allTimeTop5: IEntry[] = [];
+		const thisMonthTop5: IEntry[] = [];
 		const lastHourTop5: IEntry[] = [];
 
 		for (const entry of entries) {
-			if (entry.allTime) allTimeCount = entry.allTime;
+			if (entry.thisMonth) thisMonthCount = entry.thisMonth;
 			if (entry.lastHour) lastHourCount = entry.lastHour;
 			if (entry.recent) {
 				lastHourTop5.push({
@@ -84,7 +84,7 @@ class CommandUsageCommand extends Command {
 				});
 			}
 			if (entry.total) {
-				allTimeTop5.push({
+				thisMonthTop5.push({
 					count: Number(entry.total),
 					name: titleCase(entry.name.replace(/([A-Z])/g, ' $1')),
 				});
@@ -92,11 +92,11 @@ class CommandUsageCommand extends Command {
 		}
 		lastHourTop5.sort((a: IEntry, b: IEntry) => b.count - a.count);
 
-		const allTimeMapped: string[] = allTimeTop5
+		const thisMonthMapped: string[] = thisMonthTop5
 			.map((entry: IEntry, i: number) => `${i + 1}. ${entry.name}: ${entry.count.toLocaleString()}`);
 
-		allTimeMapped.unshift(
-			`Count: ${Number(allTimeCount).toLocaleString()}`,
+		thisMonthMapped.unshift(
+			`Count: ${Number(thisMonthCount).toLocaleString()}`,
 			'\u200b',
 		);
 
@@ -111,7 +111,7 @@ class CommandUsageCommand extends Command {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setThumbnail(message.guild.iconURL())
 			.setTitle('Command Usage Statistics')
-			.addField('All Time', allTimeMapped, true)
+			.addField('Last Month', thisMonthMapped, true)
 			.addField('Last Hour', lastHourMapped, true);
 
 		return sentMessage.edit('\u200b', embed);
