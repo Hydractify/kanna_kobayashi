@@ -124,10 +124,10 @@ export const replaceMap: (input: string, map: { [key: string]: string }) => stri
  * @param value Value to search for
  * @returns Key or null if not found
  */
-export const enumKeyFromValue: (_enum: any, value: string) => string
-	= <T>(_enum: T, value: string): string => {
+export const enumKeyFromValue: <T>(_enum: any, value: string) => T
+	= <T>(_enum: T, value: string): T => {
 		for (const [key, val] of Object.entries(_enum)) {
-			if (val === value) return key;
+			if (val === value) return key as any;
 		}
 
 		return null;
