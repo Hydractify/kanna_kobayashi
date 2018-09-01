@@ -12,7 +12,7 @@ class NotifCommand extends Command {
 			examples: [
 				'notif',
 				'notif #general',
-				'notif false // to remove the channel',
+				'notif remove // to remove the channel',
 			],
 			guarded: true,
 			name: 'notif-channel',
@@ -36,8 +36,8 @@ class NotifCommand extends Command {
 			return message.reply('there is no channel for welcome and farewell messages set up.');
 		}
 
-		// "false" passed, remove
-		if (target.toLowerCase() === 'false') {
+		// "remove" passed, remove
+		if (target.toLowerCase() === 'remove') {
 			if (message.guild.model.notificationChannelId) {
 				message.guild.model.notificationChannelId = null;
 				await message.guild.model.save();
