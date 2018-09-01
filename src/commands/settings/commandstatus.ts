@@ -3,90 +3,58 @@ import { Message } from 'discord.js';
 import { Guild } from '../../models/Guild';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
-import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { PermLevels } from '../../types/PermLevels';
 
 class CommandStatusCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['disable', 'enable'],
-			description: 'Enable, disable, or see the status of a command',
-			examples: ['command', 'command say', 'disable say', 'enable say'],
+			description: 'See whether a command is enabled or disabled',
+			examples: ['commandstatus', 'commandstatus say'],
 			guarded: true,
 			name: 'commandstatus',
 			usage: 'commandstatus [Command]',
 		});
 	}
 
-	public parseArgs(message: Message, args: string[], { authorModel, commandName }: ICommandRunInfo): Command[] | string {
-		const command: Command = this.handler.resolveCommand(args.join(' ').toLowerCase());
-		if (commandName === this.name) {
-			if (!args.length) return [];
-		} else if (!command) {
-			return 'I could not find a command with that name or alias.';
-		} else if (authorModel.permLevel(message.member) < PermLevels.HUMANTAMER) {
-			return `you do not have the required permissions to ${commandName} commands.`;
-		} else if (command.guarded) {
-			return `the **${command.name}** command may not be ${commandName}d.`;
-		}
+	public parseArgs(message: Message, args: string[]): Command[] | string[] | string {
+		if (!args.length) return args;
 
-		return command ? [command] : 'I could not find a command with that name or alias.';
+		const command: Command = this.handler.resolveCommand(args.join(' ').toLowerCase());
+
+		if (!command) return 'I could not find a command with that name or alias.';
+
+		return [command];
 	}
 
 	public async run(
 		message: Message,
-		[command]: [Command],
-		{ commandName }: ICommandRunInfo,
+		[command]: [Command | undefined],
 	): Promise<Message | Message[]> {
 		const guildModel: Guild = message.guild.model;
-		const status: boolean = command && !guildModel.disabledCommands.includes(command.name);
 
-		if (commandName === this.name) {
-			if (command) {
-				return message.reply([
-					`the **${command.name}** command is currently server wide ${status ? 'enabled' : 'disabled'}.`,
-					'',
-					`If you intended to get help about the **${command.name}** command instead, use \`k!help ${command.name}\`.`,
-				].join('\n'));
-			}
-
+		if (!command) {
 			if (!guildModel.disabledCommands.length) {
 				return message.reply([
 					'there are currently no commands server wide disabled.',
 					'',
 					'If you intended to get a list of available commands instead, try `k!help`.',
 				].join('\n'));
-
 			}
 
 			return message.reply([
 				'the following commands are currently server wide disabled:',
-				guildModel.disabledCommands.join(', '),
+				`\`${guildModel.disabledCommands.join('`, `')}\``,
 				'',
 				'If you intended to get a list of available commands instead, try `k!help`.',
 			].join('\n'));
 		}
 
-		const newStatus: boolean = commandName === 'enable';
+		const status: boolean = !guildModel.disabledCommands.includes(command.name);
 
-		if (status === newStatus) {
-			return message.reply(`the **${command.name}** command is already server wide ${status ? 'eanbled' : 'disabled'}!`);
-		}
-
-		// Sequelize wants us to reassign, here you go
-		if (newStatus) {
-			const commands: Set<string> = new Set(message.guild.model.disabledCommands);
-			commands.delete(command.name);
-			guildModel.disabledCommands = [...commands];
-		} else {
-			const commands: string[] = message.guild.model.disabledCommands;
-			commands.push(command.name);
-			guildModel.disabledCommands = commands;
-		}
-
-		await guildModel.save();
-
-		return message.reply(`the **${command.name}** command is now server wide ${newStatus ? 'enabled' : 'disabled'}!`);
+		return message.reply([
+			`the **${command.name}** command is currently server wide ${status ? 'enabled' : 'disabled'}.`,
+			'',
+			`If you intended to get help about the **${command.name}** command instead, use \`k!help ${command.name}\`.`,
+		].join('\n'));
 	}
 }
 
