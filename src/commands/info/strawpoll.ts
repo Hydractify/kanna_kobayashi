@@ -16,10 +16,8 @@ class StrawPollCommand extends Command {
 		super(handler, {
 			aliases: ['poll'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Create or display a strawpoll',
 			examples: ['strawpoll 1', 'strawpoll'],
-			exp: 0,
 			name: 'strawpoll',
 			usage: 'strawpoll [ID]',
 		});

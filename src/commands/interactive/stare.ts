@@ -11,7 +11,7 @@ class StareCommand extends WeebCommand {
 		super(handler, {
 			action: 'is staring at',
 			description: 'Stare at someone <:kannaMad:458776169924526093>',
-			emoji: '<:kannaMad:458776169924526093>',
+			emoji: '<:kannaScared:458776266154180609>',
 			examples: ['stare kanna', 'stare kanna wizard'],
 			name: 'stare',
 			type: 'stare',

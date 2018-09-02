@@ -8,15 +8,13 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 class RoleInfoCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['rr'],
+			aliases: ['rr', 'rinfo'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: [
 				'Inspect a role further',
 				'Note: Avoid role mentions as this will notify all members of the role',
 			].join('\n'),
 			examples: ['roleinfo admin'],
-			exp: 0,
 			name: 'roleinfo',
 			usage: 'roleinfo',
 		});

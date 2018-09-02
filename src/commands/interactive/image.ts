@@ -24,7 +24,6 @@ class ImageCommand extends Command {
 		'owo',
 		'pout',
 		'shrug',
-		'slap',
 		'sleepy',
 		'smile',
 		'teehee',

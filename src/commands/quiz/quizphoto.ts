@@ -13,13 +13,11 @@ class QuizPhotoCommand extends Command {
 		super(handler, {
 			aliases: ['qphoto'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Change or view the photo of the current quiz character!',
 			examples: [
 				'quizphoto set https://static.comicvine.com/uploads/original/11120/111201214/4317240-azua3.jpg',
 				'quizphoto view',
 			],
-			exp: 0,
 			name: 'quizphoto',
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'quizphoto <set|view> [URL]',

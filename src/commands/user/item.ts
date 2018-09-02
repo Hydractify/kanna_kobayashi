@@ -1,13 +1,11 @@
-import { GuildMember, Message } from 'discord.js';
-import { BOOLEAN, col, ENUM, fn, INTEGER, Transaction, where } from 'sequelize';
+import { Message } from 'discord.js';
+import { BOOLEAN, col, ENUM, fn, INTEGER, where } from 'sequelize';
 import { inspect } from 'util';
 
-import { Loggable } from '../../decorators/LoggerDecorator';
 import { Item } from '../../models/Item';
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
-import { Logger } from '../../structures/Logger';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { UserTypes } from '../../types/UserTypes';
@@ -18,19 +16,14 @@ import { FlagCollection, parseFlags, titleCase } from '../../util/Util';
 // TODO: Do something against this.
 //
 
-@Loggable
 class ItemCommand extends Command {
-	private logger: Logger;
-
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Check an item\'s information or give an item one of your friends!',
 			examples: ['item check patron'],
-			exp: 0,
 			name: 'item',
-			usage: 'item <Check|Give> <...Query|Target>',
+			usage: 'item <Target>',
 		});
 	}
 
@@ -39,7 +32,7 @@ class ItemCommand extends Command {
 		[method, ...args]: string[],
 		{ authorModel }: ICommandRunInfo,
 	): string | ['create' | 'structure' | 'find' | 'give', string[]] {
-		if (!method) return `you must provide a method! (**\`${this.usage}\`**)`;
+		if (!method) return `you must provide a target! (**\`${this.usage}\`**)`;
 
 		switch (method.toLowerCase()) {
 			case 'create':
@@ -58,22 +51,14 @@ class ItemCommand extends Command {
 
 				return ['structure', args];
 
-			case 'check':
-			case 'find':
-				return ['find', args];
-
-			case 'trade':
-			case 'give':
-				return ['give', args];
-
 			default:
-				return `Unknown method \`${method}\`.`;
+				return ['find', [method, ...args]];
 		}
 	}
 
 	public run(
 		message: Message,
-		[method, args]: ['create' | 'structure' | 'find' | 'give', string[]],
+		[method, args]: ['create' | 'structure' | 'find', string[]],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		return this[method](message, args as string[], authorModel);
@@ -163,79 +148,6 @@ class ItemCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	protected async give(
-		message: Message,
-		[target, ...search]: string[],
-		authorModel: UserModel,
-	): Promise<Message | Message[]> {
-		if (!target) return message.reply('you have to tell me who you want to give an item or badge.');
-		if (!search.length) return message.reply('you also have to tell me what item or badge you want to give.');
-
-		const member: GuildMember = await this.resolver.resolveMember(target, message.guild, false);
-		if (!member) return message.reply(`I could not find a non-bot member by ${target}.`);
-		if (member.id === message.author.id) {
-			return message.reply('you can not give an item or badge to yourself.');
-		}
-
-		const item: Item = await Item.findOne({
-			where: where(fn('lower', col('name')), search.join(' ').toLowerCase()) as {},
-		});
-		if (!item) {
-			return message.reply(`I could not find an item or badge with the name \`${search.join(' ')}\``);
-		}
-
-		const type: string = item.type === 'BADGE' ? 'Badge' : 'Item';
-
-		const [sourceItem]: Item[] = await authorModel.$get<Item>(`${type}s`, { where: { name: item.name } }) as Item[];
-		if (!sourceItem) return message.reply(`you don't have the \`${item.name}\` ${type.toLowerCase()}!`);
-
-		if (!item.tradable) {
-			return message.reply(`**${item.name}** may not be traded!`);
-		}
-
-		const targetModel: UserModel = await member.user.fetchModel();
-		const [targetItem]: Item[] = await targetModel.$get<Item>(`${type}s`, { where: { name: item.name } }) as Item[];
-		if (targetItem && item.unique) {
-			return message.reply(`**${member.user.tag}** already has the unique \`${item.name}\` ${type.toLowerCase()}!`);
-		}
-
-		const singular: boolean = item.unique || sourceItem.userItem.count === 1;
-		try {
-			const promises: PromiseLike<{}>[] = [];
-			// Make a transaction to rollback when something fails
-			const transaction: Transaction = await this.sequelize.transaction();
-
-			// If the source has more than one of this item remove one, otherwise remove the whole item
-			if (sourceItem.userItem.count > 1) {
-				promises.push(sourceItem.userItem.increment('count', { by: -1, transaction }));
-			} else {
-				promises.push(authorModel.$remove(type, sourceItem, { transaction }));
-			}
-
-			// If the target already has that item add one, otherwise add it as whole
-			if (targetItem) {
-				promises.push(targetItem.userItem.increment('count', { transaction }));
-			} else {
-				promises.push(targetModel.$add(type, item, { transaction }));
-			}
-
-			await Promise.all(promises);
-			await transaction.commit();
-
-			return message.reply([
-				`you successfully transferred${singular ? '' : ' one of'} your `,
-				`\`${item.name}\` ${type.toLowerCase() + singular ? '' : 's'} to **${member.user.tag}**!`,
-			].join('\n'));
-		} catch (error) {
-			this.logger.error(error);
-
-			return message.reply([
-				'something went wrong while transferring your',
-				`${type.toLowerCase() + singular ? '' : 's'}, the transaction has been reverted.`,
-			].join(' '));
-		}
-	}
-
 	protected structure(message: Message, args: string[], authorModel: UserModel): Promise<Message | Message[]> {
 		const structure: string[] = ['Item {'];
 		for (const [name, { type }] of Object.entries<any>((Item.prototype as any).rawAttributes)) {
@@ -261,6 +173,7 @@ class ItemCommand extends Command {
 		const modelData: { [key: string]: string | boolean | number } = {};
 
 		for (const [name, data] of parsed) {
+			if (typeof name === 'symbol') continue;
 			const { type }: any = (Item.prototype as any).rawAttributes[name] || {};
 			// Provided flag is not an attributte of Item
 			if (!type) continue;

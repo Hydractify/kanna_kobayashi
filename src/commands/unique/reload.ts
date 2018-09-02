@@ -10,11 +10,9 @@ class ReloadCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['r'],
-			coins: 0,
 			cooldown: 0,
 			description: 'Reload a command',
 			examples: ['reload reload'],
-			exp: 0,
 			guarded: true,
 			name: 'reload',
 			permLevel: PermLevels.TRUSTED,

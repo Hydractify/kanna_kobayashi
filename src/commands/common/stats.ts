@@ -14,11 +14,9 @@ class StatsCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['kannastats', 'bstats'],
-			coins: 0,
 			cooldown: 0,
 			description: 'Stats about the bot',
 			examples: ['stats'],
-			exp: 0,
 			name: 'stats',
 			usage: 'stats',
 		});
@@ -55,7 +53,7 @@ class StatsCommand extends Command {
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL())
 			.addField('Uptime <:kannaHug:460080146418892800>', uptime, true)
-			.addField('Total Guilds <:kannaWow:458777326810038292>', totalGuilds.toLocaleString(), true)
+			.addField('Total Servers <:kannaWow:458777326810038292>', totalGuilds.toLocaleString(), true)
 			.addField('Total Users <:kannaLolice:458776154057342976>', totalUsers.toLocaleString(), true)
 			.addField('Total Ram Used <:kannaTired:458777258694541313>', `${totalRam.toFixed(2)} MB`, true)
 			.addField('Shards <:kannaHungry:458776120092000258>', shardsInfo);

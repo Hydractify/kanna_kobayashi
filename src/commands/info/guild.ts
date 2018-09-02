@@ -10,14 +10,12 @@ import { mapIterable, titleCase } from '../../util/Util';
 class GuildInfoCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['gstats', 'ginfo', 'gg'],
+			aliases: ['ginfo', 'gg'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Inspect information about this guild',
-			examples: ['ginfo'],
-			exp: 0,
+			examples: ['guildinfo'],
 			name: 'guildinfo',
-			usage: 'ginfo',
+			usage: 'guilinfo',
 		});
 	}
 

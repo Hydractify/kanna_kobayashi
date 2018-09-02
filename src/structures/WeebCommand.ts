@@ -66,6 +66,7 @@ export abstract class WeebCommand extends Command {
 		const members: Collection<Snowflake, IWeebResolvedMember> = await this.resolveMembers(args, message);
 		if (!members.size) return `I could not find anyone with ${args.join(' ')}`;
 
+		await message.delete().catch(() => null);
 		return [members];
 	}
 

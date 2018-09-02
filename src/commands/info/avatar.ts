@@ -10,10 +10,8 @@ class AvatarCommand extends Command {
 		super(handler, {
 			aliases: ['av', 'image'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Take a closer look at the avatar of a user',
 			examples: ['avatar @space#0302'],
-			exp: 0,
 			name: 'avatar',
 			usage: 'avatar [User]',
 		});
@@ -33,7 +31,7 @@ class AvatarCommand extends Command {
 	}
 
 	public async run(message: Message, [user]: [User], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const embed: MessageEmbed = MessageEmbed.image(message, authorModel, user.displayAvatarURL())
+		const embed: MessageEmbed = MessageEmbed.image(message, authorModel, user.displayAvatarURL({ size: 2048 }))
 			.setAuthor(`${user.tag}'s avatar`, user.displayAvatarURL(), user.displayAvatarURL());
 
 		return message.channel.send(embed);

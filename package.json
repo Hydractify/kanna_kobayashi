@@ -5,35 +5,34 @@
 	"main": "bin/shard.js",
 	"dependencies": {
 		"discord.js": "github:discordjs/discord.js",
-		"moment": "^2.22.1",
+		"moment": "^2.22.2",
 		"moment-duration-format": "^2.2.2",
-		"pg": "^7.4.1",
+		"pg": "^7.4.3",
 		"raven": "github:spaceeec/raven-node#pg_fix",
 		"redis-p": "^0.1.8",
 		"reflect-metadata": "^0.1.12",
-		"sequelize": "4.37.6",
-		"sequelize-typescript": "^0.6.4",
+		"sequelize": "4.37.10",
+		"sequelize-typescript": "v0.6.6-beta.1",
 		"snekfetch": "^3.6.4",
-		"source-map-support": "^0.5.4"
+		"source-map-support": "^0.5.9"
 	},
 	"devDependencies": {
-		"@types/moment-duration-format": "^2.2.0",
-		"@types/node": "^9.6.6",
+		"@types/moment-duration-format": "^2.2.2",
+		"@types/node": "^10.7.1",
 		"@types/raven": "^2.5.1",
-		"@types/sequelize": "4.27.14",
-		"tslint": "^5.9.1",
-		"typescript": "^2.8.3"
+		"tslint": "^5.10.0",
+		"typescript": "^3.0.1"
 	},
 	"scripts": {
 		"build": "tsc -p ./",
 		"buildItems": "node ./bin/scripts/buildItems.js",
-		"watch": "tsc -w -p ./",
-		"test": "tslint -p ./",
-		"start": "cd bin && node ./Shard.js",
 		"dev": "export DEBUG=*|| set DEBUG=*&& export NODE_ENV=dev|| set NODE_ENV=dev&& npm run start",
 		"prod": "export NODE_ENV=production|| set NODE_ENV=production&& npm run start",
+		"start": "cd bin && node ./Shard.js",
+		"test": "tslint -p ./",
 		"testing": "export NODE_ENV=testing|| set NODE_ENV=testing&& npm run start",
-		"typings": "node ./static/typings.js"
+		"typings": "node ./static/typings.js",
+		"watch": "tsc -w -p ./"
 	},
 	"repository": {
 		"type": "git",

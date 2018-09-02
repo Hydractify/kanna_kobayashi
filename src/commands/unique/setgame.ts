@@ -8,14 +8,12 @@ class SetGameCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['sg'],
-			coins: 0,
 			cooldown: 0,
 			description: 'Set the game I am currently playing on all shards',
 			examples: ['setgame something'],
-			exp: 0,
 			guarded: true,
 			name: 'setgame',
-			permLevel: PermLevels.DEV,
+			permLevel: PermLevels.TRUSTED,
 			usage: 'setgame [\'stream\'] [...Game]',
 		});
 	}
@@ -30,7 +28,7 @@ class SetGameCommand extends Command {
 			let stream: string;
 			if (args[0].toLowerCase() === 'stream') {
 				args = args.slice(1);
-				stream = ', \'https://twitch.tv/wizzardlink\'';
+				stream = ', \'https://twitch.tv/wizardlinkk\'';
 			}
 
 			await this.client.shard.broadcastEval(this.setActivity, [args.join(' '), stream]);

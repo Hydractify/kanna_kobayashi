@@ -14,10 +14,8 @@ class OsuUserCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['osu'],
-			coins: 0,
 			description: 'Search for basic information, or best or recent plays about any osu! user',
 			examples: ['osu SpaceEEC', 'osu SpaceEEC best', 'osu SpaceEEC recent', 'osu SpaceEEC taiko'],
-			exp: 0,
 			name: 'osuuser',
 			usage: 'osucommand <UsernameOrID> [Mode] [\'top\'|\'recent\']',
 		});
@@ -68,9 +66,9 @@ class OsuUserCommand extends Command {
 			.addField('Ranked Score', user.rankedScore.toLocaleString(), true)
 			.addField('Total Score', user.totalScore.toLocaleString(), true)
 
-			.addField('SS', user.countSS.toLocaleString(), true)
-			.addField('S', user.countS.toLocaleString(), true)
-			.addField('A', user.countA.toLocaleString(), true);
+			.addField('<:SS:380476658202836992>', user.countSS.toLocaleString(), true)
+			.addField('<:S_:380476474714488843>', user.countS.toLocaleString(), true)
+			.addField('<:A_:380475521072365569>', user.countA.toLocaleString(), true);
 
 		return message.channel.send(embed);
 	}

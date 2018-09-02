@@ -141,7 +141,9 @@ export class Client extends DJSClient {
 
 		let message: string = guildModel[left ? 'farewellMessage' : 'welcomeMessage'];
 		if (!message) return;
-		message = message.replace(/\{\{member\}\}/g, member.user.tag);
+		message = message
+			.replace(/\{\{guild\}\}/g, member.guild.name)
+			.replace(/\{\{member\}\}/g, member.user.tag);
 
 		channel.send(message);
 	}

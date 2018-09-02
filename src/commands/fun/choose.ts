@@ -8,7 +8,11 @@ class ChooseCommand extends Command {
 		super(handler, {
 			aliases: ['choice'],
 			description: 'Let me choose between things',
-			examples: ['choose Tohru|Kanna', 'choose Tohru Kanna'],
+			examples: [
+				'choose Tohru | Me', 'choose Tohru Kanna',
+				'choose Tohru or Me',
+				'choose Tohru, Me, or Kobayashi-san',
+			],
 			name: 'choose',
 			usage: 'choose <...Choices>',
 		});
@@ -18,8 +22,8 @@ class ChooseCommand extends Command {
 		if (!args.length) return `you have to give me something to choose from! (\`${this.usage}\`)`;
 
 		const joined: string = args.join(' ');
-		const options: string[] = joined.includes('|')
-			? joined.split('|')
+		const options: string[] = /\||or|,/ig.test(joined)
+			? joined.replace(/\s*(\||or|,)\s*/ig, ' ').split(' ')
 			: args;
 
 		if (!options.length) return `you have to give me something to choose from! (\`${this.usage}\`)`;

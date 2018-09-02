@@ -71,7 +71,7 @@ class UrbanCommand extends Command {
 		}
 
 		embed.addField('Thumbs Up <:kannaWow:458777326810038292>', thumbsUp, true)
-			.addField('Thumbs Down <:kannaSad:458776254666244127>', thumbsDown, true);
+			.addField('Thumbs Down <:kannaMad:458776169924526093>', thumbsDown, true);
 
 		return message.channel.send(embed);
 	}

@@ -8,14 +8,12 @@ class NotifCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['notif', 'notifchannel', 'notif_channel'],
-			coins: 0,
 			description: 'Get or set a custom channel for welcome and farewell messages',
 			examples: [
 				'notif',
 				'notif #general',
-				'notif false // to remove the channel',
+				'notif remove // to remove the channel',
 			],
-			exp: 0,
 			guarded: true,
 			name: 'notif-channel',
 			permLevel: PermLevels.HUMANTAMER,
@@ -38,8 +36,8 @@ class NotifCommand extends Command {
 			return message.reply('there is no channel for welcome and farewell messages set up.');
 		}
 
-		// "false" passed, remove
-		if (target.toLowerCase() === 'false') {
+		// "remove" passed, remove
+		if (target.toLowerCase() === 'remove') {
 			if (message.guild.model.notificationChannelId) {
 				message.guild.model.notificationChannelId = null;
 				await message.guild.model.save();

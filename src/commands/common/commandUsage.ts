@@ -12,17 +12,15 @@ class CommandUsageCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Stats about command usages',
 			examples: ['usage'],
-			exp: 0,
 			name: 'usage',
 			usage: 'usage',
 		});
 	}
 
 	public async run(message: Message, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const [allTime, lastHour]: [CommandLog[], CommandLog[]] = await Promise.all([
+		const [thisMonth, lastHour]: [CommandLog[], CommandLog[]] = await Promise.all([
 			CommandLog.findAll({
 				attributes: [[fn('COUNT', col('command_name')), 'count'], ['command_name', 'commandName']],
 				group: ['commandName'],
@@ -37,13 +35,13 @@ class CommandUsageCommand extends Command {
 		]);
 
 		let allTimeCount: number = 0;
-		const allTimeTop5: string[] = [];
-		for (let { dataValues: { count, commandName } } of allTime as any) {
+		const thisMonthTop5: string[] = [];
+		for (let { dataValues: { count, commandName } } of thisMonth as any) {
 			count = Number(count);
 			allTimeCount += count;
-			if (allTimeTop5.length <= 5) {
-				allTimeTop5.push(
-					`${allTimeTop5.length + 1}. ${titleCase(commandName.replace(/([A-Z])/g, ' $1'))}: ${count.toLocaleString()}`,
+			if (thisMonthTop5.length <= 5) {
+				thisMonthTop5.push(
+					`${thisMonthTop5.length + 1}. ${titleCase(commandName.replace(/([A-Z])/g, ' $1'))}: ${count.toLocaleString()}`,
 				);
 			}
 		}
@@ -60,7 +58,7 @@ class CommandUsageCommand extends Command {
 			}
 		}
 
-		allTimeTop5.unshift(
+		thisMonthTop5.unshift(
 			`Count: ${allTimeCount.toLocaleString()}`,
 			'\u200b',
 		);
@@ -73,10 +71,10 @@ class CommandUsageCommand extends Command {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setThumbnail(message.guild.iconURL())
 			.setTitle('Command Usage Statistics')
-			.addField('All Time', allTimeTop5, true)
+			.addField('This Month', thisMonthTop5, true)
 			.addField('Last Hour', lastHourTop5, true);
 
-		return message.channel.send(embed);
+		return message.reply(embed);
 	}
 }
 

@@ -11,7 +11,7 @@ class LickCommand extends WeebCommand {
 		super(handler, {
 			action: 'licked',
 			description: 'L-lick someone!',
-			emoji: '<:KannaLewd:320406420824653825>',
+			emoji: '<:kannaBlush:458776068279762954>',
 			examples: ['lick kanna', 'lick kanna wizard'],
 			name: 'lick',
 			type: 'lick',

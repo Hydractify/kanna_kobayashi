@@ -23,7 +23,6 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		super(handler, {
 			aliases: ['halp', 'commands'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS'],
-			coins: 0,
 			cooldown: 10000,
 			description: [
 				'Let me show you all the commands (or a specifc one), that I have!',
@@ -152,7 +151,10 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 				.setThumbnail(guild.iconURL())
 				.setURL('https://thedragonproject.network/guild')
 				.setAuthor(`${this.client.user.username}'s ${titleCase(category)} Commands`)
-				.setDescription('\u200b');
+				.setDescription([
+					'[Having trouble using the help command? Read the wiki!]',
+					'(https://github.com/TheDragonProject/Kanna-Kobayashi/wiki)',
+				].join(''));
 
 			embed.footer.text += ` | Page ${embeds.length + 1} | Help`;
 

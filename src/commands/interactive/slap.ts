@@ -26,7 +26,7 @@ class SlapCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		if (members.has(message.client.user.id)) {
 			return message.reply(
-				'you can not slap me! Baka... <:kannaSad:458776254666244127>',
+				'you can not slap me! <:kannaMad:458776169924526093>',
 			);
 		}
 

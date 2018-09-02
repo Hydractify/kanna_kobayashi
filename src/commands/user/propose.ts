@@ -11,11 +11,9 @@ class ProposeCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['marry'],
-			coins: 0,
 			cooldown: 1e4,
 			description: 'Propose to someone... You love! <:kannaShy:458779242696540170>',
 			examples: ['propose Wizard'],
-			exp: 0,
 			name: 'propose',
 			usage: 'propose <User>',
 		});
@@ -178,11 +176,11 @@ class ProposeCommand extends Command {
 
 			return message.channel.send([
 				`Congratulations ${message.author} and ${mentionedUser}! If you are still together in a month,`,
-				'you can use propose again to marry! <:kannaBlush:458776068279762954>',
+				'you can use propose again to marry! <:kannaGreetings:458776090752843786>',
 			].join(' '));
 		}
 
-		return message.reply('you got rejected. <:kannaSad:458776254666244127>');
+		return message.reply('you got rejected. <:kannaScared:458776266154180609>');
 	}
 }
 

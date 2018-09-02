@@ -28,7 +28,7 @@ class BangCommand extends WeebCommand {
 		if (members) {
 			if (members.has(message.client.user.id)) {
 				return message.reply(
-					`get away from me with that pistol or I will destroy you, human! ${this.emoji}`,
+					'get away from me with that pistol or I will destroy you, human! <:kannaMad:458776169924526093>',
 				);
 			}
 		}

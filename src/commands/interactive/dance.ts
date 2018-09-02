@@ -10,8 +10,8 @@ class DanceCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'is dancing with',
-			description: 'Dance! <a:Dance:458783921073815565>',
-			emoji: '<a:Dance:458783921073815565>',
+			description: 'Dance! <a:kannaRun:458776024012947456>',
+			emoji: '<a:kannaRun:458776024012947456>',
 			examples: ['dance', 'dance kanna', 'dance kanna wizard'],
 			name: 'dance',
 			type: 'dance',

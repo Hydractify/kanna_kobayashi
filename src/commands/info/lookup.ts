@@ -11,13 +11,11 @@ class LookupCommand extends Command {
 		super(handler, {
 			aliases: ['ii', 'lookup'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Look up a guild\'s info by an invite link or invite code',
 			examples: [
 				'lookup uBdXdE9',
 				'lookup discord.gg/uBdXdE9',
 			],
-			exp: 0,
 			name: 'lookup',
 			usage: 'lookup <invite>',
 		});

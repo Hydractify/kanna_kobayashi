@@ -9,10 +9,8 @@ class BalanceCommand extends Command {
 	constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['coins', 'bal'],
-			coins: 0,
 			description: 'See how many <:coin:330926092703498240> you have!',
 			examples: ['balance', 'balance wizard'],
-			exp: 0,
 			name: 'balance',
 			usage: 'balance [User]',
 		});

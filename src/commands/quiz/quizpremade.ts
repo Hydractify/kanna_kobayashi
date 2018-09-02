@@ -26,10 +26,8 @@ class QuizPremadeCommand extends Command {
 		super(handler, {
 			aliases: ['qpremade'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'USE_EXTERNAL_EMOJIS'],
-			coins: 0,
 			description: 'Choose one of the pre made quizzes of 10 characters from the series',
 			examples: ['quizpremade'],
-			exp: 0,
 			name: 'quizpremade',
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'quizpremade',

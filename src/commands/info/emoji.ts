@@ -13,15 +13,13 @@ class EmojiInfoCommand extends Command {
 		super(handler, {
 			aliases: ['einfo', 'ee', 'emoji'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Search for information about any custom emoji',
 			examples: [
 				'emoji KannaWave',
 				'emoji 333771413842558976',
 				// Displays as regular emoji
-				'emojii <:kannaWave:458777297219092481>',
+				'emoji <:kannaWave:458777297219092481>',
 			],
-			exp: 0,
 			name: 'emojiinfo',
 			usage: 'emoji <Emoji>',
 		});
