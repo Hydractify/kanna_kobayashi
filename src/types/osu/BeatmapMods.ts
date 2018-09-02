@@ -1,5 +1,5 @@
 // tslint:disable no-bitwise
-export enum BeatmapMods {
+export enum BeatmapModsFlags {
 	NF = 1 << 0,
 	EZ = 1 << 1,
 	NoVideo = 1 << 2,
@@ -21,29 +21,40 @@ export enum BeatmapMods {
 	KEY6 = 1 << 17,
 	KEY7 = 1 << 18,
 	KEY8 = 1 << 19,
-	KEYMOD = BeatmapMods.KEY4
-	| BeatmapMods.KEY5
-	| BeatmapMods.KEY6
-	| BeatmapMods.KEY7
-	| BeatmapMods.KEY8,
+	KEYMOD = BeatmapModsFlags.KEY4
+	| BeatmapModsFlags.KEY5
+	| BeatmapModsFlags.KEY6
+	| BeatmapModsFlags.KEY7
+	| BeatmapModsFlags.KEY8,
 	FADEIN = 1 << 20,
 	RANDOM = 1 << 21,
 	LASTMOD = 1 << 22,
-	FREEMODALLOWED = BeatmapMods.NF
-	| BeatmapMods.EZ
-	| BeatmapMods.HD
-	| BeatmapMods.HR
-	| BeatmapMods.SD
-	| BeatmapMods.FL
-	| BeatmapMods.FADEIN
-	| BeatmapMods.RX
-	| BeatmapMods.RX2
-	| BeatmapMods.SO
-	| BeatmapMods.KEYMOD,
+	FREEMODALLOWED = BeatmapModsFlags.NF
+	| BeatmapModsFlags.EZ
+	| BeatmapModsFlags.HD
+	| BeatmapModsFlags.HR
+	| BeatmapModsFlags.SD
+	| BeatmapModsFlags.FL
+	| BeatmapModsFlags.FADEIN
+	| BeatmapModsFlags.RX
+	| BeatmapModsFlags.RX2
+	| BeatmapModsFlags.SO
+	| BeatmapModsFlags.KEYMOD,
 	// No 1 << 23, /shrug
 	KEY9 = 1 << 24,
 	KEY10 = 1 << 25,
 	KEY1 = 1 << 26,
 	KEY3 = 1 << 27,
 	KEY2 = 1 << 28,
+}
+// tslint:enable no-bitwise
+
+import { BitField, BitFieldResolvable } from 'discord.js';
+
+export class BeatmapMods extends BitField<keyof typeof BeatmapModsFlags> {
+	public static FLAGS = BeatmapModsFlags;
+
+	public static resolve(bit?: BitFieldResolvable<keyof typeof BeatmapModsFlags>): number {
+		return super.resolve(bit);
+	}
 }

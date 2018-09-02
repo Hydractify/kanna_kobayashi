@@ -141,22 +141,11 @@ export class Score {
 	 */
 	public get enabledMods(): string {
 		if (!this._enabledMods) return '';
-		const enabledMods: Set<string> = new Set<string>();
+		const mods = new BeatmapMods(this._enabledMods);
+		if (mods.has('NC')) mods.remove('DT');
+		if (mods.has('PF')) mods.remove('SD');
 
-		let mods: [string, number][] = Object.entries(BeatmapMods) as any;
-		mods = mods.slice(mods.length / 2);
-
-		for (const [mod, flag] of mods) {
-			// tslint:disable-next-line:no-bitwise
-			if ((this._enabledMods & flag) === flag) {
-				enabledMods.add(mod);
-			}
-		}
-
-		if (enabledMods.has('NC')) enabledMods.delete('DT');
-		if (enabledMods.has('PF')) enabledMods.delete('SD');
-
-		return Array.from(enabledMods.values()).join(', ');
+		return mods.toArray().join(', ');
 	}
 
 	public get rankEmoji(): string {
