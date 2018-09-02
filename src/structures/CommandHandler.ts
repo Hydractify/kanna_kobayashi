@@ -1,7 +1,6 @@
 import {
 	Collection,
 	DMChannel,
-	GuildMember,
 	Message,
 	MessageAttachment,
 	MessageOptions,
@@ -9,14 +8,13 @@ import {
 } from 'discord.js';
 import { readdir } from 'fs';
 import { extname, join } from 'path';
-import { captureException } from 'raven';
+import { captureBreadcrumb, captureException } from 'raven';
 import { promisify } from 'util';
 
 import { ListenerUtil } from '../decorators/ListenerUtil';
 import { Loggable } from '../decorators/LoggerDecorator';
 import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
-import { User as UserModel } from '../models/User';
 import { UserTypes } from '../types/UserTypes';
 import { Client } from './Client';
 import { Command } from './Command';
@@ -69,7 +67,6 @@ export class CommandHandler {
 			? ['kanna ', 'k!', '-']
 			: ['kanna ', 'k!'];
 
-		// Wrap all received messages in a seperate raven context
 		client.once('ready', () => this._prefixes.push(`<@!?${this.client.user.id}> `));
 
 		registerListeners(client, this);
@@ -164,25 +161,56 @@ export class CommandHandler {
 	@on('message')
 	@RavenContext
 	protected async handle(message: Message): Promise<void> {
+		// Ignore dms
 		if (message.channel instanceof DMChannel) {
 			this.client.channels.remove(message.channel.id);
-			await message.channel.delete();
+			await message.channel.delete().catch(() => null);
+			message.channel.messages.delete(message.id);
+
+			return;
 		}
-		if (message.author.id === this.client.user.id) {
-			if (message.embeds.length && message.embeds[0].footer
-				&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text)
-			) return;
-		}
+
+		// Keep "Requested by" embeds
+		if (message.author.id === this.client.user.id
+			&& message.embeds.length && message.embeds[0].footer
+			&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text)
+		) return;
+
 		message.channel.messages.delete(message.id);
 
 		if (message.author.bot || !(message.channel instanceof TextChannel)) return;
+
+		captureBreadcrumb({
+			category: 'Meta',
+			data: {
+				author: `${message.author.tag} (${message.author.id})`,
+				channel: `#${message.channel.name} (${message.channel.id})`,
+				content: message.content,
+				guild: `${message.guild.name} (${message.guild.id})`,
+				permissions: {
+					member_channel: message.channel.permissionsFor(message.member),
+					member_guild: message.member.permissions,
+					self_channel: message.channel.permissionsFor(this.client.user),
+					self_guild: message.guild.me.permissions,
+				},
+				shard_id: String(this.client.shard.id),
+			},
+			level: 'debug',
+		});
 
 		const guildModel: GuildModel = message.guild.model || await message.guild.fetchModel();
 		const [command, commandName, args]: [Command, string, string[]]
 			| [undefined, undefined, undefined] = this._matchCommand(message, guildModel);
 		if (!command) return;
 
-		const [authorModel, ownerModel] = await this._fetchModels(message);
+		captureBreadcrumb({ category: 'Command', data: { commandName }, level: 'debug' });
+
+		const [authorModel, ownerModel] = await Promise.all([
+			message.author.fetchModel(),
+			this.client.users.get(message.guild.ownerID).fetchModel(),
+			message.guild.owner ? undefined : message.guild.members.fetch(message.guild.ownerID),
+		]);
+
 		if (authorModel.type === UserTypes.BLACKLISTED) return;
 		if (ownerModel.type === UserTypes.BLACKLISTED) return;
 
@@ -224,41 +252,13 @@ export class CommandHandler {
 				await message.reply(`you advanced to level **${newLevel}**! <:kannaHug:460080146418892800>`);
 			}
 		} catch (error) {
-			captureException(error, {
-				extra: {
-					author: `${message.author.tag} (${message.author.id})`,
-					channel: `#${message.channel.name} (${message.channel.id})`,
-					content: message.content,
-					guild: `${message.guild.name} (${message.guild.id})`,
-					shard_id: String(this.client.shard.id),
-				},
-				tags: {
-					command: command.name,
-				},
-			});
+			captureException(error);
 
 			this.logger.error(error);
 			message.reply(
 				'**an errror occured, but rest assured! It has already been reported and will be fixed in no time!**',
 			).catch(() => null);
 		}
-	}
-
-	private _fetchModels(message: Message): Promise<[UserModel, UserModel, GuildMember, GuildMember]> {
-		const promises: [Promise<UserModel>, Promise<UserModel>, Promise<GuildMember>, Promise<GuildMember>] = [
-			message.author.fetchModel(),
-			this.client.users.get(message.guild.ownerID).fetchModel(),
-			undefined,
-			undefined,
-		];
-
-		if (!message.member) {
-			promises[2] = message.guild.members.fetch(message.author.id);
-		}
-
-		if (!message.guild.owner) promises[3] = message.guild.members.fetch(message.guild.ownerID);
-
-		return Promise.all(promises);
 	}
 
 	private _matchCommand(message: Message, guildModel: GuildModel):

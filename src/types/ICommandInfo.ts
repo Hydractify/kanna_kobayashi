@@ -14,6 +14,5 @@ export interface ICommandInfo {
 	name: string;
 	patreonOnly?: boolean;
 	permLevel?: PermLevels;
-	range?: number;
 	usage: string;
 }

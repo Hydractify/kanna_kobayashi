@@ -1,6 +1,6 @@
 import {
 	Message,
-	MessageAttachment,
+	MessageAdditions,
 	MessageOptions,
 	Permissions,
 	PermissionString,
@@ -24,7 +24,6 @@ import { PermLevels } from '../types/PermLevels';
 import { titleCase } from '../util/Util';
 import { Client } from './Client';
 import { CommandHandler } from './CommandHandler';
-import { MessageEmbed } from './MessageEmbed';
 import { Resolver } from './Resolver';
 
 /**
@@ -94,10 +93,6 @@ export abstract class Command {
 	 */
 	public readonly permLevel: PermLevels;
 	/**
-	 * The rewards given to the user
-	 */
-	public readonly range: number;
-	/**
 	 * Reference to the resolver
 	 */
 	public readonly resolver: Resolver;
@@ -130,7 +125,6 @@ export abstract class Command {
 		name,
 		patreonOnly = false,
 		permLevel = PermLevels.EVERYONE,
-		range = 0,
 		usage,
 	}: ICommandInfo) {
 		// Assert correct type
@@ -173,19 +167,9 @@ export abstract class Command {
 		this.handler = handler;
 		this.name = name;
 		this.resolver = handler.resolver;
-		this.range = range;
 		this.usage = usage;
 		this.patreonOnly = patreonOnly;
 		this.permLevel = permLevel;
-
-		if (range > 1) {
-			const amountRange = (amount: number): number => {
-				return Math.floor(Math.random() * (amount * range - amount) + amount);
-			};
-
-			this.exp = amountRange(exp);
-			this.coins = amountRange(coins);
-		}
 	}
 
 	/**
@@ -193,15 +177,18 @@ export abstract class Command {
 	 * Resolves with true on success or with a reason string on failure.
 	 */
 	public async canCall(message: Message, authorModel: UserModel): Promise<true | string> {
-		const missing: PermissionString[] = (message.channel as TextChannel)
-			.permissionsFor(message.guild.me)
-			.missing(this.clientPermissions) as PermissionString[];
-		if (missing.length) {
-			const missingPermsString: string = missing.map((perm: string) =>
-				titleCase(perm.replace(/_/g, ' ')),
-			).join(', ');
+		if (this.clientPermissions.length) {
+			const missing: PermissionString[] = (message.channel as TextChannel)
+				.permissionsFor(message.guild.me)
+				.missing(this.clientPermissions);
 
-			return `I require the following permissions to execute the **${this.name}** command: **${missingPermsString}**!`;
+			if (missing.length) {
+				const missingPermsString: string = missing.map((perm: string) =>
+					titleCase(perm.replace(/_/g, ' ')),
+				).join(', ');
+
+				return `I require the following permissions to execute the **${this.name}** command: **${missingPermsString}**!`;
+			}
 		}
 
 		const permLevel: PermLevels = authorModel.permLevel(message.member);
@@ -267,7 +254,7 @@ export abstract class Command {
 
 		if (this.coins) {
 			multi.hincrby(`users:${user.id}`, 'coins', this.coins);
-			// Model will be discarded directly anyway, no need to add coins to it
+			userModel.coins += this.coins;
 			fields.coins = this.coins;
 		}
 
@@ -280,20 +267,21 @@ export abstract class Command {
 	}
 
 	/**
-	 * Should be overriden if parsing and validating args is required.
-	 * Should return a string with a message to the user if resolving failed.
+	 * Should be overriden if parsing and validating of args is required.
+	 * Should return an array on success, anything sendable as response to the user, on failure.
 	 * @virtual
 	 */
 	public parseArgs(
 		message: Message,
 		args: string[],
 		info: ICommandRunInfo,
-	): MaybePromise<any[] | string | MessageOptions | MessageEmbed | MessageAttachment> {
+	): MaybePromise<any[] | string | MessageOptions | MessageAdditions> {
 		return args;
 	}
 
 	/**
 	 * Main entry point for the actual execution of the command.
+	 * @abstract
 	 */
-	public abstract run(message: Message, args: any[], info: ICommandRunInfo): any;
+	public abstract run(message: Message, args: any[], info: ICommandRunInfo): MaybePromise<any>;
 }
