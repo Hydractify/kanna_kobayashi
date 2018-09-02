@@ -43,8 +43,11 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		'&lt;': '<',
 		'&mdash;': '—',
 		'&quot;': '"',
+		'</p>': '\n\n',
 		'<br />': '\n',
 		'<br>': '\n',
+		'<p/>': '\n\n',
+		'<p>': '',
 		'`': '\'',
 	};
 
