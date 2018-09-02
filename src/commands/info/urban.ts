@@ -1,12 +1,20 @@
 import { Message } from 'discord.js';
-import { get, Result } from 'snekfetch';
 
+import { APIRouter, buildRouter } from '../../structures/Api';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IUrbanDictionaryResponse } from '../../types/IUrbanDictionaryResponse';
 import { titleCase } from '../../util/Util';
+
+// tslint:disable-next-line:variable-name
+const Api: () => APIRouter = buildRouter({
+	baseURL: 'http://api.urbandictionary.com/v0',
+	defaultHeaders: {
+		accept: 'application/json',
+	},
+});
 
 class UrbanCommand extends Command {
 	public constructor(handler: CommandHandler) {
@@ -31,25 +39,25 @@ class UrbanCommand extends Command {
 
 	public async run(
 		message: Message,
-		[original, query]: string[],
+		[original, term]: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const { body: { list } }: Result<IUrbanDictionaryResponse> = await get(
-			`http://api.urbandictionary.com/v0/define?term=${query}`,
-		);
+		const { list }: IUrbanDictionaryResponse = await Api()
+			.define
+			.get({ query: { term } });
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(
-			`Search result for ${original}`,
-			'https://d2gatte9o95jao.cloudfront.net/assets/store-mug-example-256@2x-34cb1d3724cbce5ce790228b5bf8eabe.png',
-		)
+				`Search result for ${original}`,
+				'https://d2gatte9o95jao.cloudfront.net/assets/store-mug-example-256@2x-34cb1d3724cbce5ce790228b5bf8eabe.png',
+			)
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL());
 		embed.footer.text += ' | Powered by urbandictionary';
 
 		if (!list.length) {
 			embed.addField('No results', 'Maybe made a typo?')
-				.addField('Search:', `[URL](http://www.urbandictionary.com/define.php?term=${query})`);
+				.addField('Search:', `[URL](http://www.urbandictionary.com/define.php?term=${term})`);
 
 			return message.channel.send(embed);
 		}
@@ -62,8 +70,8 @@ class UrbanCommand extends Command {
 			thumbs_down: thumbsDown,
 		} = list[0];
 
-		embed.addField('Author', author)
-			.splitToFields('Definition', definition);
+		embed.addField('Author', author || 'n/a')
+			.splitToFields('Definition', definition || 'n/a');
 
 		if (example) {
 			embed.splitToFields('Example', example);

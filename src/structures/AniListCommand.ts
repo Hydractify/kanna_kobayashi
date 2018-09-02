@@ -22,6 +22,10 @@ const readFileAsync = promisify(readFile);
 // tslint:disable-next-line:variable-name
 const Api: () => APIRouter = buildRouter({
 	baseURL: 'https://graphql.anilist.co',
+	defaultHeaders: {
+		accept: 'application/json',
+		'content-type': 'application/json',
+	},
 });
 
 /**

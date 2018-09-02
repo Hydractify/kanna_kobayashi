@@ -6,7 +6,10 @@ import { APIRouter, buildRouter } from './Api';
 const { weebToken } = require('../../data');
 const api: () => APIRouter = buildRouter({
 	baseURL: 'https://api.weeb.sh',
-	defaultHeaders: { Authorization: weebToken },
+	defaultHeaders: {
+		accept: 'application/json',
+		authorization: weebToken,
+	},
 });
 
 export interface IFetchRandomOptions {

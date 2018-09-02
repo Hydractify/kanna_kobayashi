@@ -1,15 +1,23 @@
 import { Collection, Message, Snowflake } from 'discord.js';
-import { get, post, Result } from 'snekfetch';
 
 import { User as UserModel } from '../../models/User';
+import { APIRouter, buildRouter } from '../../structures/Api';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IStrawPollPoll } from '../../types/IStrawPollPoll';
 
+// tslint:disable-next-line:variable-name
+const Api: () => APIRouter = buildRouter({
+	baseURL: 'https://www.strawpoll.me/api/v2/polls',
+	defaultHeaders: {
+		accept: 'application/json',
+		'content-type': 'application/json',
+	},
+});
+
 class StrawPollCommand extends Command {
-	private apiURL: string;
 	private baseURL: string;
 
 	public constructor(handler: CommandHandler) {
@@ -22,18 +30,16 @@ class StrawPollCommand extends Command {
 		});
 
 		this.baseURL = 'https://www.strawpoll.me';
-		this.apiURL = `${this.baseURL}/api/v2/polls`;
 	}
 
 	public async run(message: Message, [id]: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
 		if (id) {
-			const { body: fetchedPoll }: Result<IStrawPollPoll> = await get(`${this.apiURL}/${id}`)
-				.set('Content-Type', 'application/json')
-				.catch(() => ({ body: undefined }));
-			// 404 and json is overrated, better respond with 200 and html
-			if (!fetchedPoll || fetchedPoll instanceof Buffer) {
-				return message.reply('I could not find a strawpoll with that ID.');
-			}
+			const res: string = await Api()[id].get({ type: 'text' }).catch(() => null);
+
+			let fetchedPoll: IStrawPollPoll;
+			try { fetchedPoll = JSON.parse(res); } catch { } // tslint:disable-line:no-empty
+
+			if (!fetchedPoll) return message.reply('I could not find a strawpoll with that ID.');
 
 			return this.showPoll(message, fetchedPoll, authorModel);
 		}
@@ -72,14 +78,13 @@ class StrawPollCommand extends Command {
 		await this.cleanup(message, messages);
 		const [title, multi, ...options] = data;
 
-		const { body: poll }: Result<IStrawPollPoll> = await post(this.apiURL)
-			.set('Content-Type', 'application/json')
-			.set('Accept', 'application/json')
-			.send({
+		const poll: IStrawPollPoll = await Api().post({
+			data: {
 				multi: multi[0].toLowerCase() === 'y',
 				options,
 				title,
-			});
+			},
+		});
 
 		return this.showPoll(message, poll, authorModel);
 	}
