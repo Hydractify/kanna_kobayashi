@@ -9,6 +9,7 @@ query ($query: String, $type: MediaType) {
 			season
 			genres
 			averageScore
+			meanScore
 			volumes
 			chapters
 			episodes

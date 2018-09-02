@@ -28,5 +28,6 @@ export interface IMedia {
 	image: IImage;
 	siteUrl: string;
 	averageScore: number;
+	meanScore: number;
 	chapters: number;
 }

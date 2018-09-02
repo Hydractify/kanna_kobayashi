@@ -117,22 +117,23 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 			);
 		}
 
-		const description: string[] = entry.title.romaji === entry.title.native
-			? []
-			: [entry.title.romaji];
-
-		if (entry.title.english) {
-			description.push('', entry.title.english);
-		}
+		const description: string[] = [...new Set(Object.values(entry.title)
+			.filter((value: string) => value && value.trim())
+			.map((value: string) => value.trim()),
+		)];
 
 		// 3 genres per row
 		const genres: string = chunkArray(entry.genres, 3).map((chunk: string[]) => chunk.join(', ')).join('\n');
 
 		embed
-			.setTitle(entry.title.native)
+			.setTitle(description.shift())
 			.setDescription(description)
 			.addField('Genres', genres || 'Not specified', true)
-			.addField('Rating | Type', `${entry.averageScore || 'n/a'} | ${titleCase(this.type.toLowerCase())}`, true);
+			.addField(
+				'Rating | Type',
+				`${entry.averageScore || entry.meanScore || 'n/a'} | ${titleCase(this.type.toLowerCase())}`,
+				true,
+			);
 
 		if (this.type === MediaType.ANIME) {
 			embed.addField(
@@ -143,7 +144,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		} else {
 			embed.addField(
 				'Chapters | Volumes',
-				`${entry.chapters} | ${entry.volumes}`,
+				`${entry.chapters || 'n/a'} | ${entry.volumes || 'n/a'}`,
 				true,
 			);
 		}
@@ -163,15 +164,15 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		embed
 			.splitToFields(
 				'Description',
-				entry.description
+				entry.description && entry.description.trim()
 					? replaceMap(entry.description, AniListCommand.replaceChars)
 					: 'Not specified',
-		)
+			)
 			.addField(
 				`${this.type === MediaType.ANIME ? 'Airing' : 'Publishing'} Status`,
 				entry.status ? titleCase(entry.status.replace(/_/g, ' ').toLowerCase()) : 'n/a',
 				true,
-		);
+			);
 
 		if (this.type === MediaType.ANIME && entry.source) {
 			embed.addField('Origin', titleCase(entry.source.replace(/_/g, ' ').toLowerCase()), true);
