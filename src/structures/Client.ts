@@ -21,7 +21,6 @@ import { IResponsiveEmbedController } from '../types/IResponsiveEmbedController'
 import { UserTypes } from '../types/UserTypes';
 import { generateColor } from '../util/generateColor';
 import { CommandHandler } from './CommandHandler';
-import { Loggable, Logger } from './Logger';
 import { WebhookLogger } from './WebhookLogger';
 
 const { on, once, registerListeners }: typeof ListenerUtil = ListenerUtil;
@@ -29,7 +28,6 @@ const { on, once, registerListeners }: typeof ListenerUtil = ListenerUtil;
 /**
  * Extended discord.js client
  */
-@Loggable
 export class Client extends DJSClient {
 	/**
 	 * Command handler of the client
