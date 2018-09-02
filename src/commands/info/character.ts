@@ -6,7 +6,7 @@ import { ICharacter } from '../../types/anilist/ICharacter';
 import { MediaType } from '../../types/anilist/MediaType';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class AnimeCommand extends AniListCommand<ICharacter> {
+class CharacterCommand extends AniListCommand<ICharacter> {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['char'],
@@ -41,4 +41,4 @@ class AnimeCommand extends AniListCommand<ICharacter> {
 	}
 }
 
-export { AnimeCommand as Command };
+export { CharacterCommand as Command };
