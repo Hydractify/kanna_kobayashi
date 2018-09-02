@@ -43,13 +43,11 @@ export class User extends Model<User> {
 	 * This will either come from redis, or from postgres if not available.
 	 */
 	public static async fetch(id: string): Promise<User> {
-		const voted: string = await this.redis.get(`dbl:${id}`);
 		const redisData: { [key: string]: string } = await this.redis.hgetall(`users:${id}`);
-		if (redisData) return User.fromRedis(redisData, Boolean(voted));
+		if (redisData) return User.fromRedis(redisData);
 
 		const [user, created]: [User, boolean] = await User.findCreateFind<User>({ where: { id } });
 		if (!created) this.updateRedis(user);
-		user.voted = Boolean(voted);
 
 		return user;
 	}
@@ -57,7 +55,7 @@ export class User extends Model<User> {
 	/**
 	 * Build a User model from redis data.
 	 */
-	public static fromRedis(data: { [key: string]: string | number | Date }, voted: boolean): User {
+	public static fromRedis(data: { [key: string]: string | number | Date }): User {
 		if (data.partnerSince) data.partnerSince = new Date(Number(data.partnerSince));
 
 		data.coins = Number(data.coins) || 0;
@@ -65,7 +63,6 @@ export class User extends Model<User> {
 		data.tier = Number(data.tier) || 0;
 
 		const user: User = new this(data, { isNewRecord: false });
-		user.voted = voted;
 
 		return user;
 	}
@@ -190,8 +187,6 @@ export class User extends Model<User> {
 
 		return newCount;
 	}
-
-	public voted: boolean;
 
 	@PrimaryKey
 	@Column

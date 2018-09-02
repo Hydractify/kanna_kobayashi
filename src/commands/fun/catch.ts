@@ -52,8 +52,6 @@ class CatchCommand extends Command {
 			netBreak = Boolean(breakChance > 850);
 		}
 
-		if (bugAmount && authorModel.voted) bugAmount += 2;
-
 		const transaction: Transaction = await this.sequelize.transaction();
 		try {
 			await Promise.all([

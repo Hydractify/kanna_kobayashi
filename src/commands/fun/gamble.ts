@@ -41,8 +41,7 @@ class GambleCommand extends Command {
 		[wager]: [number],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		let value: number = Math.floor(Math.random() * 100);
-		value += authorModel.voted ? 6 : 1;
+		const value: number = Math.floor(Math.random() * 100) + 1;
 
 		let multiplier: number = 0;
 		if (value >= 100) multiplier = 4;
