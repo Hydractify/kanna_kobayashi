@@ -41,11 +41,6 @@ export class Client extends DJSClient {
 	public readonly webhook: WebhookLogger = WebhookLogger.instance;
 
 	/**
-	 * Reference to the logger
-	 */
-	private readonly logger: Logger;
-
-	/**
 	 * Instantiate the client
 	 */
 	public constructor(options: ClientOptions) {
