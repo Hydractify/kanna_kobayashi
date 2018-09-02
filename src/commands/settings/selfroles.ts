@@ -22,7 +22,6 @@ class SelfRolesCommand extends Command {
 				'selfroles toggle role',
 				'selfrole role',
 			],
-			name: 'selfrole',
 			usage: 'selfrole [\'add\'|\'remove\'|\'toggle\'|Role] [Role]',
 		});
 	}

@@ -18,7 +18,6 @@ class QuizPhotoCommand extends Command {
 				'quizphoto set https://static.comicvine.com/uploads/original/11120/111201214/4317240-azua3.jpg',
 				'quizphoto view',
 			],
-			name: 'quizphoto',
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'quizphoto <set|view> [URL]',
 		});

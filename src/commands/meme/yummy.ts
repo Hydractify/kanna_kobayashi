@@ -1,16 +1,15 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 
-class YummyMemeCommand extends ImageEmbedCommand {
+class YummyCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			description: 'The pure art of noodles',
 			examples: ['yummy'],
 			images: ['https://thedragonproject.network/memes/yummy/1.png'],
-			name: 'yummy',
 			usage: 'yummy',
 		});
 	}
 }
 
-export { YummyMemeCommand as Command };
+export { YummyCommand as Command };

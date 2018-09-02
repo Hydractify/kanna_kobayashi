@@ -14,7 +14,6 @@ class ProposeCommand extends Command {
 			cooldown: 1e4,
 			description: 'Propose to someone... You love! <:kannaShy:458779242696540170>',
 			examples: ['propose Wizard'],
-			name: 'propose',
 			usage: 'propose <User>',
 		});
 	}

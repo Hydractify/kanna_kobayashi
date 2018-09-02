@@ -13,7 +13,6 @@ class PokeCommand extends WeebCommand {
 			description: 'G-get someone\'s attention!',
 			emoji: '<:kannaBlush:458776068279762954>',
 			examples: ['poke kanna', 'poke kanna wizard'],
-			name: 'poke',
 			type: 'poke',
 			usage: 'poke <...User>',
 		});

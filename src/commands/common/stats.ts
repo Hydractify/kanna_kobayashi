@@ -17,7 +17,6 @@ class StatsCommand extends Command {
 			cooldown: 0,
 			description: 'Stats about the bot',
 			examples: ['stats'],
-			name: 'stats',
 			usage: 'stats',
 		});
 	}

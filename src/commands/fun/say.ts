@@ -10,7 +10,6 @@ class SayCommand extends Command {
 			aliases: ['echo'],
 			description: 'Let me say something',
 			examples: ['say Hello world!'],
-			name: 'say',
 			usage: 'say <...Message>',
 		});
 	}

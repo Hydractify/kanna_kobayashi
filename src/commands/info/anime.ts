@@ -12,7 +12,6 @@ class AnimeCommand extends AniListCommand<IMedia> {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Search for a specific anime on anilist',
 			examples: ['anime Miss Kobayashi\'s Dragon Maid'],
-			name: 'anime',
 			type: MediaType.ANIME,
 			usage: 'anime <...Search>',
 		});

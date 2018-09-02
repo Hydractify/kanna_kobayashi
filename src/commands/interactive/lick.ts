@@ -13,7 +13,6 @@ class LickCommand extends WeebCommand {
 			description: 'L-lick someone!',
 			emoji: '<:kannaBlush:458776068279762954>',
 			examples: ['lick kanna', 'lick kanna wizard'],
-			name: 'lick',
 			type: 'lick',
 			usage: 'lick <...User>',
 		});

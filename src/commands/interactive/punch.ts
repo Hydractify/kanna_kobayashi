@@ -13,7 +13,6 @@ class PunchCommand extends WeebCommand {
 			description: 'Punch someone!',
 			emoji: '<:kannaScared:458776266154180609>',
 			examples: ['punch kanna', 'punch kanna wizard'],
-			name: 'punch',
 			type: 'punch',
 			usage: 'punch <...User>',
 		});

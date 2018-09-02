@@ -13,7 +13,6 @@ class CatchCommand extends Command {
 			aliases: ['bughunt'],
 			description: 'Grab your Bug Net and let\'s go catch some bugs!',
 			examples: ['catch'],
-			name: 'catch',
 			usage: 'catch',
 		});
 	}

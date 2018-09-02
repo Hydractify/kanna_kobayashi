@@ -15,7 +15,6 @@ class RoleInfoCommand extends Command {
 				'Note: Avoid role mentions as this will notify all members of the role',
 			].join('\n'),
 			examples: ['roleinfo admin'],
-			name: 'roleinfo',
 			usage: 'roleinfo',
 		});
 	}

@@ -11,7 +11,6 @@ export interface ICommandInfo {
 	examples: string[];
 	exp?: number;
 	guarded?: boolean;
-	name: string;
 	patreonOnly?: boolean;
 	permLevel?: PermLevels;
 	usage: string;

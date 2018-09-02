@@ -6,14 +6,13 @@ import { WeebCommand } from '../../structures/WeebCommand';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class CuddleCommand extends WeebCommand {
+class BiteCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'bit',
 			description: 'Bite someone!',
 			emoji: '<:kannaShy:458779242696540170>',
 			examples: ['bite kanna', 'bite kanna wizard'],
-			name: 'bite',
 			type: 'bite',
 			usage: 'bite <...User>',
 		});
@@ -35,4 +34,4 @@ class CuddleCommand extends WeebCommand {
 	}
 }
 
-export { CuddleCommand as Command };
+export { BiteCommand as Command };

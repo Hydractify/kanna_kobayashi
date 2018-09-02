@@ -14,7 +14,6 @@ class PatCommand extends WeebCommand {
 			description: 'Pat someone\'s head!',
 			emoji: '<:kannaBlush:458776068279762954>',
 			examples: ['pat kanna', 'pat kanna wizard'],
-			name: 'pat',
 			type: 'pat',
 			usage: 'pat <...User>',
 		});

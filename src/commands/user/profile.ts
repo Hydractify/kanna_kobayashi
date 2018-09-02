@@ -15,7 +15,6 @@ class ProfileCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Display someones or your own profile',
 			examples: ['profile', 'profile wizard'],
-			name: 'profile',
 			usage: 'profile [User]',
 		});
 	}

@@ -36,7 +36,6 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 				'market Dragon Scale',
 				'market show Dragon Scale',
 			],
-			name: 'market',
 			usage: 'market [\'buy\'|\'sell\'|\'show\'|Item] [Item] [Count]',
 		});
 	}

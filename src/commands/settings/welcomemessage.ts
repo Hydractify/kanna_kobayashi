@@ -17,7 +17,6 @@ class WelcomeMessageCommand extends Command {
 				'welcomemessage Welcome {{member}} to {{guild}}!',
 			],
 			exp: 0,
-			name: 'welcomemessage',
 			permLevel: PermLevels.DEV,
 			usage: 'welcomemessage <remove|...message>',
 		});

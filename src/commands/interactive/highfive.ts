@@ -14,7 +14,6 @@ class HighFiveCommand extends WeebCommand {
 			description: 'High-five with someone! :3',
 			emoji: '<:kannaHug:460080146418892800>',
 			examples: ['highfive kanna', 'highfive kanna wizard'],
-			name: 'highfive',
 			type: 'highfive',
 			usage: 'highfive <...User>',
 		});

@@ -1,7 +1,7 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 
-class HungryMemeCommand extends ImageEmbedCommand {
+class HungryCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['food'],
@@ -17,10 +17,9 @@ class HungryMemeCommand extends ImageEmbedCommand {
 				'https://thedragonproject.network/memes/hungry/7.jpg',
 			],
 			messageContent: '**Feed me!** <:kannaWow:458777326810038292>',
-			name: 'hungry',
 			usage: 'hungry',
 		});
 	}
 }
 
-export { HungryMemeCommand as Command };
+export { HungryCommand as Command };

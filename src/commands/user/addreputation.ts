@@ -11,7 +11,6 @@ class AddReputationCommand extends Command {
 			aliases: ['rep', 'addrep', '++'],
 			description: 'Add a positive reputation to a member',
 			examples: ['addrep @space#0302'],
-			name: 'addreputation',
 			usage: 'addrep <Member>',
 		});
 	}

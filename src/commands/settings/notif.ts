@@ -4,10 +4,10 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { PermLevels } from '../../types/PermLevels';
 
-class NotifCommand extends Command {
+class NotifChannelCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['notif', 'notifchannel', 'notif_channel'],
+			aliases: ['notif-channel', 'notif', 'notif_channel'],
 			description: 'Get or set a custom channel for welcome and farewell messages',
 			examples: [
 				'notif',
@@ -15,7 +15,6 @@ class NotifCommand extends Command {
 				'notif remove // to remove the channel',
 			],
 			guarded: true,
-			name: 'notif-channel',
 			permLevel: PermLevels.HUMANTAMER,
 			usage: 'notif [Channel]',
 		});
@@ -80,4 +79,4 @@ class NotifCommand extends Command {
 	}
 }
 
-export { NotifCommand as Command };
+export { NotifChannelCommand as Command };

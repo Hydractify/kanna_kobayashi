@@ -13,7 +13,6 @@ class TickleCommand extends WeebCommand {
 			description: 'Tickle someone!',
 			emoji: '<:kannaShy:458779242696540170>',
 			examples: ['tickle kanna', 'tickle kanna wizard'],
-			name: 'tickle',
 			type: 'tickle',
 			usage: 'tickle <...User>',
 		});

@@ -10,7 +10,6 @@ class CommandStatusCommand extends Command {
 			description: 'See whether a command is enabled or disabled',
 			examples: ['commandstatus', 'commandstatus say'],
 			guarded: true,
-			name: 'commandstatus',
 			usage: 'commandstatus [Command]',
 		});
 	}

@@ -16,7 +16,6 @@ class OsuUserCommand extends Command {
 			aliases: ['osu'],
 			description: 'Search for basic information, or best or recent plays about any osu! user',
 			examples: ['osu SpaceEEC', 'osu SpaceEEC best', 'osu SpaceEEC recent', 'osu SpaceEEC taiko'],
-			name: 'osuuser',
 			usage: 'osucommand <UsernameOrID> [Mode] [\'top\'|\'recent\']',
 		});
 

@@ -27,7 +27,6 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 				'leaderboard level 15023',
 				'leaderboard level 15k23',
 			],
-			name: 'leaderboard',
 			usage: 'leaderboard [\'exp\', \'level\', \'coins\', \'reputation\'] [offset]',
 		});
 	}

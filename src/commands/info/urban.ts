@@ -14,7 +14,6 @@ class UrbanCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Look up a definition for a term on urbandictonary',
 			examples: ['urban test'],
-			name: 'urban',
 			usage: 'urban <...Term>',
 		});
 	}

@@ -14,7 +14,6 @@ class ReloadCommand extends Command {
 			description: 'Reload a command',
 			examples: ['reload reload'],
 			guarded: true,
-			name: 'reload',
 			permLevel: PermLevels.TRUSTED,
 			usage: 'You should know how to use this.',
 		});

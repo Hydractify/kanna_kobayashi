@@ -13,7 +13,6 @@ class DanceCommand extends WeebCommand {
 			description: 'Dance! <a:kannaRun:458776024012947456>',
 			emoji: '<a:kannaRun:458776024012947456>',
 			examples: ['dance', 'dance kanna', 'dance kanna wizard'],
-			name: 'dance',
 			type: 'dance',
 			usage: 'dance [...User]',
 		});

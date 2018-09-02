@@ -17,7 +17,6 @@ class FarewellMessageCommand extends Command {
 				'farewellmessage farewell {{member}} to {{guild}}!',
 			],
 			exp: 0,
-			name: 'farewellmessage',
 			permLevel: PermLevels.DEV,
 			usage: 'farewellmessage <remove|...message>',
 		});

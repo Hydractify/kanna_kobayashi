@@ -12,7 +12,6 @@ class SetGameCommand extends Command {
 			description: 'Set the game I am currently playing on all shards',
 			examples: ['setgame something'],
 			guarded: true,
-			name: 'setgame',
 			permLevel: PermLevels.TRUSTED,
 			usage: 'setgame [\'stream\'] [...Game]',
 		});

@@ -11,7 +11,6 @@ class SayDeleteCommand extends Command {
 			clientPermissions: ['MANAGE_MESSAGES'],
 			description: 'Let me say something and delete your message afterwards',
 			examples: ['sayd Hello world!'],
-			name: 'saydelete',
 			usage: 'sayd <...Message>',
 		});
 	}

@@ -14,7 +14,6 @@ class PrefixCommand extends Command {
 				'prefix $',
 			],
 			guarded: true,
-			name: 'prefix',
 			usage: 'prefix [...Prefix]',
 		});
 	}

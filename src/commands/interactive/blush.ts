@@ -14,7 +14,6 @@ class BlushCommand extends WeebCommand {
 			description: 'S-show how embarassed you are!',
 			emoji: '<:kannaShy:458779242696540170>',
 			examples: ['blush', 'blush kanna', 'blush kanna wizard'],
-			name: 'blush',
 			type: 'blush',
 			usage: 'blush [...User]',
 		});

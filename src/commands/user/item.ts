@@ -22,7 +22,6 @@ class ItemCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Check an item\'s information or give an item one of your friends!',
 			examples: ['item check patron'],
-			name: 'item',
 			usage: 'item <Target>',
 		});
 	}

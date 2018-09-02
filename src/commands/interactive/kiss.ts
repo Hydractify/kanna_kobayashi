@@ -14,7 +14,6 @@ class KissCommand extends WeebCommand {
 			description: 'K-kiss someone! ',
 			emoji: '<:kannaBlush:458776068279762954>',
 			examples: ['kiss kanna', 'kiss kanna wizard'],
-			name: 'kiss',
 			type: 'kiss',
 			usage: 'kiss <...User>',
 		});

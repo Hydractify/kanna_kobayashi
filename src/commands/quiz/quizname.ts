@@ -18,7 +18,6 @@ class QuizNameCommand extends Command {
 				'quizname view',
 				'quizname set Dio Brando',
 			],
-			name: 'quizname',
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'quizname <set|view> [...Name]',
 		});

@@ -30,7 +30,6 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 			].join('\n'),
 			examples: ['help ping', 'help'],
 			guarded: true,
-			name: 'help',
 			permLevel: 0,
 			usage: 'help [Command|Category]',
 		});

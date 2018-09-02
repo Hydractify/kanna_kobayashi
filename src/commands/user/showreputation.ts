@@ -13,7 +13,6 @@ class ShowReputationCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Show the reputation of a member',
 			examples: ['showrep @space#0302'],
-			name: 'showreputation',
 			usage: 'showrep <Member>',
 		});
 	}

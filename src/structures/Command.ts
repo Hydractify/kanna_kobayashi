@@ -122,29 +122,27 @@ export abstract class Command {
 		examples,
 		exp = 5,
 		guarded = false,
-		name,
 		patreonOnly = false,
 		permLevel = PermLevels.EVERYONE,
 		usage,
 	}: ICommandInfo) {
+		this.name = this.constructor.name.replace(/Command$/, '').toLowerCase();
+
 		// Assert correct type
 		if (!(handler instanceof CommandHandler)) {
-			throw new TypeError(`Command ${this.constructor.name}'s handler is not instanceof CommandHandler!`);
+			throw new TypeError(`Command ${this.name}'s handler is not instanceof CommandHandler!`);
 		}
 		if (!(aliases instanceof Array)) {
-			throw new TypeError(`Command ${this.constructor.name}'s aliases is not instanceof array!`);
+			throw new TypeError(`Command ${this.name}'s aliases is not instanceof array!`);
 		}
 		if (!(clientPermissions instanceof Array)) {
-			throw new TypeError(`Command ${this.constructor.name}'s clientPermissions is not instanceof array!`);
+			throw new TypeError(`Command ${this.name}'s clientPermissions is not instanceof array!`);
 		}
 		if (!description) {
-			throw new Error(`Command ${this.constructor.name} does not have a description!`);
+			throw new Error(`Command ${this.name} does not have a description!`);
 		}
 		if (!(examples instanceof Array)) {
-			throw new TypeError(`Command ${this.constructor.name}'s examples is not instanceof array!`);
-		}
-		if (!name) {
-			throw new Error(`Command ${this.constructor.name} does not have a name!`);
+			throw new TypeError(`Command ${this.name}'s examples is not instanceof array!`);
 		}
 		// Assert correct value
 		for (const permission of clientPermissions) {
@@ -165,7 +163,6 @@ export abstract class Command {
 		this.exp = exp;
 		this.guarded = guarded;
 		this.handler = handler;
-		this.name = name;
 		this.resolver = handler.resolver;
 		this.usage = usage;
 		this.patreonOnly = patreonOnly;

@@ -21,7 +21,6 @@ class ModListCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'In need of a list of mods for this guild?',
 			examples: ['modlist online', 'modlist dnd'],
-			name: 'modlist',
 			usage: 'modlist [status]',
 		});
 	}

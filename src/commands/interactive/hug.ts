@@ -14,7 +14,6 @@ class HugCommand extends WeebCommand {
 			description: 'Hug someone tight ❤',
 			emoji: '<:kannaShy:458779242696540170>',
 			examples: ['hug kanna', 'hug kanna wizard'],
-			name: 'hug',
 			type: 'hug',
 			usage: 'hug <...User>',
 		});

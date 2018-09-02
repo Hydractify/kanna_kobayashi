@@ -15,7 +15,6 @@ class QuizStartCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Starts a quiz event',
 			examples: ['qstart'],
-			name: 'quizstart',
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'qstart',
 		});

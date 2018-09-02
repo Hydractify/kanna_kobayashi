@@ -13,7 +13,6 @@ class ChooseCommand extends Command {
 				'choose Tohru or Me',
 				'choose Tohru, Me, or Kobayashi-san',
 			],
-			name: 'choose',
 			usage: 'choose <...Choices>',
 		});
 	}

@@ -16,7 +16,6 @@ class OsuBeatmapCommand extends Command {
 			aliases: ['beatmap', 'osuset', 'set'],
 			description: 'Search for osu! Beatmaps!',
 			examples: ['osubeatmap 577427', 'osubeatmap 577427 best', 'osubeatmap 577427 taiko best'],
-			name: 'osubeatmap',
 			usage: 'osubeatmap <ID> [Mode] [\'best\']',
 		});
 	}

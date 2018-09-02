@@ -12,7 +12,6 @@ class MangaCommand extends AniListCommand<IMedia> {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Search for a specific manga on anilist',
 			examples: ['manga Miss Kobayashi\'s Dragon Maid'],
-			name: 'manga',
 			type: MediaType.MANGA,
 			usage: 'manga <...Search>',
 		});

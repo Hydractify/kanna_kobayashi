@@ -10,11 +10,10 @@ class BangCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'shot',
-			aliases: ['bang'],
+			aliases: ['shoot'],
 			description: 'Shoot someone who is bothering you!',
 			emoji: '<:kannaMad:458776169924526093>',
 			examples: ['shoot kanna', 'shoot kanna wizard'],
-			name: 'shoot',
 			type: 'bang',
 			usage: 'shoot <...User>',
 		});

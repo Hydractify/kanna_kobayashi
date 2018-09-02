@@ -15,10 +15,9 @@ class EigthBallCommand extends Command {
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['8b'],
+			aliases: ['8b', '8ball'],
 			description: 'Ask the famous 8 ball a question!',
 			examples: ['8ball '],
-			name: '8ball',
 			usage: '8ball <...question>',
 		});
 	}

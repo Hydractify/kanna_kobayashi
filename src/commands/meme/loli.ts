@@ -1,7 +1,7 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 
-class LoliMemeCommand extends ImageEmbedCommand {
+class LoliCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['kanna'],
@@ -12,10 +12,9 @@ class LoliMemeCommand extends ImageEmbedCommand {
 				'https://thedragonproject.network/memes/loli/2.gif',
 			],
 			messageContent: '**Wooo... A human!** <:kannaWow:458777326810038292>',
-			name: 'loli',
 			usage: 'loli',
 		});
 	}
 }
 
-export { LoliMemeCommand as Command };
+export { LoliCommand as Command };

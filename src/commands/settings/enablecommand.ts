@@ -13,7 +13,6 @@ class EnableCommandCommand extends Command {
 			description: 'Enable a command',
 			examples: ['enable say', 'enable sayd'],
 			guarded: true,
-			name: 'enablecommand',
 			permLevel: PermLevels.HUMANTAMER,
 			usage: 'enablecommand <Command>',
 		});

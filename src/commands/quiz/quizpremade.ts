@@ -28,7 +28,6 @@ class QuizPremadeCommand extends Command {
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'USE_EXTERNAL_EMOJIS'],
 			description: 'Choose one of the pre made quizzes of 10 characters from the series',
 			examples: ['quizpremade'],
-			name: 'quizpremade',
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'quizpremade',
 		});

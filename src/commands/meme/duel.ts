@@ -1,7 +1,7 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 
-class DuelMemeCommand extends ImageEmbedCommand {
+class DuelCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			description: 'Yu-Gi-Oh memes',
@@ -14,10 +14,9 @@ class DuelMemeCommand extends ImageEmbedCommand {
 				'https://thedragonproject.network/memes/duel/5.jpg',
 				'https://thedragonproject.network/memes/duel/6.jpg',
 			],
-			name: 'duel',
 			usage: 'duel',
 		});
 	}
 }
 
-export { DuelMemeCommand as Command };
+export { DuelCommand as Command };

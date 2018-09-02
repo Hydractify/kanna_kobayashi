@@ -13,7 +13,6 @@ class BreakUpCommand extends Command {
 			cooldown: 1e4,
 			description: 'Break up with your current partner',
 			examples: ['breakup'],
-			name: 'breakup',
 			usage: 'breakup',
 		});
 	}

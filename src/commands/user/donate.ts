@@ -20,7 +20,6 @@ class DonateCommand extends Command {
 				'give wizard 1000000000', 'give wizard 1b',
 				'give wizard 1234', 'give wizard 1k234',
 			],
-			name: 'donate',
 			usage: 'donate <User> <Item|Amount> [Amount]',
 		});
 	}

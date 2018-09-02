@@ -14,7 +14,6 @@ class CuddleCommand extends WeebCommand {
 			description: 'Cuddle someone... <:kannaBlush:458776068279762954>',
 			emoji: '<:kannaBlush:458776068279762954>',
 			examples: ['cuddle kanna', 'cuddle kanna wizard'],
-			name: 'cuddle',
 			type: 'hug',
 			usage: 'cuddle <...User>',
 		});

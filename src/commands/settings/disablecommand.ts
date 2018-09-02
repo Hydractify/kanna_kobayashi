@@ -13,7 +13,6 @@ class DisableCommandCommand extends Command {
 			description: 'Disable a command',
 			examples: ['disable say', 'disable sayd'],
 			guarded: true,
-			name: 'disablecommand',
 			permLevel: PermLevels.HUMANTAMER,
 			usage: 'disablecommand <Command>',
 		});

@@ -14,7 +14,6 @@ class UserInfoCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Display information about a specific user',
 			examples: ['userinfo @space#0302'],
-			name: 'userinfo',
 			usage: 'userinfo [User]',
 		});
 	}

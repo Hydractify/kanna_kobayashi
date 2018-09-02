@@ -11,7 +11,6 @@ class BalanceCommand extends Command {
 			aliases: ['coins', 'bal'],
 			description: 'See how many <:coin:330926092703498240> you have!',
 			examples: ['balance', 'balance wizard'],
-			name: 'balance',
 			usage: 'balance [User]',
 		});
 	}

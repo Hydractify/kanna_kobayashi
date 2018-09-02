@@ -13,7 +13,6 @@ class SlapCommand extends WeebCommand {
 			description: 'Slap someone!',
 			emoji: '<:kannaScared:458776266154180609>',
 			examples: ['slap kanna', 'slap kanna wizard'],
-			name: 'slap',
 			type: 'slap',
 			usage: 'slap <...User>',
 		});

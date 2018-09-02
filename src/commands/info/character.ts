@@ -13,7 +13,6 @@ class AnimeCommand extends AniListCommand<ICharacter> {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Search for a specific character on anilist',
 			examples: ['character Kanna Kamui'],
-			name: 'character',
 			type: MediaType.CHARACTER,
 			usage: 'character <...Search>',
 		});

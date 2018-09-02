@@ -12,7 +12,6 @@ class AvatarCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Take a closer look at the avatar of a user',
 			examples: ['avatar @space#0302'],
-			name: 'avatar',
 			usage: 'avatar [User]',
 		});
 	}

@@ -11,7 +11,6 @@ class DeleteReputationCommand extends Command {
 			cooldown: 0,
 			description: 'Delete your reputation of a member',
 			examples: ['delrep @space#0302'],
-			name: 'deletereputation',
 			usage: 'deleterep <Member>',
 		});
 	}

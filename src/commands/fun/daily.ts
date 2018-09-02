@@ -12,7 +12,6 @@ class DailyCommand extends Command {
 			cooldown: 24 * 60 * 60 * 1000,
 			description: 'Your daily 200 coins!',
 			examples: ['daily'],
-			name: 'daily',
 			usage: 'daily',
 		});
 	}

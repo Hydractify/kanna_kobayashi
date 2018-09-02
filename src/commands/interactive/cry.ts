@@ -14,7 +14,6 @@ class CryCommand extends WeebCommand {
 			description: 'Show how much you are sad... `Hope you do not use this command often -Att. Wizardλ#5679`',
 			emoji: '<:kannaSad:458776254666244127>',
 			examples: ['cry', 'cry kanna', 'cry kanna wizard'],
-			name: 'cry',
 			type: 'cry',
 			usage: 'cry [...User]',
 		});

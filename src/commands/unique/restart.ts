@@ -5,12 +5,10 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { PermLevels } from '../../types/PermLevels';
 
 class RestartCommand extends Command {
-
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			description: 'Restarts Kanna!',
 			examples: ['restart', 'restart 1'],
-			name: 'restart',
 			permLevel: PermLevels.TRUSTED,
 			usage: 'restart [Number]',
 		});

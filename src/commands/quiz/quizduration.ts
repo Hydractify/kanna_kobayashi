@@ -17,7 +17,6 @@ class QuizDurationCommand extends Command {
 				'qduration set 5m',
 				'qduration set 1h30m',
 			],
-			name: 'quizduration',
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'quizduration <\'view\'|\'set\'> [Minutes]',
 		});

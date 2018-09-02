@@ -1,7 +1,7 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 
-class SleepMemeCommand extends ImageEmbedCommand {
+class SleepCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['bosssleeppls'],
@@ -15,10 +15,9 @@ class SleepMemeCommand extends ImageEmbedCommand {
 				'https://thedragonproject.network/memes/sleep/5.jpg',
 				'https://thedragonproject.network/memes/sleep/6.jpg',
 			],
-			name: 'sleep',
 			usage: 'sleep',
 		});
 	}
 }
 
-export { SleepMemeCommand as Command };
+export { SleepCommand as Command };

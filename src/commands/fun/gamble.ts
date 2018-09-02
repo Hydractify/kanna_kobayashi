@@ -15,7 +15,6 @@ class GambleCommand extends Command {
 				'gamble 1000000000', 'gamble 1b',
 				'gamble 1234', 'gamble 1k234',
 			],
-			name: 'gamble',
 			usage: 'gamble <Amount>',
 		});
 	}

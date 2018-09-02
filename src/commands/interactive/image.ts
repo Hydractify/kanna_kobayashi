@@ -49,7 +49,6 @@ class ImageCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Get an image from the weeb.sh API!',
 			examples: ['weeb smug', 'weeb types'],
-			name: 'image',
 			usage: 'image <ImageType|\'types\'>',
 		});
 	}

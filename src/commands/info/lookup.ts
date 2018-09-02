@@ -16,7 +16,6 @@ class LookupCommand extends Command {
 				'lookup uBdXdE9',
 				'lookup discord.gg/uBdXdE9',
 			],
-			name: 'lookup',
 			usage: 'lookup <invite>',
 		});
 	}

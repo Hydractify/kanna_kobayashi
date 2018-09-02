@@ -8,7 +8,6 @@ class PingCommand extends Command {
 		super(handler, {
 			description: 'See how long I need to see your message and send a response',
 			examples: ['ping'],
-			name: 'ping',
 			usage: 'ping',
 		});
 	}

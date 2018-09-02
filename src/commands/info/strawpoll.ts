@@ -18,7 +18,6 @@ class StrawPollCommand extends Command {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Create or display a strawpoll',
 			examples: ['strawpoll 1', 'strawpoll'],
-			name: 'strawpoll',
 			usage: 'strawpoll [ID]',
 		});
 
