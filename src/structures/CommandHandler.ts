@@ -88,8 +88,22 @@ export class CommandHandler {
 		command.location = location;
 		command.category = folder;
 
+		const existing: Command = this._commands.get(command.name);
+		if (existing) {
+			throw new Error(
+				`${commandConstructor.name}: Command name "${command.name}" already in use by ${existing.constructor.name}!`,
+			);
+		}
+
 		this._commands.set(command.name, command);
 		for (const alias of command.aliases) {
+			const existingAlias: string = this._aliases.get(alias);
+			if (existingAlias) {
+				const name: string = this._commands.get(existingAlias).constructor.name;
+				throw new Error(
+					`${commandConstructor.name}: Command alias "${alias}" already in use by ${name}!`,
+				);
+			}
 			this._aliases.set(alias, command.name);
 		}
 	}
