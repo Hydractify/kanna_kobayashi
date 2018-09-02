@@ -26,7 +26,6 @@ export async function extendAll(): Promise<void> {
 
 declare module 'discord.js' {
 	interface Guild {
-		readonly isBotFarm: boolean;
 		model: GuildModel;
 
 		fetchModel(): Promise<GuildModel>;
