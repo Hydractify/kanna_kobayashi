@@ -64,6 +64,7 @@ class EmojiInfoCommand extends Command {
 			.addField('ID', emoji.id, true)
 			.addField('Created', createdAtString, true)
 			.addField('Relative', createdBeforeString, true)
+			.addField('Link', `[Link](${emoji.url})`, true)
 			.setThumbnail(emoji.url);
 
 		return message.channel.send(embed);
