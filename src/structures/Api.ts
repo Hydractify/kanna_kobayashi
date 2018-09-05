@@ -50,10 +50,11 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 					}
 
 					return fetch.default(url, {
-						body: JSON.stringify(options.data),
+						body: options.data ? JSON.stringify(options.data) : undefined,
 						headers: options.headers
 							? { ...options.headers, ...defaultHeaders }
 							: defaultHeaders,
+						method: name,
 					}).then((res: fetch.Response) => {
 						if (res.ok) return res[options.type || 'json']();
 
