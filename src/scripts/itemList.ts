@@ -26,7 +26,7 @@ const ITEMS: IItemStructure[] = [
 		buyable: true,
 		description: 'Go out to catch bugs with this net!',
 		name: Items.BUG_NET,
-		price: 5,
+		price: 40,
 		rarity: ItemRarities.HARMONY,
 		tradable: true,
 		type: ItemTypes.ITEM,
