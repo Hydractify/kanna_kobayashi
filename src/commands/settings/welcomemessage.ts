@@ -8,7 +8,7 @@ import { PermLevels } from '../../types/PermLevels';
 class WelcomeMessageCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['joinmessage'],
+			aliases: ['joinmessage', 'welcome'],
 			coins: 0,
 			description: 'Sets, displays, or removes the welcome message!',
 			examples: [
@@ -17,7 +17,7 @@ class WelcomeMessageCommand extends Command {
 				'welcomemessage Welcome {{member}} to {{guild}}!',
 			],
 			exp: 0,
-			permLevel: PermLevels.DEV,
+			permLevel: PermLevels.HUMANTAMER,
 			usage: 'welcomemessage <remove|...message>',
 		});
 	}

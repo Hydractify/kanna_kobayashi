@@ -8,7 +8,7 @@ import { PermLevels } from '../../types/PermLevels';
 class FarewellMessageCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['leavemessage'],
+			aliases: ['leavemessage', 'farewell'],
 			coins: 0,
 			description: 'Sets, displays, or removes the farewell message!',
 			examples: [
@@ -17,7 +17,7 @@ class FarewellMessageCommand extends Command {
 				'farewellmessage farewell {{member}} to {{guild}}!',
 			],
 			exp: 0,
-			permLevel: PermLevels.DEV,
+			permLevel: PermLevels.HUMANTAMER,
 			usage: 'farewellmessage <remove|...message>',
 		});
 	}
