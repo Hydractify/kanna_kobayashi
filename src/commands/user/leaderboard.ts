@@ -5,7 +5,6 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
-import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { ILeaderBoardUser } from '../../types/ILeaderBoardUser';
 import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedController';
 import { resolveAmount, titleCase } from '../../util/Util';
@@ -56,7 +55,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 			|| isNaN(offset)
 			|| !this.types.includes(type)
 		) return;
-		reactors.remove(user);
+		await reactors.remove(user).catch(() => undefined);
 
 		if (emoji.name === '➡') {
 			// We are already on the last page
@@ -103,7 +102,6 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 	public async run(
 		message: Message,
 		[type, offset]: [string, number],
-		{ authorModel }: ICommandRunInfo,
 	): Promise<void> {
 		const users: ILeaderBoardUser[] = await this._fetchTop(type, offset);
 		const embed: MessageEmbed = await this._fetchEmbed(message.author, type, offset, message.guild, users);
