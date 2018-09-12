@@ -14,7 +14,7 @@ class DonateCommand extends Command {
 			aliases: ['give', 'transfer', 'trade'],
 			description: 'Give money to someone!',
 			examples: [
-				'give wizard bugnet',
+				'give wizard bug net',
 				'give wizard 1000', 'give wizard 1k',
 				'give wizard 1000000', 'give wizard 1k',
 				'give wizard 1000000000', 'give wizard 1b',
@@ -30,7 +30,7 @@ class DonateCommand extends Command {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<string | [User, number] | [User, Item, number]> {
 		if (!input) return `you must give me a user! (\`${this.usage}\`)`;
-		if (!itemAndAmount) return `you must give me an amount or item to donate! (\`${this.usage}\`)`;
+		if (!itemAndAmount.length) return `you must give me an amount or item to donate! (\`${this.usage}\`)`;
 
 		const target: User = await this.resolver.resolveMember(input, message.guild, false)
 			.then((member: GuildMember) => member
@@ -38,7 +38,7 @@ class DonateCommand extends Command {
 				: this.resolver.resolveUser(input, false),
 			);
 		if (!target) return `I could not find a non bot user with the name or id ${input}.`;
-		const [, itemName, amount]: RegExpMatchArray = itemAndAmount.join(' ').match(/([^\d]*?(?= *\d)) *(.*)/);
+		const [, itemName, amount]: RegExpMatchArray = itemAndAmount.join(' ').match(/([^\d]*?(?= *(?:\d|$))) *(.*)/);
 
 		let item: Item = null;
 		if (itemName) {
