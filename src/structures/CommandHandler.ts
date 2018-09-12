@@ -266,7 +266,22 @@ export class CommandHandler {
 				await message.reply(`you advanced to level **${newLevel}**! <:kannaHug:460080146418892800>`);
 			}
 		} catch (error) {
-			captureException(error);
+			captureBreadcrumb({
+				category: 'Deleted',
+				data: {
+					channel_deleted: message.channel.deleted,
+					guild_deleted: message.guild.deleted,
+					message_deleted: message.deleted,
+				},
+				level: 'debug',
+			});
+
+			captureException(error, {
+				// Sentry does not allow to filter based on breadcrumbs, but via tags
+				tags: {
+					command: commandName,
+				},
+			});
 
 			this.logger.error(error);
 			message.reply(
