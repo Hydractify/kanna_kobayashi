@@ -1,4 +1,4 @@
-import { MessageEmbed as DJSMessageEmbed, User } from 'discord.js';
+import { MessageEmbed as DJSMessageEmbed, MessageEmbedOptions, User } from 'discord.js';
 
 import { User as UserModel } from '../models/User';
 
@@ -33,11 +33,18 @@ export class MessageEmbed extends DJSMessageEmbed {
 
 		return this;
 	}
+
+	/**
+	 * Hack to change the accessibility level of _apiTransform.
+	 */
+	public apiTransform(): MessageEmbedOptions {
+		return (this as any)._apiTransform();
+	}
 }
 
 // Messing with original prototype instead of the extended one because d.js internally uses their own embed class
 const { _apiTransform }: { _apiTransform: () => object } = DJSMessageEmbed.prototype as any;
-Reflect.defineProperty(DJSMessageEmbed.prototype, '_apiTransform', {
+Object.defineProperty(DJSMessageEmbed.prototype, '_apiTransform', {
 	value(this: MessageEmbed) {
 		// It's not possible to exceed the limit without fields
 		if (this.fields && this.fields.length) {
