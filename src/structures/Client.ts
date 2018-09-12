@@ -4,7 +4,6 @@ import {
 	Guild,
 	GuildChannel,
 	GuildMember,
-	MessageEmbed,
 	MessageEmbedOptions,
 	MessageReaction,
 	TextChannel,
@@ -21,6 +20,7 @@ import { IResponsiveEmbedController } from '../types/IResponsiveEmbedController'
 import { UserTypes } from '../types/UserTypes';
 import { generateColor } from '../util/generateColor';
 import { CommandHandler } from './CommandHandler';
+import { MessageEmbed } from './MessageEmbed';
 import { WebhookLogger } from './WebhookLogger';
 
 const { on, once, registerListeners }: typeof ListenerUtil = ListenerUtil;
@@ -80,7 +80,7 @@ export class Client extends DJSClient {
 			.then((user: UserModel) => user.type === UserTypes.BLACKLISTED ? 'Yes' : 'No');
 		const botCount: number = guild.members.filter((member: GuildMember) => member.user.bot).size;
 
-		const embed: MessageEmbedOptions = (new MessageEmbed()
+		const embed: MessageEmbedOptions = new MessageEmbed()
 			.setThumbnail(guild.iconURL())
 			.setTitle(`I have ${left ? 'left' : 'joined'} a guild!`)
 			.setDescription(`I am now in ${totalGuilds} guilds.`)
@@ -92,9 +92,8 @@ export class Client extends DJSClient {
 
 			.addField('Total Members', guild.memberCount, true)
 			.addField('Humans', guild.memberCount - botCount, true)
-			.addField('Bots', botCount, true) as any)
-
-			._apiTransform();
+			.addField('Bots', botCount, true)
+			.apiTransform();
 
 		(this as any).api.channels('303180857030606849').messages.post({ data: { embed } });
 	}
