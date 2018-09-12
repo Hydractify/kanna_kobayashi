@@ -190,103 +190,105 @@ export class CommandHandler {
 			&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text)
 		) return;
 
-		message.channel.messages.delete(message.id);
-
-		if (message.author.bot || !(message.channel instanceof TextChannel)) return;
-
-		captureBreadcrumb({
-			category: 'Meta',
-			data: {
-				author: `${message.author.tag} (${message.author.id})`,
-				channel: `#${message.channel.name} (${message.channel.id})`,
-				content: message.content,
-				guild: `${message.guild.name} (${message.guild.id})`,
-				permissions: {
-					member_channel: message.channel.permissionsFor(message.member),
-					member_guild: message.member.permissions,
-					self_channel: message.channel.permissionsFor(this.client.user),
-					self_guild: message.guild.me.permissions,
-				},
-				shard_id: String(this.client.shard.id),
-			},
-			level: 'debug',
-		});
-
-		const guildModel: GuildModel = message.guild.model || await message.guild.fetchModel();
-		const [command, commandName, args]: [Command, string, string[]]
-			| [undefined, undefined, undefined] = this._matchCommand(message, guildModel);
-		if (!command) return;
-
-		captureBreadcrumb({ category: 'Command', data: { commandName }, level: 'debug' });
-
-		const [authorModel, ownerModel] = await Promise.all([
-			message.author.fetchModel(),
-			this.client.users.get(message.guild.ownerID).fetchModel(),
-			message.guild.owner ? undefined : message.guild.members.fetch(message.guild.ownerID),
-		]);
-
-		if (authorModel.type === UserTypes.BLACKLISTED) return;
-		if (ownerModel.type === UserTypes.BLACKLISTED) return;
-
-		if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) {
-			message.author.send('I do not have permission to send in the channel of your command!')
-				.catch(() => undefined);
-
-			return;
-		}
-
-		const canCallRes: true | string = await command.canCall(message, authorModel);
-
-		if (typeof canCallRes === 'string') {
-			await message.reply(canCallRes);
-
-			return;
-		}
-
 		try {
-			const parsedArgs: any[] | string | MessageOptions | MessageEmbed | MessageAttachment
-				= await command.parseArgs(message, args, { authorModel, commandName, args });
+			if (message.author.bot || !(message.channel instanceof TextChannel)) return;
 
-			if (!(parsedArgs instanceof Array)) {
-				await message.reply(parsedArgs);
-
-				return;
-			}
-
-			await authorModel.$create('CommandLog', {
-				commandName: command.name,
-				guildId: message.guild.id,
-				userId: message.author.id,
-			});
-
-			await command.run(message, parsedArgs, { authorModel, commandName, args });
-
-			const newLevel: number | void = await command.grantRewards(message.author, authorModel);
-			if (newLevel && guildModel.levelUpEnabled) {
-				await message.reply(`you advanced to level **${newLevel}**! <:kannaHug:460080146418892800>`);
-			}
-		} catch (error) {
 			captureBreadcrumb({
-				category: 'Deleted',
+				category: 'Meta',
 				data: {
-					channel_deleted: message.channel.deleted,
-					guild_deleted: message.guild.deleted,
-					message_deleted: message.deleted,
+					author: `${message.author.tag} (${message.author.id})`,
+					channel: `#${message.channel.name} (${message.channel.id})`,
+					content: message.content,
+					guild: `${message.guild.name} (${message.guild.id})`,
+					permissions: {
+						member_channel: message.channel.permissionsFor(message.member),
+						member_guild: message.member.permissions,
+						self_channel: message.channel.permissionsFor(this.client.user),
+						self_guild: message.guild.me.permissions,
+					},
+					shard_id: String(this.client.shard.id),
 				},
 				level: 'debug',
 			});
 
-			captureException(error, {
-				// Sentry does not allow to filter based on breadcrumbs, but via tags
-				tags: {
-					command: commandName,
-				},
-			});
+			const guildModel: GuildModel = message.guild.model || await message.guild.fetchModel();
+			const [command, commandName, args]: [Command, string, string[]]
+				| [undefined, undefined, undefined] = this._matchCommand(message, guildModel);
+			if (!command) return;
 
-			this.logger.error(error);
-			message.reply(
-				'**an errror occured, but rest assured! It has already been reported and will be fixed in no time!**',
-			).catch(() => null);
+			captureBreadcrumb({ category: 'Command', data: { commandName }, level: 'debug' });
+
+			const [authorModel, ownerModel] = await Promise.all([
+				message.author.fetchModel(),
+				this.client.users.get(message.guild.ownerID).fetchModel(),
+				message.guild.owner ? undefined : message.guild.members.fetch(message.guild.ownerID),
+			]);
+
+			if (authorModel.type === UserTypes.BLACKLISTED) return;
+			if (ownerModel.type === UserTypes.BLACKLISTED) return;
+
+			if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) {
+				message.author.send('I do not have permission to send in the channel of your command!')
+					.catch(() => undefined);
+
+				return;
+			}
+
+			const canCallRes: true | string = await command.canCall(message, authorModel);
+
+			if (typeof canCallRes === 'string') {
+				await message.reply(canCallRes);
+
+				return;
+			}
+
+			try {
+				const parsedArgs: any[] | string | MessageOptions | MessageEmbed | MessageAttachment
+					= await command.parseArgs(message, args, { authorModel, commandName, args });
+
+				if (!(parsedArgs instanceof Array)) {
+					await message.reply(parsedArgs);
+
+					return;
+				}
+
+				await authorModel.$create('CommandLog', {
+					commandName: command.name,
+					guildId: message.guild.id,
+					userId: message.author.id,
+				});
+
+				await command.run(message, parsedArgs, { authorModel, commandName, args });
+
+				const newLevel: number | void = await command.grantRewards(message.author, authorModel);
+				if (newLevel && guildModel.levelUpEnabled) {
+					await message.reply(`you advanced to level **${newLevel}**! <:kannaHug:460080146418892800>`);
+				}
+			} catch (error) {
+				captureBreadcrumb({
+					category: 'Deleted',
+					data: {
+						channel_deleted: message.channel.deleted,
+						guild_deleted: message.guild.deleted,
+						message_deleted: message.deleted,
+					},
+					level: 'debug',
+				});
+
+				captureException(error, {
+					// Sentry does not allow to filter based on breadcrumbs, but via tags
+					tags: {
+						command: commandName,
+					},
+				});
+
+				this.logger.error(error);
+				message.reply(
+					'**an errror occured, but rest assured! It has already been reported and will be fixed in no time!**',
+				).catch(() => null);
+			}
+		} finally {
+			message.channel.messages.delete(message.id);
 		}
 	}
 
