@@ -72,6 +72,8 @@ export class Client extends DJSClient {
 	@on('guildDelete', true)
 	@RavenContext
 	protected async _onGuild(guild: Guild, left: boolean): Promise<void> {
+		captureBreadcrumb({ category: left ? 'guildDelete' : 'guildCreate', level: 'debug' });
+
 		if (!left && guild.memberCount !== guild.members.size) await guild.members.fetch();
 
 		const totalGuilds: number = await this.shard.fetchClientValues('guilds.size')
