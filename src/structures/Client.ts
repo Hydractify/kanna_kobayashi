@@ -81,6 +81,7 @@ export class Client extends DJSClient {
 		const blacklisted: string = await UserModel.fetch(guild.ownerID)
 			.then((user: UserModel) => user.type === UserTypes.BLACKLISTED ? 'Yes' : 'No');
 		const botCount: number = guild.members.filter((member: GuildMember) => member.user.bot).size;
+		const owner: User = this.users.get(guild.ownerID) || await this.users.fetch(guild.ownerID);
 
 		const embed: MessageEmbedOptions = new MessageEmbed()
 			.setThumbnail(guild.iconURL())
@@ -89,7 +90,7 @@ export class Client extends DJSClient {
 			.setColor(generateColor())
 
 			.addField('Name', `${guild.name} (${guild.id})`, true)
-			.addField('Owner', `${guild.owner.user.tag} (${guild.ownerID})`, true)
+			.addField('Owner', `${owner.tag} (${guild.ownerID})`, true)
 			.addField('Blacklisted', blacklisted, true)
 
 			.addField('Total Members', guild.memberCount, true)
