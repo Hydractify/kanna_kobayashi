@@ -5,6 +5,7 @@ import { Item } from '../../models/Item';
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { resolveAmount } from '../../util/Util';
 
@@ -95,7 +96,7 @@ class DonateCommand extends Command {
 			await transaction.commit();
 
 			return message.reply(
-				`You sucessfully transferred **${amount.toLocaleString()}** <:coin:330926092703498240> to **${target.tag}**!`,
+				`You sucessfully transferred **${amount.toLocaleString()}** ${Emojis.Coin} to **${target.tag}**!`,
 			);
 		} catch (error) {
 			await transaction.rollback();

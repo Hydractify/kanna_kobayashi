@@ -4,6 +4,7 @@ import { User as UserModel } from '../../models/User';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -12,7 +13,7 @@ class KissCommand extends WeebCommand {
 		super(handler, {
 			action: 'kissed',
 			description: 'K-kiss someone! ',
-			emoji: '<:kannaBlush:458776068279762954>',
+			emoji: Emojis.KannaBlush,
 			examples: ['kiss kanna', 'kiss kanna wizard'],
 			type: 'kiss',
 			usage: 'kiss <...User>',
@@ -25,7 +26,7 @@ class KissCommand extends WeebCommand {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		if (members && members.size === 1) {
-			if (members.has(message.client.user.id)) return message.reply('h-hentai da! <:kannaBlush:458776068279762954>');
+			if (members.has(message.client.user.id)) return message.reply(`h-hentai da! ${this.emoji}`);
 		}
 
 		const check: boolean = await this.ensureValidTargets(message, authorModel, members);
@@ -74,7 +75,7 @@ class KissCommand extends WeebCommand {
 			// Has it a partner?
 			if (members.first().partnerId) {
 				await message.reply(
-					`**${members.first().name}** has a partner! Canceling the command! <:kannaBlush:458776068279762954>`,
+					`**${members.first().name}** has a partner! Canceling the command! ${this.emoji}`,
 				);
 
 				return false;
@@ -95,7 +96,7 @@ class KissCommand extends WeebCommand {
 				? `**${names[0]} has`
 				: `**${names.slice(0, -1).join('**, **')}** and **${names[names.length - 1]}** have`;
 
-			await message.reply(`**${response} a partner! Canceling the command! <:kannaBlush:458776068279762954>`);
+			await message.reply(`**${response} a partner! Canceling the command! ${this.emoji}`);
 
 			return false;
 		}

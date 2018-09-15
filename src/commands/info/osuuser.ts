@@ -7,6 +7,7 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { Beatmap } from '../../structures/osu/Beatmap';
 import { Score } from '../../structures/osu/Score';
 import { User } from '../../structures/osu/User';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { OsuMode } from '../../types/osu/OsuMode';
 
@@ -65,9 +66,9 @@ class OsuUserCommand extends Command {
 			.addField('Ranked Score', user.rankedScore.toLocaleString(), true)
 			.addField('Total Score', user.totalScore.toLocaleString(), true)
 
-			.addField('<:SS:380476658202836992>', user.countSS.toLocaleString(), true)
-			.addField('<:S_:380476474714488843>', user.countS.toLocaleString(), true)
-			.addField('<:A_:380475521072365569>', user.countA.toLocaleString(), true);
+			.addField(Emojis.X, user.countSS.toLocaleString(), true)
+			.addField(Emojis.S, user.countS.toLocaleString(), true)
+			.addField(Emojis.A, user.countA.toLocaleString(), true);
 
 		return message.channel.send(embed);
 	}

@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -12,7 +13,7 @@ class CryCommand extends WeebCommand {
 			action: 'is upset with',
 			aliases: ['sad', 'upset'],
 			description: 'Show how much you are sad... `Hope you do not use this command often -Att. Wizardλ#5679`',
-			emoji: '<:kannaSad:458776254666244127>',
+			emoji: Emojis.KannaSad,
 			examples: ['cry', 'cry kanna', 'cry kanna wizard'],
 			type: 'cry',
 			usage: 'cry [...User]',
@@ -45,7 +46,7 @@ class CryCommand extends WeebCommand {
 		if (!members) {
 			const action: string = this.action.replace(' with', '');
 			return message.channel.send(
-				`<:kannaSad:458776254666244127> | **${message.member.displayName}** ${action}...`,
+				`${this.emoji} | **${message.member.displayName}** ${action}...`,
 				embed,
 			);
 		}

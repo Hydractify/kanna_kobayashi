@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -11,7 +12,7 @@ class PokeCommand extends WeebCommand {
 		super(handler, {
 			action: 'poked',
 			description: 'G-get someone\'s attention!',
-			emoji: '<:kannaBlush:458776068279762954>',
+			emoji: Emojis.KannaBlush,
 			examples: ['poke kanna', 'poke kanna wizard'],
 			type: 'poke',
 			usage: 'poke <...User>',

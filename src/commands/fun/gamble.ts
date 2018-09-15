@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { resolveAmount } from '../../util/Util';
 
@@ -55,8 +56,8 @@ class GambleCommand extends Command {
 
 		return message.reply(
 			won
-				? `you got **${won - wager}** coins! <:kannaShy:458779242696540170>`
-				: `you lost **${wager}** coins! <:kannaScared:458776266154180609>`,
+				? `you got **${won - wager}** coins! ${Emojis.KannaShy}`
+				: `you lost **${wager}** coins! ${Emojis.KannaScared}`,
 		);
 	}
 }

@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -12,7 +13,7 @@ class BlushCommand extends WeebCommand {
 			action: 'is blushing because of',
 			aliases: ['embarassed'],
 			description: 'S-show how embarassed you are!',
-			emoji: '<:kannaShy:458779242696540170>',
+			emoji: Emojis.KannaShy,
 			examples: ['blush', 'blush kanna', 'blush kanna wizard'],
 			type: 'blush',
 			usage: 'blush [...User]',
@@ -49,7 +50,7 @@ class BlushCommand extends WeebCommand {
 		if (!members) {
 			action = action.replace(' because of', '');
 			return message.channel.send(
-				`<:kannaSad:458776254666244127> | **${message.member.displayName}** ${action}...`,
+				`${Emojis.KannaShy} | **${message.member.displayName}** ${action}...`,
 				embed,
 			);
 		}

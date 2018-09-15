@@ -5,6 +5,7 @@ import { Client } from '../../structures/Client';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IShardData } from '../../types/IShardData';
 
@@ -51,11 +52,11 @@ class StatsCommand extends Command {
 			.setAuthor(`${this.client.user.username}'s Stats (v${version})`, this.client.user.displayAvatarURL())
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL())
-			.addField('Uptime <:kannaHug:460080146418892800>', uptime, true)
-			.addField('Total Servers <:kannaWow:458777326810038292>', totalGuilds.toLocaleString(), true)
-			.addField('Total Users <:kannaLolice:458776154057342976>', totalUsers.toLocaleString(), true)
-			.addField('Total Ram Used <:kannaTired:458777258694541313>', `${totalRam.toFixed(2)} MB`, true)
-			.addField('Shards <:kannaHungry:458776120092000258>', shardsInfo);
+			.addField(`Uptime ${Emojis.KannaHug}`, uptime, true)
+			.addField(`Total Servers ${Emojis.KannaWow}`, totalGuilds.toLocaleString(), true)
+			.addField(`Total Users ${Emojis.KannaLolice}`, totalUsers.toLocaleString(), true)
+			.addField(`Total Ram Used ${Emojis.KannaTired}`, `${totalRam.toFixed(2)} MB`, true)
+			.addField(`Shards ${Emojis.KannaHungry}`, shardsInfo);
 
 		return message.channel.send(embed);
 	}

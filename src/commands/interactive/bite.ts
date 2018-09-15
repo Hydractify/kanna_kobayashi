@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -11,7 +12,7 @@ class BiteCommand extends WeebCommand {
 		super(handler, {
 			action: 'bit',
 			description: 'Bite someone!',
-			emoji: '<:kannaShy:458779242696540170>',
+			emoji: Emojis.KannaShy,
 			examples: ['bite kanna', 'bite kanna wizard'],
 			type: 'bite',
 			usage: 'bite <...User>',

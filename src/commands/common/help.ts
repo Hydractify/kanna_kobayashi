@@ -11,6 +11,7 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedController';
 import { PermLevels } from '../../types/PermLevels';
@@ -100,7 +101,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 
 		if (embed) return message.channel.send(embed);
 
-		return message.reply(`I could not find a command matching **${name}** <:kannaShy:458779242696540170>`);
+		return message.reply(`I could not find a command matching **${name}** ${Emojis.KannaShy}`);
 	}
 
 	private _findCommand(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[] | void> {

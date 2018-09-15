@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -11,8 +12,8 @@ class CuddleCommand extends WeebCommand {
 		super(handler, {
 			action: 'cuddled',
 			aliases: ['snuggle', 'snug'],
-			description: 'Cuddle someone... <:kannaBlush:458776068279762954>',
-			emoji: '<:kannaBlush:458776068279762954>',
+			description: `Cuddle someone... ${Emojis.KannaBlush}`,
+			emoji: Emojis.KannaBlush,
 			examples: ['cuddle kanna', 'cuddle kanna wizard'],
 			type: 'hug',
 			usage: 'cuddle <...User>',

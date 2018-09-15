@@ -7,6 +7,7 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { UserTypes } from '../../types/UserTypes';
 import { FlagCollection, parseFlags, titleCase } from '../../util/Util';
@@ -38,14 +39,14 @@ class ItemCommand extends Command {
 			case 'make':
 			case 'update':
 				if (authorModel.type !== UserTypes.DEV) {
-					return 'only developers can make or update items! <:kannaMad:458776169924526093>';
+					return `only developers can make or update items! ${Emojis.KannaMad}`;
 				}
 
 				return ['create', args];
 
 			case 'structure':
 				if (authorModel.type !== UserTypes.DEV) {
-					return 'only developers can see the structure of items! <:kannaMad:458776169924526093>';
+					return `only developers can see the structure of items! ${Emojis.KannaMad}`;
 				}
 
 				return ['structure', args];
@@ -74,7 +75,7 @@ class ItemCommand extends Command {
 
 				return message.reply([
 					`I have sucessfully updated the ${item.type[0] + item.type.slice(1).toLowerCase()}!`
-					+ ' Here it is... <:kannaShy:458779242696540170>',
+					+ ` Here it is... ${Emojis.KannaShy}`,
 					'```js',
 					'Item {',
 					` ${inspect(item.toJSON()).slice(1)}`,
@@ -86,7 +87,7 @@ class ItemCommand extends Command {
 
 			return message.reply([
 				`I have sucessfully created the ${item.type[0] + item.type.slice(1).toLowerCase()}!`
-				+ ' Here it is... <:kannaShy:458779242696540170>',
+				+ ` Here it is... ${Emojis.KannaShy}`,
 				'```js',
 				'Item {',
 				` ${inspect(item.toJSON()).slice(1)}`,

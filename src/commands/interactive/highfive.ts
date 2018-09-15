@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -12,7 +13,7 @@ class HighFiveCommand extends WeebCommand {
 			action: 'high-fived',
 			aliases: ['high5'],
 			description: 'High-five with someone! :3',
-			emoji: '<:kannaHug:460080146418892800>',
+			emoji: Emojis.KannaHug,
 			examples: ['highfive kanna', 'highfive kanna wizard'],
 			type: 'highfive',
 			usage: 'highfive <...User>',
@@ -25,9 +26,9 @@ class HighFiveCommand extends WeebCommand {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
-			bot: 'Yay! <:kannaHug:460080146418892800>',
-			dev: `High-five with me **${message.author}**! <:kannaHug:460080146418892800>`,
-			trusted: `High-five with me **${message.author}**! <:kannaHug:460080146418892800>`,
+			bot: `Yay! ${Emojis.KannaHug}`,
+			dev: `High-five with me **${message.author}**! ${Emojis.KannaHug}`,
+			trusted: `High-five with me **${message.author}**! ${Emojis.KannaHug}`,
 		});
 		const baseString: string = this.computeBaseString(message, members);
 

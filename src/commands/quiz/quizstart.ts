@@ -4,6 +4,7 @@ import { Quiz } from '../../models/Quiz';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 import { titleCase } from '../../util/Util';
@@ -26,7 +27,7 @@ class QuizStartCommand extends Command {
 			return message.reply([
 				'this guild does not have a quiz set up!',
 				'You can use one of the a pre made ones,'
-				+ ' or add your own by setting a photo and an answer! <:kannaShy:458779242696540170>',
+				+ ` or add your own by setting a photo and an answer! ${Emojis.KannaShy}`,
 			].join('\n'));
 		}
 

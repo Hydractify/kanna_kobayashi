@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -12,7 +13,7 @@ class PatCommand extends WeebCommand {
 			action: 'patted',
 			aliases: ['patto'],
 			description: 'Pat someone\'s head!',
-			emoji: '<:kannaBlush:458776068279762954>',
+			emoji: Emojis.KannaBlush,
 			examples: ['pat kanna', 'pat kanna wizard'],
 			type: 'pat',
 			usage: 'pat <...User>',

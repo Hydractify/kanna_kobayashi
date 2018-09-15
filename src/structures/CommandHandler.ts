@@ -15,6 +15,7 @@ import { ListenerUtil } from '../decorators/ListenerUtil';
 import { Loggable } from '../decorators/LoggerDecorator';
 import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
+import { Emojis } from '../types/Emojis';
 import { UserTypes } from '../types/UserTypes';
 import { Client } from './Client';
 import { Command } from './Command';
@@ -262,7 +263,7 @@ export class CommandHandler {
 
 				const newLevel: number | void = await command.grantRewards(message.author, authorModel);
 				if (newLevel && guildModel.levelUpEnabled) {
-					await message.reply(`you advanced to level **${newLevel}**! <:kannaHug:460080146418892800>`);
+					await message.reply(`you advanced to level **${newLevel}**! ${Emojis.KannaHug}`);
 				}
 			} catch (error) {
 				captureBreadcrumb({

@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -10,8 +11,8 @@ class DanceCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'is dancing with',
-			description: 'Dance! <a:kannaRun:458776024012947456>',
-			emoji: '<a:kannaRun:458776024012947456>',
+			description: `Dance! ${Emojis.KannaRun}`,
+			emoji: Emojis.KannaRun,
 			examples: ['dance', 'dance kanna', 'dance kanna wizard'],
 			type: 'dance',
 			usage: 'dance [...User]',
@@ -44,7 +45,7 @@ class DanceCommand extends WeebCommand {
 		if (!members) {
 			const action: string = this.action.replace(' with', '');
 			return message.channel.send(
-				`<:kannaSad:458776254666244127> | **${message.member.displayName}** ${action}!`,
+				`${Emojis.KannaSad} | **${message.member.displayName}** ${action}!`,
 				embed,
 			);
 		}

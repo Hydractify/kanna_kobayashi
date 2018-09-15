@@ -1,5 +1,6 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
+import { Emojis } from '../../types/Emojis';
 
 class DoItCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
@@ -7,7 +8,7 @@ class DoItCommand extends ImageEmbedCommand {
 			description: 'You have to do it... For me!',
 			examples: ['doit'],
 			images: ['https://thedragonproject.network/memes/doit/1.jpg'],
-			messageContent: '<:kannaMad:458776169924526093> | **Do it!**',
+			messageContent: `${Emojis.KannaMad} | **Do it!**`,
 			usage: 'dance',
 		});
 	}

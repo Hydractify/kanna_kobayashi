@@ -4,15 +4,16 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { mapIterable, titleCase } from '../../util/Util';
 
 class ModListCommand extends Command {
 	private statuses: Map<string, string> = new Map<string, string>([
-		['online', '<:online:339191830140944385>'],
-		['idle', '<:idle:339191829515993089>'],
-		['dnd', '<:dnd:339191829524381716>'],
-		['offline', '<:offline:339191829218066433>'],
+		['online', Emojis.Online],
+		['idle', Emojis.Idle],
+		['dnd', Emojis.DND],
+		['offline', Emojis.Offline],
 	]);
 
 	public constructor(handler: CommandHandler) {

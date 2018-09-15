@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -11,7 +12,7 @@ class SlapCommand extends WeebCommand {
 		super(handler, {
 			action: 'slapped',
 			description: 'Slap someone!',
-			emoji: '<:kannaScared:458776266154180609>',
+			emoji: Emojis.KannaScared,
 			examples: ['slap kanna', 'slap kanna wizard'],
 			type: 'slap',
 			usage: 'slap <...User>',
@@ -25,7 +26,7 @@ class SlapCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		if (members.has(message.client.user.id)) {
 			return message.reply(
-				'you can not slap me! <:kannaMad:458776169924526093>',
+				`you can not slap me! ${Emojis.KannaMad}`,
 			);
 		}
 

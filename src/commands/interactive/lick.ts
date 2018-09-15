@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -11,7 +12,7 @@ class LickCommand extends WeebCommand {
 		super(handler, {
 			action: 'licked',
 			description: 'L-lick someone!',
-			emoji: '<:kannaBlush:458776068279762954>',
+			emoji: Emojis.KannaBlush,
 			examples: ['lick kanna', 'lick kanna wizard'],
 			type: 'lick',
 			usage: 'lick <...User>',

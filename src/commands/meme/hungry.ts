@@ -1,5 +1,6 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
+import { Emojis } from '../../types/Emojis';
 
 class HungryCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
@@ -16,7 +17,7 @@ class HungryCommand extends ImageEmbedCommand {
 				'https://thedragonproject.network/memes/hungry/6.jpg',
 				'https://thedragonproject.network/memes/hungry/7.jpg',
 			],
-			messageContent: '**Feed me!** <:kannaWow:458777326810038292>',
+			messageContent: `**Feed me!** ${Emojis.KannaWow}`,
 			usage: 'hungry',
 		});
 	}

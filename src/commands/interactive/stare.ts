@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -10,8 +11,8 @@ class StareCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'is staring at',
-			description: 'Stare at someone <:kannaMad:458776169924526093>',
-			emoji: '<:kannaScared:458776266154180609>',
+			description: `Stare at someone ${Emojis.KannaMad}`,
+			emoji: Emojis.KannaScared,
 			examples: ['stare kanna', 'stare kanna wizard'],
 			type: 'stare',
 			usage: 'stare <...User>',

@@ -6,6 +6,7 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { Emojis } from '../../types/Emojis';
 import { titleCase } from '../../util/Util';
 
 class ProfileCommand extends Command {
@@ -86,7 +87,7 @@ class ProfileCommand extends Command {
 			.setDescription('\u200b')
 			.addField('Level', `${userModel.level} (${(userModel.exp || 0).toLocaleString()} exp)`, true)
 			.addField('Reputation', (reputation || 0).toLocaleString(), true)
-			.addField('Kanna Coins', `${(userModel.coins || 0).toLocaleString()} <:coin:330926092703498240>`, true)
+			.addField('Kanna Coins', `${(userModel.coins || 0).toLocaleString()} ${Emojis.Coin}`, true)
 			.addField('Items', this.mapItems(userModel.items), true)
 			.addField('Badges', this.mapItems(userModel.badges), true)
 			.addField('Relationship', partnerString, true);

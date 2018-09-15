@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -12,7 +13,7 @@ class BangCommand extends WeebCommand {
 			action: 'shot',
 			aliases: ['shoot'],
 			description: 'Shoot someone who is bothering you!',
-			emoji: '<:kannaMad:458776169924526093>',
+			emoji: Emojis.KannaMad,
 			examples: ['shoot kanna', 'shoot kanna wizard'],
 			type: 'bang',
 			usage: 'shoot <...User>',
@@ -27,7 +28,7 @@ class BangCommand extends WeebCommand {
 		if (members) {
 			if (members.has(message.client.user.id)) {
 				return message.reply(
-					'get away from me with that pistol or I will destroy you, human! <:kannaMad:458776169924526093>',
+					`get away from me with that pistol or I will destroy you, human! ${this.emoji}`,
 				);
 			}
 		}

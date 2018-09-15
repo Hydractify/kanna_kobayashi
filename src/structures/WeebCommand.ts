@@ -1,6 +1,7 @@
 import { Collection, GuildMember, Message, Snowflake } from 'discord.js';
 
 import { User as UserModel } from '../models/User';
+import { Emojis } from '../types/Emojis';
 import { ICommandInfo } from '../types/ICommandInfo';
 import { PermLevels } from '../types/PermLevels';
 import { IWeebResolvedMember } from '../types/weeb/IWeebResolvedMember';
@@ -61,7 +62,7 @@ export abstract class WeebCommand extends Command {
 		message: Message,
 		args: string[],
 	): Promise<string | [Collection<Snowflake, IWeebResolvedMember>]> {
-		if (!args.length) return 'you must mention someone <:kannaShy:458779242696540170>';
+		if (!args.length) return `you must mention someone ${Emojis.KannaShy}`;
 
 		const members: Collection<Snowflake, IWeebResolvedMember> = await this.resolveMembers(args, message);
 		if (!members.size) return `I could not find anyone with ${args.join(' ')}`;

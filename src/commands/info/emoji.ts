@@ -6,6 +6,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { EmojiMatchType } from '../../types/EmojiMatchType';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class EmojiInfoCommand extends Command {
@@ -18,7 +19,7 @@ class EmojiInfoCommand extends Command {
 				'emoji KannaWave',
 				'emoji 333771413842558976',
 				// Displays as regular emoji
-				'emoji <:kannaWave:458777297219092481>',
+				`emoji ${Emojis.KannaGreetings}`,
 			],
 			usage: 'emoji <Emoji>',
 		});

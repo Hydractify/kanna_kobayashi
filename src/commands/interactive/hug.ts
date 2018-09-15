@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -11,8 +12,8 @@ class HugCommand extends WeebCommand {
 		super(handler, {
 			action: 'hugged',
 			aliases: ['hwug'],
-			description: 'Hug someone tight ❤',
-			emoji: '<:kannaShy:458779242696540170>',
+			description: 'Hug someone tightly ❤',
+			emoji: Emojis.KannaShy,
 			examples: ['hug kanna', 'hug kanna wizard'],
 			type: 'hug',
 			usage: 'hug <...User>',

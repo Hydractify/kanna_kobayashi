@@ -3,6 +3,7 @@ import { Collection, Message, Snowflake } from 'discord.js';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -11,7 +12,7 @@ class TickleCommand extends WeebCommand {
 		super(handler, {
 			action: 'tickled',
 			description: 'Tickle someone!',
-			emoji: '<:kannaShy:458779242696540170>',
+			emoji: Emojis.KannaShy,
 			examples: ['tickle kanna', 'tickle kanna wizard'],
 			type: 'tickle',
 			usage: 'tickle <...User>',

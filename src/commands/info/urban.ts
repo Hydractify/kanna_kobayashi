@@ -4,6 +4,7 @@ import { APIRouter, buildRouter } from '../../structures/Api';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IUrbanDictionaryResponse } from '../../types/IUrbanDictionaryResponse';
 import { titleCase } from '../../util/Util';
@@ -30,7 +31,7 @@ class UrbanCommand extends Command {
 		if (!args.length) {
 			return [
 				'you are supposed to tell me a term to lookup!',
-				`(\`kanna ${this.usage}\`) <:kannaScared:458776266154180609>`,
+				`(\`kanna ${this.usage}\`) ${Emojis.KannaScared}`,
 			].join(' ');
 		}
 
@@ -77,8 +78,8 @@ class UrbanCommand extends Command {
 			embed.splitToFields('Example', example);
 		}
 
-		embed.addField('Thumbs Up <:kannaWow:458777326810038292>', thumbsUp, true)
-			.addField('Thumbs Down <:kannaMad:458776169924526093>', thumbsDown, true);
+		embed.addField(`Thumbs Up ${Emojis.KannaWow}`, thumbsUp, true)
+			.addField(`Thumbs Down ${Emojis.KannaMad}`, thumbsDown, true);
 
 		return message.channel.send(embed);
 	}

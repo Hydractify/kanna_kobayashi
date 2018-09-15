@@ -3,13 +3,14 @@ import { Message, User } from 'discord.js';
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class BalanceCommand extends Command {
 	constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['coins', 'bal'],
-			description: 'See how many <:coin:330926092703498240> you have!',
+			description: `See how many ${Emojis.Coin} you have!`,
 			examples: ['balance', 'balance wizard'],
 			usage: 'balance [User]',
 		});
@@ -31,11 +32,11 @@ class BalanceCommand extends Command {
 
 	public run(message: Message, [model, user]: [UserModel, User]): Promise<Message | Message[]> {
 		if (!user) {
-			return message.reply(`you have a total of **${model.coins.toLocaleString()}** <:coin:330926092703498240>!`);
+			return message.reply(`you have a total of **${model.coins.toLocaleString()}** ${Emojis.Coin}!`);
 		}
 
 		return message.reply(
-			`**${user.tag}** has a total of **${model.coins.toLocaleString()}** <:coin:330926092703498240>!`,
+			`**${user.tag}** has a total of **${model.coins.toLocaleString()}** ${Emojis.Coin}!`,
 		);
 	}
 }

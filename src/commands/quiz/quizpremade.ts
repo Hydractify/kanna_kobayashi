@@ -4,13 +4,14 @@ import { Quiz } from '../../models/Quiz';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 
 class QuizPremadeCommand extends Command {
 
 	private emojis: string[] = [
-		'KannaMad:315264558279426048',
+		Emojis.KannaMad.slice(2, -1),
 		'1%E2%83%A3',
 		'2%E2%83%A3',
 		'3%E2%83%A3',
@@ -40,7 +41,7 @@ class QuizPremadeCommand extends Command {
 			.addField(
 			'Dragons',
 			[
-				'<:kannaMad:458776169924526093> **Ilulu**',
+				`${Emojis.KannaMad} **Ilulu**`,
 				':one: **Tohru**',
 				':two: **Quetzalcoatl**',
 				':three: **Fafnir**',

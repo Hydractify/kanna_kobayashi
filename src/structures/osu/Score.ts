@@ -1,5 +1,6 @@
 import { Moment, utc } from 'moment';
 
+import { Emojis } from '../../types/Emojis';
 import { BeatmapMods } from '../../types/osu/BeatmapMods';
 import { OsuMode } from '../../types/osu/OsuMode';
 import { Beatmap } from './Beatmap';
@@ -10,20 +11,7 @@ import { User } from './User';
  */
 export class Score {
 	/* tslint:disable:variable-name object-literal-sort-keys */
-	private static readonly RankEmojis: { [rank: string]: string } = {
-		// SS (Hidden/FL)
-		XH: '<:XSS:380477297884528640>',
-		// S (Hidden/FL)
-		SH: '<:XS:380476957831200772>',
-		// SS
-		X: '<:SS:380476658202836992>',
-		S: '<:S_:380476474714488843>',
-		A: '<:A_:380475521072365569>',
-		B: '<:B_:380475539820904450>',
-		C: '<:C_:380475959876517888>',
-		D: '<:D_:380476237526859778>',
-		F: '<:F_:380859218158419968>',
-	};
+	private static readonly RankEmojis: { [rank: string]: string } = Emojis as any;
 	/* tslint:enable variable-name object-literal-sort-keys */
 
 	/**

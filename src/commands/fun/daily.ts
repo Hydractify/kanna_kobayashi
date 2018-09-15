@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class DailyCommand extends Command {
@@ -22,7 +23,7 @@ class DailyCommand extends Command {
 			authorModel.increment({ coins: 200 }),
 		]);
 
-		return message.reply('here are your daily **200** <:coin:330926092703498240>!');
+		return message.reply(`here are your daily **200** ${Emojis.Coin}!`);
 	}
 }
 

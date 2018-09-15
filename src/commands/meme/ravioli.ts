@@ -1,5 +1,6 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
+import { Emojis } from '../../types/Emojis';
 
 class RavioliCommand extends ImageEmbedCommand {
 	public constructor(handler: CommandHandler) {
@@ -8,7 +9,7 @@ class RavioliCommand extends ImageEmbedCommand {
 			description: 'Respect me!',
 			examples: ['ravioli'],
 			images: ['https://thedragonproject.network/memes/ravioli/1.png'],
-			messageContent: '**Ravioli ravioli all praise the Dragon... PRAISE ME HUMAN!** <:kannaWow:458777326810038292>',
+			messageContent: `**Ravioli ravioli all praise the Dragon... PRAISE ME, HUMAN!** ${Emojis.KannaWow}`,
 			usage: 'ravioli',
 		});
 	}

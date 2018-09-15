@@ -4,6 +4,7 @@ import { Transaction } from 'sequelize';
 import { Item } from '../../models/Item';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { Items } from '../../types/Items';
 
@@ -68,7 +69,7 @@ class CatchCommand extends Command {
 
 		return message.channel.send([
 			`You ${bugAmount ? `got **${bugAmount}** bugs!` : 'did not get any bugs...'}`,
-			`And your Bug Net ${netBreak ? 'broke...' : 'did not break!'} <a:kannaRun:458776024012947456>`,
+			`And your Bug Net ${netBreak ? 'broke...' : 'did not break!'} ${Emojis.KannaRun}`,
 		].join(' '));
 	}
 }

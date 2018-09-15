@@ -4,6 +4,7 @@ import { Transaction } from 'sequelize';
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class BreakUpCommand extends Command {
@@ -18,9 +19,9 @@ class BreakUpCommand extends Command {
 	}
 
 	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		if (!authorModel.partnerId) return message.reply('you do not have a partner! <:kannaShy:458779242696540170>');
+		if (!authorModel.partnerId) return message.reply(`you do not have a partner! ${Emojis.KannaShy}`);
 		const partnerModel: UserModel = await authorModel.$get<UserModel>('partner') as UserModel;
-		if (!partnerModel) return message.reply('you do not have a partner! <:kannaShy:458779242696540170>');
+		if (!partnerModel) return message.reply(`you do not have a partner! ${Emojis.KannaShy}`);
 
 		await message.reply(`are you sure you want to break up with <@${partnerModel.id}>? (**Y**es or **N**o)`);
 
@@ -49,7 +50,7 @@ class BreakUpCommand extends Command {
 
 		await transaction.commit();
 
-		return message.reply('you successfully broke up with your current partner! <:kannaShy:458779242696540170>');
+		return message.reply(`you successfully broke up with your current partner! ${Emojis.KannaShy}`);
 	}
 }
 

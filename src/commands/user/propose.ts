@@ -5,6 +5,7 @@ import { Transaction } from 'sequelize';
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { Emojis } from '../../types/Emojis';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class ProposeCommand extends Command {
@@ -12,7 +13,7 @@ class ProposeCommand extends Command {
 		super(handler, {
 			aliases: ['marry'],
 			cooldown: 1e4,
-			description: 'Propose to someone... You love! <:kannaShy:458779242696540170>',
+			description: `Propose to someone... You love! ${Emojis.KannaShy}`,
 			examples: ['propose Wizard'],
 			usage: 'propose <User>',
 		});
@@ -57,7 +58,7 @@ class ProposeCommand extends Command {
 		// Mentioned user is not the current user
 		if (partner.id !== mentionedUser.id) {
 
-			await message.reply('you are already in a relationship with somebody else... <:kannaScared:458776266154180609>');
+			await message.reply(`you are already in a relationship with somebody else... ${Emojis.KannaScared}`);
 
 			return false;
 		}
@@ -67,7 +68,7 @@ class ProposeCommand extends Command {
 		const until = partner.partnerSince.valueOf() + (30 * 24 * 60 * 60 * 1000);
 		if (until > message.createdTimestamp) {
 			await message.reply([
-				'sorry but not enough time has passed since you two got together! <:kannaShy:458779242696540170>',
+				`sorry but not enough time has passed since you two got together! ${Emojis.KannaShy}`,
 				`Try again in ${moment(until).fromNow()}.`,
 			].join('\n'));
 
@@ -93,7 +94,7 @@ class ProposeCommand extends Command {
 		if (!confirmation) {
 			await message.reply([
 				'looks like you got no response, so',
-				'I had to cancel the command <:kannaSad:458776254666244127>',
+				`I had to cancel the command ${Emojis.KannaSad}`,
 			].join(' '));
 
 			return false;
@@ -113,13 +114,13 @@ class ProposeCommand extends Command {
 			await transaction.commit();
 
 			await message.channel.send(
-				`Congratulations ${message.author} and ${mentionedUser} for your marriage! <:kannaHug:460080146418892800>`,
+				`Congratulations ${message.author} and ${mentionedUser} for your marriage! ${Emojis.KannaHug}`,
 			);
 
 			return false;
 		}
 
-		await message.reply('canceling the command... <:kannaShy:458779242696540170>');
+		await message.reply(`canceling the command... ${Emojis.KannaShy}`);
 
 		return false;
 	}
@@ -150,7 +151,7 @@ class ProposeCommand extends Command {
 		if (!confirmation) {
 			return message.reply([
 				'looks like you got no response, so',
-				'I had to cancel the command <:kannaSad:458776254666244127>',
+				`I had to cancel the command ${Emojis.KannaSad}`,
 			].join(' '));
 		}
 
@@ -175,11 +176,11 @@ class ProposeCommand extends Command {
 
 			return message.channel.send([
 				`Congratulations ${message.author} and ${mentionedUser}! If you are still together in a month,`,
-				'you can use propose again to marry! <:kannaGreetings:458776090752843786>',
+				`you can use propose again to marry! ${Emojis.KannaGreetings}`,
 			].join(' '));
 		}
 
-		return message.reply('you got rejected. <:kannaScared:458776266154180609>');
+		return message.reply(`you got rejected. ${Emojis.KannaScared}`);
 	}
 }
 
