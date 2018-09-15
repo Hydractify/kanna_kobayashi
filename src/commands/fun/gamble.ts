@@ -24,7 +24,7 @@ class GambleCommand extends Command {
 		input: string[],
 		{ authorModel }: ICommandRunInfo,
 	): string | [number] {
-		if (!input) return `you must give me an amount! (\`${this.usage}\`)`;
+		if (!input.length) return `you must give me an amount! (\`${this.usage}\`)`;
 
 		const amount: number = resolveAmount(input.join(' '));
 		if (isNaN(amount)) return `**${input}** is not a valid number!`;
