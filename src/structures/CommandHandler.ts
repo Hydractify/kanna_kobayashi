@@ -8,7 +8,7 @@ import {
 } from 'discord.js';
 import { readdir } from 'fs';
 import { extname, join } from 'path';
-import { captureBreadcrumb, captureException } from 'raven';
+import { captureBreadcrumb, captureException, captureMessage } from 'raven';
 import { promisify } from 'util';
 
 import { ListenerUtil } from '../decorators/ListenerUtil';
@@ -193,6 +193,21 @@ export class CommandHandler {
 
 		try {
 			if (message.author.bot || !(message.channel instanceof TextChannel)) return;
+
+			if (!message.member) {
+				captureMessage('Uncached member',
+					{
+						extra: {
+							author: message.author.toJSON(),
+							member_api_count: message.guild.memberCount,
+							member_cache_count: message.guild.members.size,
+							message: message.toJSON(),
+						},
+						level: 'warn',
+					});
+
+				await message.guild.members.fetch(message.author.id);
+			}
 
 			captureBreadcrumb({
 				category: 'Meta',
