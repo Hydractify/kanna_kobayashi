@@ -45,7 +45,6 @@ class GambleCommand extends Command {
 		let multiplier: number = 0;
 		if (value >= 100) multiplier = 4;
 		else if (value >= 80) multiplier = 2;
-		else if (value >= 60) multiplier = 1;
 
 		const won: number = wager * multiplier;
 
