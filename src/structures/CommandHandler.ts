@@ -281,17 +281,18 @@ export class CommandHandler {
 					await message.reply(`you advanced to level **${newLevel}**! ${Emojis.KannaHug}`);
 				}
 			} catch (error) {
-				captureBreadcrumb({
-					category: 'Deleted',
-					data: {
+				captureException(error, {
+					extra: {
 						channel_deleted: message.channel.deleted,
 						guild_deleted: message.guild.deleted,
 						message_deleted: message.deleted,
+						permissions: {
+							member_channel: message.channel.permissionsFor(message.member),
+							member_guild: message.member.permissions,
+							self_channel: message.channel.permissionsFor(this.client.user),
+							self_guild: message.guild.me.permissions,
+						},
 					},
-					level: 'debug',
-				});
-
-				captureException(error, {
 					// Sentry does not allow to filter based on breadcrumbs, but via tags
 					tags: {
 						command: commandName,
