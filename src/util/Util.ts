@@ -41,7 +41,7 @@ export const parseFlags: (input: string, lowerCase?: boolean) => FlagCollection
 		}
 
 		// tslint:disable-next-line:no-null-keyword
-		let match: RegExpExecArray = null;
+		let match: RegExpExecArray | null = null;
 
 		// tslint:disable-next-line:no-conditional-assignment
 		while ((match = flagsRegex.exec(input)) !== null) {
@@ -125,7 +125,7 @@ export const replaceMap: (input: string, map: { [key: string]: string }) => stri
  * @returns Key or null if not found
  */
 export const enumKeyFromValue: <T>(_enum: any, value: string) => T
-	= <T>(_enum: T, value: string): T => {
+	= <T>(_enum: T, value: string): T | null => {
 		for (const [key, val] of Object.entries(_enum)) {
 			if (val === value) return key as any;
 		}
@@ -144,7 +144,7 @@ const _resolve: (regex: RegExp, modifiers: { [key: string]: number }, input: str
 	(regex: RegExp, modifiers: { [key: string]: number }, input: string): number => {
 		let valid: boolean = false;
 		let out: number = 0;
-		let res: RegExpExecArray;
+		let res: RegExpExecArray | null;
 
 		// tslint:disable-next-line:no-conditional-assignment
 		while ((res = regex.exec(input)) !== null) {

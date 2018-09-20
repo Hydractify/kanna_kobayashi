@@ -18,7 +18,7 @@ class PrefixCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, args: string[], { authorModel }: ICommandRunInfo): string | [string] {
+	public parseArgs(message: Message, args: string[], { authorModel }: ICommandRunInfo): string | [string | undefined] {
 		if (args.length) {
 			if (authorModel.permLevel(message.member) < 2) {
 				return 'you do not have the required permission level to change the prefix!';
@@ -39,7 +39,7 @@ class PrefixCommand extends Command {
 		return [undefined];
 	}
 
-	public async run(message: Message, [newPrefix]: [string]): Promise<Message | Message[]> {
+	public async run(message: Message, [newPrefix]: [string | undefined]): Promise<Message | Message[]> {
 		if (!newPrefix) {
 			const prefixes: string =
 				`always working prefixes are: \`@${this.client.user.tag} \u200b\`, \`k!\` and \`kanna \u200b\``;

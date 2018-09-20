@@ -43,9 +43,9 @@ class OsuBeatmapCommand extends Command {
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		if (!commandName.includes('set')) {
-			const best: boolean = option && option.toLowerCase() === 'best';
+			const best: boolean = Boolean(option) && option.toLowerCase() === 'best';
 
-			const beatmap: Beatmap = await Beatmap.fetch(id, mode);
+			const beatmap: Beatmap | undefined = await Beatmap.fetch(id, mode);
 
 			if (!beatmap) {
 				if (best) return message.reply('I could not find a beatmap with that id!');
@@ -56,7 +56,7 @@ class OsuBeatmapCommand extends Command {
 			}
 		}
 
-		const beatmaps: Beatmap[] = await Beatmap.fetchSet(id);
+		const beatmaps: Beatmap[] | undefined = await Beatmap.fetchSet(id);
 
 		if (!beatmaps) return message.reply('I could not find a beatmap nor set with that id!');
 
@@ -68,7 +68,7 @@ class OsuBeatmapCommand extends Command {
 	}
 
 	private async showBest(message: Message, authorModel: UserModel, beatmap: Beatmap): Promise<Message | Message[]> {
-		const scores: Score[] = await beatmap.fetchBestScores();
+		const scores: Required<Score>[] = await beatmap.fetchBestScores();
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`${beatmap.artist} -- ${beatmap.title} [${beatmap.version}]`, undefined, beatmap.versionURL())

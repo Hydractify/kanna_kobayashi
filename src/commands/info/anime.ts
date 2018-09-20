@@ -28,11 +28,11 @@ class AnimeCommand extends AniListCommand<IMedia> {
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const entries: IMedia[] = await this.search(args.join(' '));
+		const entries: IMedia[] | undefined = await this.search(args.join(' '));
 
 		if (!entries) return message.reply('I could not find a single anime matching your search!');
 
-		const entry: IMedia = entries.length > 1
+		const entry: IMedia | undefined = entries.length > 1
 			? await this.pick(message, authorModel, entries)
 			: entries[0];
 

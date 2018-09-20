@@ -28,7 +28,7 @@ export class PostgreSQL {
 	/**
 	 * Reference to the Logger instance
 	 */
-	private readonly logger: Logger;
+	private readonly logger!: Logger;
 
 	/**
 	 * Instantiate the PostgreSQL singleton.

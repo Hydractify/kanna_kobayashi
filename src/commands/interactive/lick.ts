@@ -30,7 +30,7 @@ class LickCommand extends WeebCommand {
 
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'D-don\'t!',
-			dev: `W-why are you licking **${members.first().name}**!?`,
+			dev: `W-why are you licking **${members.first()!.name}**!?`,
 			trusted: 'P-pervert!',
 		});
 		const baseString: string = this.computeBaseString(message, members);

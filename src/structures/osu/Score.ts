@@ -61,7 +61,7 @@ export class Score {
 	/**
 	 * Amount of pp granted, only availabe for best scores
 	 */
-	public readonly pp: number;
+	public readonly pp?: number;
 	/**
 	 * Grade achieved with the score (`SS`, `B`, etc)
 	 */
@@ -82,7 +82,7 @@ export class Score {
 	/**
 	 * Cached beatmap the score was played in
 	 */
-	private _beatmap: Beatmap;
+	private _beatmap: Beatmap | undefined;
 	/**
 	 * Raw bitfied of the score
 	 */
@@ -90,7 +90,7 @@ export class Score {
 	/**
 	 * Cached user that achieved the score
 	 */
-	private _user: User;
+	private _user: User | undefined;
 
 	/**
 	 * Instantiate a new score
@@ -189,7 +189,7 @@ export class Score {
 
 		this._beatmap = await require('./Beatmap').Beatmap.fetch(this.beatmapId, mode);
 
-		return this._beatmap;
+		return this._beatmap!;
 	}
 
 	/**
@@ -200,6 +200,6 @@ export class Score {
 
 		this._user = await require('./User').User.fetchBasic(this.userId);
 
-		return this._user;
+		return this._user!;
 	}
 }

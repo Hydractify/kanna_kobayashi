@@ -22,7 +22,7 @@ class DanceCommand extends WeebCommand {
 	public async parseArgs(
 		message: Message,
 		args: string[],
-	): Promise<string | [Collection<Snowflake, IWeebResolvedMember>]> {
+	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> {
 		if (!args.length) return [undefined];
 
 		const members: Collection<Snowflake, IWeebResolvedMember> = await this.resolveMembers(args, message);
@@ -33,13 +33,13 @@ class DanceCommand extends WeebCommand {
 
 	public async run(
 		message: Message,
-		[members]: [Collection<Snowflake, IWeebResolvedMember>],
+		[members]: [Collection<Snowflake, IWeebResolvedMember> | undefined],
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'Let\'s dance!',
-			dev: `**${members ? members.first().name : undefined}**... Dance!!`,
-			trusted: `Dance with us **${members ? members.first().name : undefined}!`,
+			dev: `**${members ? members.first()!.name : undefined}**... Dance!!`,
+			trusted: `Dance with us **${members ? members.first()!.name : undefined}!`,
 		});
 
 		if (!members) {

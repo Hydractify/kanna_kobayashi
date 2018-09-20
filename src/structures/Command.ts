@@ -39,7 +39,7 @@ export abstract class Command {
 	/**
 	 * Which category the command is in
 	 */
-	public category: string;
+	public category!: string;
 	/**
 	 * Client the command belongs to
 	 */
@@ -79,7 +79,7 @@ export abstract class Command {
 	/**
 	 * Abosulute path of the command
 	 */
-	public location: string;
+	public location!: string;
 	/**
 	 * Name of the command
 	 */
@@ -104,11 +104,11 @@ export abstract class Command {
 	/**
 	 * Reference to the redis client
 	 */
-	protected redis: RedisClient;
+	protected redis!: RedisClient;
 	/**
 	 * Reference to the sequelize connection
 	 */
-	protected sequelize: Sequelize;
+	protected sequelize!: Sequelize;
 
 	/**
 	 * Instantiates a new command
@@ -176,7 +176,7 @@ export abstract class Command {
 	public async canCall(message: Message, authorModel: UserModel): Promise<true | string> {
 		if (this.clientPermissions.length) {
 			const missing: PermissionString[] = (message.channel as TextChannel)
-				.permissionsFor(message.guild.me)
+				.permissionsFor(message.guild.me)!
 				.missing(this.clientPermissions);
 
 			if (missing.length) {

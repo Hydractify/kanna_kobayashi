@@ -1,6 +1,7 @@
 import {
 	Collection,
 	DMChannel,
+	GuildMember,
 	Message,
 	MessageAttachment,
 	MessageOptions,
@@ -15,6 +16,7 @@ import { ListenerUtil } from '../decorators/ListenerUtil';
 import { Loggable } from '../decorators/LoggerDecorator';
 import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
+import { User as UserModel } from '../models/User';
 import { Emojis } from '../types/Emojis';
 import { UserTypes } from '../types/UserTypes';
 import { Client } from './Client';
@@ -56,7 +58,7 @@ export class CommandHandler {
 	/**
 	 * Reference to the logger
 	 */
-	private readonly logger: Logger;
+	private readonly logger!: Logger;
 	/**
 	 * Instantiate a new command handler
 	 */
@@ -89,7 +91,7 @@ export class CommandHandler {
 		command.location = location;
 		command.category = folder;
 
-		const existing: Command = this._commands.get(command.name);
+		const existing: Command | undefined = this._commands.get(command.name);
 		if (existing) {
 			throw new Error(
 				`${commandConstructor.name}: Command name "${command.name}" already in use by ${existing.constructor.name}!`,
@@ -98,9 +100,9 @@ export class CommandHandler {
 
 		this._commands.set(command.name, command);
 		for (const alias of command.aliases) {
-			const existingAlias: string = this._aliases.get(alias);
+			const existingAlias: string | undefined = this._aliases.get(alias);
 			if (existingAlias) {
-				const name: string = this._commands.get(existingAlias).constructor.name;
+				const name: string = this._commands.get(existingAlias)!.constructor.name;
 				throw new Error(
 					`${commandConstructor.name}: Command alias "${alias}" already in use by ${name}!`,
 				);
@@ -140,7 +142,7 @@ export class CommandHandler {
 	}
 
 	public async reloadCommand(command: string | Command): Promise<void> {
-		if (!(command instanceof Command)) command = this.resolveCommand(command);
+		if (!(command instanceof Command)) command = this.resolveCommand(command)!;
 		if (!command) throw new Error('Could not find the specified command!');
 
 		// On error this will have been run regardless, may lead to unexpected consequences.
@@ -168,9 +170,9 @@ export class CommandHandler {
 	/**
 	 * Resolves a command by command name or alias
 	 */
-	public resolveCommand(commandName: string): Command {
+	public resolveCommand(commandName: string): Command | undefined {
 		return this._commands.get(commandName)
-			|| this._commands.get(this._aliases.get(commandName));
+			|| this._commands.get(this._aliases.get(commandName)!);
 	}
 
 	@on('message')
@@ -188,7 +190,7 @@ export class CommandHandler {
 		// Keep "Requested by" embeds
 		if (message.author.id === this.client.user.id
 			&& message.embeds.length && message.embeds[0].footer
-			&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text)
+			&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text!)
 		) return;
 
 		try {
@@ -230,20 +232,21 @@ export class CommandHandler {
 			const guildModel: GuildModel = message.guild.model || await message.guild.fetchModel();
 			const [command, commandName, args]: [Command, string, string[]]
 				| [undefined, undefined, undefined] = this._matchCommand(message, guildModel);
-			if (!command) return;
+			if (!command || !commandName || !args) return;
 
 			captureBreadcrumb({ category: 'Command', data: { commandName }, level: 'debug' });
 
-			const [authorModel, ownerModel] = await Promise.all([
-				message.author.fetchModel(),
-				this.client.users.get(message.guild.ownerID).fetchModel(),
-				message.guild.owner ? undefined : message.guild.members.fetch(message.guild.ownerID),
-			]);
+			const [authorModel, ownerModel]: [UserModel, UserModel, GuildMember | undefined] =
+				await Promise.all<UserModel, UserModel, GuildMember | undefined>([
+					message.author.fetchModel(),
+					this.client.users.get(message.guild.ownerID)!.fetchModel(),
+					message.guild.owner ? undefined : message.guild.members.fetch(message.guild.ownerID),
+				]);
 
 			if (authorModel.type === UserTypes.BLACKLISTED) return;
 			if (ownerModel.type === UserTypes.BLACKLISTED) return;
 
-			if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) {
+			if (!message.channel.permissionsFor(message.guild.me)!.has('SEND_MESSAGES')) {
 				message.author.send('I do not have permission to send in the channel of your command!')
 					.catch(() => undefined);
 
@@ -312,12 +315,12 @@ export class CommandHandler {
 	private _matchCommand(message: Message, guildModel: GuildModel):
 		[Command, string, string[]] | [undefined, undefined, undefined] {
 		const prefixes: string[] = guildModel.prefix ? this._prefixes.concat(guildModel.prefix) : this._prefixes;
-		const match: RegExpExecArray = new RegExp(`^(${prefixes.join('|')})`, 'i').exec(message.content);
+		const match: RegExpExecArray | null = new RegExp(`^(${prefixes.join('|')})`, 'i').exec(message.content);
 
 		if (!match) return [undefined, undefined, undefined];
 
 		const [commandName, ...args]: string[] = message.content.slice(match[1].length).split(/ +/);
-		const command: Command = this.resolveCommand(commandName.toLowerCase());
+		const command: Command | undefined = this.resolveCommand(commandName.toLowerCase());
 		if (!command) return [undefined, undefined, undefined];
 
 		return [command, commandName.toLowerCase(), args];

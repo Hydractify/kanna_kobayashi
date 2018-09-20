@@ -23,11 +23,11 @@ class ProfileCommand extends Command {
 	public async parseArgs(message: Message, [input]: string[]): Promise<string | [User]> {
 		if (!input) return [message.author];
 
-		const user: User = await this.resolver.resolveMember(input, message.guild, false)
-			.then((member: GuildMember) => member
+		const user: User | undefined = await this.resolver.resolveMember(input, message.guild, false)
+			.then((member: GuildMember | undefined) => member
 				? member.user
 				: this.resolver.resolveUser(input, false),
-		);
+			);
 
 		if (!user) return `I could not find a non-bot user with the name or id **${input}**.`;
 
@@ -72,7 +72,7 @@ class ProfileCommand extends Command {
 			},
 		);
 
-		const partner: User = userModel.partnerId
+		const partner: User | undefined = userModel.partnerId
 			? this.client.users.get(userModel.partnerId)
 			|| await this.client.users.fetch(userModel.partnerId).catch(() => undefined)
 			: undefined;
@@ -88,8 +88,8 @@ class ProfileCommand extends Command {
 			.addField('Level', `${userModel.level} (${(userModel.exp || 0).toLocaleString()} exp)`, true)
 			.addField('Reputation', (reputation || 0).toLocaleString(), true)
 			.addField('Kanna Coins', `${(userModel.coins || 0).toLocaleString()} ${Emojis.Coin}`, true)
-			.addField('Items', this.mapItems(userModel.items), true)
-			.addField('Badges', this.mapItems(userModel.badges), true)
+			.addField('Items', this.mapItems(userModel.items!), true)
+			.addField('Badges', this.mapItems(userModel.badges!), true)
 			.addField('Relationship', partnerString, true);
 	}
 
@@ -102,7 +102,7 @@ class ProfileCommand extends Command {
 
 		const formatted: string[] = [];
 		for (const item of items) {
-			formatted.push(`${item.unique ? '' : `[${item.userItem.count}]`} ${titleCase(item.name.replace(/_/g, ' '))}`);
+			formatted.push(`${item.unique ? '' : `[${item.userItem!.count}]`} ${titleCase(item.name.replace(/_/g, ' '))}`);
 		}
 
 		return formatted.join('\n');

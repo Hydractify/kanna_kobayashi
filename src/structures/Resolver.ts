@@ -33,10 +33,10 @@ export class Resolver {
 	/**
 	 * Try to resolve the provided input to a member
 	 */
-	public async resolveMember(input: string, guild: Guild, allowBots: boolean = true): Promise<GuildMember> {
+	public async resolveMember(input: string, guild: Guild, allowBots: boolean = true): Promise<GuildMember | undefined> {
 		if (!input) return undefined;
 
-		const fetched: GuildMember = await this._matchAndFetch<GuildMember>(input, Resolver.idRegex, guild.members);
+		const fetched: GuildMember | undefined = await this._matchAndFetch(input, Resolver.idRegex, guild.members);
 
 		if (fetched) {
 			if (!allowBots && fetched.user.bot) return undefined;
@@ -45,7 +45,7 @@ export class Resolver {
 		}
 
 		input = input.toLowerCase();
-		let matchedMember: GuildMember;
+		let matchedMember: GuildMember | undefined;
 		for (const member of guild.members.values()) {
 			if (!allowBots && member.user.bot) continue;
 
@@ -71,7 +71,7 @@ export class Resolver {
 			return matchedMember;
 		}
 
-		const user: User = await this.resolveUser(input, allowBots);
+		const user: User | undefined = await this.resolveUser(input, allowBots);
 		if (user) return guild.members.fetch(user).catch(() => undefined);
 
 		return undefined;
@@ -80,18 +80,18 @@ export class Resolver {
 	/**
 	 * Try to resolve the input to a role
 	 */
-	public resolveRole(input: string, roles: Collection<string, Role>, allowEveryone: boolean = true): Role {
-		const match: RegExpExecArray = /^<@&(\d{17,19})>$|^(\d{17,19})$/.exec(input);
+	public resolveRole(input: string, roles: Collection<string, Role>, allowEveryone: boolean = true): Role | undefined {
+		const match: RegExpExecArray | null = /^<@&(\d{17,19})>$|^(\d{17,19})$/.exec(input);
 		if (match) {
 			const which: string = match[1] || match[2];
-			if (!allowEveryone && which === roles.first().guild.id) return undefined;
+			if (!allowEveryone && which === roles.first()!.guild.id) return undefined;
 
 			return roles.get(which) || undefined;
 		}
 
 		input = input.toLowerCase();
 
-		let includesMatch: Role;
+		let includesMatch: Role | undefined;
 		for (const role of roles.values()) {
 			if (!allowEveryone && role.id === role.guild.id) continue;
 			const roleName: string = role.name.toLowerCase();
@@ -105,10 +105,10 @@ export class Resolver {
 	/**
 	 * Try to resolve the input to a user
 	 */
-	public async resolveUser(input: string, allowBots: boolean = true): Promise<User> {
+	public async resolveUser(input: string, allowBots: boolean = true): Promise<User | undefined> {
 		if (!input) return undefined;
 
-		const fetched: User = await this._matchAndFetch(input, Resolver.idRegex, this.client.users);
+		const fetched: User | undefined = await this._matchAndFetch(input, Resolver.idRegex, this.client.users);
 
 		if (fetched) {
 			if (!allowBots && fetched.bot) return undefined;
@@ -136,10 +136,13 @@ export class Resolver {
 		return undefined;
 	}
 
-	private async _matchAndFetch<T>(input: string, regex: RegExp, store: IFetchableStore<T>)
-		: Promise<T> {
+	private async _matchAndFetch<V>(
+		input: string,
+		regex: RegExp,
+		store: IFetchableStore<V>,
+	): Promise<V | undefined> {
 
-		const match: RegExpExecArray = regex.exec(input);
+		const match: RegExpExecArray | null = regex.exec(input);
 		if (!match) return undefined;
 
 		const which: string = match[1] || match[2];

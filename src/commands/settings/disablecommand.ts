@@ -21,7 +21,7 @@ class DisableCommandCommand extends Command {
 	public parseArgs(message: Message, args: string[]): [Command] | string {
 		if (!args.length) return `you have to give me a command to disable (\`${this.usage}\`)`;
 
-		const command: Command = this.handler.resolveCommand(args.join(' ').toLocaleLowerCase());
+		const command: Command | undefined = this.handler.resolveCommand(args.join(' ').toLocaleLowerCase());
 
 		if (!command) {
 			return 'I could not find a command with that name or alias.';

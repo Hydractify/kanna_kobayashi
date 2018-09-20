@@ -61,7 +61,7 @@ export abstract class WeebCommand extends Command {
 	public async parseArgs(
 		message: Message,
 		args: string[],
-	): Promise<string | [Collection<Snowflake, IWeebResolvedMember>]> {
+	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> {
 		if (!args.length) return `you must mention someone ${Emojis.KannaShy}`;
 
 		const members: Collection<Snowflake, IWeebResolvedMember> = await this.resolveMembers(args, message);
@@ -80,7 +80,7 @@ export abstract class WeebCommand extends Command {
 	): string {
 		let base: string = `${this.emoji} | `;
 
-		if (members.size === 1) return `${base}**${message.member.displayName}** ${action} **${members.first().name}**`;
+		if (members.size === 1) return `${base}**${message.member.displayName}** ${action} **${members.first()!.name}**`;
 
 		base += `**${message.member.displayName}** ${action}`;
 		const names: string[] = members.map((member: IWeebResolvedMember) => member.name);
@@ -97,7 +97,7 @@ export abstract class WeebCommand extends Command {
 	protected async fetchEmbed(
 		message: Message,
 		model: UserModel,
-		members: Collection<string, IWeebResolvedMember>,
+		members: Collection<string, IWeebResolvedMember> | undefined,
 		{ dev, trusted, bot }: IWeebResponseTemplates,
 	): Promise<MessageEmbed> {
 		const { url }: RandomImageResult = await fetchRandom({
@@ -113,7 +113,7 @@ export abstract class WeebCommand extends Command {
 		);
 
 		if (members && members.size === 1) {
-			const { member, perm }: IWeebResolvedMember = members.first();
+			const { member, perm }: IWeebResolvedMember = members.first()!;
 
 			if (dev && perm === PermLevels.DEV) {
 				embed.setDescription(dev);
@@ -140,7 +140,7 @@ export abstract class WeebCommand extends Command {
 			// Ignore 2 or 1 char long "names"
 			if (word.length < 3) continue;
 
-			const member: GuildMember = await this.resolver.resolveMember(word, guild);
+			const member: GuildMember | undefined = await this.resolver.resolveMember(word, guild);
 			if (!member) continue;
 
 			const userModel: UserModel = await member.user.fetchModel();

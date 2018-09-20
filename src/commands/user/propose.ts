@@ -25,14 +25,18 @@ class ProposeCommand extends Command {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<string | [User]> {
 		if (!input) return `you are missing someone to propose to! (\`${this.usage}\`)`;
-		const user: User = await this.resolver.resolveUser(input, false);
+		const user: User | undefined = await this.resolver.resolveUser(input, false);
 		if (!user) return `I could not find a non-bot user with the name or id ${input}`;
 		if (message.author.id === user.id) return 'you can not propose to yourself.';
 
 		return [user];
 	}
 
-	public async run(message: Message, [user]: [User], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: Message,
+		[user]: [User],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[] | undefined> {
 
 		const checked: boolean = await this.relationCheck(message, user, authorModel);
 
@@ -65,7 +69,7 @@ class ProposeCommand extends Command {
 
 		// Are those two together for at least a month?
 		// Days * hours * minutes * seconds * milliseconds (large to small)
-		const until = partner.partnerSince.valueOf() + (30 * 24 * 60 * 60 * 1000);
+		const until = partner.partnerSince!.valueOf() + (30 * 24 * 60 * 60 * 1000);
 		if (until > message.createdTimestamp) {
 			await message.reply([
 				`sorry but not enough time has passed since you two got together! ${Emojis.KannaShy}`,
@@ -88,7 +92,7 @@ class ProposeCommand extends Command {
 		const filter: CollectorFilter = (msg: Message): boolean => msg.author.id === mentionedUser.id
 			&& /^(y|n|yes|no)/i.test(msg.content);
 
-		const confirmation: Message = await message.channel.awaitMessages(filter, { time: 10000, max: 1 })
+		const confirmation: Message | undefined = await message.channel.awaitMessages(filter, { time: 10000, max: 1 })
 			.then((collected: Collection<Snowflake, Message>) => collected.first());
 
 		if (!confirmation) {
@@ -145,7 +149,7 @@ class ProposeCommand extends Command {
 		const filter: CollectorFilter = (msg: Message): boolean => msg.author.id === mentionedUser.id
 			&& /^(y|n|yes|no)/i.test(msg.content);
 
-		const confirmation: Message = await message.channel.awaitMessages(filter, { time: 90000, max: 1 })
+		const confirmation: Message | undefined = await message.channel.awaitMessages(filter, { time: 90000, max: 1 })
 			.then((collected: Collection<Snowflake, Message>) => collected.first());
 
 		if (!confirmation) {

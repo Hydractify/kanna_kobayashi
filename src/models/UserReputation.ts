@@ -17,7 +17,7 @@ export class UserReputation extends Model<UserReputation> {
 		field: 'rep_id',
 		type: DataType.TEXT,
 	})
-	public readonly repId: string;
+	public readonly repId!: string;
 
 	/**
 	 * Source id
@@ -27,11 +27,11 @@ export class UserReputation extends Model<UserReputation> {
 		field: 'repper_id',
 		type: DataType.TEXT,
 	})
-	public readonly repperId: string;
+	public readonly repperId!: string;
 
 	/**
 	 * Type (positive or negative)
 	 */
 	@Column({ type: DataType.ENUM, values: Object.keys(UserReputationTypes) })
-	public type: UserReputationTypes;
+	public type!: UserReputationTypes;
 }

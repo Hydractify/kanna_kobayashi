@@ -20,11 +20,21 @@ export interface IFetchRandomOptions {
 	type?: string;
 }
 
-export const fetchTags: (showHidden?: boolean) => Promise<string[]> = (showHidden?: boolean): Promise<string[]> =>
-	api().images.tags.get<TagsResult>({ query: { showHidden } }).then((res: TagsResult) => res.tags);
+export const fetchTags: (showHidden?: boolean) => Promise<string[]> =
+	(showHidden: boolean = false): Promise<string[]> =>
+		api()
+			.images
+			.tags
+			.get<TagsResult>({ query: { showHidden } })
+			.then((res: TagsResult) => res.tags);
 
-export const fetchTypes: (showHidden?: boolean) => Promise<string[]> = (showHidden?: boolean): Promise<string[]> =>
-	api().images.types.get<TypesResult>({ query: { showHidden } }).then((res: TypesResult) => res.types);
+export const fetchTypes: (showHidden?: boolean) => Promise<string[]> =
+	(showHidden: boolean = false): Promise<string[]> =>
+		api()
+			.images
+			.types
+			.get<TypesResult>({ query: { showHidden } })
+			.then((res: TypesResult) => res.types);
 
 export const fetchRandom: (options: IFetchRandomOptions) => Promise<RandomImageResult>
 	= (options: IFetchRandomOptions): Promise<RandomImageResult> => {

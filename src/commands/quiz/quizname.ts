@@ -23,7 +23,7 @@ class QuizNameCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, [option, ...name]: string[]): string | ['view' | 'set', string] {
+	public parseArgs(message: Message, [option, ...name]: string[]): string | ['set', string] | ['view', undefined] {
 		if (!option) {
 			return [
 				'you need to tell me whether you want to',
@@ -46,7 +46,7 @@ class QuizNameCommand extends Command {
 
 	public async run(
 		message: Message,
-		[option, name]: ['view' | 'set', string],
+		[option, name]: ['set', string] | ['view', undefined],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
@@ -71,9 +71,9 @@ class QuizNameCommand extends Command {
 			]);
 		}
 
-		let toSend: string[] | MessageEmbed;
+		let toSend: string[] | MessageEmbed | undefined;
 		if (quiz) {
-			quiz.name = name;
+			quiz.name = name!;
 			await quiz.save();
 			if (quiz.photo) {
 				toSend = MessageEmbed
@@ -90,7 +90,7 @@ class QuizNameCommand extends Command {
 
 		if (!toSend) {
 			toSend = [
-				`Set the answer to \`${titleCase(name)}\`.`,
+				`Set the answer to \`${titleCase(name!)}\`.`,
 				'_There is no photo associated with this quiz!_',
 			];
 		}

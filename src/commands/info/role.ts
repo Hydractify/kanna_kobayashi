@@ -22,7 +22,7 @@ class RoleInfoCommand extends Command {
 	public parseArgs(message: Message, [roleName]: [string]): string | [Role] {
 		if (!roleName) return 'you need to give me a role name to search for.';
 
-		const role: Role = this.resolver.resolveRole(roleName, message.guild.roles, false);
+		const role: Role | undefined = this.resolver.resolveRole(roleName, message.guild.roles, false);
 
 		if (!role) return `I could not find a role by that name or id ${roleName}.`;
 

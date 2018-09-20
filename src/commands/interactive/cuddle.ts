@@ -28,8 +28,8 @@ class CuddleCommand extends WeebCommand {
 		const action: string = commandName === 'cuddle' ? 'cuddled' : 'snuggled';
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `T-thanks **${message.member.displayName}**`,
-			dev: `${members ? members.first().name : undefined}-senpai... Y-you got ${action}!`,
-			trusted: `S-so cute **${members ? members.first().name : undefined}**`,
+			dev: `${members ? members.first()!.name : undefined}-senpai... Y-you got ${action}!`,
+			trusted: `S-so cute **${members ? members.first()!.name : undefined}**`,
 		});
 		const baseString: string = this.computeBaseString(
 			message,

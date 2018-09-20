@@ -18,7 +18,7 @@ export class Beatmap {
 	/**
 	 * Fetch an osu! beatmap by id, mode defaults to `OsuMode.OSU`.
 	 */
-	public static async fetch(id: string | number, mode: OsuMode = OsuMode.OSU): Promise<Beatmap> {
+	public static async fetch(id: string | number, mode: OsuMode = OsuMode.OSU): Promise<Beatmap | undefined> {
 		let data: { [key: string]: string } = await this.redis.hgetall(`osu:beatmaps:${id}_${mode}`);
 
 		if (!data) {
@@ -47,10 +47,10 @@ export class Beatmap {
 	/**
 	 * Fetch a full set of osu! beatmaps.
 	 */
-	public static async fetchSet(id: string | number): Promise<Beatmap[]> {
+	public static async fetchSet(id: string | number): Promise<Beatmap[] | undefined> {
 		const already: string[] = await this.redis.smembers(`osu:beatmapsets:${id}`);
 
-		let data: { [key: string]: string }[];
+		let data: { [key: string]: string }[] | undefined;
 		if (already.length) {
 			const multi: Multi = this.redis.multi();
 			for (const alreadyId of already) {
@@ -115,7 +115,7 @@ export class Beatmap {
 	/**
 	 * When the map was approved
 	 */
-	public readonly approvedAt: Moment;
+	public readonly approvedAt: Moment | undefined;
 	/**
 	 * Artist of the song used in the beatmap
 	 */
@@ -163,7 +163,7 @@ export class Beatmap {
 	/**
 	 * Maximum reachable combo, `undefined` for taiko for some reason
 	 */
-	public readonly maxCombo: number;
+	public readonly maxCombo: number | undefined;
 	/**
 	 * Mode the beatmap is in
 	 */
@@ -282,7 +282,7 @@ export class Beatmap {
 	 */
 	public async fetchBestScores(
 		{ limit = 10, mode = this.mode }: { limit?: number; mode?: OsuMode } = {},
-	): Promise<Score[]> {
+	): Promise<Required<Score>[]> {
 		const scores: { [key: string]: string }[] = await Api().get_scores.get({
 			query: {
 				b: this.id,
@@ -291,9 +291,9 @@ export class Beatmap {
 			},
 		});
 
-		const promises: Promise<Score>[] = [];
+		const promises: Promise<Required<Score>>[] = [];
 		for (const data of scores) {
-			const score: Score = new Score(data, { beatmap: this, mode });
+			const score: Required<Score> = new Score(data, { beatmap: this, mode }) as Required<Score>;
 			promises.push(score.fetchUser().then(() => score));
 		}
 

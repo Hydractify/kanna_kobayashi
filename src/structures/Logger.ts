@@ -12,8 +12,6 @@ export { Loggable } from '../decorators/LoggerDecorator';
  * Singleton Logger
  */
 export class Logger {
-	protected ['constructor']: typeof Logger;
-
 	/**
 	 * Singleton Logger instance
 	 */
@@ -35,13 +33,13 @@ export class Logger {
 	 * Instantiate the Logger singleton.
 	 */
 	protected constructor() {
-		if (this.constructor._instance) {
+		if ((this.constructor as typeof Logger)._instance) {
 			throw new Error('Can not create multiple instances of Logger singleton.');
 		}
 
 		this._logLevel = LogLevel.SILLY;
 
-		this.constructor._instance = this;
+		(this.constructor as typeof Logger)._instance = this;
 	}
 
 	/**

@@ -6,7 +6,7 @@ const broadcastEval: (script: string) => Promise<any[]> = ShardClientUtil.protot
 
 @Loggable('BROADCASTEVAL')
 class ShardClientUtilExtension {
-	private logger: Logger;
+	private logger!: Logger;
 
 	public async _handleMessage(
 		this: { _respond: (type: string, val: object) => void; client: any },

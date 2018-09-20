@@ -54,7 +54,7 @@ class ModListCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	public parseArgs(message: Message, [input]: string[]): [string] | string {
+	public parseArgs(message: Message, [input]: string[]): [string | undefined] | string {
 		if (!input) return [undefined];
 
 		input = input.toLowerCase();
@@ -63,7 +63,7 @@ class ModListCommand extends Command {
 		return `"${input}" is not a valid status! Valid statuses are ${Array.from(this.statuses.keys()).join(', ')}`;
 	}
 
-	public async run(message: Message, [status]: [string], { authorModel }: ICommandRunInfo)
+	public async run(message: Message, [status]: [string | undefined], { authorModel }: ICommandRunInfo)
 		: Promise<Message | Message[]> {
 		if (message.guild.memberCount !== message.guild.members.size) await message.guild.members.fetch();
 

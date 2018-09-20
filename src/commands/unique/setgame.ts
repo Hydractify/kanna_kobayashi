@@ -24,7 +24,7 @@ class SetGameCommand extends Command {
 
 			await this.client.shard.broadcastEval(this.setActivity, [`k!help | on ${totalGuilds} guilds`]);
 		} else {
-			let stream: string;
+			let stream: string = '';
 			if (args[0].toLowerCase() === 'stream') {
 				args = args.slice(1);
 				stream = ', \'https://twitch.tv/wizardlinkk\'';

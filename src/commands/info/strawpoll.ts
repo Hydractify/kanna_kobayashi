@@ -36,7 +36,7 @@ class StrawPollCommand extends Command {
 		if (id) {
 			const res: string = await Api()[id].get({ type: 'text' }).catch(() => null);
 
-			let fetchedPoll: IStrawPollPoll;
+			let fetchedPoll: IStrawPollPoll | undefined;
 			try { fetchedPoll = JSON.parse(res); } catch { } // tslint:disable-line:no-empty
 
 			if (!fetchedPoll) return message.reply('I could not find a strawpoll with that ID.');
@@ -126,9 +126,9 @@ class StrawPollCommand extends Command {
 			])
 			.setThumbnail(message.guild.iconURL());
 
-		const voteIterator: IterableIterator<number> = votes ? votes[Symbol.iterator]() : undefined;
+		const voteIterator: IterableIterator<number> | undefined = votes ? votes[Symbol.iterator]() : undefined;
 		for (const option of options) {
-			const voteCount: string = voteIterator ? voteIterator.next().value.toLocaleString() : undefined;
+			const voteCount: string | undefined = voteIterator ? voteIterator.next().value.toLocaleString() : undefined;
 			embed.addField(option, voteCount || 'No vote count available', true);
 		}
 

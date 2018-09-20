@@ -23,7 +23,7 @@ class BlushCommand extends WeebCommand {
 	public async parseArgs(
 		message: Message,
 		args: string[],
-	): Promise<string | [Collection<Snowflake, IWeebResolvedMember>]> {
+	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> {
 		if (!args.length) return [undefined];
 
 		const members: Collection<Snowflake, IWeebResolvedMember> = await this.resolveMembers(args, message);
@@ -43,7 +43,7 @@ class BlushCommand extends WeebCommand {
 
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'B-baka! I-i did not mean to... make you blush',
-			dev: `${members ? members.first().name : undefined}... What did you do!?`,
+			dev: `${members ? members.first()!.name : undefined}... What did you do!?`,
 			trusted: `${message.author}... Y-you b-baka!`,
 		});
 

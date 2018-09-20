@@ -26,8 +26,8 @@ class TickleCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'P-please stop!',
-			dev: `Tickle **${members.first().name}** harder!`,
-			trusted: `Poor **${members.first().name}**`,
+			dev: `Tickle **${members.first()!.name}** harder!`,
+			trusted: `Poor **${members.first()!.name}**`,
 		});
 		const baseString: string = this.computeBaseString(message, members);
 

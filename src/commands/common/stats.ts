@@ -1,7 +1,6 @@
-import { Message } from 'discord.js';
+import { Client, Message } from 'discord.js';
 import * as moment from 'moment';
 
-import { Client } from '../../structures/Client';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';

@@ -34,32 +34,36 @@ class QuizPremadeCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: Message,
+		args: string[],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[] | undefined> {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setTitle('Take your pick!')
 			.setDescription('This will replace the current set up quiz in this guild.')
 			.addField(
-			'Dragons',
-			[
-				`${Emojis.KannaMad} **Ilulu**`,
-				':one: **Tohru**',
-				':two: **Quetzalcoatl**',
-				':three: **Fafnir**',
-				':four: **Elma**',
-				':five: **Kanna Kamui**',
-			],
-			true,
-		)
+				'Dragons',
+				[
+					`${Emojis.KannaMad} **Ilulu**`,
+					':one: **Tohru**',
+					':two: **Quetzalcoatl**',
+					':three: **Fafnir**',
+					':four: **Elma**',
+					':five: **Kanna Kamui**',
+				],
+				true,
+			)
 			.addField(
-			'Humans',
-			[
-				':six: **Kobayashi**',
-				':seven: **Makoto Takiya**',
-				':eight: **Magatsuchi Shouta**',
-				':nine: **Saikawa Riko**',
-			],
-			true,
-		)
+				'Humans',
+				[
+					':six: **Kobayashi**',
+					':seven: **Makoto Takiya**',
+					':eight: **Magatsuchi Shouta**',
+					':nine: **Saikawa Riko**',
+				],
+				true,
+			)
 			.setThumbnail(message.guild.iconURL());
 
 		const pickMessage: Message = await message.channel.send(embed) as Message;
@@ -80,7 +84,7 @@ class QuizPremadeCommand extends Command {
 		const quiz: {
 			name: string;
 			photo: string;
-		} = Quiz.preMade[this.emojis.indexOf(reactions.first().emoji.identifier)];
+		} = Quiz.preMade[this.emojis.indexOf(reactions.first()!.emoji.identifier)];
 		if (already) {
 			already.set(quiz);
 			await already.save();

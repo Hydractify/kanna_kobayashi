@@ -59,7 +59,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 	/**
 	 * Query of this command
 	 */
-	protected query: string;
+	protected query!: string;
 
 	/**
 	 * Derives from the AniListCommand class.
@@ -204,7 +204,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		message: Message,
 		authorModel: UserModel,
 		entries: T[],
-	): Promise<T> {
+	): Promise<T | undefined> {
 		const mapped: string[] = [];
 		const { length }: string = String(entries.length);
 		let count: number = 0;
@@ -229,7 +229,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 			]);
 
 		const prompt: Message = await message.channel.send(embed) as Message;
-		const response: Message = await message.channel.awaitMessages(
+		const response: Message | undefined = await message.channel.awaitMessages(
 			(msg: Message) => msg.author.id === message.author.id,
 			{ max: 1, time: 3e4 },
 		).then((collected: Collection<string, Message>) => collected.first());
@@ -249,7 +249,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 	/**
 	 * Search for the specified type on anilist, returns an array of results or `undefined` when nothing was found.
 	 */
-	protected async search(query: string): Promise<T[]> {
+	protected async search(query: string): Promise<T[] | undefined> {
 		const response: {
 			data?: {
 				result: {
@@ -284,12 +284,11 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 			throw error;
 		}
 
-		if (!response.data.result.results.length) {
+		if (!response.data || !response.data.result.results.length) {
 			// Nothing found
 			return undefined;
 		}
 
 		return response.data.result.results;
 	}
-
 }

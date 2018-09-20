@@ -20,7 +20,7 @@ class BalanceCommand extends Command {
 		message: Message,
 		[input]: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<[UserModel, User] | string> {
+	): Promise<[UserModel, User | undefined] | string> {
 		if (!input) return [authorModel, undefined];
 
 		const { user }: { user?: User } = await this.resolver.resolveMember(input, message.guild) || {};

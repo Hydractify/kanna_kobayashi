@@ -14,7 +14,7 @@ export class User {
 	 * Fetches a full osu! user, scores by passed mode.
 	 * Mode defaults to `OsuMode.OSU`.
 	 */
-	public static async fetch(query: string | number, mode: OsuMode = OsuMode.OSU): Promise<User> {
+	public static async fetch(query: string | number, mode: OsuMode = OsuMode.OSU): Promise<Required<User> | undefined> {
 		const [data]: { [key: string]: string }[] = await Api().get_user.get({
 			query: {
 				limit: 1,
@@ -35,18 +35,18 @@ export class User {
 			.exec()
 			.catch(() => undefined);
 
-		return new this(data);
+		return new this(data) as Required<User>;
 	}
 
 	/**
 	 * Fetch a most likely partial osu! user, only guaranteed to have id, username and country.
 	 * If the user was not cached previously a full user is returned instead.
 	 */
-	public static async fetchBasic(query: string | number): Promise<User> {
+	public static async fetchBasic(query: string | number): Promise<User | undefined> {
 		query = await this.redis.get(`osu:usernames:${String(query).toLowerCase()}`) || query;
 		const data: { [key: string]: string } = await this.redis.hgetall(`osu:users:${query}`);
 
-		if (!data) return this.fetch(query);
+		if (!data) return this.fetch(query) as Promise<User>;
 
 		return new this(data, false);
 	}
@@ -92,23 +92,23 @@ export class User {
 	/**
 	 * Total accuracy the user has
 	 */
-	public readonly accuracy: number;
+	public readonly accuracy?: number;
 	/**
 	 * Total number of 100s the user has
 	 */
-	public readonly count100: number;
+	public readonly count100?: number;
 	/**
 	 * Total number of 300s the user has
 	 */
-	public readonly count300: number;
+	public readonly count300?: number;
 	/**
 	 * Total number of 50s the user has
 	 */
-	public readonly count50: number;
+	public readonly count50?: number;
 	/**
 	 * Total amount of As the user has achieved
 	 */
-	public readonly countA: number;
+	public readonly countA?: number;
 	/**
 	 * Country the user is from
 	 */
@@ -116,15 +116,15 @@ export class User {
 	/**
 	 * Rank the user has in their country
 	 */
-	public readonly countryRank: number;
+	public readonly countryRank?: number;
 	/**
 	 * Total amount of Ss the user has achieved
 	 */
-	public readonly countS: number;
+	public readonly countS?: number;
 	/**
 	 * Total amount of SSs the user has achieved
 	 */
-	public readonly countSS: number;
+	public readonly countSS?: number;
 	/**
 	 * Id of the user
 	 */
@@ -132,27 +132,27 @@ export class User {
 	/**
 	 * Level of the user
 	 */
-	public readonly level: number;
+	public readonly level?: number;
 	/**
 	 * Total amount of plays the user has
 	 */
-	public readonly playCount: number;
+	public readonly playCount?: number;
 	/**
 	 * Total amount of pp the user has
 	 */
-	public readonly pp: number;
+	public readonly pp?: number;
 	/**
 	 * Current rank of the user
 	 */
-	public readonly rank: number;
+	public readonly rank?: number;
 	/**
 	 * Total ranked score, calculated by adding the best scores of all sets together
 	 */
-	public readonly rankedScore: number;
+	public readonly rankedScore?: number;
 	/**
 	 * Total score the user achieved in all ranked beatmaps in all plays
 	 */
-	public readonly totalScore: number;
+	public readonly totalScore?: number;
 	/**
 	 * Username of the user
 	 */

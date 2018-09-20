@@ -68,7 +68,7 @@ class ItemCommand extends Command {
 		try {
 			const modelData: { [key: string]: string | number | boolean } = this._buildModel(parseFlags(args.join(' '), true));
 
-			let item: Item = await Item.findOne({ where: { name: modelData.name } });
+			let item: Item | null = await Item.findOne({ where: { name: modelData.name } });
 
 			if (item) {
 				item = await item.update(modelData);
@@ -99,7 +99,7 @@ class ItemCommand extends Command {
 	}
 
 	protected async find(message: Message, args: string[], authorModel: UserModel): Promise<Message | Message[]> {
-		const item: Item = await Item.findOne({
+		const item: Item | null = await Item.findOne({
 			include: [{
 				as: 'holders',
 				model: UserModel,
@@ -113,9 +113,9 @@ class ItemCommand extends Command {
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(
-			`Information about the ${item.type.toLowerCase()} "${titleCase(item.name)}"`,
-			this.client.user.displayAvatarURL(),
-		)
+				`Information about the ${item.type.toLowerCase()} "${titleCase(item.name)}"`,
+				this.client.user.displayAvatarURL(),
+			)
 			.setThumbnail(message.guild.iconURL())
 			.setDescription(item.description || '\u200b');
 

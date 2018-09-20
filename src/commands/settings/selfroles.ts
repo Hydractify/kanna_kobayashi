@@ -26,7 +26,11 @@ class SelfRolesCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, [type, role]: string[], { authorModel }: ICommandRunInfo): [string, Role] | string {
+	public parseArgs(
+		message: Message,
+		[type, role]: string[],
+		{ authorModel }: ICommandRunInfo,
+	): string | [string, Role] | [undefined, undefined] {
 		if (type) {
 			type = type.toLowerCase();
 			if (!['add', 'remove'].includes(type)) {
@@ -40,7 +44,7 @@ class SelfRolesCommand extends Command {
 				return 'you should also tell me a role!';
 			}
 
-			const resolved: Role = this.resolver.resolveRole(role, message.guild.roles, false);
+			const resolved: Role | undefined = this.resolver.resolveRole(role, message.guild.roles, false);
 
 			if (!resolved) {
 				return `could not find a role with ${role}!`;
@@ -56,14 +60,14 @@ class SelfRolesCommand extends Command {
 		message: Message,
 		[type, role]: ['add' | 'toggle' | 'remove' | undefined, Role],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[] | undefined> {
 		if (!type) {
 			const roles: string[] = [];
 			for (const roleId of message.guild.model.selfRoleIds) {
-				role = message.guild.roles.get(roleId);
+				const selfRole: Role | undefined = message.guild.roles.get(roleId);
 				// TODO: Remove from database.
-				if (!role) continue;
-				roles.push(`\`@${role.name}\``);
+				if (!selfRole) continue;
+				roles.push(`\`@${selfRole.name}\``);
 
 			}
 

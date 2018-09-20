@@ -26,7 +26,7 @@ class BiteCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `W-why did you bite me **${message.member.displayName}**?`,
-			dev: `Why did you bite ${members.first().name}!?`,
+			dev: `Why did you bite ${members.first()!.name}!?`,
 			trusted: `${message.author}... Stop!`,
 		});
 		const baseString: string = this.computeBaseString(message, members);

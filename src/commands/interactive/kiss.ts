@@ -24,7 +24,7 @@ class KissCommand extends WeebCommand {
 		message: Message,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[] | undefined> {
 		if (members && members.size === 1) {
 			if (members.has(message.client.user.id)) return message.reply(`h-hentai da! ${this.emoji}`);
 		}
@@ -35,7 +35,7 @@ class KissCommand extends WeebCommand {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'W-what!?',
 			dev: 'W-why!?',
-			trusted: `**${members.first().name}**... My developers can trust you, but I do not!`,
+			trusted: `**${members.first()!.name}**... My developers can trust you, but I do not!`,
 		});
 		const baseString: string = this.computeBaseString(message, members);
 
@@ -60,7 +60,7 @@ class KissCommand extends WeebCommand {
 				return false;
 			}
 
-			const target: IWeebResolvedMember = members.first();
+			const target: IWeebResolvedMember = members.first()!;
 			if ([message.author.id, authorModel.partnerId].includes(target.member.id)) {
 				return true;
 			}
@@ -73,9 +73,9 @@ class KissCommand extends WeebCommand {
 		// Only one target?
 		if (members.size === 1) {
 			// Has it a partner?
-			if (members.first().partnerId) {
+			if (members.first()!.partnerId) {
 				await message.reply(
-					`**${members.first().name}** has a partner! Canceling the command! ${this.emoji}`,
+					`**${members.first()!.name}** has a partner! Canceling the command! ${this.emoji}`,
 				);
 
 				return false;

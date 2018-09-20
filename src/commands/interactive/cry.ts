@@ -23,7 +23,7 @@ class CryCommand extends WeebCommand {
 	public async parseArgs(
 		message: Message,
 		args: string[],
-	): Promise<string | [Collection<Snowflake, IWeebResolvedMember>]> {
+	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> {
 		if (!args.length) return [undefined];
 
 		const members: Collection<Snowflake, IWeebResolvedMember> = await this.resolveMembers(args, message);
@@ -39,8 +39,8 @@ class CryCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'W-what did I do?!',
-			dev: `What did you do **${members ? members.first().name : undefined}**!?`,
-			trusted: `Why **${members ? members.first().name : undefined}?`,
+			dev: `What did you do **${members ? members.first()!.name : undefined}**!?`,
+			trusted: `Why **${members ? members.first()!.name : undefined}?`,
 		});
 
 		if (!members) {

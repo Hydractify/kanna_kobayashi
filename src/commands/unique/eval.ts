@@ -57,7 +57,7 @@ class EvalCommand extends Command {
 	}
 
 	protected get depth(): number {
-		return this._inspect.depth;
+		return this._inspect.depth!;
 	}
 	protected set depth(value: number) {
 		this._inspect.depth = value;

@@ -22,12 +22,9 @@ class UserInfoCommand extends Command {
 		message: Message,
 		[input]: string[],
 	): Promise<string | [User]> {
-		const user: User = input
+		const user: User | undefined = input
 			? await this.resolver.resolveMember(input, message.guild)
-				.then((m: GuildMember) => m
-					? m.user
-					: this.resolver.resolveUser(input),
-			)
+				.then((m: GuildMember | undefined) => m ? m.user : this.resolver.resolveUser(input))
 			: message.author;
 		if (!user) return `I could not find a user with ${input}.`;
 
@@ -35,7 +32,7 @@ class UserInfoCommand extends Command {
 	}
 
 	public async run(message: Message, [user]: [User], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const member: GuildMember = message.guild.members.get(user.id) ||
+		const member: GuildMember | undefined = message.guild.members.get(user.id) ||
 			await message.guild.members.fetch(user.id).catch(() => undefined);
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
@@ -54,7 +51,7 @@ class UserInfoCommand extends Command {
 				'Shared guilds on this shard',
 				this.client.guilds.filter((guild: Guild) => guild.members.has(user.id)).size,
 				true,
-		)
+			)
 			.addField('Registered account', this._formatTimespan(user.createdTimestamp));
 
 		if (member) {

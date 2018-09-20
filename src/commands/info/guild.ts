@@ -32,13 +32,13 @@ class GuildInfoCommand extends Command {
 		const counts: {
 			bots: number;
 			category: number;
-			dm?: number;
-			group?: number;
+			dm: number;
+			group: number;
 			text: number;
-			unknown?: number;
+			unknown: number;
 			users: number;
 			voice: number;
-		} = { bots: 0, category: 0, text: 0, users: 0, voice: 0 };
+		} = { bots: 0, category: 0, dm: 0, group: 0, text: 0, unknown: 0, users: 0, voice: 0 };
 		for (const { user: { bot } } of guild.members.values()) {
 			++counts[bot ? 'bots' : 'users'];
 		}
@@ -54,37 +54,37 @@ class GuildInfoCommand extends Command {
 			.addField('Guild ID', guild.id, true)
 
 			.addField(
-			'Server region',
-			titleCase(guild.region.replace(/_/g, ' ')),
-			true,
-		)
-
-			.addField(
-			'Guild creation',
-			moment(guild.createdTimestamp).format('MM/DD/YYYY [(]HH:mm[)]'),
-			true,
-		)
-			.addField('Owner', `Tag: ${guild.owner.user.tag}\nID: ${guild.owner.id}`, true)
-
-			.addField(
-			'Members',
-			[
-				`Total: ${guild.memberCount}`,
-				`Users: ${counts.users}`,
-				`Bots: ${counts.bots}`,
-			],
-			true,
+				'Server region',
+				titleCase(guild.region.replace(/_/g, ' ')),
+				true,
 			)
 
 			.addField(
-			'Channels',
-			[
-				`Total: ${guild.channels.size}`,
-				`Category: ${counts.category}`,
-				`Text: ${counts.text}`,
-				`Voice: ${counts.voice}`,
-			],
-			true,
+				'Guild creation',
+				moment(guild.createdTimestamp).format('MM/DD/YYYY [(]HH:mm[)]'),
+				true,
+			)
+			.addField('Owner', `Tag: ${guild.owner.user.tag}\nID: ${guild.owner.id}`, true)
+
+			.addField(
+				'Members',
+				[
+					`Total: ${guild.memberCount}`,
+					`Users: ${counts.users}`,
+					`Bots: ${counts.bots}`,
+				],
+				true,
+			)
+
+			.addField(
+				'Channels',
+				[
+					`Total: ${guild.channels.size}`,
+					`Category: ${counts.category}`,
+					`Text: ${counts.text}`,
+					`Voice: ${counts.voice}`,
+				],
+				true,
 			)
 
 			.addField('Role count', guild.roles.size, true)

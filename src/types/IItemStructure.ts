@@ -6,7 +6,7 @@ export interface IItemStructure {
 	buyable: boolean;
 	description: string;
 	name: Items;
-	price: number;
+	price: number | null;
 	rarity: ItemRarities;
 	tradable: boolean;
 	type: ItemTypes;

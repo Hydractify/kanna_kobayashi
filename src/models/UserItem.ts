@@ -11,19 +11,19 @@ export class UserItem extends Model<UserItem> {
 		defaultValue: 1,
 		type: DataType.INTEGER,
 	})
-	public count: number;
+	public count!: number;
 
 	@PrimaryKey
 	@Column({
 		field: 'item_name',
 		type: DataType.TEXT,
 	})
-	public readonly itemName: number;
+	public readonly itemName!: number;
 
 	@PrimaryKey
 	@Column({
 		field: 'user_id',
 		type: DataType.TEXT,
 	})
-	public readonly userId: string;
+	public readonly userId!: string;
 }

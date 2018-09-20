@@ -44,10 +44,13 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		return `you must give me a valid method! (\`${this.usage}\`)`;
 	}
 
-	public async onCollect({ message, emoji, users: reactors }: MessageReaction, user: User): Promise<Message> {
+	public async onCollect(
+		{ message, emoji, users: reactors }: MessageReaction,
+		user: User,
+	): Promise<Message | undefined> {
 		const [embed]: MessageEmbed[] = message.embeds as MessageEmbed[];
 		const [, type, match]: RegExpExecArray = /.+? \| (.+):(\d+) \|/
-			.exec(message.embeds[0].footer.text) || [] as any;
+			.exec(message.embeds[0].footer.text!) || [] as any;
 		let offset: number = parseInt(match);
 
 		if (
@@ -178,7 +181,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 
 		for (const user of users) {
 			// Only the finest js hacks; Calling the level getter of the user model in the context of the newly fetched "user"
-			user.level = Object.getOwnPropertyDescriptor(UserModel.prototype, 'level').get.call(user);
+			user.level = Object.getOwnPropertyDescriptor(UserModel.prototype, 'level')!.get!.call(user);
 		}
 
 		return users;

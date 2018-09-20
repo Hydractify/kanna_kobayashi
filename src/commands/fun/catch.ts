@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 import { Transaction } from 'sequelize';
 
 import { Item } from '../../models/Item';
+import { User as UserModel} from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
@@ -54,7 +55,7 @@ class CatchCommand extends Command {
 
 		const transaction: Transaction = await this.sequelize.transaction();
 		try {
-			await Promise.all([
+			await Promise.all<number | null, number, UserModel>([
 				netBreak ? authorModel.addItem(Items.BUG_NET, -1, { transaction }) : null,
 				authorModel.addItem(Items.BUG, bugAmount, { transaction }),
 				authorModel.save({ transaction }),

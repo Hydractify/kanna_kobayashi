@@ -23,7 +23,8 @@ class NotifChannelCommand extends Command {
 	public async run(message: Message, [target]: string[]): Promise<Message | Message[]> {
 		// Nothing passed, show current
 		if (!target) {
-			const alreadyChannel: GuildChannel = message.guild.channels.get(message.guild.model.notificationChannelId);
+			const alreadyChannel: GuildChannel | undefined = message.guild.channels
+				.get(message.guild.model.notificationChannelId!);
 			if (alreadyChannel) {
 				return message.reply(`the current channel for welcome and farewell messages is ${alreadyChannel}.`);
 			}
@@ -48,9 +49,9 @@ class NotifChannelCommand extends Command {
 		}
 
 		// Something was passed, try to set a new one
-		let channel: GuildChannel;
+		let channel: GuildChannel | undefined;
 		// This will go to resolve channel for CommandHandler if somewhere else required
-		const match: RegExpExecArray = /^<#(\d{17,19})>$|^(\d{17,19})$/.exec(target);
+		const match: RegExpExecArray | null = /^<#(\d{17,19})>$|^(\d{17,19})$/.exec(target);
 		if (match) {
 			const which: string = match[1] || match[2];
 			channel = message.guild.channels.get(which);
@@ -68,7 +69,7 @@ class NotifChannelCommand extends Command {
 		if (!channel) return message.reply(`I could not find a channel with **${target}**.`);
 
 		// Be sure that we can send messages to the specified channel
-		if (!channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
+		if (!channel.permissionsFor(this.client.user)!.has('SEND_MESSAGES')) {
 			return message.reply(`I do not have permissions to send messages in ${channel}.`);
 		}
 

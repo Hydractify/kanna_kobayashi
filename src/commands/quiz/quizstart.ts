@@ -45,10 +45,10 @@ class QuizStartCommand extends Command {
 			const content: string = msg.content.toLowerCase();
 
 			return content.startsWith(firstName)
-				|| (lastName && content.startsWith(lastName));
+				|| (Boolean(lastName) && content.startsWith(lastName));
 		};
 
-		const answer: Message = await message.channel.awaitMessages(filter, { max: 1, time: quiz.duration * 6e4 })
+		const answer: Message | undefined = await message.channel.awaitMessages(filter, { max: 1, time: quiz.duration * 6e4 })
 			.then((collected: Collection<Snowflake, Message>) => collected.first());
 
 		eventEmbed.fields[0].value = `~~${eventEmbed.fields[0].value}~~ Time is over!`;
@@ -59,7 +59,7 @@ class QuizStartCommand extends Command {
 			value: titleCase(quiz.name),
 		};
 
-		eventEmbed.author = null;
+		delete eventEmbed.author;
 
 		eventEmbed.setTitle(
 			answer

@@ -17,7 +17,7 @@ class CommandStatusCommand extends Command {
 	public parseArgs(message: Message, args: string[]): Command[] | string[] | string {
 		if (!args.length) return args;
 
-		const command: Command = this.handler.resolveCommand(args.join(' ').toLowerCase());
+		const command: Command | undefined = this.handler.resolveCommand(args.join(' ').toLowerCase());
 
 		if (!command) return 'I could not find a command with that name or alias.';
 

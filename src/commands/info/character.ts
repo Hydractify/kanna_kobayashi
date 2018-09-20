@@ -25,11 +25,11 @@ class CharacterCommand extends AniListCommand<ICharacter> {
 	}
 
 	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const entries: ICharacter[] = await this.search(args.join(' '));
+		const entries: ICharacter[] | undefined = await this.search(args.join(' '));
 
 		if (!entries) return message.reply('I could not find a single character matching your search!');
 
-		const entry: ICharacter = entries.length > 1
+		const entry: ICharacter | undefined = entries.length > 1
 			? await this.pick(message, authorModel, entries)
 			: entries[0];
 

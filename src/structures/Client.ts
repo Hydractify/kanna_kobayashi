@@ -112,7 +112,7 @@ export class Client extends DJSClient {
 				member: `${member.user.tag} (${member.id})`,
 
 				mePresent: {
-					guild: this.guilds.get(member.guild.id).members.has(this.user.id),
+					guild: this.guilds.get(member.guild.id)!.members.has(this.user.id),
 					member: member.guild.members.has(this.user.id),
 				},
 				referenceEqual: member.guild === this.guilds.get(member.guild.id),
@@ -123,7 +123,7 @@ export class Client extends DJSClient {
 		const guildModel: GuildModel = await member.guild.fetchModel();
 
 		if (!guildModel.notificationChannelId) return;
-		const channel: GuildChannel = member.guild.channels.get(guildModel.notificationChannelId);
+		const channel: GuildChannel | undefined = member.guild.channels.get(guildModel.notificationChannelId);
 
 		if (!(channel instanceof TextChannel)) {
 			guildModel.notificationChannelId = null;
@@ -132,9 +132,9 @@ export class Client extends DJSClient {
 			return;
 		}
 
-		if (!channel.permissionsFor(member.guild.me).has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
+		if (!channel.permissionsFor(member.guild.me)!.has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 
-		let message: string = guildModel[left ? 'farewellMessage' : 'welcomeMessage'];
+		let message: string | null = guildModel[left ? 'farewellMessage' : 'welcomeMessage'];
 		if (!message) return;
 		message = message
 			.replace(/\{\{guild\}\}/g, member.guild.name)
@@ -162,7 +162,7 @@ export class Client extends DJSClient {
 			message: 'Info about the embed',
 		});
 
-		const [, tag, name]: RegExpExecArray = /^Requested by (.+?) \|.* (.+)$/.exec(reaction.message.embeds[0].footer.text)
+		const [, tag, name]: RegExpExecArray = /^Requested by (.+?) \|.* (.+)$/.exec(reaction.message.embeds[0].footer.text!)
 			|| [] as any;
 		if (!tag || !name) {
 			reaction.message.channel.messages.delete(reaction.message.id);
@@ -201,14 +201,14 @@ export class Client extends DJSClient {
 		const channel: TextChannel = this.channels.get(data.channel_id) as TextChannel;
 		if (!channel) return;
 		if (channel.messages.has(data.message_id)
-			|| !channel.permissionsFor(channel.guild.me).has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'])
+			|| !channel.permissionsFor(channel.guild.me)!.has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'])
 		) return;
 
-		const user: User = this.users.get(data.user_id);
+		const user: User = this.users.get(data.user_id) || await this.users.fetch(data.user_id);
 		const message = await channel.messages.fetch(data.message_id).catch(() => undefined);
 		if (!message) return;
 
-		let reaction: MessageReaction = message.reactions.get(data.emoji.id || data.emoji.name);
+		let reaction: MessageReaction | undefined = message.reactions.get(data.emoji.id || data.emoji.name);
 
 		if (!reaction) {
 			reaction = message.reactions.add({

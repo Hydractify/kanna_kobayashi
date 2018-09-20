@@ -18,7 +18,7 @@ class ShowReputationCommand extends Command {
 	}
 
 	public async parseArgs(message: Message, args: string[]): Promise<string | [GuildMember, number, number]> {
-		const member: GuildMember = args.length
+		const member: GuildMember | undefined = args.length
 			? await this.resolver.resolveMember(args.join(' '), message.guild, false)
 			: message.member;
 

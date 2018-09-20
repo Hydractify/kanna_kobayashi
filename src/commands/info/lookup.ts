@@ -5,6 +5,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { Command as GuildInfoCommand } from './guild';
 
 class LookupCommand extends Command {
 	public constructor(handler: CommandHandler) {
@@ -35,7 +36,11 @@ class LookupCommand extends Command {
 	): Promise<Message | Message[]> {
 		// This shard is part of that guild, give full info
 		if (this.client.guilds.has(guild.id)) {
-			return this.handler.resolveCommand('guildinfo').run(message, undefined, { authorModel });
+			return (this.handler.resolveCommand('guildinfo') as GuildInfoCommand).run(
+				message,
+				[],
+				{ args: [], commandName: 'guildinfo', authorModel },
+			);
 		}
 
 		const iconURL: string = guild.iconURL();
@@ -47,33 +52,33 @@ class LookupCommand extends Command {
 			.setThumbnail(iconURL)
 
 			.addField(
-			'Guild ID',
-			guild.id,
-		)
+				'Guild ID',
+				guild.id,
+			)
 
 			.addField(
-			'Guild creation',
-			createdAt.utc().format('MM/DD/YYYY [(]HH:mm[)]'),
-			true,
-		)
+				'Guild creation',
+				createdAt.utc().format('MM/DD/YYYY [(]HH:mm[)]'),
+				true,
+			)
 
 			.addField(
-			'Channel of the invite',
-			[
-				`• Name: \`${channel.name}\``,
-				`• Mention: <#${channel.id}>\n_Note: This mentions only resolves when you are part of this guild._`,
-			],
-			true,
-		)
+				'Channel of the invite',
+				[
+					`• Name: \`${channel.name}\``,
+					`• Mention: <#${channel.id}>\n_Note: This mentions only resolves when you are part of this guild._`,
+				],
+				true,
+			)
 
 			.addField(
-			'Members',
-			[
-				`• Online: \`${presenceCount.toLocaleString()}\``,
-				`• Total: \`${memberCount.toLocaleString()}\``,
-			],
-			true,
-		);
+				'Members',
+				[
+					`• Online: \`${presenceCount.toLocaleString()}\``,
+					`• Total: \`${memberCount.toLocaleString()}\``,
+				],
+				true,
+			);
 
 		return message.channel.send(embed);
 	}

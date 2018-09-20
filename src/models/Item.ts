@@ -44,7 +44,7 @@ import { UserItem } from './UserItem';
 export class Item extends Model<Item> {
 	@AllowNull(false)
 	@Validate({
-		isPriceSet: (value: Item): void => {
+		isPriceSet(value: Item): void {
 			if (value && this.price === undefined) {
 				throw new Error(`The buyable item "${this.name}" must have a price!`);
 			}
@@ -57,10 +57,10 @@ export class Item extends Model<Item> {
 		defaultValue: false,
 		type: DataType.BOOLEAN,
 	})
-	public buyable: boolean;
+	public buyable!: boolean;
 
 	@Column
-	public description: string;
+	public description!: string;
 
 	@BelongsToMany(() => User, {
 		as: 'holders',
@@ -68,45 +68,45 @@ export class Item extends Model<Item> {
 		otherKey: 'user_id',
 		through: (): typeof Model => UserItem,
 	})
-	public holders: User[];
+	public holders!: User[];
 
 	@AllowNull(false)
 	@PrimaryKey
 	@Column({
 		type: DataType.TEXT,
 	})
-	public name: Items;
+	public name!: Items;
 
 	@Column(DataType.INTEGER)
-	public price: number;
+	public price!: number;
 
 	@AllowNull(false)
 	@Column(DataType.INTEGER)
-	public rarity: ItemRarities;
+	public rarity!: ItemRarities;
 
 	@AllowNull(false)
 	@Column({
 		defaultValue: false,
 		type: DataType.BOOLEAN,
 	})
-	public tradable: boolean;
+	public tradable!: boolean;
 
 	@AllowNull(false)
 	@Column({
 		type: DataType.ENUM,
 		values: Object.keys(ItemTypes),
 	})
-	public type: ItemTypes;
+	public type!: ItemTypes;
 
 	@AllowNull(false)
 	@Column({
 		defaultValue: true,
 		type: DataType.BOOLEAN,
 	})
-	public unique: boolean;
+	public unique!: boolean;
 
 	// tslint:disable-next-line:variable-name
-	private UserItem: UserItem;
+	private UserItem: UserItem | undefined;
 
 	public getCount(): number {
 		if (!this.UserItem) throw new Error(`This "${this.name}" is not associated with any user!`);
@@ -127,10 +127,10 @@ export class Item extends Model<Item> {
 	 * Additional meta data about an item, such as the holder id and the item count
 	 * **Only present if fetched via association!**
 	 */
-	public get userItem(): UserItem {
+	public get userItem(): UserItem | undefined {
 		return this.UserItem;
 	}
-	public set userItem(value: UserItem) {
+	public set userItem(value: UserItem | undefined) {
 		this.UserItem = value;
 	}
 }

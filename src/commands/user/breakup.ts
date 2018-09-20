@@ -31,7 +31,7 @@ class BreakUpCommand extends Command {
 
 		if (!collected.size) return message.reply('aborting the command, due to lacking response.');
 
-		if (collected.first().content[0].toLowerCase() !== 'y') return message.reply('aborting the command.');
+		if (collected.first()!.content[0].toLowerCase() !== 'y') return message.reply('aborting the command.');
 
 		authorModel.partnerId = null;
 		authorModel.partnerMarried = null;

@@ -43,11 +43,11 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 	public async parseArgs(
 		message: Message,
 		args: string[],
-	): Promise<string | [string, Item, number] | [string]> {
+	): Promise<string | [string, Item, number | undefined] | [string]> {
 		const [input, ...item] = args.join(' ').toLowerCase().split(' ');
 		if (!input || input.toLowerCase() === 'list') return ['list'];
 
-		let resolvedItem: Item;
+		let resolvedItem: Item | null;
 		if (!this.methods.includes(input)) {
 			resolvedItem = await Item.findById([input, ...item].join(' '));
 			if (!resolvedItem) return `**${input}** is not a valid method!`;
@@ -74,7 +74,7 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 		return [input, resolvedItem, count];
 	}
 
-	public async onCollect({ emoji, message, users }: MessageReaction, user: User): Promise<Message> {
+	public async onCollect({ emoji, message, users }: MessageReaction, user: User): Promise<Message | undefined> {
 		users.remove(user).catch(() => undefined);
 		// tslint:disable-next-line:prefer-const
 		let [, type, rawIndex]: RegExpMatchArray = /Kanna's Market (?:.+ )?\(?(.+)\) \| Page (\d+)/

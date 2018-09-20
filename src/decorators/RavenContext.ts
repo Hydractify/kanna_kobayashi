@@ -6,7 +6,7 @@ export function RavenContext(
 	descriptor: PropertyDescriptor,
 ): PropertyDescriptor {
 	if (!target) throw new Error('No target for @RavenContext decorator found!');
-	if (!descriptor) descriptor = Reflect.getOwnPropertyDescriptor(target, key);
+	if (!descriptor) descriptor = Reflect.getOwnPropertyDescriptor(target, key)!;
 
 	const original: (...args: any[]) => any = descriptor.value;
 

@@ -20,13 +20,12 @@ class WhitelistCommand extends Command {
 
 	public async run(message: Message, [target, remove]: [string, string]): Promise<Message | Message[]> {
 		// To allow nicknames, I am so sure they will be used.
-		let user: User = await this.resolver.resolveMember(target, message.guild, false)
-			.then((member: GuildMember) => member ? member.user : undefined);
-		if (!user) user = await this.resolver.resolveUser(target, false).catch(() => undefined);
+		const user: User | undefined = await this.resolver.resolveMember(target, message.guild, false)
+			.then((member: GuildMember | undefined) => member ? member.user : this.resolver.resolveUser(target, false));
 		if (!user) return message.reply(`I could not find a non-bot user by ${target}!`);
 
 		const targetModel: UserModel = await user.fetchModel();
-		if (['DEV', 'TRUSTED'].includes(targetModel.type)) {
+		if (['DEV', 'TRUSTED'].includes(targetModel.type!)) {
 			return message.reply('devs or trusted users can not be whitelisted. Maybe entered the wrong user?');
 		}
 

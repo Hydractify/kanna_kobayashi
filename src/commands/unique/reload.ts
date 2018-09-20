@@ -29,15 +29,15 @@ class ReloadCommand extends Command {
 
 		const results: [number, IPlainError | undefined][] = await this.client.shard.broadcastEval(
 			// tslint:disable-next-line:no-shadowed-variable
-			(client: Client, [commandName]: string[]) =>
+			(client: Client, [commandName]: string[]): Promise<[number, IPlainError | undefined]> =>
 				client.commandHandler.reloadCommand(commandName)
-					.then(() =>
+					.then<[number, undefined]>(() =>
 						([client.shard.id, undefined]),
-				).catch((e: IPlainError) =>
-					([client.shard.id, require('discord.js').Util.makePlainError(e)]),
-				),
+					).catch<[number, IPlainError]>((e: IPlainError) =>
+						([client.shard.id, require('discord.js').Util.makePlainError(e) as IPlainError]),
+					),
 			[commandName],
-		) as any;
+		);
 
 		return message.channel.send(results.map(
 			([id, error]: [number, IPlainError | undefined]) =>

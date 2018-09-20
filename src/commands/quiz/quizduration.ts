@@ -22,7 +22,7 @@ class QuizDurationCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, [option, ...time]: string[]): string | ['view' | 'set', number] {
+	public parseArgs(message: Message, [option, ...time]: string[]): string | ['set', number] | ['view', undefined] {
 		if (!option) {
 			return [
 				'you need to tell me whether you want to',
@@ -52,7 +52,7 @@ class QuizDurationCommand extends Command {
 
 	public async run(
 		message: Message,
-		[option, time]: ['view' | 'set', number],
+		[option, time]: ['set', number] | ['view', undefined],
 	): Promise<Message | Message[]> {
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
 
@@ -65,7 +65,7 @@ class QuizDurationCommand extends Command {
 		}
 
 		if (quiz) {
-			quiz.duration = time;
+			quiz.duration = time!;
 			await quiz.save();
 		} else {
 			await message.guild.model.$create('quiz', {

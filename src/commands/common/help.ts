@@ -54,8 +54,8 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 			|| this._findCategory(message, name, authorModel);
 	}
 
-	public async onCollect({ emoji, users, message }: MessageReaction, user: User): Promise<Message> {
-		const [, rawPage]: RegExpExecArray = /.+? \| Page (\d+) \|/.exec(message.embeds[0].footer.text) || [] as any;
+	public async onCollect({ emoji, users, message }: MessageReaction, user: User): Promise<Message | undefined> {
+		const [, rawPage]: RegExpExecArray = /.+? \| Page (\d+) \|/.exec(message.embeds[0].footer.text!) || [] as any;
 		if (!rawPage) return;
 
 		let page: number = parseInt(rawPage) - 1;
@@ -81,7 +81,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 	}
 
 	private _findCategory(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[]> {
-		let embed: MessageEmbed;
+		let embed: MessageEmbed | undefined;
 		for (const command of this.handler._commands.values()) {
 			if (command.category.toLowerCase() === name) {
 				if (!embed) {
@@ -104,8 +104,12 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		return message.reply(`I could not find a command matching **${name}** ${Emojis.KannaShy}`);
 	}
 
-	private _findCommand(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[] | void> {
-		const command: Command = this.handler.resolveCommand(name);
+	private _findCommand(
+		message: Message,
+		name: string,
+		authorModel: UserModel,
+	): Promise<Message | Message[]> | undefined {
+		const command: Command | undefined = this.handler.resolveCommand(name);
 
 		if (!command) {
 			return undefined;
@@ -136,7 +140,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		// Map all commands to their appropiate categories
 		const categories: Collection<string, Command[]> = new Collection();
 		for (const command of this.handler._commands.values()) {
-			const category: Command[] = categories.get(command.category);
+			const category: Command[] | undefined = categories.get(command.category);
 			if (!category) categories.set(command.category, [command]);
 			else category.push(command);
 		}

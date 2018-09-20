@@ -20,11 +20,11 @@ class MangaCommand extends AniListCommand<IMedia> {
 	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
 		if (!args.length) return message.reply('you have to tell me what manga you are looking for!');
 
-		const entries: IMedia[] = await this.search(args.join(' '));
+		const entries: IMedia[] | undefined = await this.search(args.join(' '));
 
 		if (!entries) return message.reply('I could not find a single manga matching your search!');
 
-		const entry: IMedia = entries.length > 1
+		const entry: IMedia | undefined = entries.length > 1
 			? await this.pick(message, authorModel, entries)
 			: entries[0];
 

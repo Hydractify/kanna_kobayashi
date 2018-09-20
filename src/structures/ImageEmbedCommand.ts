@@ -11,19 +11,19 @@ export abstract class ImageEmbedCommand extends Command {
 	/**
 	 * Base URL to fetch images from
 	 */
-	protected baseURL: string;
+	protected baseURL: string | undefined;
 	/**
 	 * Array of image URLS in case the default schema does not apply to the urls
 	 */
-	protected images: string[];
+	protected images: string[] | undefined;
 	/**
 	 * The highest number of a filename of an image
 	 */
-	protected maxNumber: number;
+	protected maxNumber: number | undefined;
 	/**
 	 * The content of the sent message
 	 */
-	protected messageContent: string;
+	protected messageContent: string | undefined;
 
 	/**
 	 * Instantiate a new ImageEmedCommand
@@ -75,8 +75,8 @@ export abstract class ImageEmbedCommand extends Command {
 	 */
 	protected imageEmbed(message: Message, userModel: UserModel): MessageEmbed {
 		const image: string = this.baseURL
-			? `${this.baseURL}${Math.floor(Math.random() * this.maxNumber) + 1}.gif`
-			: this.images[Math.floor(Math.random() * this.images.length)];
+			? `${this.baseURL}${Math.floor(Math.random() * this.maxNumber!) + 1}.gif`
+			: this.images![Math.floor(Math.random() * this.images!.length)];
 
 		return MessageEmbed.image(message, userModel, image);
 	}

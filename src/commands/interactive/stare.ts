@@ -26,8 +26,8 @@ class StareCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: '_runs_',
-			dev: `**${members.first().name}**... Run!`,
-			trusted: `**${members.first().name}**... Run!`,
+			dev: `**${members.first()!.name}**... Run!`,
+			trusted: `**${members.first()!.name}**... Run!`,
 		});
 		const baseString: string = this.computeBaseString(message, members);
 

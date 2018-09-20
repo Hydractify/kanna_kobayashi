@@ -17,7 +17,7 @@ export class CommandLog extends Model<CommandLog> {
 		field: 'command_name',
 		type: DataType.TEXT,
 	})
-	public readonly commandName: string;
+	public readonly commandName!: string;
 
 	/**
 	 * Guild Id where this command ran
@@ -26,13 +26,13 @@ export class CommandLog extends Model<CommandLog> {
 		field: 'guild_id',
 		type: DataType.TEXT,
 	})
-	public readonly guildId: string;
+	public readonly guildId!: string;
 
 	/**
 	 * When the command ran
 	 */
 	@CreatedAt
-	public readonly run: Date;
+	public readonly run!: Date;
 
 	/**
 	 * Id of the user that used the command
@@ -42,5 +42,5 @@ export class CommandLog extends Model<CommandLog> {
 		field: 'user_id',
 		type: DataType.TEXT,
 	})
-	public readonly userId: string;
+	public readonly userId!: string;
 }

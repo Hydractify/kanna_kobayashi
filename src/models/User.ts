@@ -190,30 +190,30 @@ export class User extends Model<User> {
 
 	@PrimaryKey
 	@Column
-	public readonly id: string;
+	public readonly id!: string;
 	@HasMany(() => CommandLog, {
 		as: 'commandLogs',
 		foreignKey: 'user_id',
 	})
-	public readonly commandLogs: CommandLog[];
+	public readonly commandLogs: CommandLog[] | undefined;
 
 	@Column({
 		defaultValue: 0,
 		type: DataType.INTEGER,
 	})
-	public coins: number;
+	public coins!: number;
 
 	@Column({
 		defaultValue: 0,
 		type: DataType.INTEGER,
 	})
-	public exp: number;
+	public exp!: number;
 
 	@Column({
 		type: DataType.ENUM,
 		values: Object.keys(UserTypes),
 	})
-	public type: UserTypes;
+	public type!: UserTypes | null;
 
 	/**
 	 * Patreon tier
@@ -222,31 +222,31 @@ export class User extends Model<User> {
 		defaultValue: 0,
 		type: DataType.INTEGER,
 	})
-	public tier: number;
+	public tier!: number;
 
 	@HasOne(() => User, {
 		as: 'partner',
 		foreignKey: 'partnerId',
 	})
-	public readonly partner: User;
+	public readonly partner!: User | null;
 
 	@Column({
 		field: 'partner_id',
 		type: DataType.TEXT,
 	})
-	public partnerId: string;
+	public partnerId!: string | null;
 
 	@Column({
 		field: 'partner_since',
 		type: DataType.DATE,
 	})
-	public partnerSince: Date;
+	public partnerSince!: Date | null;
 
 	@Column({
 		field: 'partner_married',
 		type: DataType.BOOLEAN,
 	})
-	public partnerMarried: boolean;
+	public partnerMarried!: boolean | null;
 
 	@BelongsToMany(() => Item, {
 		as: 'badges',
@@ -255,7 +255,7 @@ export class User extends Model<User> {
 		scope: { type: ItemTypes.BADGE },
 		through: (): typeof Model => UserItem,
 	})
-	public readonly badges: Item[];
+	public readonly badges: Item[] | undefined;
 
 	@BelongsToMany(() => Item, {
 		as: 'items',
@@ -264,7 +264,7 @@ export class User extends Model<User> {
 		scope: { type: ItemTypes.ITEM },
 		through: (): typeof Model => UserItem,
 	})
-	public readonly items: Item[];
+	public readonly items: Item[] | undefined;
 
 	/**
 	 * All users who added a reputation to the user
@@ -275,7 +275,7 @@ export class User extends Model<User> {
 		otherKey: 'repper_id',
 		through: (): typeof Model => UserReputation,
 	})
-	public readonly reps: User[];
+	public readonly reps: User[] | undefined;
 
 	/**
 	 * All users the user added a reputation
@@ -286,5 +286,5 @@ export class User extends Model<User> {
 		otherKey: 'rep_id',
 		through: (): typeof Model => UserReputation,
 	})
-	public readonly repped: User[];
+	public readonly repped: User[] | undefined;
 }

@@ -9,7 +9,7 @@ const { webhook: { id, secret } } = require('../../data.json');
 const webhook: WebhookClient = new WebhookClient(id, secret);
 
 export class WebhookLogger extends Logger {
-	protected static _instance: WebhookLogger = undefined;
+	protected static _instance: WebhookLogger;
 
 	public static get instance(): WebhookLogger {
 		return this._instance || new this();

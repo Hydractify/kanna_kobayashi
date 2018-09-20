@@ -2,6 +2,6 @@ export interface ILeaderBoardUser {
 	coins: number;
 	exp: number;
 	id: string;
-	level?: number;
-	reputation?: number;
+	level: number;
+	reputation: number;
 }

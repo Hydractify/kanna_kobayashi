@@ -23,7 +23,7 @@ class QuizPhotoCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, [option, photo]: string[]): string | ['view' | 'set', string] {
+	public parseArgs(message: Message, [option, photo]: string[]): string | ['set', string] | ['view', undefined] {
 		if (!option) {
 			return [
 				'you need to tell me whether you want to',
@@ -47,7 +47,7 @@ class QuizPhotoCommand extends Command {
 
 	public async run(
 		message: Message,
-		[option, photo]: ['view' | 'set', string],
+		[option, photo]: ['set', string] | ['view', undefined],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
@@ -65,7 +65,7 @@ class QuizPhotoCommand extends Command {
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setTitle('Setting up photo...')
-			.setImage(photo);
+			.setImage(photo!);
 
 		const confirmMessage: Message | DiscordAPIError = await (message.channel.send(embed) as Promise<Message>)
 			.catch((error: DiscordAPIError) => error);
@@ -80,7 +80,7 @@ class QuizPhotoCommand extends Command {
 		}
 
 		if (quiz) {
-			quiz.photo = photo;
+			quiz.photo = photo!;
 			await quiz.save();
 		} else {
 			await message.guild.model.$create('quiz', {

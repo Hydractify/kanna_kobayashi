@@ -33,15 +33,15 @@ class DonateCommand extends Command {
 		if (!input) return `you must give me a user! (\`${this.usage}\`)`;
 		if (!itemAndAmount.length) return `you must give me an amount or item to donate! (\`${this.usage}\`)`;
 
-		const target: User = await this.resolver.resolveMember(input, message.guild, false)
-			.then((member: GuildMember) => member
+		const target: User | undefined = await this.resolver.resolveMember(input, message.guild, false)
+			.then((member: GuildMember | undefined) => member
 				? member.user
 				: this.resolver.resolveUser(input, false),
 			);
 		if (!target) return `I could not find a non bot user with the name or id ${input}.`;
-		const [, itemName, amount]: RegExpMatchArray = itemAndAmount.join(' ').match(/([^\d]*?(?= *(?:\d|$))) *(.*)/);
+		const [, itemName, amount]: RegExpMatchArray = itemAndAmount.join(' ').match(/([^\d]*?(?= *(?:\d|$))) *(.*)/)!;
 
-		let item: Item = null;
+		let item: Item | null = null;
 		if (itemName) {
 			item = await Item.findById(itemName.toLowerCase());
 			if (!item) return `no such item "${itemName}"!`;

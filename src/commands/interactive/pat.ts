@@ -27,8 +27,8 @@ class PatCommand extends WeebCommand {
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `You are so cute **${message.member.displayName}**!`,
-			dev: `Thanks for patting **${members.first().name}**!`,
-			trusted: `**${members.first().name}** deserved it :3`,
+			dev: `Thanks for patting **${members.first()!.name}**!`,
+			trusted: `**${members.first()!.name}** deserved it :3`,
 		});
 		const baseString: string = this.computeBaseString(message, members);
 

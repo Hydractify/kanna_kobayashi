@@ -65,7 +65,7 @@ export class Quiz extends Model<Quiz> {
 		defaultValue: 15,
 		type: DataType.INTEGER,
 	})
-	public duration: number;
+	public duration!: number;
 
 	@PrimaryKey
 	@Validate({
@@ -78,16 +78,16 @@ export class Quiz extends Model<Quiz> {
 		field: 'guild_id',
 		type: DataType.TEXT,
 	})
-	public readonly guildId: string;
+	public readonly guildId!: string;
 
 	@Column({
 		type: DataType.TEXT,
-		set(this: Quiz, value: string): void {
+		set(this: Model<Quiz>, value: string): void {
 			this.setDataValue('name', value.toLowerCase());
 		},
 	})
-	public name: string;
+	public name!: string;
 
 	@Column
-	public photo: string;
+	public photo!: string;
 }
