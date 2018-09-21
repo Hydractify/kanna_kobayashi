@@ -17,7 +17,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['lb'],
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'READ_MESSAGE_HISTORY'],
 			description: 'See the best of the best!',
 			examples: [
 				'leaderboard level',

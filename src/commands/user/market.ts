@@ -26,7 +26,7 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['store'],
-			clientPermissions: ['EMBED_LINKS'],
+			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'READ_MESSAGE_HISTORY'],
 			cooldown: 10000,
 			description: 'This is the ~~black~~ market... Buy, sell, and see info about items and badges!',
 			examples: [

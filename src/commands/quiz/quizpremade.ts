@@ -26,7 +26,7 @@ class QuizPremadeCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['qpremade'],
-			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'USE_EXTERNAL_EMOJIS'],
+			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'USE_EXTERNAL_EMOJIS', 'READ_MESSAGE_HISTORY'],
 			description: 'Choose one of the pre made quizzes of 10 characters from the series',
 			examples: ['quizpremade'],
 			permLevel: PermLevels.DRAGONTAMER,
