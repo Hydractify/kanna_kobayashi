@@ -38,7 +38,7 @@ export class WebhookLogger extends Logger {
 					: 'Sharding Manager',
 		);
 		const options: WebhookMessageOptions = {
-			avatarURL: 'https://a.safe.moe/lwS5D.png',
+			avatarURL: 'https://cdn.discordapp.com/attachments/250372608284033025/494249449862725632/avatar.png',
 			embeds: [embed],
 			username: 'Kanna Status',
 		};
