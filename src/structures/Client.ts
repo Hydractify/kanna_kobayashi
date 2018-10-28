@@ -138,7 +138,7 @@ export class Client extends DJSClient {
 		if (!message) return;
 		message = message
 			.replace(/\{\{guild\}\}/g, member.guild.name)
-			.replace(/\{\{member\}\}/g, member.user.tag);
+			.replace(/\{\{member\}\}/g, member.toString());
 
 		channel.send(message);
 	}
