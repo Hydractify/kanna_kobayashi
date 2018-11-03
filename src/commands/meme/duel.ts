@@ -7,12 +7,12 @@ class DuelCommand extends ImageEmbedCommand {
 			description: 'Yu-Gi-Oh memes',
 			examples: ['duel'],
 			images: [
-				'https://thedragonproject.network/memes/duel/1.png',
-				'https://thedragonproject.network/memes/duel/2.png',
-				'https://thedragonproject.network/memes/duel/3.png',
-				'https://thedragonproject.network/memes/duel/4.jpg',
-				'https://thedragonproject.network/memes/duel/5.jpg',
-				'https://thedragonproject.network/memes/duel/6.jpg',
+				'https://www.hydractify.org/memes/duel/1.png',
+				'https://www.hydractify.org/memes/duel/2.png',
+				'https://www.hydractify.org/memes/duel/3.png',
+				'https://www.hydractify.org/memes/duel/4.jpg',
+				'https://www.hydractify.org/memes/duel/5.jpg',
+				'https://www.hydractify.org/memes/duel/6.jpg',
 			],
 			usage: 'duel',
 		});

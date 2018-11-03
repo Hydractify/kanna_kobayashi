@@ -7,7 +7,7 @@ class PopcornCommand extends ImageEmbedCommand {
 			aliases: ['dreck'],
 			description: 'Popcorn!',
 			examples: ['popcorn'],
-			images: ['https://thedragonproject.network/memes/popcorn/1.png'],
+			images: ['https://www.hydractify.org/memes/popcorn/1.png'],
 			usage: 'popcorn',
 		});
 	}

@@ -6,7 +6,7 @@ class YummyCommand extends ImageEmbedCommand {
 		super(handler, {
 			description: 'The pure art of noodles',
 			examples: ['yummy'],
-			images: ['https://thedragonproject.network/memes/yummy/1.png'],
+			images: ['https://www.hydractify.org/memes/yummy/1.png'],
 			usage: 'yummy',
 		});
 	}

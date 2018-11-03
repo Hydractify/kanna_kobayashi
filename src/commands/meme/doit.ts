@@ -7,7 +7,7 @@ class DoItCommand extends ImageEmbedCommand {
 		super(handler, {
 			description: 'You have to do it... For me!',
 			examples: ['doit'],
-			images: ['https://thedragonproject.network/memes/doit/1.jpg'],
+			images: ['https://www.hydractify.org/memes/doit/1.jpg'],
 			messageContent: `${Emojis.KannaMad} | **Do it!**`,
 			usage: 'dance',
 		});

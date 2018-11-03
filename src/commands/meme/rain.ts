@@ -6,7 +6,7 @@ class RainCommand extends ImageEmbedCommand {
 		super(handler, {
 			description: 'Get your umbrella and lets go have fun!',
 			examples: ['rain'],
-			images: ['https://thedragonproject.network/memes/rain/1.gif'],
+			images: ['https://www.hydractify.org/memes/rain/1.gif'],
 			usage: 'rain',
 		});
 	}

@@ -9,8 +9,8 @@ class LoliCommand extends ImageEmbedCommand {
 			description: 'Protect all the lolis!',
 			examples: ['loli'],
 			images: [
-				'https://thedragonproject.network/memes/loli/1.png',
-				'https://thedragonproject.network/memes/loli/2.gif',
+				'https://www.hydractify.org/memes/loli/1.png',
+				'https://www.hydractify.org/memes/loli/2.gif',
 			],
 			messageContent: `**Wooo... A human!** ${Emojis.KannaWow}`,
 			usage: 'loli',

@@ -8,7 +8,7 @@ class RavioliCommand extends ImageEmbedCommand {
 			aliases: ['praise'],
 			description: 'Respect me!',
 			examples: ['ravioli'],
-			images: ['https://thedragonproject.network/memes/ravioli/1.png'],
+			images: ['https://www.hydractify.org/memes/ravioli/1.png'],
 			messageContent: `**Ravioli ravioli all praise the Dragon... PRAISE ME, HUMAN!** ${Emojis.KannaWow}`,
 			usage: 'ravioli',
 		});
