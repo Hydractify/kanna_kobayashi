@@ -89,10 +89,10 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 						.setAuthor(`${this.client.user.username}'s ${titleCase(name)} Commands`)
 						.setDescription([
 							'[Having trouble using the help command? Read the wiki!]',
-							'(https://github.com/TheDragonProject/Kanna-Kobayashi/wiki)',
+							'(https://github.com/hydractify/kanna-kobayashi/wiki)',
 						].join(''))
 						.setThumbnail(message.guild.iconURL())
-						.setURL('https://thedragonproject.network/guild');
+						.setURL('https://www.hydractify.org/discord');
 				}
 
 				embed.addField(`kanna ${command.name}`, `k!${command.usage}`, true);

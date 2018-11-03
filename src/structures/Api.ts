@@ -15,7 +15,7 @@ const reflectors: PropertyKey[] = [
 ];
 
 const ua: { [key: string]: string } = {
-	'User-Agent': `Kanna-Kobayashi, a discord bot. v${version} (https://github.com/TheDragonProject/Kanna-Kobayashi)`,
+	'User-Agent': `Kanna-Kobayashi, a discord bot. v${version} (https://github.com/hydractify/kanna-kobayashi)`,
 };
 
 export const buildRouter: (options: IAPIRouterOptions) => () => APIRouter

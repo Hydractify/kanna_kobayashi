@@ -24,7 +24,7 @@ class InfoCommand extends Command {
 				'[Patreon](https://www.patreon.com/hydractify)',
 				'[Support Server / Official Server](https://discord.gg/uBdXdE9)',
 				'[Official Weebsite](https://www.hydractify.org)',
-				'[Wiki / Kanna 101](https://github.com/hydractify/wiki)',
+				'[Wiki / Kanna 101](https://github.com/hydractify/kanna-kobayashi/wiki)',
 			].join('\n'))
 			.setThumbnail(message.guild.iconURL());
 

@@ -37,7 +37,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/TheDragonProject/Kanna-Kobayashi.git"
+		"url": "git+https://github.com/hydractify/kanna-kobayashi.git"
 	},
 	"contributors": [
 		"Alexandre Cavalheiro <alexandre.cssilva@gmail.com>",
@@ -45,7 +45,7 @@
 	],
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/TheDragonProject/Kanna-Kobayashi/issues"
+		"url": "https://github.com/hydractify/kanna-kobayashi/issues"
 	},
-	"homepage": "https://github.com/TheDragonProject/Kanna-Kobayashi#readme"
+	"homepage": "https://github.com/hydractify/kanna-kobayashi#readme"
 }
