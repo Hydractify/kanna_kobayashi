@@ -20,10 +20,10 @@ class InfoCommand extends Command {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`${this.client.user.username} Information`, this.client.user.displayAvatarURL())
 			.setDescription([
-				'[Invite Link](https://thedragonproject.network/invite)',
+				'[Invite Link](https://www.hydractify.org/invite)',
 				'[Patreon](https://www.patreon.com/kannathebot)',
 				'[Support Server / Official Server](https://discord.gg/uBdXdE9)',
-				'[Official Weebsite](https://thedragonproject.network)',
+				'[Official Weebsite](https://www.hydractify.org)',
 				'[Wiki / Kanna 101](https://github.com/TheDragonProject/wiki)',
 			].join('\n'))
 			.setThumbnail(message.guild.iconURL());
