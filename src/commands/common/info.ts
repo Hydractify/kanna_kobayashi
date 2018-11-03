@@ -21,10 +21,10 @@ class InfoCommand extends Command {
 			.setAuthor(`${this.client.user.username} Information`, this.client.user.displayAvatarURL())
 			.setDescription([
 				'[Invite Link](https://www.hydractify.org/invite)',
-				'[Patreon](https://www.patreon.com/kannathebot)',
+				'[Patreon](https://www.patreon.com/hydractify)',
 				'[Support Server / Official Server](https://discord.gg/uBdXdE9)',
 				'[Official Weebsite](https://www.hydractify.org)',
-				'[Wiki / Kanna 101](https://github.com/TheDragonProject/wiki)',
+				'[Wiki / Kanna 101](https://github.com/hydractify/wiki)',
 			].join('\n'))
 			.setThumbnail(message.guild.iconURL());
 
