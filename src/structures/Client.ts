@@ -18,6 +18,7 @@ import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
 import { IResponsiveEmbedController } from '../types/IResponsiveEmbedController';
 import { UserTypes } from '../types/UserTypes';
+import { updateBotLists } from '../util/botlists';
 import { generateColor } from '../util/generateColor';
 import { CommandHandler } from './CommandHandler';
 import { MessageEmbed } from './MessageEmbed';
@@ -54,6 +55,12 @@ export class Client extends DJSClient {
 	@RavenContext
 	protected _onceReady(): void {
 		(this as any).ws.connection.on('close', this._onDisconnect.bind(this));
+
+		this.webhook.info('Ready', `Logged in as ${this.user.tag} (${this.user.id})`);
+
+		if (this.shard.id === 0 && this.user.id === '297459926505095180') {
+			this.setInterval(updateBotLists.bind(this), 30 * 60 * 1000);
+		}
 	}
 
 	@on('disconnect')
