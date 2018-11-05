@@ -4,18 +4,9 @@ import { APIRouter, buildRouter } from '../structures/Api';
 import { Client } from '../structures/Client';
 import { Logger } from '../structures/Logger';
 
-const { dbots, dbotsorg }: { [key: string]: string } = require('../../data.json');
+const { dbotsorg }: { [key: string]: string } = require('../../data.json');
 
-/* tslint:disable variable-name */
-const DBots: () => APIRouter = buildRouter({
-	baseURL: 'https://bots.discord.pw',
-	defaultHeaders: {
-		accept: 'application/json',
-		authorization: dbots,
-		'content-type': 'application/json',
-	},
-});
-
+// tslint:disable-next-line:variable-name
 const DBotsOrg: () => APIRouter = buildRouter({
 	baseURL: 'https://discordbots.org',
 	defaultHeaders: {
@@ -24,7 +15,6 @@ const DBotsOrg: () => APIRouter = buildRouter({
 		'content-type': 'application/json',
 	},
 });
-/* tslint:enable variable-name */
 
 export async function updateBotLists(this: Client): Promise<void> {
 	const count: number = await this.shard.fetchClientValues('guild.size')
@@ -34,19 +24,9 @@ export async function updateBotLists(this: Client): Promise<void> {
 	Logger.instance.debug('BotLists', `Updating guild count for bot lists to ${count} guilds.`);
 
 	const data: { server_count: number } = { server_count: count };
-	try {
-		await DBots().api.bots(this.user.id).stats.post({ data });
-	} catch (error) {
-		captureException(error, {
-			extra: { guild_count: count },
-			tags: { service: 'dbots' },
-		});
-
-		this.webhook.error('dbots', 'Failed updating guild count:');
-	}
 
 	try {
-		DBotsOrg().api.bots(this.user.id).stats.post({ data });
+		await DBotsOrg().api.bots(this.user.id).stats.post({ data });
 	} catch (error) {
 		captureException(error, {
 			extra: { guild_count: count },
