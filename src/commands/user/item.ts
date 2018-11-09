@@ -114,7 +114,7 @@ class ItemCommand extends Command {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(
 				`Information about the ${item.type.toLowerCase()} "${titleCase(item.name)}"`,
-				this.client.user.displayAvatarURL(),
+				this.client.user!.displayAvatarURL(),
 			)
 			.setThumbnail(message.guild.iconURL())
 			.setDescription(item.description || '\u200b');
