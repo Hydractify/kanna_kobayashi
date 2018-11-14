@@ -42,7 +42,7 @@ class PrefixCommand extends Command {
 	public async run(message: Message, [newPrefix]: [string | undefined]): Promise<Message | Message[]> {
 		if (!newPrefix) {
 			const prefixes: string =
-				`always working prefixes are: \`@${this.client.user!.tag} \u200b\`, \`k!\` and \`kanna \u200b\``;
+				`always working prefixes are: \`@${this.client.user.tag} \u200b\`, \`k!\` and \`kanna \u200b\``;
 			if (!message.guild.model.prefix) {
 				return message.reply(prefixes);
 			}

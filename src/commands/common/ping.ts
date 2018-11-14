@@ -20,7 +20,7 @@ class PingCommand extends Command {
 
 		return sent.edit([
 			`It took me **${sent.createdTimestamp - message.createdTimestamp}ms** to find and eat all insects!`,
-			` ~~**\`(WS: ${Math.floor(this.client.ws.ping)}ms)\`**~~ ${Emojis.KannaHungry}`,
+			` ~~**\`(WS: ${Math.floor(this.client.ping)}ms)\`**~~ ${Emojis.KannaHungry}`,
 		]);
 	}
 }

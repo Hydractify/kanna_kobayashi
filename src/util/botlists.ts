@@ -26,7 +26,7 @@ export async function updateBotLists(this: Client): Promise<void> {
 	const data: { server_count: number } = { server_count: count };
 
 	try {
-		await DBotsOrg().api.bots(this.user!.id).stats.post({ data });
+		await DBotsOrg().api.bots(this.user.id).stats.post({ data });
 	} catch (error) {
 		captureException(error, {
 			extra: { guild_count: count },

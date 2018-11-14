@@ -48,7 +48,7 @@ class StatsCommand extends Command {
 		].join(' ');
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setAuthor(`${this.client.user!.username}'s Stats (v${version})`, this.client.user!.displayAvatarURL())
+			.setAuthor(`${this.client.user.username}'s Stats (v${version})`, this.client.user.displayAvatarURL())
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL())
 			.addField(`Uptime ${Emojis.KannaHug}`, uptime, true)

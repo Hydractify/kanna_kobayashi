@@ -46,7 +46,7 @@ class ShowReputationCommand extends Command {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setAuthor(`Reputation for ${member.user.tag}`, message.client.user!.displayAvatarURL());
+			.setAuthor(`Reputation for ${member.user.tag}`, message.client.user.displayAvatarURL());
 		// One is always present here
 		if (positive) embed.addField('Positive', positive, true);
 		if (negative) embed.addField('Negative', negative, true);
