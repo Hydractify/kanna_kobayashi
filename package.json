@@ -4,7 +4,7 @@
 	"description": "A robot made for Discord.",
 	"main": "bin/shard.js",
 	"dependencies": {
-		"discord.js": "github:discordjs/discord.js",
+		"discord.js": "discordjs/discord.js#18f065867ce7f8369e2c660b62b093e092433822",
 		"moment": "^2.22.2",
 		"moment-duration-format": "^2.2.2",
 		"node-fetch": "^2.2.0",
