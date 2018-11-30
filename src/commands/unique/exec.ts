@@ -12,9 +12,11 @@ const execAsync: (command: string) => Promise<IExecResult> = promisify(exec);
 class ExecCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			coins: 0,
 			cooldown: 0,
 			description: 'Execute arbitrary input in a shell or terminal',
 			examples: ['exec echo hi'],
+			exp: 0,
 			guarded: true,
 			permLevel: PermLevels.DEV,
 			usage: 'exec <command>',

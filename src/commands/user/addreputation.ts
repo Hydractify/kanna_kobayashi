@@ -9,8 +9,10 @@ class AddReputationCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['rep', 'addrep', '++'],
+			coins: 0,
 			description: 'Add a positive reputation to a member',
 			examples: ['addrep @space#0302'],
+			exp: 0,
 			usage: 'addrep <Member>',
 		});
 	}

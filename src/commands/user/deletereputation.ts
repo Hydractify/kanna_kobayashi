@@ -8,9 +8,11 @@ class DeleteReputationCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['delrep', 'deleterep'],
+			coins: 0,
 			cooldown: 0,
 			description: 'Delete your reputation of a member',
 			examples: ['delrep @space#0302'],
+			exp: 0,
 			usage: 'deleterep <Member>',
 		});
 	}

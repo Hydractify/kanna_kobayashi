@@ -7,8 +7,10 @@ import { CommandHandler } from '../../structures/CommandHandler';
 class CommandStatusCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			coins: 0,
 			description: 'See whether a command is enabled or disabled',
 			examples: ['commandstatus', 'commandstatus say'],
+			exp: 0,
 			guarded: true,
 			usage: 'commandstatus [Command]',
 		});

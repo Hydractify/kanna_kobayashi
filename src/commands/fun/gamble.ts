@@ -9,6 +9,7 @@ import { resolveAmount } from '../../util/Util';
 class GambleCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			coins: 0,
 			description: 'Gamble your coins to get more!',
 			examples: [
 				'gamble 1000', 'gamble 1k',
@@ -16,6 +17,7 @@ class GambleCommand extends Command {
 				'gamble 1000000000', 'gamble 1b',
 				'gamble 1234', 'gamble 1k234',
 			],
+			exp: 0,
 			usage: 'gamble <Amount>',
 		});
 	}

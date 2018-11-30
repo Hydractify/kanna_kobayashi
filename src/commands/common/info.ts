@@ -9,8 +9,10 @@ class InfoCommand extends Command {
 		super(handler, {
 			aliases: ['invite', 'patreon', 'guild', 'ghearts'],
 			clientPermissions: ['EMBED_LINKS'],
+			coins: 0,
 			description: 'All the useful links you need!',
 			examples: ['info'],
+			exp: 0,
 			guarded: true,
 			usage: 'info',
 		});

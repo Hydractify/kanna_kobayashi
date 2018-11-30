@@ -11,9 +11,11 @@ class BreakUpCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['divorce'],
+			coins: 0,
 			cooldown: 1e4,
 			description: 'Break up with your current partner',
 			examples: ['breakup'],
+			exp: 0,
 			usage: 'breakup',
 		});
 	}

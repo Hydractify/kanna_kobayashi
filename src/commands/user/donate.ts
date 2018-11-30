@@ -13,6 +13,7 @@ class DonateCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['give', 'transfer', 'trade'],
+			coins: 0,
 			description: 'Give money to someone!',
 			examples: [
 				'give wizard bug net',
@@ -21,6 +22,7 @@ class DonateCommand extends Command {
 				'give wizard 1000000000', 'give wizard 1b',
 				'give wizard 1234', 'give wizard 1k234',
 			],
+			exp: 0,
 			usage: 'donate <User> <Item|Amount> [Amount]',
 		});
 	}

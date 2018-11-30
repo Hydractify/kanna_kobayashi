@@ -10,8 +10,10 @@ class DisableCommandCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['disable'],
+			coins: 0,
 			description: 'Disable a command',
 			examples: ['disable say', 'disable sayd'],
+			exp: 0,
 			guarded: true,
 			permLevel: PermLevels.HUMANTAMER,
 			usage: 'disablecommand <Command>',

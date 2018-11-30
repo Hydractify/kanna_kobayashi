@@ -9,9 +9,11 @@ import { UserTypes } from '../../types/UserTypes';
 class WhitelistCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			coins: 0,
 			cooldown: 0,
 			description: 'Whitelist a user, allowing their bot guilds to use the bot',
 			examples: ['whitelist @space#0302'],
+			exp: 0,
 			guarded: true,
 			permLevel: PermLevels.TRUSTED,
 			usage: 'whitelist <User> [\'remove\']',

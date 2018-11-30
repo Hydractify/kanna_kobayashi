@@ -10,9 +10,11 @@ class DailyCommand extends Command {
 		super(handler, {
 			aliases: ['dailies'],
 			// One day 24 hours * 60 minutes * 60 second * 1000 milliseconds
+			coins: 0,
 			cooldown: 24 * 60 * 60 * 1000,
 			description: 'Your daily 200 coins!',
 			examples: ['daily'],
+			exp: 0,
 			usage: 'daily',
 		});
 	}

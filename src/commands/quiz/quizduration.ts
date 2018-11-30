@@ -10,6 +10,7 @@ class QuizDurationCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['qduration'],
+			coins: 0,
 			description: 'Change or view the selected duration of the quiz!',
 			examples: [
 				'qduration view',
@@ -17,6 +18,7 @@ class QuizDurationCommand extends Command {
 				'qduration set 5m',
 				'qduration set 1h30m',
 			],
+			exp: 0,
 			permLevel: PermLevels.DRAGONTAMER,
 			usage: 'quizduration <\'view\'|\'set\'> [Minutes]',
 		});

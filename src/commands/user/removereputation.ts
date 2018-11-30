@@ -9,9 +9,11 @@ class RemoveReputationCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['removerep', '--'],
+			coins: 0,
 			cooldown: 0,
 			description: 'Add a negative reputation to a member',
 			examples: ['removerep @space#0302'],
+			exp: 0,
 			usage: 'removerep <Member>',
 		});
 	}

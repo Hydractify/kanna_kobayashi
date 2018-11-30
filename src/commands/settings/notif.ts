@@ -8,12 +8,14 @@ class NotifChannelCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['notif-channel', 'notif', 'notif_channel'],
+			coins: 0,
 			description: 'Get or set a custom channel for welcome and farewell messages',
 			examples: [
 				'notif',
 				'notif #general',
 				'notif remove // to remove the channel',
 			],
+			exp: 0,
 			guarded: true,
 			permLevel: PermLevels.HUMANTAMER,
 			usage: 'notif [Channel]',

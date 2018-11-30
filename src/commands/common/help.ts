@@ -24,14 +24,15 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		super(handler, {
 			aliases: ['halp', 'commands'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'READ_MESSAGE_HISTORY'],
+			coins: 0,
 			cooldown: 10000,
 			description: [
 				'Let me show you all the commands (or a specifc one), that I have!',
 				'_PS: Use the arrow reactions to scroll through categories_',
 			].join('\n'),
 			examples: ['help ping', 'help'],
+			exp: 0,
 			guarded: true,
-			permLevel: 0,
 			usage: 'help [Command|Category]',
 		});
 	}

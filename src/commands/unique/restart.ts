@@ -7,8 +7,10 @@ import { PermLevels } from '../../types/PermLevels';
 class RestartCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
+			coins: 0,
 			description: 'Restarts Kanna!',
 			examples: ['restart', 'restart 1'],
+			exp: 0,
 			permLevel: PermLevels.TRUSTED,
 			usage: 'restart [Number]',
 		});

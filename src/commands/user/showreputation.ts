@@ -11,8 +11,10 @@ class ShowReputationCommand extends Command {
 		super(handler, {
 			aliases: ['showrep'],
 			clientPermissions: ['EMBED_LINKS'],
+			coins: 0,
 			description: 'Show the reputation of a member',
 			examples: ['showrep @space#0302'],
+			exp: 0,
 			usage: 'showrep <Member>',
 		});
 	}

@@ -21,8 +21,10 @@ class ItemCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
+			coins: 0,
 			description: 'Check an item\'s information or give an item one of your friends!',
 			examples: ['item check patron'],
+			exp: 0,
 			usage: 'item <Target>',
 		});
 	}

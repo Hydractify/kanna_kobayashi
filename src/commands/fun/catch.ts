@@ -2,7 +2,7 @@ import { Message } from 'discord.js';
 import { Transaction } from 'sequelize';
 
 import { Item } from '../../models/Item';
-import { User as UserModel} from '../../models/User';
+import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
@@ -13,8 +13,10 @@ class CatchCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['bughunt'],
+			coins: 0,
 			description: 'Grab your Bug Net and let\'s go catch some bugs!',
 			examples: ['catch'],
+			exp: 0,
 			usage: 'catch',
 		});
 	}

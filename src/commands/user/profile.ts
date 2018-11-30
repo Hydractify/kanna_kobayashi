@@ -14,8 +14,10 @@ class ProfileCommand extends Command {
 		super(handler, {
 			aliases: ['pf'],
 			clientPermissions: ['EMBED_LINKS'],
+			coins: 0,
 			description: 'Display someones or your own profile',
 			examples: ['profile', 'profile wizard'],
+			exp: 0,
 			usage: 'profile [User]',
 		});
 	}

@@ -27,6 +27,7 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 		super(handler, {
 			aliases: ['store'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'READ_MESSAGE_HISTORY'],
+			coins: 0,
 			cooldown: 10000,
 			description: 'This is the ~~black~~ market... Buy, sell, and see info about items and badges!',
 			examples: [
@@ -36,6 +37,7 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 				'market Dragon Scale',
 				'market show Dragon Scale',
 			],
+			exp: 0,
 			usage: 'market [\'buy\'|\'sell\'|\'show\'|Item] [Item] [Count]',
 		});
 	}

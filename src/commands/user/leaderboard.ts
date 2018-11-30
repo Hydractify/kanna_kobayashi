@@ -18,6 +18,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		super(handler, {
 			aliases: ['lb'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'READ_MESSAGE_HISTORY'],
+			coins: 0,
 			description: 'See the best of the best!',
 			examples: [
 				'leaderboard level',
@@ -26,6 +27,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 				'leaderboard level 15023',
 				'leaderboard level 15k23',
 			],
+			exp: 0,
 			usage: 'leaderboard [\'exp\', \'level\', \'coins\', \'reputation\'] [offset]',
 		});
 	}

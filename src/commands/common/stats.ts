@@ -14,9 +14,11 @@ class StatsCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['kannastats', 'bstats'],
+			coins: 0,
 			cooldown: 0,
 			description: 'Stats about the bot',
 			examples: ['stats'],
+			exp: 0,
 			usage: 'stats',
 		});
 	}
