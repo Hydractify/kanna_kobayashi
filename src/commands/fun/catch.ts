@@ -2,7 +2,6 @@ import { Message } from 'discord.js';
 import { Transaction } from 'sequelize';
 
 import { Item } from '../../models/Item';
-import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
@@ -33,41 +32,42 @@ class CatchCommand extends Command {
 		let netBreak: boolean = false;
 
 		const breakChance: number = Math.floor(Math.random() * 1000);
-		const bugChance: number = Math.floor(Math.random() * 100);
+		const bugChance: number = Math.floor(Math.random() * 100) + 1;
 
 		if (bugChance === 100) {
 			bugAmount = 6;
-			netBreak = Boolean(breakChance > 445);
+			netBreak = breakChance > 445;
 		} else if (bugChance > 90) {
 			bugAmount = 5;
-			netBreak = Boolean(breakChance > 500);
+			netBreak = breakChance > 500;
 		} else if (bugChance > 80) {
 			bugAmount = 4;
-			netBreak = Boolean(breakChance > 550);
+			netBreak = breakChance > 550;
 		} else if (bugChance > 70) {
 			bugAmount = 3;
-			netBreak = Boolean(breakChance > 635);
+			netBreak = breakChance > 635;
 		} else if (bugChance > 60) {
 			bugAmount = 2;
-			netBreak = Boolean(breakChance > 700);
+			netBreak = breakChance > 700;
 		} else if (bugChance > 50) {
 			bugAmount = 1;
-			netBreak = Boolean(breakChance > 850);
+			netBreak = breakChance > 850;
 		}
 
-		const transaction: Transaction = await this.sequelize.transaction();
-		try {
-			await Promise.all<number | null, number, UserModel>([
-				netBreak ? authorModel.addItem(Items.BUG_NET, -1, { transaction }) : null,
-				authorModel.addItem(Items.BUG, bugAmount, { transaction }),
-				authorModel.save({ transaction }),
-			]);
+		if (netBreak || bugAmount) {
+			const transaction: Transaction = await this.sequelize.transaction();
+			try {
+				await Promise.all<number | null, number | null>([
+					netBreak ? authorModel.addItem(Items.BUG_NET, -1, { transaction }) : null,
+					bugAmount ? authorModel.addItem(Items.BUG, bugAmount, { transaction }) : null,
+				]);
 
-			await transaction.commit();
-		} catch (error) {
-			await transaction.rollback();
+				await transaction.commit();
+			} catch (error) {
+				await transaction.rollback();
 
-			throw error;
+				throw error;
+			}
 		}
 
 		return message.channel.send([
