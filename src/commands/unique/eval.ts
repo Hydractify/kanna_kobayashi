@@ -14,7 +14,7 @@ class EvalCommand extends Command {
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['evaluate', 'broadcasteval'],
+			aliases: ['evaluate', 'broadcasteval', 'beval'],
 			coins: 0,
 			cooldown: 0,
 			description: 'Evaluate arbitrary JavaScript code',
@@ -31,7 +31,7 @@ class EvalCommand extends Command {
 		let code: string = args.join(' ');
 		if (code.includes('await')) code = `(async()=>{${code}})()`;
 		try {
-			let evaled: any = commandName === 'broadcasteval'
+			let evaled: any = ['broadcasteval', 'beval'].includes(commandName)
 				? await this.client.shard.broadcastEval(code)
 				// tslint:disable-next-line:no-eval
 				: await eval(code);
