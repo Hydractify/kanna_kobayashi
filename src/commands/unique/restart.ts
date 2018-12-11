@@ -11,6 +11,7 @@ class RestartCommand extends Command {
 			description: 'Restarts Kanna!',
 			examples: ['restart', 'restart 1'],
 			exp: 0,
+			guarded: true,
 			permLevel: PermLevels.TRUSTED,
 			usage: 'restart [Number]',
 		});
