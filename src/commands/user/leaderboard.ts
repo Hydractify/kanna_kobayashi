@@ -124,7 +124,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		const embed: MessageEmbed = MessageEmbed.common({ author }, await author.fetchModel())
 			.setTitle(`${titleCase(type)} Leaderboard`);
 
-		embed.footer.text += ` | ${type}:${offset} | Leaderboard`;
+		embed.footer.text += ` | ${type}:${offset} \u200b| Leaderboard`;
 
 		if (!users.length) return embed.setDescription(`There is no user with the rank #${offset}.`);
 

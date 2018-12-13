@@ -169,7 +169,8 @@ export class Client extends DJSClient {
 			message: 'Info about the embed',
 		});
 
-		const [, tag, name]: RegExpExecArray = /^Requested by (.+?) \|.* (.+)$/.exec(reaction.message.embeds[0].footer.text!)
+		const [, tag, name]: RegExpExecArray = /^Requested by (.+?) \u200b\|.* (.+)$/
+			.exec(reaction.message.embeds[0].footer.text!)
 			|| [] as any;
 		if (!tag || !name) {
 			reaction.message.channel.messages.delete(reaction.message.id);

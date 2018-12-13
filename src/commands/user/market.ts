@@ -277,7 +277,7 @@ class MarketCommand extends Command implements IResponsiveEmbedController {
 		const embed: MessageEmbed = MessageEmbed.common({ author }, await author.fetchModel())
 			.setTitle(`Kanna\'s Market (${superior ? 'Dragon Scales' : 'Coins'}) | Page ${index + 1}`);
 
-		embed.footer.text += ' | Market';
+		embed.footer.text += ' \u200b| Market';
 
 		if (!items.length) return embed.setDescription('Nothing to see here, you maybe want to go back.');
 

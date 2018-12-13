@@ -161,7 +161,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 					'(https://github.com/TheDragonProject/Kanna-Kobayashi/wiki)',
 				].join(''));
 
-			embed.footer.text += ` | Page ${embeds.length + 1} | Help`;
+			embed.footer.text += ` \u200b| Page ${embeds.length + 1} | Help`;
 
 			for (const command of commands) {
 				if (command.permLevel > permLevel) continue;
