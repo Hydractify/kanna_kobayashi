@@ -132,7 +132,7 @@ class SelfRolesCommand extends Command {
 			}
 
 			if (message.member.roles.has(role.id)) {
-				await message.member.roles.remove(role, 'Requested removal of felfrole');
+				await message.member.roles.remove(role, 'Requested removal of selfrole');
 
 				return message.reply(`you no longer have the \`@${role.name}\` role!`);
 			} else {
