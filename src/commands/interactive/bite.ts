@@ -11,6 +11,7 @@ class BiteCommand extends WeebCommand {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			action: 'bit',
+			aliases: ['nom'],
 			description: 'Bite someone!',
 			emoji: Emojis.KannaShy,
 			examples: ['bite kanna', 'bite kanna wizard'],
@@ -24,12 +25,17 @@ class BiteCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
+		const action: string = commandName === 'cuddle' ? 'cuddled' : 'snuggled';
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `W-why did you bite me **${message.member.displayName}**?`,
 			dev: `Why did you bite ${members.first()!.name}!?`,
 			trusted: `${message.author}... Stop!`,
 		});
-		const baseString: string = this.computeBaseString(message, members);
+		const baseString: string = this.computeBaseString(
+			message,
+			members,
+			action,
+		);
 
 		return message.channel.send(baseString, embed);
 	}
