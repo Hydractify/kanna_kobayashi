@@ -14,7 +14,6 @@ class QuizStartCommand extends Command {
 		super(handler, {
 			aliases: ['qstart'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Starts a quiz event',
 			examples: ['qstart'],
 			exp: 0,

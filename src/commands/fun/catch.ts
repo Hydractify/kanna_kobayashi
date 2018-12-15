@@ -12,7 +12,6 @@ class CatchCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['bughunt'],
-			coins: 0,
 			description: 'Grab your Bug Net and let\'s go catch some bugs!',
 			examples: ['catch'],
 			exp: 0,

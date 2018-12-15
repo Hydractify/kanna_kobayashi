@@ -9,7 +9,6 @@ class FarewellMessageCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['leavemessage', 'farewell'],
-			coins: 0,
 			description: 'Sets, displays, or removes the farewell message!',
 			examples: [
 				'farewellmessage',

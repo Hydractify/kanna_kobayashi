@@ -12,7 +12,6 @@ class ProposeCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['marry'],
-			coins: 0,
 			cooldown: 1e4,
 			description: `Propose to someone... You love! ${Emojis.KannaShy}`,
 			examples: ['propose Wizard'],

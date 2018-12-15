@@ -7,7 +7,6 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 class PrefixCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			description: 'Get all available prefixes or set a custom one',
 			examples: [
 				'prefix',

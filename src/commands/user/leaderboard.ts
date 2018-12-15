@@ -12,13 +12,12 @@ import { Command as ProfileCommand } from './profile';
 
 class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 	public emojis: string[] = ['⬅', '1⃣', '2⃣', '3⃣', '4⃣', '➡'];
-	public types: string[] = ['exp', 'coins', 'reputation'];
+	public types: string[] = ['exp', 'reputation'];
 
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['lb'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'READ_MESSAGE_HISTORY'],
-			coins: 0,
 			description: 'See the best of the best!',
 			examples: [
 				'leaderboard level',
@@ -28,7 +27,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 				'leaderboard level 15k23',
 			],
 			exp: 0,
-			usage: 'leaderboard [\'exp\', \'level\', \'coins\', \'reputation\'] [offset]',
+			usage: 'leaderboard [\'exp\', \'level\', \'reputation\'] [offset]',
 		});
 	}
 
@@ -144,7 +143,6 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 				`${offset + i + 1}. ${tag}`,
 				[
 					`Level: ${user.level.toLocaleString()} (${user.exp.toLocaleString()} exp)`,
-					`Coins: ${user.coins.toLocaleString()}`,
 					`Reputation: ${user.reputation.toLocaleString()}`,
 				].join('\n'),
 				true,
@@ -163,7 +161,6 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 			// Not worth figuring out how to tell sequelize to build this query
 			`SELECT
 				"user"."id",
-				COALESCE("user"."coins", 0) as "coins",
 				COALESCE("user"."exp", 0) as "exp",
 				COALESCE(
 					sum(("user_reputations"."type"='POSITIVE')::int) - sum(("user_reputations"."type"='NEGATIVE')::int),

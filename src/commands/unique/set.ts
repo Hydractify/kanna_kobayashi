@@ -14,7 +14,6 @@ type SetCommandArgs = PartnerArgs | PatronArgs;
 class SetCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			cooldown: 0,
 			description: 'Command to help with various administrative tasks.',
 			examples: ['set'],

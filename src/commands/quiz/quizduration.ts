@@ -10,7 +10,6 @@ class QuizDurationCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['qduration'],
-			coins: 0,
 			description: 'Change or view the selected duration of the quiz!',
 			examples: [
 				'qduration view',

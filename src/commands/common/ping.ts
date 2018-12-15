@@ -7,7 +7,6 @@ import { Emojis } from '../../types/Emojis';
 class PingCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			description: 'See how long I need to see your message and send a response',
 			examples: ['ping'],
 			exp: 0,

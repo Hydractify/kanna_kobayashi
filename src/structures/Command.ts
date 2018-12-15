@@ -49,10 +49,6 @@ export abstract class Command {
 	 */
 	public readonly clientPermissions: PermissionString[];
 	/**
-	 * Base amount of coins that users receive
-	 */
-	public readonly coins: number;
-	/**
 	 * Time to wait between multiple usages of the command
 	 */
 	public readonly cooldown: number;
@@ -116,7 +112,6 @@ export abstract class Command {
 	protected constructor(handler: CommandHandler, {
 		aliases = [],
 		clientPermissions = [],
-		coins = 4,
 		cooldown = 5000,
 		description,
 		examples,
@@ -156,7 +151,6 @@ export abstract class Command {
 		this.aliases = aliases;
 		this.clientPermissions = clientPermissions;
 		this.client = handler.client;
-		this.coins = coins;
 		this.cooldown = cooldown;
 		this.description = description;
 		this.examples = examples;
@@ -237,7 +231,6 @@ export abstract class Command {
 	 * Returns the new level if user level'd up, or void if not.
 	 */
 	public async grantRewards(user: User, userModel: UserModel): Promise<number | void> {
-		if (!this.exp && !this.coins) return;
 
 		const { level } = userModel;
 		const multi: Multi = this.redis.multi();
@@ -247,12 +240,6 @@ export abstract class Command {
 			multi.hincrby(`users:${user.id}`, 'exp', this.exp);
 			userModel.exp += this.exp;
 			fields.exp = this.exp;
-		}
-
-		if (this.coins) {
-			multi.hincrby(`users:${user.id}`, 'coins', this.coins);
-			userModel.coins += this.coins;
-			fields.coins = this.coins;
 		}
 
 		await Promise.all([

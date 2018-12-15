@@ -13,7 +13,6 @@ class CommandUsageCommand extends Command {
 		super(handler, {
 			aliases: ['usage'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Stats about command usages',
 			examples: ['usage'],
 			exp: 0,
