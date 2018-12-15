@@ -25,7 +25,7 @@ class BiteCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		const action: string = commandName === 'cuddle' ? 'cuddled' : 'snuggled';
+		const action: string = commandName === 'bite' ? 'bit' : 'nommed';
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `W-why did you bite me **${message.member.displayName}**?`,
 			dev: `Why did you bite ${members.first()!.name}!?`,
