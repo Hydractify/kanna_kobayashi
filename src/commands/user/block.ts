@@ -24,7 +24,7 @@ class BlockCommand extends Command {
 
 		let { user }: { user?: User } = await this.resolver.resolveMember(args.join(' '), message.guild, false) || {};
 		if (!user) user = await this.resolver.resolveUser(args.join(' '), false);
-		if (!user) return `I could not find a non-bot user with that id or name ${args.join(' ')}.`;
+		if (!user) return `I could not find a non-bot user with that id or name: ${args.join(' ')}.`;
 
 		if (await authorModel.$has('blocked', user.id)) {
 			return `you already blocked ${user.tag}.`;
