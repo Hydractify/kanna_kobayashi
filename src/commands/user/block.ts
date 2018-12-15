@@ -30,6 +30,9 @@ class BlockCommand extends Command {
 			return `you already blocked ${user.tag}.`;
 		}
 
+		// Force the user to be in the database.
+		await user.fetchModel();
+
 		return [user];
 	}
 
