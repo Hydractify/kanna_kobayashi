@@ -231,6 +231,7 @@ export abstract class Command {
 	 * Returns the new level if user level'd up, or void if not.
 	 */
 	public async grantRewards(user: User, userModel: UserModel): Promise<number | void> {
+		if (!this.exp) return;
 
 		const { level } = userModel;
 		const multi: Multi = this.redis.multi();
