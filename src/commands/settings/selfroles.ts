@@ -9,7 +9,7 @@ import { mapIterable } from '../../util/Util';
 class SelfRolesCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			aliases: ['selfroles', 'sr'],
+			aliases: ['selfrole', 'sr'],
 			clientPermissions: ['MANAGE_ROLES'],
 			coins: 0,
 			description: [
