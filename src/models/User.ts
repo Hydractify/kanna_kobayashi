@@ -27,6 +27,7 @@ import { generateColor } from '../util/generateColor';
 import { CommandLog } from './CommandLog';
 import { Guild } from './Guild';
 import { Item } from './Item';
+import { UserBlock } from './UserBlock';
 import { UserItem } from './UserItem';
 import { UserReputation } from './UserReputation';
 
@@ -287,4 +288,26 @@ export class User extends Model<User> {
 		through: (): typeof Model => UserReputation,
 	})
 	public readonly repped: User[] | undefined;
+
+	/**
+	 * All users which blocked this user.
+	 */
+	@BelongsToMany(() => User, {
+		as: 'blocks',
+		foreignKey: 'blocker_id',
+		otherKey: 'blocked_id',
+		through: (): typeof Model => UserBlock,
+	})
+	public readonly blocks: User[] | undefined;
+
+	/**
+	 * All the users which this user blocked.
+	 */
+	@BelongsToMany(() => User, {
+		as: 'blocked',
+		foreignKey: 'blocked_id',
+		otherKey: 'blocker_id',
+		through: (): typeof Model => UserBlock,
+	})
+	public readonly blocked: User[] | undefined;
 }
