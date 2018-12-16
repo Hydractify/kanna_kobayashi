@@ -10,7 +10,7 @@ import {
 import { duration } from 'moment';
 // tslint:disable-next-line:no-import-side-effect
 import 'moment-duration-format';
-import { Multi, RedisClient } from 'redis-p';
+import { RedisClient } from 'redis-p';
 import { Sequelize } from 'sequelize-typescript';
 
 import { Redis } from '../decorators/RedisDecorator';
@@ -234,20 +234,14 @@ export abstract class Command {
 		if (!this.exp) return;
 
 		const { level } = userModel;
-		const multi: Multi = this.redis.multi();
-		const fields: { coins?: number; exp?: number } = {};
-
-		if (this.exp) {
-			multi.hincrby(`users:${user.id}`, 'exp', this.exp);
-			userModel.exp += this.exp;
-			fields.exp = this.exp;
-		}
 
 		await Promise.all([
-			multi.exec(),
-			userModel.increment(fields),
+			this.redis.hincrby(`users:${user.id}`, 'exp', this.exp),
+			userModel.increment({ exp: this.exp }),
+
 		]);
 
+		userModel.exp += this.exp;
 		if (userModel.level > level) return userModel.level;
 	}
 
