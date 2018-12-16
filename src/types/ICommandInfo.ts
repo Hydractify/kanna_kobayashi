@@ -5,7 +5,6 @@ import { PermLevels } from './PermLevels';
 export interface ICommandInfo {
 	aliases?: string[];
 	clientPermissions?: PermissionString[];
-	coins?: number;
 	cooldown?: number;
 	description: string;
 	examples: string[];
