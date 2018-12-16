@@ -59,7 +59,6 @@ export class User extends Model<User> {
 	public static fromRedis(data: { [key: string]: string | number | Date }): User {
 		if (data.partnerSince) data.partnerSince = new Date(Number(data.partnerSince));
 
-		data.coins = Number(data.coins) || 0;
 		data.exp = Number(data.exp) || 0;
 		data.tier = Number(data.tier) || 0;
 
@@ -197,12 +196,6 @@ export class User extends Model<User> {
 		foreignKey: 'user_id',
 	})
 	public readonly commandLogs: CommandLog[] | undefined;
-
-	@Column({
-		defaultValue: 0,
-		type: DataType.INTEGER,
-	})
-	public coins!: number;
 
 	@Column({
 		defaultValue: 0,

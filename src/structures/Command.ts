@@ -226,7 +226,7 @@ export abstract class Command {
 	}
 
 	/**
-	 * Grant a user coins and experience of the command.
+	 * Grant a user experience for using this command.
 	 *
 	 * Returns the new level if user level'd up, or void if not.
 	 */
