@@ -15,6 +15,7 @@ jobs:
         script: npm run build
 
       - stage: webhook
+        if: type != pull_request
         install: skip
         script:
           - chmod +x ./travis/webhook.sh

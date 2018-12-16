@@ -3,6 +3,7 @@ import { Collection, GuildMember, Message, Snowflake } from 'discord.js';
 import { User as UserModel } from '../models/User';
 import { Emojis } from '../types/Emojis';
 import { ICommandInfo } from '../types/ICommandInfo';
+import { ICommandRunInfo } from '../types/ICommandRunInfo';
 import { PermLevels } from '../types/PermLevels';
 import { IWeebResolvedMember } from '../types/weeb/IWeebResolvedMember';
 import { IWeebResponseTemplates } from '../types/weeb/IWeebResponseTemplate';
@@ -61,13 +62,26 @@ export abstract class WeebCommand extends Command {
 	public async parseArgs(
 		message: Message,
 		args: string[],
+		{ authorModel }: ICommandRunInfo,
 	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> {
-		if (!args.length) return `you must mention someone ${Emojis.KannaShy}`;
+		if (!args.length) return `you must mention someone ${Emojis.KannaShy}.`;
 
 		const members: Collection<Snowflake, IWeebResolvedMember> = await this.resolveMembers(args, message);
-		if (!members.size) return `I could not find anyone with ${args.join(' ')}`;
+		if (!members.size) return `I could not find anyone with ${args.join(' ')}.`;
 
-		return [members];
+		const ids: Snowflake[] = await authorModel
+			.$get<UserModel>('blocks', members.keyArray())
+			.then((users: UserModel | UserModel[]) => (users as UserModel[]).map((user: UserModel) => user.id));
+
+		if (ids.length === members.size) {
+			if (members.size === 1) {
+				return `${members.first()!.member.user.tag} blocked you from using interactive commands on them.`;
+			} else {
+				return `you were blocked by all mentioned users. ${Emojis.KannaSad}.`;
+			}
+		}
+
+		return [members.filter((m: IWeebResolvedMember) => !ids.includes(m.member.id))];
 	}
 
 	/**
