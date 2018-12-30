@@ -2,7 +2,7 @@
 import 'source-map-support/register';
 
 import { config } from 'raven';
-const { ravenToken } = require('../data');
+const { ravenToken, clientToken } = require('../data');
 config(process.env.NODE_ENV && process.env.NODE_ENV !== 'dev' && ravenToken, {
 	autoBreadcrumbs: true,
 	captureUnhandledRejections: true,
@@ -36,6 +36,6 @@ const client: Client = new Client({
 	messageCacheMaxSize: 5,
 });
 
-client.login()
+client.login(clientToken)
 	.catch((error: Error) => client.webhook.error('LOGIN', error)
 		.then(() => process.exit(1), () => process.exit(1)));

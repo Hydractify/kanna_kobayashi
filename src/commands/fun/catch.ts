@@ -1,11 +1,7 @@
 import { Message } from 'discord.js';
-import { Transaction } from 'sequelize';
 
-import { Item } from '../../models/Item';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
-import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { Items } from '../../types/Items';
 
 class CatchCommand extends Command {
 	public constructor(handler: CommandHandler) {
@@ -18,7 +14,7 @@ class CatchCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, item: Item[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(message: Message): Promise<Message | Message[]> {
 		let bugAmount: number = 0;
 
 		const bugChance: number = Math.floor(Math.random() * 100) + 1;
@@ -35,21 +31,6 @@ class CatchCommand extends Command {
 			bugAmount = 2;
 		} else if (bugChance > 50) {
 			bugAmount = 1;
-		}
-
-		if (bugAmount) {
-			const transaction: Transaction = await this.sequelize.transaction();
-			try {
-				await Promise.all<number | null>([
-					bugAmount ? authorModel.addItem(Items.BUG, bugAmount, { transaction }) : null,
-				]);
-
-				await transaction.commit();
-			} catch (error) {
-				await transaction.rollback();
-
-				throw error;
-			}
 		}
 
 		return message.channel.send(`You ${bugAmount ? `got **${bugAmount}** bugs! 🐛` : 'did not get any bugs...'}`);
