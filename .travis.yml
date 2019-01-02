@@ -5,7 +5,7 @@ node_js: 10
 
 after_failure:
   - chmod +x ./travis/webhook.sh
-  - ./travis/webhook.sh
+  - 'if [ "$TRAVIS_EVENT_TYPE" != "pull_request" ]; then ./travis/webhook.sh; fi'
 
 jobs:
     include:

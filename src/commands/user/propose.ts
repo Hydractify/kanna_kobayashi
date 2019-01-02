@@ -74,7 +74,7 @@ class ProposeCommand extends Command {
 		if (until > message.createdTimestamp) {
 			await message.reply([
 				`sorry but not enough time has passed since you two got together! ${Emojis.KannaShy}`,
-				`Try again in ${moment(until).fromNow()}.`,
+				`Try again ${moment(until).fromNow()}.`,
 			].join('\n'));
 
 			return false;

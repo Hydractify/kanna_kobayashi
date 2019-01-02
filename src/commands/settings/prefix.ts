@@ -3,11 +3,12 @@ import { Message } from 'discord.js';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { PermLevels } from '../../types/PermLevels';
 
 class PrefixCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			description: 'Get all available prefixes or set a custom one',
+			description: 'Get all available prefixes or set the custom one',
 			examples: [
 				'prefix',
 				'prefix "kamui "',
@@ -21,7 +22,7 @@ class PrefixCommand extends Command {
 
 	public parseArgs(message: Message, args: string[], { authorModel }: ICommandRunInfo): string | [string | undefined] {
 		if (args.length) {
-			if (authorModel.permLevel(message.member) < 2) {
+			if (authorModel.permLevel(message.member) < PermLevels.HUMANTAMER) {
 				return 'you do not have the required permission level to change the prefix!';
 			}
 
@@ -56,7 +57,7 @@ class PrefixCommand extends Command {
 		message.guild.model.prefix = newPrefix;
 		await message.guild.model.save();
 
-		return message.reply(`you set the guild specific prefix to \`${newPrefix}\u200b\``);
+		return message.reply(`you set the custom prefix to \`${newPrefix}\u200b\``);
 	}
 }
 

@@ -40,11 +40,11 @@ export class Guild extends Model<Guild> {
 
 	@Column({
 		set(this: Model<Guild>, value: string): void {
-			this.setDataValue('prefix', value.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'));
+			this.setDataValue('prefix', value ? value.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') : null);
 		},
 		type: DataType.TEXT,
 	})
-	public prefix!: string;
+	public prefix!: string | null;
 
 	@HasOne(() => Quiz, 'guildId')
 	public quiz?: Quiz;
