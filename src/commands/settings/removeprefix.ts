@@ -7,7 +7,6 @@ import { PermLevels } from '../../types/PermLevels';
 class RemovePrefixCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			description: 'Removes the custom prefix.',
 			examples: ['removeprefix'],
 			exp: 0,
