@@ -9,7 +9,6 @@ import { UserTypes } from '../../types/UserTypes';
 class BlacklistCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			cooldown: 0,
 			description: 'Blacklist a user, disallowing them and their guilds to use the bot',
 			examples: ['blacklist @space#0302'],

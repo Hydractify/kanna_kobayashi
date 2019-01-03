@@ -24,7 +24,6 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		super(handler, {
 			aliases: ['halp', 'commands'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'READ_MESSAGE_HISTORY'],
-			coins: 0,
 			cooldown: 10000,
 			description: [
 				'Let me show you all the commands (or a specifc one), that I have!',

@@ -10,7 +10,6 @@ class EnableCommandCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['enable'],
-			coins: 0,
 			description: 'Enable a command',
 			examples: ['enable say', 'enable sayd'],
 			exp: 0,

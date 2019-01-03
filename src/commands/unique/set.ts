@@ -4,7 +4,7 @@ import { Transaction } from 'sequelize';
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
-import { Items } from '../../types/Items';
+import { Badges } from '../../types/Badges';
 import { PermLevels } from '../../types/PermLevels';
 
 type PartnerArgs = ['partner', User, User, boolean];
@@ -14,7 +14,6 @@ type SetCommandArgs = PartnerArgs | PatronArgs;
 class SetCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			cooldown: 0,
 			description: 'Command to help with various administrative tasks.',
 			examples: ['set'],
@@ -93,9 +92,9 @@ class SetCommand extends Command {
 				model.tier = args[2];
 
 				if (args[2] === 0) {
-					await model.$remove('badges', Items.PATRON, { transaction });
+					await model.$remove('badges', Badges.PATRON, { transaction });
 				} else {
-					await model.$add('badges', Items.PATRON, { transaction });
+					await model.$add('badges', Badges.PATRON, { transaction });
 				}
 
 				await model.save({ transaction });

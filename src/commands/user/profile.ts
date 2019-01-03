@@ -1,12 +1,11 @@
 import { Guild, GuildMember, Message, User } from 'discord.js';
 import { QueryTypes } from 'sequelize';
 
-import { Item } from '../../models/Item';
+import { Badge } from '../../models/Badge';
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
-import { Emojis } from '../../types/Emojis';
 import { titleCase } from '../../util/Util';
 
 class ProfileCommand extends Command {
@@ -14,7 +13,6 @@ class ProfileCommand extends Command {
 		super(handler, {
 			aliases: ['pf'],
 			clientPermissions: ['EMBED_LINKS'],
-			coins: 0,
 			description: 'Display someones or your own profile',
 			examples: ['profile', 'profile wizard'],
 			exp: 0,
@@ -42,19 +40,11 @@ class ProfileCommand extends Command {
 	}
 
 	public async fetchEmbed({ author, guild }: { author: User, guild: Guild }, user: User): Promise<MessageEmbed> {
-		// No redis caching here because of includes, which wouldn't work then :c
-		// Better than a bunch of single queries tho
 		const [userModel] = await UserModel.findCreateFind({
 			include: [
 				{
-					as: 'items',
-					model: Item,
-					required: false,
-					through: { attributes: ['count'] },
-				},
-				{
 					as: 'badges',
-					model: Item,
+					model: Badge,
 					required: false,
 					through: { attributes: ['count'] },
 				},
@@ -89,8 +79,6 @@ class ProfileCommand extends Command {
 			.setDescription('\u200b')
 			.addField('Level', `${userModel.level} (${(userModel.exp || 0).toLocaleString()} exp)`, true)
 			.addField('Reputation', (reputation || 0).toLocaleString(), true)
-			.addField('Kanna Coins', `${(userModel.coins || 0).toLocaleString()} ${Emojis.Coin}`, true)
-			.addField('Items', this.mapItems(userModel.items!), true)
 			.addField('Badges', this.mapItems(userModel.badges!), true)
 			.addField('Relationship', partnerString, true);
 	}
@@ -99,12 +87,12 @@ class ProfileCommand extends Command {
 	 * Maps an array of items (or badges) to a readable string.
 	 * @param items Array of items to map
 	 */
-	private mapItems(items: Item[]): string {
+	private mapItems(items: Badge[]): string {
 		if (!items || !items.length) return 'None';
 
 		const formatted: string[] = [];
 		for (const item of items) {
-			formatted.push(`${item.unique ? '' : `[${item.userItem!.count}]`} ${titleCase(item.name.replace(/_/g, ' '))}`);
+			formatted.push(`[${item.userItem!.count}] ${titleCase(item.name.replace(/_/g, ' '))}`);
 		}
 
 		return formatted.join('\n');

@@ -8,7 +8,6 @@ import { PermLevels } from '../../types/PermLevels';
 class PrefixCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			description: 'Get all available prefixes or set the custom one',
 			examples: [
 				'prefix',

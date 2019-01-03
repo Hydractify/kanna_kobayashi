@@ -7,7 +7,6 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 class BlockCommand extends Command {
 	constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			description: 'Block a user, disallowing them from using any interactive commands on you.',
 			examples: ['block space'],
 			exp: 0,

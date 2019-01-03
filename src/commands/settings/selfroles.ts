@@ -11,7 +11,6 @@ class SelfRolesCommand extends Command {
 		super(handler, {
 			aliases: ['selfrole', 'sr'],
 			clientPermissions: ['MANAGE_ROLES'],
-			coins: 0,
 			description: [
 				'Assign yourself a role, remove it or display all available ones',
 				'If you are elevated you may also remove or add available roles',

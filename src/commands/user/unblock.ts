@@ -7,7 +7,6 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 class UnblockCommand extends Command {
 	constructor(handler: CommandHandler) {
 		super(handler, {
-			coins: 0,
 			description: 'Unblock a user, allowing them to use interactive commands on you again.',
 			examples: ['unblock space'],
 			exp: 0,

@@ -19,14 +19,13 @@ import {
 } from 'sequelize-typescript';
 
 import { Redis } from '../decorators/RedisDecorator';
-import { Items } from '../types/Items';
-import { ItemTypes } from '../types/ItemTypes';
+import { Badges } from '../types/Badges';
 import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
 import { generateColor } from '../util/generateColor';
+import { Badge } from './Badge';
 import { CommandLog } from './CommandLog';
 import { Guild } from './Guild';
-import { Item } from './Item';
 import { UserBlock } from './UserBlock';
 import { UserItem } from './UserItem';
 import { UserReputation } from './UserReputation';
@@ -59,7 +58,6 @@ export class User extends Model<User> {
 	public static fromRedis(data: { [key: string]: string | number | Date }): User {
 		if (data.partnerSince) data.partnerSince = new Date(Number(data.partnerSince));
 
-		data.coins = Number(data.coins) || 0;
 		data.exp = Number(data.exp) || 0;
 		data.tier = Number(data.tier) || 0;
 
@@ -157,7 +155,7 @@ export class User extends Model<User> {
 	 * @param count Optional number of items to give, defaults to 1
 	 * @returns New item count
 	 */
-	public async addItem(item: Item | Items, count: number = 1, options: QueryOptions = {}): Promise<number> {
+	public async addItem(item: Badge | Badges, count: number = 1, options: QueryOptions = {}): Promise<number> {
 		const itemName: string = typeof item === 'string'
 			? item
 			: item.name;
@@ -197,12 +195,6 @@ export class User extends Model<User> {
 		foreignKey: 'user_id',
 	})
 	public readonly commandLogs: CommandLog[] | undefined;
-
-	@Column({
-		defaultValue: 0,
-		type: DataType.INTEGER,
-	})
-	public coins!: number;
 
 	@Column({
 		defaultValue: 0,
@@ -249,23 +241,13 @@ export class User extends Model<User> {
 	})
 	public partnerMarried!: boolean | null;
 
-	@BelongsToMany(() => Item, {
+	@BelongsToMany(() => Badge, {
 		as: 'badges',
 		foreignKey: 'user_id',
 		otherKey: 'item_name',
-		scope: { type: ItemTypes.BADGE },
 		through: (): typeof Model => UserItem,
 	})
-	public readonly badges: Item[] | undefined;
-
-	@BelongsToMany(() => Item, {
-		as: 'items',
-		foreignKey: 'user_id',
-		otherKey: 'item_name',
-		scope: { type: ItemTypes.ITEM },
-		through: (): typeof Model => UserItem,
-	})
-	public readonly items: Item[] | undefined;
+	public readonly badges: Badge[] | undefined;
 
 	/**
 	 * All users who added a reputation to the user

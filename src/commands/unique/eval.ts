@@ -15,7 +15,6 @@ class EvalCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			aliases: ['evaluate', 'broadcasteval', 'beval'],
-			coins: 0,
 			cooldown: 0,
 			description: 'Evaluate arbitrary JavaScript code',
 			examples: ['eval 1+1'],
