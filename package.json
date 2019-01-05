@@ -1,6 +1,6 @@
 {
 	"name": "kanna-kobayashi",
-	"version": "4.1.3",
+	"version": "4.2.0",
 	"description": "A robot made for Discord.",
 	"main": "bin/shard.js",
 	"dependencies": {
@@ -40,8 +40,8 @@
 		"url": "git+https://github.com/hydractify/kanna-kobayashi.git"
 	},
 	"contributors": [
-		"Alexandre Cavalheiro <alexandre.cssilva@gmail.com>",
-		"SpaceEEC"
+		"Alexandre Cavalheiro <wizardlink@hydractify.org>",
+		"SpaceEEC <space@hydractify.org>"
 	],
 	"license": "ISC",
 	"bugs": {
