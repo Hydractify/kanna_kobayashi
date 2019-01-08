@@ -40,7 +40,9 @@ class ShardClientUtilExtension {
 		if (typeof fn !== 'string') {
 			stringified = String(fn);
 
-			if (!/(^function|^\(.*\) =>)/.test(stringified)) {
+			if (/^async .* \{/.test(stringified)) {
+				stringified = `async function ${stringified.slice(5)}`;
+			} else if (!/(^function|^\(.*\) =>)/.test(stringified)) {
 				stringified = `function ${stringified}`;
 			}
 

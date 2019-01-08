@@ -16,34 +16,54 @@ class ReloadCommand extends Command {
 			exp: 0,
 			guarded: true,
 			permLevel: PermLevels.TRUSTED,
-			usage: 'You should know how to use this.',
+			usage: 'reload <...Command>',
 		});
 	}
 	public parseArgs(message: Message, args: string[]): string | string[] {
-		if (!args.length) return 'you should supply a command to reload.';
+		if (!args.length) return 'you should supply at least one command to reload.';
+
+		for (const name of args) {
+			const command: Command | undefined = this.handler.resolveCommand(name.toLowerCase());
+			if (!command) return `could not resolve \`${name}\` to a command.`;
+		}
 
 		return args;
 	}
 
-	public async run(message: Message, [commandName]: string[]): Promise<Message | Message[]> {
-		if (!commandName) return message.reply('you should supply a command to reload.');
+	public async run(message: Message, commands: string[]): Promise<Message | Message[]> {
+		const results: [number, [string, IPlainError][]][] = await this.client.shard
+			.broadcastEval(this.reloadCommands, commands);
 
-		const results: [number, IPlainError | undefined][] = await this.client.shard.broadcastEval(
-			// tslint:disable-next-line:no-shadowed-variable
-			(client: Client, [commandName]: string[]): Promise<[number, IPlainError | undefined]> =>
-				client.commandHandler.reloadCommand(commandName)
-					.then<[number, undefined]>(() =>
-						([client.shard.id, undefined]),
-					).catch<[number, IPlainError]>((e: IPlainError) =>
-						([client.shard.id, require('discord.js').Util.makePlainError(e) as IPlainError]),
-					),
-			[commandName],
-		);
+		const errorMap = new Map<string, string[]>();
 
-		return message.channel.send(results.map(
-			([id, error]: [number, IPlainError | undefined]) =>
-				`Shard: ${id} - ${error ? `\`${error.message}\`` : 'Success'}`,
-		).join('\n'));
+		for (const [id, errors] of results) {
+			for (const [command, { message: error }] of errors) {
+				const alr = errorMap.get(command);
+				if (alr) alr.push(`${id} - ${error}`);
+				else errorMap.set(command, [`${id} - ${error}`]);
+			}
+		}
+
+		let out: string = 'something went wrong.\n';
+
+		for (const [command, errors] of errorMap) {
+			out += `**${command[0].toUpperCase() + command.slice(1)}**:\n    ${errors.join('    \n')}\n`;
+		}
+
+		return message.reply(errorMap.size ? out : 'everything reloaded successfully.');
+	}
+
+	private async reloadCommands(client: Client, commands: string[]): Promise<[number, [string, IPlainError][]]> {
+		const failures: [string, IPlainError][] = [];
+		for (const command of commands) {
+			try {
+				await client.commandHandler.reloadCommand(command);
+			} catch (e) {
+				failures.push([command, require('discord.js').Util.makePlainError(e) as IPlainError])
+			}
+		}
+
+		return [client.shard.id, failures];
 	}
 }
 
