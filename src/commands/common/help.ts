@@ -55,7 +55,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 	}
 
 	public async onCollect({ emoji, users, message }: MessageReaction, user: User): Promise<Message | undefined> {
-		const [, rawPage]: RegExpExecArray = /.+? \| Page (\d+) \|/.exec(message.embeds[0].footer.text!) || [] as any;
+		const [, rawPage]: RegExpExecArray = /.+? \u200b\| Page (\d+) \|/.exec(message.embeds[0].footer.text!) || [] as any;
 		if (!rawPage) return;
 
 		let page: number = parseInt(rawPage) - 1;

@@ -50,7 +50,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		user: User,
 	): Promise<Message | undefined> {
 		const [embed]: MessageEmbed[] = message.embeds as MessageEmbed[];
-		const [, type, match]: RegExpExecArray = /.+? \| (.+):(\d+) \|/
+		const [, type, match]: RegExpExecArray = /.+? \u200b\| (.+):(\d+) \|/
 			.exec(message.embeds[0].footer.text!) || [] as any;
 		let offset: number = parseInt(match);
 
