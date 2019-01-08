@@ -59,7 +59,7 @@ class ReloadCommand extends Command {
 			try {
 				await client.commandHandler.reloadCommand(command);
 			} catch (e) {
-				failures.push([command, require('discord.js').Util.makePlainError(e) as IPlainError])
+				failures.push([command, require('discord.js').Util.makePlainError(e) as IPlainError]);
 			}
 		}
 
