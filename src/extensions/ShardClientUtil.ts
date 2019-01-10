@@ -16,8 +16,16 @@ class ShardClientUtilExtension {
 		if (message._fetchProp) {
 			const props: string[] = message._fetchProp.split('.');
 			let value: any = this.client;
-			for (const prop of props) value = value[prop];
-			this._respond('fetchProp', { _fetchProp: message._fetchProp, _result: value });
+			try {
+				for (const prop of props) value = value[prop];
+
+				// Checking for circulars; Not reassigning is intended.
+				JSON.stringify(value);
+
+				this._respond('fetchProp', { _fetchProp: message._fetchProp, _result: value });
+			} catch (err) {
+				this._respond('fetchProp', { _fetchProp: message._fetchProp, _error: Util.makePlainError(err) });
+			}
 		} else if (message._eval) {
 			try {
 				const _result: any = await this.client._eval(message._eval);
