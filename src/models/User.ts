@@ -55,9 +55,10 @@ export class User extends Model<User> {
 	/**
 	 * Build a User model from redis data.
 	 */
-	public static fromRedis(data: { [key: string]: string | number | Date }): User {
+	public static fromRedis(data: { [key: string]: string | number | Date | boolean }): User {
 		if (data.partnerSince) data.partnerSince = new Date(Number(data.partnerSince));
 
+		data.partnerHidden = data.partnerHidden === 'true';
 		data.exp = Number(data.exp) || 0;
 		data.tier = Number(data.tier) || 0;
 
@@ -240,6 +241,13 @@ export class User extends Model<User> {
 		type: DataType.BOOLEAN,
 	})
 	public partnerMarried!: boolean | null;
+
+	@Column({
+		defaultValue: false,
+		field: 'partner_hidden',
+		type: DataType.BOOLEAN,
+	})
+	public partnerHidden!: boolean;
 
 	@BelongsToMany(() => Badge, {
 		as: 'badges',
