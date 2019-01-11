@@ -39,7 +39,7 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 		get(target: () => void, name: string): any {
 			if (reflectors.includes(name)) return (): string => route.join('/');
 			if (methods.includes(name)) {
-				return <T = any>(options: IAPIOptions): Promise<T> => {
+				return async <T = any>(options: IAPIOptions = {}): Promise<T> => {
 					let url: string = `${baseURL}${route.join('/')}`;
 					if (options.query) {
 						const queryString: string = (stringify({
@@ -49,29 +49,31 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 						url += `?${queryString}`;
 					}
 
-					return fetch.default(url, {
+					const res: fetch.Response = await fetch.default(url, {
 						body: options.data ? JSON.stringify(options.data) : undefined,
 						headers: options.headers
 							? { ...options.headers, ...defaultHeaders }
 							: defaultHeaders,
 						method: name,
-					}).then((res: fetch.Response) => {
-						if (res.ok) return res[options.type || 'json']();
-
-						if (res.status === 404 && catchNotFound) return undefined;
-
-						return res.json()
-							.catch(() => res.buffer())
-							.catch(() => res.text())
-							.catch(() => null)
-							.then((body: any) =>
-								Promise.reject({
-									body,
-									...new Error(`${res.status}: ${res.statusText}`),
-									...res,
-								}),
-							);
 					});
+
+					if (res.ok) return res[options.type || 'json']();
+
+					if (res.status === 404 && catchNotFound) return undefined as any;
+
+					return res.json()
+						.catch(() => res.buffer())
+						.catch(() => res.text())
+						.catch(() => null)
+						.then((body: any) =>
+							Promise.reject(
+								Object.assign(
+									new Error(`${res.status}: ${res.statusText}`),
+									body,
+									res,
+								),
+							),
+						);
 				};
 			}
 			route.push(name);
