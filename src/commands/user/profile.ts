@@ -64,14 +64,18 @@ class ProfileCommand extends Command {
 			},
 		);
 
-		const partner: User | undefined = userModel.partnerId
-			? this.client.users.get(userModel.partnerId)
-			|| await this.client.users.fetch(userModel.partnerId).catch(() => undefined)
-			: undefined;
+		let partnerString: string = 'Hidden';
 
-		const partnerString: string = partner
-			? `${userModel.partnerMarried ? 'Married' : 'Together'} with **${partner.tag}**`
-			: 'Single';
+		if (!userModel.partnerHidden) {
+			const partner: User | undefined = userModel.partnerId
+				? this.client.users.get(userModel.partnerId)
+				|| await this.client.users.fetch(userModel.partnerId).catch(() => undefined)
+				: undefined;
+
+			partnerString = partner
+				? `${userModel.partnerMarried ? 'Married' : 'Together'} with **${partner.tag}**`
+				: 'Single';
+		}
 
 		return MessageEmbed.common({ author }, userModel)
 			.setThumbnail(guild.iconURL())
