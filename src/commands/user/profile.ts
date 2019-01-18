@@ -86,15 +86,21 @@ class ProfileCommand extends Command {
 			userTime = `${time} (UTC ${timezone})`;
 		}
 
-		return MessageEmbed.common({ author }, userModel)
+		const embed: MessageEmbed = MessageEmbed.common({ author }, userModel)
 			.setThumbnail(guild.iconURL())
 			.setAuthor(`${titleCase(user.username)}'s Profile`, user.displayAvatarURL())
 			.setDescription('\u200b')
 			.addField('Level', `${userModel.level} (${(userModel.exp || 0).toLocaleString()} exp)`, true)
 			.addField('Reputation', (reputation || 0).toLocaleString(), true)
 			.addField('Badges', this.mapItems(userModel.badges!), true)
-			.addField('Relationship', partnerString, true)
-			.addField('Time', userTime, true);
+			.addField('Time', userTime, true)
+			.addField('Relationship', partnerString, true);
+
+		if (!userModel.partnerHidden && user === author && userModel.partnerId) {
+			embed.addField('Relationship Anniversary', moment(userModel.partnerSince!).format('YYYY-MM-DD'), true);
+		}
+
+		return embed;
 	}
 
 	/**
