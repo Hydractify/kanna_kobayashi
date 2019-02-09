@@ -1,4 +1,5 @@
 import { Guild, GuildMember, Message, User } from 'discord.js';
+import * as moment from 'moment';
 import { QueryTypes } from 'sequelize';
 
 import { Badge } from '../../models/Badge';
@@ -77,6 +78,14 @@ class ProfileCommand extends Command {
 				: 'Single';
 		}
 
+		let userTime: string = 'No timezone set.';
+
+		if (userModel.timezone || userModel.timezone === 0) {
+			const time = moment().utc().subtract(-(userModel.timezone), 'hours').format('dddd Do H:mm');
+			const timezone = userModel.timezone > 0 ? `+${userModel.timezone}` : userModel.timezone;
+			userTime = `${time} (UTC ${timezone})`;
+		}
+
 		return MessageEmbed.common({ author }, userModel)
 			.setThumbnail(guild.iconURL())
 			.setAuthor(`${titleCase(user.username)}'s Profile`, user.displayAvatarURL())
@@ -84,7 +93,8 @@ class ProfileCommand extends Command {
 			.addField('Level', `${userModel.level} (${(userModel.exp || 0).toLocaleString()} exp)`, true)
 			.addField('Reputation', (reputation || 0).toLocaleString(), true)
 			.addField('Badges', this.mapItems(userModel.badges!), true)
-			.addField('Relationship', partnerString, true);
+			.addField('Relationship', partnerString, true)
+			.addField('Time', userTime, true);
 	}
 
 	/**

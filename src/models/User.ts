@@ -249,6 +249,12 @@ export class User extends Model<User> {
 	})
 	public partnerHidden!: boolean;
 
+	@Column({
+		field: 'timezone',
+		type: DataType.INTEGER,
+	})
+	public timezone!: number;
+
 	@BelongsToMany(() => Badge, {
 		as: 'badges',
 		foreignKey: 'user_id',
