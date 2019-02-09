@@ -115,20 +115,24 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 			return undefined;
 		}
 
-		const commandEnabled: boolean = message.guild.model.disabledCommands.includes(command.name);
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user.displayAvatarURL())
 			.setDescription(command.description)
 			.setURL('https://thedragonproject.network/guild')
 			.setThumbnail(message.guild.iconURL());
-		if (command.aliases.length) {
-			embed.addField('Aliases', `kanna ${command.aliases.join('\nkanna ')}`);
+
+		if (message.guild.model.disabledCommands.includes(command.name)) {
+			embed.addField('Server-Wide Disabled', '\u200b');
 		}
 
-		embed.addField('Usage', `kanna ${command.usage}`)
-			.addField(`Example${command.examples.length === 1 ? '' : 's'}`, `kanna ${command.examples.join('\nkanna ')}`)
-			.addField('Permissions Level Required', command.permLevel, true)
-			.addField('Enabled', commandEnabled ? 'Yes' : 'No', true);
+		if (command.aliases.length) {
+			embed.addField('Aliases', `kanna ${command.aliases.join('\nkanna ')}`, true);
+		}
+
+		embed
+			.addField('Usage', `kanna ${command.usage}`, true)
+			.addField(`Example${command.examples.length === 1 ? '' : 's'}`, `kanna ${command.examples.join('\nkanna ')}`, true)
+			.addField('Permissions Level Required', `${titleCase(PermLevels[command.permLevel])} (${command.permLevel})`, true);
 
 		return message.channel.send(embed);
 	}
