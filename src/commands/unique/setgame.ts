@@ -38,7 +38,7 @@ class SetGameCommand extends Command {
 	}
 
 	private setActivity(client: Client, [game, stream]: string[]): Promise<Presence> {
-		return client.user.setActivity(`${game} [${client.shard.id}]`, {
+		return client.user!.setActivity(`${game} [${client.shard.id}]`, {
 			type: stream ? 'STREAMING' : 'PLAYING',
 			url: stream,
 		});

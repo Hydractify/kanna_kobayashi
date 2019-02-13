@@ -1,6 +1,6 @@
 export interface IShardData {
 	guilds: number;
-	id: number;
+	id: number | number[];
 	ram: number;
 	users: number;
 }

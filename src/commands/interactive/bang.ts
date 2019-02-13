@@ -26,7 +26,7 @@ class BangCommand extends WeebCommand {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		if (members) {
-			if (members.has(message.client.user.id)) {
+			if (members.has(message.client.user!.id)) {
 				return message.reply(
 					`get away from me with that pistol or I will destroy you, human! ${this.emoji}`,
 				);

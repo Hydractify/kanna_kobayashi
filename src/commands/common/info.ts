@@ -19,7 +19,7 @@ class InfoCommand extends Command {
 
 	public run(message: Message, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setAuthor(`${this.client.user.username} Information`, this.client.user.displayAvatarURL())
+			.setAuthor(`${this.client.user!.username} Information`, this.client.user!.displayAvatarURL())
 			.setDescription([
 				'[Invite Link](https://www.hydractify.org/invite)',
 				'[Patreon](https://www.patreon.com/hydractify)',
