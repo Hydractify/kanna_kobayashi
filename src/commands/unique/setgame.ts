@@ -1,4 +1,4 @@
-import { Client, Message, Presence } from 'discord.js';
+import { Message, Presence } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
@@ -20,10 +20,7 @@ class SetGameCommand extends Command {
 
 	public async run(message: Message, args: string[]): Promise<Message | Message[]> {
 		if (!args.length) {
-			const totalGuilds: number = await this.client.shard.fetchClientValues('guilds.size')
-				.then((result: number[]) => result.reduce((acc: number, current: number) => acc + current));
-
-			await this.client.shard.broadcastEval(this.setActivity, [`k!help | on ${totalGuilds} guilds`]);
+			this.setActivity([`k!help | on ${this.client.guilds.size} guilds`]);
 		} else {
 			let stream: string = '';
 			if (args[0].toLowerCase() === 'stream') {
@@ -31,14 +28,14 @@ class SetGameCommand extends Command {
 				stream = ', \'https://twitch.tv/wizardlinkk\'';
 			}
 
-			await this.client.shard.broadcastEval(this.setActivity, [args.join(' '), stream]);
+			this.setActivity([args.join(' '), stream]);
 		}
 
 		return message.channel.send('Updated presence status successfully on all shards!');
 	}
 
-	private setActivity(client: Client, [game, stream]: string[]): Promise<Presence> {
-		return client.user!.setActivity(`${game} [${client.shard.id}]`, {
+	private setActivity([game, stream]: string[]): Promise<Presence> {
+		return this.client.user!.setActivity(game, {
 			type: stream ? 'STREAMING' : 'PLAYING',
 			url: stream,
 		});

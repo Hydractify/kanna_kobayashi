@@ -224,7 +224,7 @@ export class CommandHandler {
 						self_channel: message.channel.permissionsFor(this.client.user!),
 						self_guild: message.guild.me.permissions,
 					},
-					shard_id: String(this.client.shard.id),
+					shard_id: String(message.guild.shardID),
 				},
 				level: 'debug',
 			});

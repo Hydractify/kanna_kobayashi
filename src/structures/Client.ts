@@ -54,11 +54,11 @@ export class Client extends DJSClient {
 	@once('ready')
 	@RavenContext
 	protected _onceReady(): void {
-		(this as any).ws.connection.on('close', this._onDisconnect.bind(this));
+		// (this as any).ws.connection.on('close', this._onDisconnect.bind(this));
 
-		this.webhook.info('Ready', `Logged in as ${this.user.tag} (${this.user.id})`);
+		this.webhook.info('Ready', `Logged in as ${this.user!.tag} (${this.user!.id})`);
 
-		if (this.shard.id === 0 && this.user.id === '297459926505095180') {
+		if (this.user!.id === '297459926505095180' && false) {
 			this.setInterval(updateBotLists.bind(this), 30 * 60 * 1000);
 		}
 	}
@@ -83,8 +83,7 @@ export class Client extends DJSClient {
 
 		if (!left && guild.memberCount !== guild.members.size) await guild.members.fetch();
 
-		const totalGuilds: number = await this.shard.fetchClientValues('guilds.size')
-			.then((result: number[]) => result.reduce((prev: number, cur: number) => prev + cur));
+		const totalGuilds: number = this.guilds.size;
 		const blacklisted: string = await UserModel.fetch(guild.ownerID)
 			.then((user: UserModel) => user.type === UserTypes.BLACKLISTED ? 'Yes' : 'No');
 		const botCount: number = guild.members.filter((member: GuildMember) => member.user.bot).size;
@@ -119,8 +118,8 @@ export class Client extends DJSClient {
 				member: `${member.user.tag} (${member.id})`,
 
 				mePresent: {
-					guild: this.guilds.get(member.guild.id)!.members.has(this.user.id),
-					member: member.guild.members.has(this.user.id),
+					guild: this.guilds.get(member.guild.id)!.members.has(this.user!.id),
+					member: member.guild.members.has(this.user!.id),
 				},
 				referenceEqual: member.guild === this.guilds.get(member.guild.id),
 			},
@@ -154,7 +153,7 @@ export class Client extends DJSClient {
 	@RavenContext
 	protected _onMessageReactionAdd(reaction: MessageReaction, user: User): any {
 		if (
-			reaction.message.author.id !== this.user.id
+			reaction.message.author.id !== this.user!.id
 			|| !reaction.message.embeds.length
 			|| !reaction.message.embeds[0].footer
 		) {
@@ -222,7 +221,7 @@ export class Client extends DJSClient {
 			reaction = message.reactions.add({
 				count: 0,
 				emoji: data.emoji,
-				me: user.id === this.user.id,
+				me: user.id === this.user!.id,
 			});
 		}
 
@@ -245,5 +244,11 @@ export class Client extends DJSClient {
 	@RavenContext
 	protected _onWarn(warning: string): void {
 		this.webhook.warn('Client Warn', warning);
+	}
+
+	@on('debug')
+	@RavenContext
+	protected _onDebug(info: string): void {
+		this.webhook.debug('Debug', info);
 	}
 }

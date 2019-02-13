@@ -34,8 +34,9 @@ Redis.instance.start();
 const client: Client = new Client({
 	disableEveryone: true,
 	messageCacheMaxSize: 5,
+	shardCount: 'auto' as any,
 });
 
-client.login(clientToken)
-	.catch((error: Error) => client.webhook.error('LOGIN', error)
-		.then(() => process.exit(1), () => process.exit(1)));
+client
+	.login(clientToken)
+	.catch((error: Error) => client.webhook.error('LOGIN', error).finally(() => process.exit(1)));

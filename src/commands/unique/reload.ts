@@ -1,9 +1,7 @@
 import { Message } from 'discord.js';
 
-import { Client } from '../../structures/Client';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
-import { IPlainError } from '../../types/IPlainError';
 import { PermLevels } from '../../types/PermLevels';
 
 class ReloadCommand extends Command {
@@ -31,39 +29,27 @@ class ReloadCommand extends Command {
 	}
 
 	public async run(message: Message, commands: string[]): Promise<Message | Message[]> {
-		const results: [number, [string, IPlainError][]][] = await this.client.shard
-			.broadcastEval(this.reloadCommands, commands);
-
-		const errorMap = new Map<string, string[]>();
-
-		for (const [id, errors] of results) {
-			for (const [command, { message: error }] of errors) {
-				const alr = errorMap.get(command);
-				if (alr) alr.push(`${id} - ${error}`);
-				else errorMap.set(command, [`${id} - ${error}`]);
-			}
-		}
+		const results = await this.reloadCommands(commands);
 
 		let out: string = 'something went wrong.\n';
-
-		for (const [command, errors] of errorMap) {
-			out += `**${command[0].toUpperCase() + command.slice(1)}**:\n    ${errors.join('    \n')}\n`;
+		for (const [command, { message: error }] of results) {
+			out += `**${command[0].toUpperCase() + command.slice(1)}**:\n    ${error}\n`;
 		}
 
-		return message.reply(errorMap.size ? out : 'everything reloaded successfully.');
+		return message.reply(results.length ? out : 'everything reloaded successfully.');
 	}
 
-	private async reloadCommands(client: Client, commands: string[]): Promise<[number, [string, IPlainError][]]> {
-		const failures: [string, IPlainError][] = [];
+	private async reloadCommands(commands: string[]): Promise<[string, Error][]> {
+		const failures: [string, Error][] = [];
 		for (const command of commands) {
 			try {
-				await client.commandHandler.reloadCommand(command);
+				await this.client.commandHandler.reloadCommand(command);
 			} catch (e) {
-				failures.push([command, require('discord.js').Util.makePlainError(e) as IPlainError]);
+				failures.push([command, e]);
 			}
 		}
 
-		return [client.shard.id, failures];
+		return failures;
 	}
 }
 

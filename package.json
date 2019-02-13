@@ -2,9 +2,9 @@
 	"name": "kanna-kobayashi",
 	"version": "4.2.0",
 	"description": "A robot made for Discord.",
-	"main": "bin/shard.js",
+	"main": "bin/index.js",
 	"dependencies": {
-		"discord.js": "discordjs/discord.js#18f065867ce7f8369e2c660b62b093e092433822",
+		"discord.js": "discordjs/discord.js#partials",
 		"moment": "^2.22.2",
 		"moment-duration-format": "^2.2.2",
 		"node-fetch": "^2.2.0",
@@ -29,10 +29,8 @@
 		"buildItems": "node ./bin/scripts/buildItems.js",
 		"dev": "export DEBUG=*|| set DEBUG=*&& export NODE_ENV=dev|| set NODE_ENV=dev&& npm run start",
 		"prod": "export NODE_ENV=production|| set NODE_ENV=production&& npm run start",
-		"start": "cd bin && node ./Shard.js",
+		"start": "cd bin && node ./index.js",
 		"test": "tslint -p ./",
-		"testing": "export NODE_ENV=testing|| set NODE_ENV=testing&& npm run start",
-		"typings": "node ./static/typings.js",
 		"watch": "tsc -w -p ./"
 	},
 	"repository": {

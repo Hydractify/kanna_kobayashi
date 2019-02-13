@@ -39,17 +39,4 @@ declare module 'discord.js' {
 	interface User {
 		fetchModel(): Promise<UserModel>;
 	}
-
-	interface ShardClientUtil {
-		broadcastEval<T, U extends Client>(fn: (client: U) => T,
-		): T extends Promise<any>
-			? T extends Promise<infer U> ? U : any
-			: Promise<T[]>;
-		broadcastEval<T, S, U extends Client>(
-			fn: (client: U, args: S[]) => T,
-			args: S[],
-		): T extends Promise<any>
-			? T extends Promise<infer U> ? U[] : T[]
-			: Promise<T[]>;
-	}
 }

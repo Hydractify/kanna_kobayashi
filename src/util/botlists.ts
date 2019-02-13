@@ -17,8 +17,7 @@ const DBotsOrg: () => APIRouter = buildRouter({
 });
 
 export async function updateBotLists(this: Client): Promise<void> {
-	const count: number = await this.shard.fetchClientValues('guilds.size')
-		.then((res: number[]) => res.reduce((p: number, c: number) => p + c));
+	const count: number = this.guilds.size;
 
 	// No webhook, that would just spam
 	Logger.instance.debug('BotLists', `Updating guild count for bot lists to ${count} guilds.`);

@@ -8,26 +8,17 @@ class RestartCommand extends Command {
 	public constructor(handler: CommandHandler) {
 		super(handler, {
 			description: 'Restarts Kanna!',
-			examples: ['restart', 'restart 1'],
+			examples: ['restart'],
 			exp: 0,
 			guarded: true,
 			permLevel: PermLevels.TRUSTED,
-			usage: 'restart [Number]',
+			usage: 'restart',
 		});
 	}
 
-	public async run(message: Message, [shardNumber]: string[]): Promise<Message | Message[]> {
-		if (!shardNumber) {
-			await message.reply('Restarting!');
-			return message.client.shard.broadcastEval('process.exit(0)');
-		}
-
-		const shard: number = parseInt(shardNumber);
-		if (isNaN(shard)) return message.reply('You must provide me a number!');
-		else if (shard > (message.client.shard.count - 1)) return message.reply('That is not a valid shard!');
-
-		await message.reply(`Restarting shard ${shardNumber}!`);
-		return message.client.shard.broadcastEval(`if (this.shard.id === ${shardNumber} process.exit(0)`);
+	public async run(message: Message, _: string[]): Promise<Message | Message[]> {
+		await message.reply('Restarting!');
+		return process.exit();
 	}
 }
 
