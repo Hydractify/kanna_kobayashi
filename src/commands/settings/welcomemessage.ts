@@ -13,7 +13,7 @@ class WelcomeMessageCommand extends Command {
 			examples: [
 				'welcomemessage',
 				'welcomemessage remove',
-				'welcomemessage Welcome {{member}} to {{guild}}!',
+				'welcomemessage Welcome {{mention}} to {{guild}}!',
 			],
 			exp: 0,
 			permLevel: PermLevels.HUMANTAMER,
