@@ -34,6 +34,7 @@ Redis.instance.start();
 const client: Client = new Client({
 	disableEveryone: true,
 	messageCacheMaxSize: 5,
+	partials: ['MESSAGE'],
 	shardCount: 'auto' as any,
 });
 

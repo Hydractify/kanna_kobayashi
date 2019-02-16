@@ -4,7 +4,7 @@
 	"description": "A robot made for Discord.",
 	"main": "bin/index.js",
 	"dependencies": {
-		"discord.js": "discordjs/discord.js#partials",
+		"discord.js": "discordjs/discord.js",
 		"moment": "^2.22.2",
 		"moment-duration-format": "^2.2.2",
 		"node-fetch": "^2.2.0",

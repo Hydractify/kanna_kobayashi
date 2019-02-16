@@ -151,9 +151,10 @@ export class Client extends DJSClient {
 
 	@on('messageReactionAdd')
 	@RavenContext
-	protected _onMessageReactionAdd(reaction: MessageReaction, user: User): any {
-		if (
-			reaction.message.author.id !== this.user!.id
+	protected async _onMessageReactionAdd(reaction: MessageReaction, user: User): Promise<any> {
+		if (reaction.message.partial) await reaction.message.fetch();
+
+		if (reaction.message.author.id !== this.user!.id
 			|| !reaction.message.embeds.length
 			|| !reaction.message.embeds[0].footer
 		) {
@@ -192,40 +193,6 @@ export class Client extends DJSClient {
 		}
 
 		return command.onCollect(reaction, user);
-	}
-
-	@on('raw')
-	@RavenContext
-	protected async _onRaw({ t: type, d: data }: any): Promise<void> {
-		if (type !== 'MESSAGE_REACTION_ADD') return;
-
-		captureBreadcrumb({
-			category: type,
-			data,
-			message: 'Info about the raw event',
-		});
-
-		const channel: TextChannel = this.channels.get(data.channel_id) as TextChannel;
-		if (!channel) return;
-		if (channel.messages.has(data.message_id)
-			|| !channel.permissionsFor(channel.guild.me)!.has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'])
-		) return;
-
-		const user: User = this.users.get(data.user_id) || await this.users.fetch(data.user_id);
-		const message = await channel.messages.fetch(data.message_id).catch(() => undefined);
-		if (!message) return;
-
-		let reaction: MessageReaction | undefined = message.reactions.get(data.emoji.id || data.emoji.name);
-
-		if (!reaction) {
-			reaction = message.reactions.add({
-				count: 0,
-				emoji: data.emoji,
-				me: user.id === this.user!.id,
-			});
-		}
-
-		this.emit('messageReactionAdd', reaction, user);
 	}
 
 	@on('reconnecting')
