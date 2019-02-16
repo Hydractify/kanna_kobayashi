@@ -1,6 +1,11 @@
 // tslint:disable-next-line:no-import-side-effect no-submodule-imports
 import 'source-map-support/register';
 
+// Hack to ensure that the WebhookLogger is instantiated first
+import { WebhookLogger } from './structures/WebhookLogger';
+// tslint:disable-next-line:no-unused-expression
+WebhookLogger.instance;
+
 import { config } from 'raven';
 const { ravenToken, clientToken } = require('../data');
 config(process.env.NODE_ENV && process.env.NODE_ENV !== 'dev' && ravenToken, {

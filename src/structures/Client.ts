@@ -51,13 +51,21 @@ export class Client extends DJSClient {
 		registerListeners(this);
 	}
 
+	@on('shardReady')
+	@RavenContext
+	protected _onShardReady(id: number): void {
+		this.webhook.info('Ready', id, 'Up and running!');
+	}
+
+	@on('ready')
+	@RavenContext
+	protected _onReady(): void {
+		this.webhook.info('Ready', 'Logged in and processing events!');
+	}
+
 	@once('ready')
 	@RavenContext
 	protected _onceReady(): void {
-		// (this as any).ws.connection.on('close', this._onDisconnect.bind(this));
-
-		this.webhook.info('Ready', `Logged in as ${this.user!.tag} (${this.user!.id})`);
-
 		if (this.user!.id === '297459926505095180' && false) {
 			this.setInterval(updateBotLists.bind(this), 30 * 60 * 1000);
 		}
@@ -65,14 +73,14 @@ export class Client extends DJSClient {
 
 	@on('disconnect')
 	@RavenContext
-	protected _onDisconnect({ code, reason }: { code: number; reason: string }): void {
-		this.webhook.warn('Disconnect', `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
+	protected _onDisconnect({ code, reason }: { code: number; reason: string }, id: number): void {
+		this.webhook.warn('Disconnect', id, `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
 	}
 
 	@on('error')
 	@RavenContext
-	protected _onError(error: Error): void {
-		this.webhook.error('Client Error', error);
+	protected _onError(error: Error, id: number): void {
+		this.webhook.error('Client#error', id, error);
 	}
 
 	@on('guildCreate', false)
@@ -197,14 +205,14 @@ export class Client extends DJSClient {
 
 	@on('reconnecting')
 	@RavenContext
-	protected _onReconnecting(): void {
-		this.webhook.info('Reconnecting');
+	protected _onReconnecting(id: number): void {
+		this.webhook.info('Reconnecting', id);
 	}
 
 	@on('resumed')
 	@RavenContext
-	protected _onResume(replayed: number): void {
-		this.webhook.info('Resumed', `Replayed \`${replayed}\` events.`);
+	protected _onResume(replayed: number, id: number): void {
+		this.webhook.info('Resumed', id, `Replayed \`${replayed}\` events.`);
 	}
 
 	@on('warn')
@@ -216,6 +224,19 @@ export class Client extends DJSClient {
 	@on('debug')
 	@RavenContext
 	protected _onDebug(info: string): void {
-		this.webhook.debug('Debug', info);
+		// Spawning x shards...
+		if (info.startsWith('Spawning')) {
+			this.webhook.info('Debug', info);
+		} else {
+			// General lifecycle events
+			const exec = /^\[Shard (\d+)\] +(.+)$/.exec(info);
+			if (!exec) return;
+			const [, id, info2] = exec;
+			if (/^Connected |^Attempting |^Identify/.test(info2)) {
+				this.webhook.debug('Debug', parseInt(id), info2);
+			} else if (/^Session |^WebSocket was closed\./.test(info2)) {
+				this.webhook.warn('Debug', parseInt(id), info2);
+			}
+		}
 	}
 }

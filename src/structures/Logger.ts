@@ -136,6 +136,9 @@ export class Logger {
 	 * Write to the output stream
 	 */
 	protected _write(level: LogLevel, tag: string, data: any[]): void {
+		let shardId: string | null = null;
+		[data, shardId] = typeof data[0] === 'number' ? [data.slice(1), String(data[0])] : [data, null];
+
 		const cleaned: string = this._prepareText(data);
 		this._capture(level, tag, cleaned);
 
@@ -147,15 +150,15 @@ export class Logger {
 		out.write(
 			[
 				'\n',
-				'SHARD_ID' in process.env
-					? `\x1b[32m[SHARD ${process.env.SHARD_ID}]\x1b[0m`
-					: '',
+				shardId
+					? `\x1b[32m[SHARD ${shardId.padStart(2, ' ')}]\x1b[0m`
+					: '[        ]',
 				`[${moment().format('YYYY.MM.DD-HH:mm:ss')}]`,
 				// Background
 				`\x1b[${colors[level][0]}m`,
 				// Black
 				'\x1b[30m',
-				`[${LogLevel[level]}]`,
+				`[${LogLevel[level].padStart(5, ' ')}]`,
 				// Reset
 				'\x1b[0m',
 				tag
