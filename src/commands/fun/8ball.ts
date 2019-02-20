@@ -4,7 +4,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
 
-class EigthBallCommand extends Command {
+class EightballCommand extends Command {
 	private _responses: string[] = [
 		`'I want it too! ${Emojis.KannaHug}`,
 		`aye! ${Emojis.KannaHungry}`,
@@ -34,4 +34,4 @@ class EigthBallCommand extends Command {
 	}
 }
 
-export { EigthBallCommand as Command };
+export { EightballCommand as Command };
