@@ -253,7 +253,7 @@ export class User extends Model<User> {
 		field: 'timezone',
 		type: DataType.INTEGER,
 	})
-	public timezone!: number;
+	public timezone!: number | null;
 
 	@BelongsToMany(() => Badge, {
 		as: 'badges',
