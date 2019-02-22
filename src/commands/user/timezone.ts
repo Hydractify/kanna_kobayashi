@@ -19,12 +19,13 @@ class TimezoneCommand extends Command {
 		message: Message,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): number[] | string {
+	): (number | string)[] | string {
 		if (authorModel.timezone && !args.length) {
 			const timezone = authorModel.timezone > 0 ? `+${authorModel.timezone}` : authorModel.timezone;
-			return `your timezone is __${timezone} UTC__.`;
+			return `your timezone is **${timezone} UTC**.`;
 		}
 		if (!args.length) return 'you do not have a timezone set!';
+		if (args[0] === 'remove') return args;
 
 		const offset: number = parseInt(args[0]);
 		if ((!offset && offset !== 0) || offset > 12 || Math.abs(offset) > 12) {
@@ -36,10 +37,16 @@ class TimezoneCommand extends Command {
 
 	public async run(
 		message: Message,
-		[offset]: number[],
+		[offset]: number[] | string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		authorModel.timezone = offset;
+		if (typeof offset === 'string') {
+			authorModel.timezone = null;
+			authorModel.save();
+
+			return message.reply('your timezone has been successfully cleared!');
+		}
+		authorModel.timezone = offset as number;
 		await authorModel.save();
 
 		const timezone = offset > 0 ? `+${offset}` : offset;
