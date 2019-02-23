@@ -1,4 +1,5 @@
 import { Collection, GuildMember, Message, Snowflake } from 'discord.js';
+import { Op } from 'sequelize';
 
 import { User as UserModel } from '../models/User';
 import { Emojis } from '../types/Emojis';
@@ -70,7 +71,7 @@ export abstract class WeebCommand extends Command {
 		if (!members.size) return `I could not find anyone with ${args.join(' ')}.`;
 
 		const ids: Snowflake[] = await authorModel
-			.$get<UserModel>('blocks', members.keyArray())
+			.$get<UserModel>('blocks', { where: { id: { [Op.or]: members.keyArray() } } })
 			.then((users: UserModel | UserModel[]) => (users as UserModel[]).map((user: UserModel) => user.id));
 
 		if (ids.length === members.size) {
