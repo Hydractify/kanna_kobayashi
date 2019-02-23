@@ -187,6 +187,13 @@ export class CommandHandler {
 			return;
 		}
 
+		// Ignore system messages
+		if (message.system) {
+			message.channel.messages.delete(message.id);
+
+			return;
+		}
+
 		// Keep "Requested by" embeds
 		if (message.author.id === this.client.user.id
 			&& message.embeds.length && message.embeds[0].footer
