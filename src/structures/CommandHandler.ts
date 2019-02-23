@@ -6,6 +6,7 @@ import {
 	MessageAttachment,
 	MessageOptions,
 	TextChannel,
+	User,
 } from 'discord.js';
 import { readdir } from 'fs';
 import { extname, join } from 'path';
@@ -246,7 +247,7 @@ export class CommandHandler {
 			const [authorModel, ownerModel]: [UserModel, UserModel, GuildMember | undefined] =
 				await Promise.all<UserModel, UserModel, GuildMember | undefined>([
 					message.author.fetchModel(),
-					this.client.users.get(message.guild.ownerID)!.fetchModel(),
+					this.client.users.fetch(message.guild.ownerID).then((owner: User) => owner.fetchModel()),
 					message.guild.owner ? undefined : message.guild.members.fetch(message.guild.ownerID),
 				]);
 
