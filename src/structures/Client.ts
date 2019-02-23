@@ -139,6 +139,7 @@ export class Client extends DJSClient {
 			return;
 		}
 
+		if (!member.guild.me) await member.guild.members.fetch(this.user);
 		if (!channel.permissionsFor(member.guild.me)!.has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 
 		let message: string | null = guildModel[left ? 'farewellMessage' : 'welcomeMessage'];
