@@ -80,7 +80,7 @@ class ProfileCommand extends Command {
 
 		let userTime: string = 'No timezone set.';
 
-		if (userModel.timezone || userModel.timezone === 0) {
+		if (typeof userModel.timezone === 'number') {
 			const time = moment().utc().subtract(-(userModel.timezone), 'hours').format('dddd Do H:mm');
 			const timezone = userModel.timezone > 0 ? `+${userModel.timezone}` : userModel.timezone;
 			userTime = `${time} (UTC ${timezone})`;

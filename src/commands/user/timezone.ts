@@ -20,9 +20,9 @@ class TimezoneCommand extends Command {
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
 	): (number | string)[] | string {
-		if (authorModel.timezone && !args.length) {
-			const timezone = authorModel.timezone > 0 ? `+${authorModel.timezone}` : authorModel.timezone;
-			return `your timezone is **${timezone} UTC**.`;
+		if (authorModel.timezone !== null && !args.length) {
+			const timezone = authorModel.timezone as number > 0 ? `+${authorModel.timezone}` : authorModel.timezone;
+			return `your timezone set is **${timezone}**.`;
 		}
 		if (!args.length) return 'you do not have a timezone set!';
 		if (args[0] === 'remove') return args;
