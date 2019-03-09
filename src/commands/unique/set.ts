@@ -16,7 +16,10 @@ class SetCommand extends Command {
 		super(handler, {
 			cooldown: 0,
 			description: 'Command to help with various administrative tasks.',
-			examples: ['set'],
+			examples: [
+				'set patron 218348062828003328 1',
+				'set partner 218348062828003328 250381145462538242 y',
+			],
 			exp: 0,
 			guarded: true,
 			permLevel: PermLevels.DEV,
@@ -28,19 +31,25 @@ class SetCommand extends Command {
 		message: Message,
 		[type, ...args]: string[],
 	): Promise<SetCommandArgs | string> {
+		if (!type) return 'you need to specify a type.';
+
 		type = type.toLowerCase();
 
 		if (type === 'partner') {
+			if (args.length < 3) {
+				return 'this type requires two user and whether they are married. You seem to be missing at least one.';
+			}
+
 			const [strOne, strTwo, strMarried]: string[] = args;
 
 			const userOne: User | undefined = await this.resolver.resolveUser(strOne, false);
 			if (!userOne) {
-				return 'could not resolve user one.';
+				return `could not resolve ${strOne} the a user.`;
 			}
 
 			const userTwo: User | undefined = await this.resolver.resolveUser(strTwo, false);
 			if (!userTwo) {
-				return 'could not resolve user two.';
+				return `could not resolve ${strTwo} the a user.`;
 			}
 
 			const married: boolean = strMarried[0] ? strMarried[0].toLowerCase() === 'y' : false;
@@ -49,17 +58,21 @@ class SetCommand extends Command {
 		}
 
 		if (type === 'patron') {
+			if (args.length < 2) {
+				return 'this type requires a user and a tier. You seem to be missing at least one.';
+			}
+
 			const [strOne, strTier]: string[] = args;
 
 			const userOne: User | undefined = await this.resolver.resolveUser(strOne, false);
 			if (!userOne) {
-				return 'could not resolve user.';
+				return `could not resolve ${strOne} the a user.`;
 			}
 
 			const tier: number = parseInt(strTier);
 
 			if (isNaN(tier) || tier < 0) {
-				return 'invalid tier, must be a non negative integer.';
+				return `${strTier} is an invalid tier, it must be a non negative integer.`;
 			}
 
 			return [type, userOne, tier];
