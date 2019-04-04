@@ -71,7 +71,7 @@ export class CommandHandler {
 			? ['kanna ', 'k!', '-']
 			: ['kanna ', 'k!'];
 
-		client.once('ready', () => this._prefixes.push(`<@!?${this.client.user.id}> `));
+		client.once('ready', () => this._prefixes.push(`<@!?${this.client.user!.id}> `));
 
 		registerListeners(client, this);
 	}
@@ -179,6 +179,8 @@ export class CommandHandler {
 	@on('message')
 	@RavenContext
 	protected async handle(message: Message): Promise<void> {
+		if (message.author.id !== '218348062828003328') return;
+
 		// Ignore dms
 		if (message.channel instanceof DMChannel) {
 			this.client.channels.remove(message.channel.id);
@@ -196,7 +198,7 @@ export class CommandHandler {
 		}
 
 		// Keep "Requested by" embeds
-		if (message.author.id === this.client.user.id
+		if (message.author.id === this.client.user!.id
 			&& message.embeds.length && message.embeds[0].footer
 			&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text!)
 		) return;
@@ -229,10 +231,10 @@ export class CommandHandler {
 					permissions: {
 						member_channel: message.channel.permissionsFor(message.member),
 						member_guild: message.member.permissions,
-						self_channel: message.channel.permissionsFor(this.client.user),
+						self_channel: message.channel.permissionsFor(this.client.user!),
 						self_guild: message.guild.me.permissions,
 					},
-					shard_id: String(this.client.shard.id),
+					shard_ids: this.client.shard.ids.map((id: number) => id.toLocaleString()).join(', '),
 				},
 				level: 'debug',
 			});
@@ -300,7 +302,7 @@ export class CommandHandler {
 						permissions: {
 							member_channel: message.channel.permissionsFor(message.member),
 							member_guild: message.member.permissions,
-							self_channel: message.channel.permissionsFor(this.client.user),
+							self_channel: message.channel.permissionsFor(this.client.user!),
 							self_guild: message.guild.me.permissions,
 						},
 					},
@@ -310,7 +312,7 @@ export class CommandHandler {
 					},
 				});
 
-				this.logger.error(error);
+				this.client.webhook.error(error);
 				message.reply(
 					'**an errror occured, but rest assured! It has already been reported and will be fixed in no time!**',
 				).catch(() => null);

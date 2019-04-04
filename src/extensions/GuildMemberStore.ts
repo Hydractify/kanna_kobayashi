@@ -8,7 +8,7 @@ class GuildMemberStoreExtension {
 	}
 
 	public async test() { return 'nope'; }
-	public async fetch(this: { guild: Guild } & GuildMemberStore, ...args: any[]): Promise<any> {
+	public async fetch(this: { guild: Guild } & GuildMemberStore, ...args: [any]): Promise<any> {
 		try {
 			return await fetch.apply(this, args);
 		} catch (error) {

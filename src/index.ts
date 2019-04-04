@@ -1,6 +1,11 @@
 // tslint:disable-next-line:no-import-side-effect no-submodule-imports
 import 'source-map-support/register';
 
+// Hack to ensure that the WebhookLogger is instantiated first
+import { WebhookLogger } from './structures/WebhookLogger';
+// tslint:disable-next-line:no-unused-expression
+WebhookLogger.instance;
+
 import { config } from 'raven';
 const { ravenToken, clientToken } = require('../data');
 config(process.env.NODE_ENV && process.env.NODE_ENV !== 'dev' && ravenToken, {
@@ -34,8 +39,9 @@ Redis.instance.start();
 const client: Client = new Client({
 	disableEveryone: true,
 	messageCacheMaxSize: 5,
+	partials: ['MESSAGE'],
 });
 
-client.login(clientToken)
-	.catch((error: Error) => client.webhook.error('LOGIN', error)
-		.then(() => process.exit(1), () => process.exit(1)));
+client
+	.login(clientToken)
+	.catch((error: Error) => client.webhook.error('LOGIN', error).finally(() => process.exit(1)));

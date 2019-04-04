@@ -1,4 +1,4 @@
-import { Client, Message, Presence } from 'discord.js';
+import { Client, Message, Presence, WebSocketShard } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
@@ -28,7 +28,7 @@ class SetGameCommand extends Command {
 			let stream: string = '';
 			if (args[0].toLowerCase() === 'stream') {
 				args = args.slice(1);
-				stream = ', \'https://twitch.tv/wizardlinkk\'';
+				stream = ', \'https://twitch.tv/wizardlink\'';
 			}
 
 			await this.client.shard.broadcastEval(this.setActivity, [args.join(' '), stream]);
@@ -37,11 +37,17 @@ class SetGameCommand extends Command {
 		return message.channel.send('Updated presence status successfully on all shards!');
 	}
 
-	private setActivity(client: Client, [game, stream]: string[]): Promise<Presence> {
-		return client.user.setActivity(`${game} [${client.shard.id}]`, {
-			type: stream ? 'STREAMING' : 'PLAYING',
-			url: stream,
-		});
+	private setActivity(client: Client, [game, stream]: string[]): Promise<Presence[]> {
+		return Promise.all(
+			client.ws.shards.map((shard: WebSocketShard, shardId: number) =>
+				client.user!.setActivity({
+					name: `${game} [${shardId}]`,
+					shardID: shardId,
+					type: stream ? 'STREAMING' : 'PLAYING',
+					url: stream,
+				}),
+			),
+		);
 	}
 }
 

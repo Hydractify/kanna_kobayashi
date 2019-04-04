@@ -86,7 +86,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 			if (command.category.toLowerCase() === name) {
 				if (!embed) {
 					embed = MessageEmbed.common(message, authorModel)
-						.setAuthor(`${this.client.user.username}'s ${titleCase(name)} Commands`)
+						.setAuthor(`${this.client.user!.username}'s ${titleCase(name)} Commands`)
 						.setDescription([
 							'[Having trouble using the help command? Read the wiki!]',
 							'(https://github.com/hydractify/kanna-kobayashi/wiki)',
@@ -116,7 +116,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		}
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user.displayAvatarURL())
+			.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user!.displayAvatarURL())
 			.setDescription(command.description)
 			.setURL('https://thedragonproject.network/guild')
 			.setThumbnail(message.guild.iconURL());
@@ -158,7 +158,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 			const embed: MessageEmbed = MessageEmbed.common({ author }, authorModel)
 				.setThumbnail(guild.iconURL())
 				.setURL('https://thedragonproject.network/guild')
-				.setAuthor(`${this.client.user.username}'s ${titleCase(category)} Commands`)
+				.setAuthor(`${this.client.user!.username}'s ${titleCase(category)} Commands`)
 				.setDescription([
 					'[Having trouble using the help command? Read the wiki!]',
 					'(https://github.com/TheDragonProject/Kanna-Kobayashi/wiki)',

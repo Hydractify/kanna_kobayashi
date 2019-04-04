@@ -26,7 +26,7 @@ class StatsCommand extends Command {
 		const data: IShardData[] = await this.client.shard.broadcastEval<IShardData>(
 			(client: Client) => ({
 				guilds: client.guilds.size,
-				id: client.shard.id,
+				ids: client.shard.ids,
 				ram: process.memoryUsage().heapUsed / 1024 / 1024,
 				users: client.users.size,
 			}),
@@ -49,7 +49,7 @@ class StatsCommand extends Command {
 		].join(' ');
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setAuthor(`${this.client.user.username}'s Stats (v${version})`, this.client.user.displayAvatarURL())
+			.setAuthor(`${this.client.user!.username}'s Stats (v${version})`, this.client.user!.displayAvatarURL())
 			.setDescription('\u200b')
 			.setThumbnail(message.guild.iconURL())
 			.addField(`Uptime ${Emojis.KannaHug}`, uptime, true)
@@ -62,8 +62,8 @@ class StatsCommand extends Command {
 	}
 
 	private _buildTableString(data: IShardData[]): string {
-		// 'ID'.length
-		let longestId: number = 2;
+		// 'IDs'.length
+		let longestId: number = 3;
 		// 'Guilds'.length
 		let longestGuild: number = 6;
 		// 'Ram'.length
@@ -71,11 +71,20 @@ class StatsCommand extends Command {
 		// 'Users'.length
 		let longestUser: number = 5;
 
-		for (const { guilds, id, ram, users } of data) {
-			if (id.toLocaleString().length > longestId) longestId = id.toLocaleString().length;
-			if (guilds.toLocaleString().length > longestGuild) longestGuild = guilds.toLocaleString().length;
-			if (((ram.toFixed(2).length) + 3) > longestRam) longestRam = ram.toFixed(2).length + 3;
-			if (users.toLocaleString().length > longestUser) longestUser = users.toLocaleString().length;
+		for (const { guilds, ids, ram, users } of data) {
+			let tmp: number;
+
+			tmp = ids.map((id: number) => id.toLocaleString()).join(', ').length;
+			if (tmp > longestId) longestId = tmp;
+
+			tmp = guilds.toLocaleString().length;
+			if (tmp > longestGuild) longestGuild = tmp;
+
+			tmp = ram.toFixed(2).length + 3;
+			if (tmp > longestRam) longestRam = tmp;
+
+			tmp = users.toLocaleString().length;
+			if (tmp > longestUser) longestUser = tmp;
 		}
 
 		// Add the extra space to the right and left
@@ -94,16 +103,16 @@ class StatsCommand extends Command {
 		].join('');
 
 		shardInfo += [
-			'║', this._pad('ID', longestId),
+			'║', this._pad('IDs', longestId),
 			'|', this._pad('Ram Used', longestRam),
 			'|', this._pad('Guilds', longestGuild),
 			'|', this._pad('Users', longestUser),
 			'║\n',
 		].join('');
 
-		for (const { guilds, id, ram, users } of data) {
+		for (const { guilds, ids, ram, users } of data) {
 			shardInfo += [
-				'║', this._pad(id.toLocaleString(), longestId),
+				'║', this._pad(ids.map((id: number) => id.toLocaleString()).join(', '), longestId),
 				'|', this._pad(`${ram.toFixed(2)} MB`, longestRam),
 				'|', this._pad(guilds.toLocaleString(), longestGuild),
 				'|', this._pad(users.toLocaleString(), longestUser),
