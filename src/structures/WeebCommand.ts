@@ -134,7 +134,7 @@ export abstract class WeebCommand extends Command {
 				embed.setDescription(dev);
 			} else if (trusted && perm === PermLevels.TRUSTED) {
 				embed.setDescription(trusted);
-			} else if (bot && message.client.user.id === member.id) {
+			} else if (bot && this.client.user!.id === member.id) {
 				embed.setDescription(bot);
 			}
 		}
@@ -164,7 +164,7 @@ export abstract class WeebCommand extends Command {
 			const name: string =
 				member.id === author.id
 					? 'themself'
-					: member.id === this.client.user.id
+					: member.id === this.client.user!.id
 						? 'me'
 						: WeebCommand.mentionRegex.test(word)
 							? member.displayName

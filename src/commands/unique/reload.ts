@@ -31,16 +31,16 @@ class ReloadCommand extends Command {
 	}
 
 	public async run(message: Message, commands: string[]): Promise<Message | Message[]> {
-		const results: [number, [string, IPlainError][]][] = await this.client.shard
+		const results: [number[], [string, IPlainError][]][] = await this.client.shard
 			.broadcastEval(this.reloadCommands, commands);
 
 		const errorMap = new Map<string, string[]>();
 
-		for (const [id, errors] of results) {
+		for (const [ids, errors] of results) {
 			for (const [command, { message: error }] of errors) {
 				const alr = errorMap.get(command);
-				if (alr) alr.push(`${id} - ${error}`);
-				else errorMap.set(command, [`${id} - ${error}`]);
+				if (alr) alr.push(`${ids.join(', ')} - ${error}`);
+				else errorMap.set(command, [`${ids.join(', ')} - ${error}`]);
 			}
 		}
 
@@ -53,7 +53,7 @@ class ReloadCommand extends Command {
 		return message.reply(errorMap.size ? out : 'everything reloaded successfully.');
 	}
 
-	private async reloadCommands(client: Client, commands: string[]): Promise<[number, [string, IPlainError][]]> {
+	private async reloadCommands(client: Client, commands: string[]): Promise<[number[], [string, IPlainError][]]> {
 		const failures: [string, IPlainError][] = [];
 		for (const command of commands) {
 			try {
@@ -63,7 +63,7 @@ class ReloadCommand extends Command {
 			}
 		}
 
-		return [client.shard.id, failures];
+		return [client.shard.ids, failures];
 	}
 }
 

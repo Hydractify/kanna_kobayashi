@@ -51,28 +51,36 @@ export class Client extends DJSClient {
 		registerListeners(this);
 	}
 
+	@on('shardReady')
+	@RavenContext
+	protected _onShardReady(id: number): void {
+		this.webhook.info('Ready', id, 'Up and running!');
+	}
+
+	@on('ready')
+	@RavenContext
+	protected _onReady(): void {
+		this.webhook.info('Ready', 'Manager', 'Logged in and processing events!');
+	}
+
 	@once('ready')
 	@RavenContext
 	protected _onceReady(): void {
-		(this as any).ws.connection.on('close', this._onDisconnect.bind(this));
-
-		this.webhook.info('Ready', `Logged in as ${this.user.tag} (${this.user.id})`);
-
-		if (this.shard.id === 0 && this.user.id === '297459926505095180') {
+		if (this.user!.id === '297459926505095180' && false) {
 			this.setInterval(updateBotLists.bind(this), 30 * 60 * 1000);
 		}
 	}
 
-	@on('disconnect')
+	@on('shardDisconnect')
 	@RavenContext
-	protected _onDisconnect({ code, reason }: { code: number; reason: string }): void {
-		this.webhook.warn('Disconnect', `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
+	protected _onDisconnect({ code, reason }: { code: number; reason: string }, id: number): void {
+		this.webhook.warn('shardDisconnect', id, `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
 	}
 
-	@on('error')
+	@on('shardError')
 	@RavenContext
-	protected _onError(error: Error): void {
-		this.webhook.error('Client Error', error);
+	protected _onError(error: Error, id: number): void {
+		this.webhook.error('ShardError', id, error);
 	}
 
 	@on('guildCreate', false)
@@ -83,8 +91,7 @@ export class Client extends DJSClient {
 
 		if (!left && guild.memberCount !== guild.members.size) await guild.members.fetch();
 
-		const totalGuilds: number = await this.shard.fetchClientValues('guilds.size')
-			.then((result: number[]) => result.reduce((prev: number, cur: number) => prev + cur));
+		const totalGuilds: number = this.guilds.size;
 		const blacklisted: string = await UserModel.fetch(guild.ownerID)
 			.then((user: UserModel) => user.type === UserTypes.BLACKLISTED ? 'Yes' : 'No');
 		const botCount: number = guild.members.filter((member: GuildMember) => member.user.bot).size;
@@ -119,8 +126,8 @@ export class Client extends DJSClient {
 				member: `${member.user.tag} (${member.id})`,
 
 				mePresent: {
-					guild: this.guilds.get(member.guild.id)!.members.has(this.user.id),
-					member: member.guild.members.has(this.user.id),
+					guild: this.guilds.get(member.guild.id)!.members.has(this.user!.id),
+					member: member.guild.members.has(this.user!.id),
 				},
 				referenceEqual: member.guild === this.guilds.get(member.guild.id),
 			},
@@ -139,7 +146,7 @@ export class Client extends DJSClient {
 			return;
 		}
 
-		if (!member.guild.me) await member.guild.members.fetch(this.user);
+		if (!member.guild.me) await member.guild.members.fetch(this.user!);
 		if (!channel.permissionsFor(member.guild.me)!.has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 
 		let message: string | null = guildModel[left ? 'farewellMessage' : 'welcomeMessage'];
@@ -154,9 +161,30 @@ export class Client extends DJSClient {
 
 	@on('messageReactionAdd')
 	@RavenContext
-	protected _onMessageReactionAdd(reaction: MessageReaction, user: User): any {
-		if (
-			reaction.message.author.id !== this.user.id
+	protected async _onMessageReactionAdd(reaction: MessageReaction, user: User): Promise<any> {
+		// Pre discord ready?
+		if (!this.user) return;
+		// Ignore reactions in dms
+		if (!(reaction.message.channel instanceof TextChannel)) return;
+		// Ensure own member is cached in the current guild
+		if (!reaction.message.guild.me) await reaction.message.guild.members.fetch(this.user);
+
+		if (reaction.message.partial) {
+			// Only attempt to fetch if we can actually fetch
+			if (!reaction.message.channel.permissionsFor(this.user)!.has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'])) return;
+
+			try {
+				// If the message gets uncached, discord.js won't find a reference to it and creates a new instance
+				reaction.message = await reaction.message.fetch();
+			} catch (e) {
+				// Ignore Unknown Message errors
+				if (e.code === 10008) return;
+				this.webhook.error('ReactionError', reaction.message.guild.shardID, e);
+
+				return;
+			}
+		}
+		if (reaction.message.author.id !== this.user.id
 			|| !reaction.message.embeds.length
 			|| !reaction.message.embeds[0].footer
 		) {
@@ -197,55 +225,69 @@ export class Client extends DJSClient {
 		return command.onCollect(reaction, user);
 	}
 
-	@on('raw')
+	@on('shardReconnecting')
 	@RavenContext
-	protected async _onRaw({ t: type, d: data }: any): Promise<void> {
-		if (type !== 'MESSAGE_REACTION_ADD') return;
-
-		captureBreadcrumb({
-			category: type,
-			data,
-			message: 'Info about the raw event',
-		});
-
-		const channel: TextChannel = this.channels.get(data.channel_id) as TextChannel;
-		if (!channel) return;
-		if (channel.messages.has(data.message_id)
-			|| !channel.permissionsFor(channel.guild.me)!.has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'])
-		) return;
-
-		const user: User = this.users.get(data.user_id) || await this.users.fetch(data.user_id);
-		const message = await channel.messages.fetch(data.message_id).catch(() => undefined);
-		if (!message) return;
-
-		let reaction: MessageReaction | undefined = message.reactions.get(data.emoji.id || data.emoji.name);
-
-		if (!reaction) {
-			reaction = message.reactions.add({
-				count: 0,
-				emoji: data.emoji,
-				me: user.id === this.user.id,
-			});
-		}
-
-		this.emit('messageReactionAdd', reaction, user);
-	}
-
-	@on('reconnecting')
-	@RavenContext
-	protected _onReconnecting(): void {
-		this.webhook.info('Reconnecting');
-	}
-
-	@on('resumed')
-	@RavenContext
-	protected _onResume(replayed: number): void {
-		this.webhook.info('Resumed', `Replayed \`${replayed}\` events.`);
+	protected _onReconnecting(id: number): void {
+		this.webhook.info('Reconnecting', id, 'Shard is reconnecting...');
 	}
 
 	@on('warn')
 	@RavenContext
 	protected _onWarn(warning: string): void {
 		this.webhook.warn('Client Warn', warning);
+	}
+
+	@on('debug')
+	@RavenContext
+	protected _onDebug(info: string): void {
+		let exec: RegExpExecArray | null = /^\[WS => (?:Shard )?(\d+|Manager)\] +([\s\S]+)$/.exec(info);
+		if (!exec) return;
+		const [, rawId, info2]: [string, string, string] = exec as any;
+		const id: number | 'Manager' = rawId === 'Manager' ? rawId : parseInt(rawId);
+
+		// tslint:disable-next-line:no-conditional-assignment
+		if (exec = /^Fetched Gateway Information *\n *URL: *(.+) *\n *Recommended Shards: *(.+)/.exec(info2)) {
+			this.webhook.info('Debug', id, 'URL: ', exec[1], 'Recommend Shards:', exec[2]);
+
+			return;
+		}
+
+		// tslint:disable-next-line:no-conditional-assignment
+		if (exec = /^Session Limit Information *\n *Total: *(.+) *\n *Remaining: *(.+)/.exec(info2)) {
+			this.webhook.info('Debug', id, 'Identifies:', exec[2], '/', exec[1]);
+
+			return;
+		}
+
+		// tslint:disable-next-line:no-conditional-assignment
+		if (exec = /^WebSocket was closed. *\n *Event Code: *(.+) *\n *Clean: .+ *\n *Reason: *(.+)/.exec(info2)) {
+			this.webhook.info('Debug', id, 'WebSocket Closed', exec[1], ':', exec[2]);
+
+			return;
+		}
+
+		if (/^Warning: attempted |^Opened |^Attempting |^Identify |^READY /.test(info2)) {
+			this.webhook.debug('Debug', id, info2);
+
+			return;
+		}
+
+		if (/^RESUMED /.test(info2)) {
+			this.webhook.info('Resumed', id, info2);
+
+			return;
+		}
+
+		if (/^Session |^Failed /.test(info2)) {
+			this.webhook.warn('Debug', id, info2);
+
+			return;
+		}
+
+		if (/^Couldn't reconnect/.test(info2)) {
+			this.webhook.error('Error', id, info2);
+
+			return;
+		}
 	}
 }

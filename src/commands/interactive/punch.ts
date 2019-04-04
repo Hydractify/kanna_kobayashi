@@ -24,7 +24,7 @@ class PunchCommand extends WeebCommand {
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
-		if (members.has(message.client.user.id)) {
+		if (members.has(this.client.user!.id)) {
 			return message.reply(
 				`you can not punch me! ${Emojis.KannaMad}`,
 			);

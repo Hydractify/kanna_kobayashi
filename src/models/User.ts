@@ -112,7 +112,7 @@ export class User extends Model<User> {
 	}
 
 	/**
-	 * Color for this user, either random, or preset for DEVs or trusted
+	 * Color for this.user!, either random, or preset for DEVs or trusted
 	 */
 	public get color(): number {
 		if (this.type === UserTypes.DEV) return 0x00000F;
@@ -122,7 +122,7 @@ export class User extends Model<User> {
 	}
 
 	/**
-	 * Computes the perm level of this user,
+	 * Computes the perm level of this.user!,
 	 * optionally based on a member passed.
 	 */
 	public permLevel(member?: GuildMember): PermLevels {
@@ -280,7 +280,7 @@ export class User extends Model<User> {
 	public readonly repped: User[] | undefined;
 
 	/**
-	 * All users which blocked this user.
+	 * All users which blocked this.user!.
 	 */
 	@BelongsToMany(() => User, {
 		as: 'blocks',
@@ -291,7 +291,7 @@ export class User extends Model<User> {
 	public readonly blocks: User[] | undefined;
 
 	/**
-	 * All the users which this user blocked.
+	 * All the users which this.user! blocked.
 	 */
 	@BelongsToMany(() => User, {
 		as: 'blocked',

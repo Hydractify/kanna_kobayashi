@@ -15,28 +15,25 @@ export class WebhookLogger extends Logger {
 		return this._instance || new this();
 	}
 
-	public constructor() {
-		super();
-
-		if (!process.env.NODE_ENV || process.env.NODE_ENV === 'dev') {
-			this.setLogLevel(LogLevel.NONE);
-		}
-	}
+	private _webhookLevel: LogLevel = LogLevel.SILLY;
 
 	protected _write(level: LogLevel, tag: string, data: any[]): void {
 		super._write(level, `Webhook][${tag}`, data);
-		if (this._logLevel < level) return;
+		if (this._webhookLevel < level) return;
+
+		let shardId: string | null = null;
+		[data, shardId] = typeof data[0] === 'number'
+			? [data.slice(1), `Shard ${data[0]}`]
+			: data[0] === 'Manager'
+				? [data.slice(1), data[0]]
+				: [data, 'Global'];
 
 		const cleaned: string = this._prepareText(data);
 
 		const embed: MessageEmbed = new MessageEmbed()
 			.setTimestamp()
 			.setColor(colors[level][2])
-			.setFooter(
-				'SHARD_ID' in process.env
-					? `Shard ${process.env.SHARD_ID}`
-					: 'Sharding Manager',
-		);
+			.setFooter(shardId);
 		const options: WebhookMessageOptions = {
 			avatarURL: 'https://cdn.discordapp.com/attachments/250372608284033025/494249449862725632/avatar.png',
 			embeds: [embed],

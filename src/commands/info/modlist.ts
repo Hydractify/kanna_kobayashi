@@ -41,7 +41,7 @@ class ModListCommand extends Command {
 		}
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setAuthor(`${titleCase(message.guild.name)}'s Mod List`, message.client.user.avatarURL())
+			.setAuthor(`${titleCase(message.guild.name)}'s Mod List`, this.client.user!.avatarURL())
 			.setThumbnail(message.guild.iconURL())
 			.setDescription('This list is populated with all members that can ban and kick members.');
 
@@ -78,7 +78,7 @@ class ModListCommand extends Command {
 		if (!mods.size) return message.reply(`there are no **${status}** mods!`);
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setAuthor(`${titleCase(message.guild.name)}'s Mod List`, message.client.user.avatarURL())
+			.setAuthor(`${titleCase(message.guild.name)}'s Mod List`, this.client.user!.avatarURL())
 			.setDescription('This list is populated with all members that can ban and kick members.')
 			.addField(`${titleCase(status)} Mods`, mapIterable(mods.values()));
 

@@ -26,7 +26,7 @@ class KissCommand extends WeebCommand {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[] | undefined> {
 		if (members && members.size === 1) {
-			if (members.has(message.client.user.id)) return message.reply(`h-hentai da! ${this.emoji}`);
+			if (members.has(this.client.user!.id)) return message.reply(`h-hentai da! ${this.emoji}`);
 		}
 
 		const check: boolean = await this.ensureValidTargets(message, authorModel, members);
