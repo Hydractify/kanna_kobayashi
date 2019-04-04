@@ -179,8 +179,6 @@ export class CommandHandler {
 	@on('message')
 	@RavenContext
 	protected async handle(message: Message): Promise<void> {
-		if (message.author.id !== '218348062828003328') return;
-
 		// Ignore dms
 		if (message.channel instanceof DMChannel) {
 			this.client.channels.remove(message.channel.id);
