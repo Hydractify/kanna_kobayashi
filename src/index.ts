@@ -3,8 +3,7 @@ import 'source-map-support/register';
 
 // Hack to ensure that the WebhookLogger is instantiated first
 import { WebhookLogger } from './structures/WebhookLogger';
-// tslint:disable-next-line:no-unused-expression
-WebhookLogger.instance;
+WebhookLogger.instance.info('Process spawn', parseInt(process.env.SHARDS!), `Process spawned (${process.env.SHARDS})`);
 
 import { config } from 'raven';
 const { ravenToken, clientToken } = require('../data');
