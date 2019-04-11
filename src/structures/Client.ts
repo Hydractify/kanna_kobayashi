@@ -91,7 +91,8 @@ export class Client extends DJSClient {
 
 		if (!left && guild.memberCount !== guild.members.size) await guild.members.fetch();
 
-		const totalGuilds: number = this.guilds.size;
+		const totalGuilds: number = await this.shard.fetchClientValues('guilds.size')
+			.then((result: number[]) => result.reduce((acc: number, current: number) => acc + current));
 		const blacklisted: string = await UserModel.fetch(guild.ownerID)
 			.then((user: UserModel) => user.type === UserTypes.BLACKLISTED ? 'Yes' : 'No');
 		const botCount: number = guild.members.filter((member: GuildMember) => member.user.bot).size;
