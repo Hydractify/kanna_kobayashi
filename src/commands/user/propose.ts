@@ -1,4 +1,4 @@
-import { Collection, CollectorFilter, Message, Snowflake, User } from 'discord.js';
+import { Collection, CollectorFilter, GuildMember, Message, Snowflake, User } from 'discord.js';
 import * as moment from 'moment';
 import { Transaction } from 'sequelize';
 
@@ -26,11 +26,11 @@ class ProposeCommand extends Command {
 		{ authorModel }: ICommandRunInfo,
 	): Promise<string | [User]> {
 		if (!input) return `you are missing someone to propose to! (\`${this.usage}\`)`;
-		const user: User | undefined = await this.resolver.resolveUser(input, false);
-		if (!user) return `I could not find a non-bot user with the name or id ${input}`;
-		if (message.author.id === user.id) return 'you can not propose to yourself.';
+		const member: GuildMember | undefined = await this.resolver.resolveMember(input, message.guild, false);
+		if (!member) return `I could not find a non-bot user with the name or id ${input}`;
+		if (message.author.id === member.id) return 'you can not propose to yourself.';
 
-		return [user];
+		return [member.user];
 	}
 
 	public async run(
