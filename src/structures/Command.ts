@@ -10,10 +10,8 @@ import {
 import { duration } from 'moment';
 // tslint:disable-next-line:no-import-side-effect
 import 'moment-duration-format';
-import { RedisClient } from 'redis-p';
 import { Sequelize } from 'sequelize-typescript';
 
-import { Redis } from '../decorators/RedisDecorator';
 import { Sequelize as sequelize } from '../decorators/SequelizeDecorator';
 import { CommandLog } from '../models/CommandLog';
 import { User as UserModel } from '../models/User';
@@ -29,7 +27,6 @@ import { Resolver } from './Resolver';
 /**
  * Represents an abstract Command
  */
-@Redis
 @sequelize
 export abstract class Command {
 	/**
@@ -97,10 +94,6 @@ export abstract class Command {
 	 */
 	public readonly usage: string;
 
-	/**
-	 * Reference to the redis client
-	 */
-	protected redis!: RedisClient;
 	/**
 	 * Reference to the sequelize connection
 	 */
@@ -235,11 +228,7 @@ export abstract class Command {
 
 		const { level } = userModel;
 
-		await Promise.all([
-			this.redis.hincrby(`users:${user.id}`, 'exp', this.exp),
-			userModel.increment({ exp: this.exp }),
-
-		]);
+		await userModel.increment({ exp: this.exp }),
 
 		userModel.exp += this.exp;
 		if (userModel.level > level) return userModel.level;

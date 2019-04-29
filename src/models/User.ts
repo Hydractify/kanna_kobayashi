@@ -1,13 +1,8 @@
 // tslint:disable member-ordering
 
 import { GuildMember, Role } from 'discord.js';
-import { RedisClient } from 'redis-p';
 import { QueryOptions, QueryTypes } from 'sequelize';
 import {
-	AfterCreate,
-	AfterSave,
-	AfterUpdate,
-	AfterUpsert,
 	BelongsToMany,
 	Column,
 	DataType,
@@ -18,7 +13,6 @@ import {
 	Table,
 } from 'sequelize-typescript';
 
-import { Redis } from '../decorators/RedisDecorator';
 import { Badges } from '../types/Badges';
 import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
@@ -30,7 +24,6 @@ import { UserBlock } from './UserBlock';
 import { UserItem } from './UserItem';
 import { UserReputation } from './UserReputation';
 
-@Redis(true)
 @Table({
 	createdAt: false,
 	tableName: 'users',
@@ -43,66 +36,10 @@ export class User extends Model<User> {
 	 * This will either come from redis, or from postgres if not available.
 	 */
 	public static async fetch(id: string): Promise<User> {
-		const redisData: { [key: string]: string } = await this.redis.hgetall(`users:${id}`);
-		if (redisData) return User.fromRedis(redisData);
-
-		const [user, created]: [User, boolean] = await User.findCreateFind<User>({ where: { id } });
-		if (!created) this.updateRedis(user);
+		const [user]: [User, boolean] = await User.findCreateFind<User>({ where: { id } });
 
 		return user;
 	}
-
-	/**
-	 * Build a User model from redis data.
-	 */
-	public static fromRedis(data: { [key: string]: string | number | Date | boolean }): User {
-		if (data.partnerSince) data.partnerSince = new Date(Number(data.partnerSince));
-
-		data.partnerHidden = data.partnerHidden === 'true';
-		data.exp = Number(data.exp) || 0;
-		data.tier = Number(data.tier) || 0;
-
-		const user: User = new this(data, { isNewRecord: false });
-
-		return user;
-	}
-
-	/**
-	 * Cache or update a user instance into redis
-	 */
-	@AfterCreate
-	@AfterUpdate
-	@AfterSave
-	@AfterUpsert
-	private static updateRedis(user: User): Promise<string | string[]> {
-		const data: { [key: string]: string | number } = user.toJSON();
-		const nullKeys: string[] = [];
-
-		if (data.partnerSince) data.partnerSince = data.partnerSince.valueOf();
-
-		for (const [k, v] of Object.entries(data)) {
-			if (v === null) {
-				delete data[k];
-				nullKeys.push(k);
-			} else if (v === undefined) {
-				delete data[k];
-			}
-		}
-
-		if (!nullKeys.length) {
-			return this.redis.hmset(`users:${user.id}`, data);
-		}
-
-		return this.redis.multi()
-			.hmset(`users:${user.id}`, data)
-			.hdel(`users:${user.id}`, ...nullKeys)
-			.exec();
-	}
-
-	/**
-	 * Reference to the redis client
-	 */
-	private static redis: RedisClient;
 
 	/**
 	 * Current level of the User

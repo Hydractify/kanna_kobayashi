@@ -30,10 +30,8 @@ process.on('unhandledRejection', (error: Error) => {
 
 import { Client } from './structures/Client';
 import { PostgreSQL } from './structures/PostgreSQL';
-import { Redis } from './structures/Redis';
 
 PostgreSQL.instance.start();
-Redis.instance.start();
 
 const client: Client = new Client({
 	disableEveryone: true,
