@@ -3,7 +3,7 @@
 import { PostgreSQL } from '../structures/PostgreSQL';
 
 /**
- * Adds a reference to the redis client to the class or class prototype.
+ * Adds a reference to the sequelize client to the class or class prototype.
  * Defaults to adding to the prototype.
  */
 export function Sequelize(defineStatic: boolean): ClassDecorator;

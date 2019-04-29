@@ -1,6 +1,3 @@
-import { RedisClient } from 'redis-p';
-
-import { Redis } from '../../decorators/RedisDecorator';
 import { OsuMode } from '../../types/osu/OsuMode';
 import { Api } from './';
 import { Score } from './Score';
@@ -8,13 +5,12 @@ import { Score } from './Score';
 /**
  * Represents an osu! user.
  */
-@Redis(true)
 export class User {
 	/**
 	 * Fetches a full osu! user, scores by passed mode.
 	 * Mode defaults to `OsuMode.OSU`.
 	 */
-	public static async fetch(query: string | number, mode: OsuMode = OsuMode.OSU): Promise<Required<User> | undefined> {
+	public static async fetch(query: string | number, mode: OsuMode = OsuMode.OSU): Promise<User | undefined> {
 		const [data]: { [key: string]: string }[] = await Api().get_user.get({
 			query: {
 				limit: 1,
@@ -25,30 +21,7 @@ export class User {
 
 		if (!data) return undefined;
 
-		this.redis.multi()
-			.hmset(`osu:users:${data.user_id}`, {
-				country: data.country,
-				user_id: data.user_id,
-				username: data.username,
-			})
-			.set(`osu:usernames:${data.username.toLowerCase()}`, data.user_id)
-			.exec()
-			.catch(() => undefined);
-
-		return new this(data) as Required<User>;
-	}
-
-	/**
-	 * Fetch a most likely partial osu! user, only guaranteed to have id, username and country.
-	 * If the user was not cached previously a full user is returned instead.
-	 */
-	public static async fetchBasic(query: string | number): Promise<User | undefined> {
-		query = await this.redis.get(`osu:usernames:${String(query).toLowerCase()}`) || query;
-		const data: { [key: string]: string } = await this.redis.hgetall(`osu:users:${query}`);
-
-		if (!data) return this.fetch(query) as Promise<User>;
-
-		return new this(data, false);
+		return new this(data) as User;
 	}
 
 	/**
@@ -83,11 +56,6 @@ export class User {
 		Y: '🇾',
 		Z: '🇿',
 	};
-
-	/**
-	 * Reference to the redis client
-	 */
-	private static redis: RedisClient;
 
 	/**
 	 * Total accuracy the user has
