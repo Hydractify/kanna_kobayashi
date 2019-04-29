@@ -1,7 +1,5 @@
 import { Moment, utc } from 'moment';
-import { Multi, RedisClient } from 'redis-p';
 
-import { Redis } from '../../decorators/RedisDecorator';
 import { BeatmapGenre } from '../../types/osu/BeatmapGenre';
 import { BeatmapLanguage } from '../../types/osu/BeatmapLanguage';
 import { BeatmapState } from '../../types/osu/BeatmapState';
@@ -13,33 +11,19 @@ import { Score } from './Score';
 /**
  * Represents an osu! beatmap.
  */
-@Redis(true)
 export class Beatmap {
 	/**
 	 * Fetch an osu! beatmap by id, mode defaults to `OsuMode.OSU`.
 	 */
 	public static async fetch(id: string | number, mode: OsuMode = OsuMode.OSU): Promise<Beatmap | undefined> {
-		let data: { [key: string]: string } = await this.redis.hgetall(`osu:beatmaps:${id}_${mode}`);
-
-		if (!data) {
-			[data] = await Api().get_beatmaps.get({
-				query: {
-					a: 1,
-					b: id,
-					limit: 1,
-					m: mode,
-				},
-			});
-
-			if (!data) return undefined;
-
-			data.mode = String(mode);
-			if ([BeatmapState.LOVED, BeatmapState.APPROVED, BeatmapState.RANKED].includes(Number(data.approved))) {
-				if (!data.max_combo) delete data.max_combo;
-				this.redis.hmset(`osu:beatmaps:${id}_${mode}`, data)
-					.catch(() => undefined);
+		const [data]: { [key: string]: string }[] = await Api().get_beatmaps.get({
+			query: {
+				a: 1,
+				b: id,
+				limit: 1,
+				m: mode,
 			}
-		}
+		});
 
 		return new this(data);
 	}
@@ -48,61 +32,14 @@ export class Beatmap {
 	 * Fetch a full set of osu! beatmaps.
 	 */
 	public static async fetchSet(id: string | number): Promise<Beatmap[] | undefined> {
-		const already: string[] = await this.redis.smembers(`osu:beatmapsets:${id}`);
-
-		let data: { [key: string]: string }[] | undefined;
-		if (already.length) {
-			const multi: Multi = this.redis.multi();
-			for (const alreadyId of already) {
-				multi.hgetall(`osu:beatmaps:${alreadyId}`);
-			}
-
-			data = await multi.exec().catch(() => undefined);
-		}
-
-		const maps: Beatmap[] = [];
-
-		if (data && data.length) {
-			for (const map of data) {
-				maps.push(new this(map));
-			}
-
-			return maps;
-		}
-
-		data = await Api().get_beatmaps.get({
+		const data: { [key: string]: string }[] = await Api().get_beatmaps.get({
 			query: { s: id },
 		});
 
 		if (!data || !data.length) return undefined;
 
-		if ([BeatmapState.LOVED, BeatmapState.APPROVED, BeatmapState.RANKED].includes(Number(data[0].approved))) {
-			const multi: Multi = this.redis.multi();
-
-			const ids: string[] = [];
-			for (const map of data) {
-				multi.hmset(`osu:beatmaps:${map.beatmap_id}_${map.mode}`, map);
-				ids.push(`${map.beatmap_id}_${map.mode}`);
-				maps.push(new this(map));
-			}
-
-			multi
-				.sadd(`osu:beatmapsets:${data[0].beatmapset_id}`, ...ids)
-				.exec()
-				.catch(() => undefined);
-		} else {
-			for (const map of data) {
-				maps.push(new this(map));
-			}
-		}
-
-		return maps;
+		return data.map((map: { [key: string]: string }) => new this(map));
 	}
-
-	/**
-	 * Reference to the redis client instance
-	 */
-	private static redis: RedisClient;
 
 	/**
 	 * `AR` of the beatmap

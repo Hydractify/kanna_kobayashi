@@ -50,7 +50,7 @@ class OsuUserCommand extends Command {
 	): Promise<Message | Message[]> {
 		if (option) return this.fetchScores(message, authorModel, query, mode, option);
 
-		const user: Required<User> | undefined = await User.fetch(query, mode);
+		const user: User | undefined = await User.fetch(query, mode);
 		if (!user) return message.reply('I could not find any user matching your query.');
 
 		const embed: MessageEmbed = this.embed(message, authorModel, user as User)
@@ -86,7 +86,7 @@ class OsuUserCommand extends Command {
 		mode: OsuMode,
 		type: 'best' | 'recent',
 	): Promise<Message | Message[]> {
-		const user: User | undefined = await User.fetchBasic(query);
+		const user: User | undefined = await User.fetch(query);
 		if (!user) return message.reply('I could not find any user matching your query.');
 
 		const scores: Score[] = type === 'best'

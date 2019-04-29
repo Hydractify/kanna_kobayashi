@@ -6,7 +6,6 @@ _You do not have to be a master on these areas, but at least have knowledge on h
  
 * [discord.js][djs]
 * [JavaScript][js]
-* [Redis][redis]
 * [Sequelize][sequelize], _[PostgreSQL][psql] included_
 * [TypeScript][ts]
 
@@ -19,7 +18,6 @@ _You do not have to be a master on these areas, but at least have knowledge on h
 
 [djs]: https://github.com/hydrabolt/discord.js
 [js]: https://en.wikipedia.org/wiki/JavaScript
-[redis]: https://github.com/antirez/redis
 [sequelize]: https://github.com/sequelize/sequelize
 [psql]: https://www.postgresql.org
 [ts]: https://www.typescriptlang.org/
