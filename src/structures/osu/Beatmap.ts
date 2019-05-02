@@ -22,8 +22,10 @@ export class Beatmap {
 				b: id,
 				limit: 1,
 				m: mode,
-			}
+			},
 		});
+
+		if (!data) return undefined;
 
 		return new this(data);
 	}
