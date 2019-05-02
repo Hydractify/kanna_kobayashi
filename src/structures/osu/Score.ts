@@ -187,7 +187,7 @@ export class Score {
 	public async fetchBeatmap(mode: OsuMode = this.mode): Promise<Beatmap> {
 		if (this._beatmap) return this._beatmap;
 
-		this._beatmap = await require('./Beatmap').Beatmap.fetch(this.beatmapId, mode);
+		this._beatmap = await (require('./Beatmap').Beatmap as typeof Beatmap).fetch(this.beatmapId, mode);
 
 		return this._beatmap!;
 	}
@@ -198,7 +198,7 @@ export class Score {
 	public async fetchUser(): Promise<User> {
 		if (this._user) return this._user;
 
-		this._user = await require('./User').User.fetchBasic(this.userId);
+		this._user = await (require('./User').User as typeof User).fetch(this.userId);
 
 		return this._user!;
 	}
