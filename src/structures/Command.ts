@@ -228,7 +228,7 @@ export abstract class Command {
 
 		const { level } = userModel;
 
-		await userModel.increment({ exp: this.exp }),
+		await userModel.increment({ exp: this.exp });
 
 		userModel.exp += this.exp;
 		if (userModel.level > level) return userModel.level;
