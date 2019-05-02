@@ -60,23 +60,23 @@ export class User {
 	/**
 	 * Total accuracy the user has
 	 */
-	public readonly accuracy?: number;
+	public readonly accuracy: number;
 	/**
 	 * Total number of 100s the user has
 	 */
-	public readonly count100?: number;
+	public readonly count100: number;
 	/**
 	 * Total number of 300s the user has
 	 */
-	public readonly count300?: number;
+	public readonly count300: number;
 	/**
 	 * Total number of 50s the user has
 	 */
-	public readonly count50?: number;
+	public readonly count50: number;
 	/**
 	 * Total amount of As the user has achieved
 	 */
-	public readonly countA?: number;
+	public readonly countA: number;
 	/**
 	 * Country the user is from
 	 */
@@ -84,15 +84,15 @@ export class User {
 	/**
 	 * Rank the user has in their country
 	 */
-	public readonly countryRank?: number;
+	public readonly countryRank: number;
 	/**
 	 * Total amount of Ss the user has achieved
 	 */
-	public readonly countS?: number;
+	public readonly countS: number;
 	/**
 	 * Total amount of SSs the user has achieved
 	 */
-	public readonly countSS?: number;
+	public readonly countSS: number;
 	/**
 	 * Id of the user
 	 */
@@ -100,27 +100,27 @@ export class User {
 	/**
 	 * Level of the user
 	 */
-	public readonly level?: number;
+	public readonly level: number;
 	/**
 	 * Total amount of plays the user has
 	 */
-	public readonly playCount?: number;
+	public readonly playCount: number;
 	/**
 	 * Total amount of pp the user has
 	 */
-	public readonly pp?: number;
+	public readonly pp: number;
 	/**
 	 * Current rank of the user
 	 */
-	public readonly rank?: number;
+	public readonly rank: number;
 	/**
 	 * Total ranked score, calculated by adding the best scores of all sets together
 	 */
-	public readonly rankedScore?: number;
+	public readonly rankedScore: number;
 	/**
 	 * Total score the user achieved in all ranked beatmaps in all plays
 	 */
-	public readonly totalScore?: number;
+	public readonly totalScore: number;
 	/**
 	 * Username of the user
 	 */
@@ -129,28 +129,26 @@ export class User {
 	/**
 	 * Instantiate a new osu! user.
 	 */
-	public constructor(data: { [key: string]: string }, full: boolean = true) {
+	public constructor(data: { [key: string]: string }) {
 		this.id = data.user_id;
 		this.username = data.username;
 		this.country = data.country;
 
-		if (full) {
-			this.count300 = Number(data.count300);
-			this.count100 = Number(data.count100);
-			this.count50 = Number(data.count50);
-			this.playCount = Number(data.playcount);
-			this.rankedScore = Number(data.ranked_score);
-			this.totalScore = Number(data.total_score);
-			this.rank = Number(data.pp_rank);
-			this.level = Number(data.level);
-			this.pp = Number(data.pp_raw);
-			this.accuracy = Number(data.accuracy);
-			this.countSS = Number(data.count_rank_ss);
-			this.countS = Number(data.count_rank_s);
-			this.countA = Number(data.count_rank_a);
-			this.countryRank = Number(data.pp_country_rank);
-			// Technically a thing: this.events = data.events;
-		}
+		this.count300 = Number(data.count300);
+		this.count100 = Number(data.count100);
+		this.count50 = Number(data.count50);
+		this.playCount = Number(data.playcount);
+		this.rankedScore = Number(data.ranked_score);
+		this.totalScore = Number(data.total_score);
+		this.rank = Number(data.pp_rank);
+		this.level = Number(data.level);
+		this.pp = Number(data.pp_raw);
+		this.accuracy = Number(data.accuracy);
+		this.countSS = Number(data.count_rank_ss);
+		this.countS = Number(data.count_rank_s);
+		this.countA = Number(data.count_rank_a);
+		this.countryRank = Number(data.pp_country_rank);
+		// Technically a thing: this.events = data.events;
 	}
 
 	/**
