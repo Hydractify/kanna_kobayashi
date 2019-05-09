@@ -43,7 +43,7 @@
 		"Alexandre Cavalheiro <wizardlink@hydractify.org>",
 		"SpaceEEC <space@hydractify.org>"
 	],
-	"license": "ISC",
+	"license": "GPL-3.0",
 	"bugs": {
 		"url": "https://github.com/hydractify/kanna-kobayashi/issues"
 	},
