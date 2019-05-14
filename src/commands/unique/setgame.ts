@@ -28,7 +28,7 @@ class SetGameCommand extends Command {
 			let stream: string = '';
 			if (args[0].toLowerCase() === 'stream') {
 				args = args.slice(1);
-				stream = ', \'https://twitch.tv/wizardlink\'';
+				stream = 'https://twitch.tv/wizardlink';
 			}
 
 			await this.client.shard.broadcastEval(this.setActivity, [args.join(' '), stream]);
@@ -44,7 +44,7 @@ class SetGameCommand extends Command {
 					name: `${game} [${shardId}]`,
 					shardID: shardId,
 					type: stream ? 'STREAMING' : 'PLAYING',
-					url: stream,
+					url: stream || undefined,
 				}),
 			),
 		);
