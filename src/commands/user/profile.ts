@@ -112,7 +112,7 @@ class ProfileCommand extends Command {
 
 		const formatted: string[] = [];
 		for (const item of items) {
-			formatted.push(`[${item.userItem!.count}] ${titleCase(item.name.replace(/_/g, ' '))}`);
+			formatted.push(titleCase(item.name.replace(/_/g, ' ')));
 		}
 
 		return formatted.join('\n');
