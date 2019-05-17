@@ -1,5 +1,6 @@
-import { Column, DataType, Model, PrimaryKey, Table } from 'sequelize-typescript';
+import { Column, DataType, PrimaryKey, Table } from 'sequelize-typescript';
 
+import { Model } from '../structures/Model';
 import { UserReputationTypes } from '../types/UserReputationTypes';
 
 @Table({

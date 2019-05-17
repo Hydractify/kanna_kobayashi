@@ -1,4 +1,6 @@
-import { AllowNull, Column, CreatedAt, DataType, Model, Table } from 'sequelize-typescript';
+import { AllowNull, Column, CreatedAt, DataType, Table } from 'sequelize-typescript';
+
+import { Model } from '../structures/Model';
 
 /**
  * Keeps track of command usages

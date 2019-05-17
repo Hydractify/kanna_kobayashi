@@ -1,5 +1,6 @@
-import { Column, DataType, HasOne, Model, PrimaryKey, Table } from 'sequelize-typescript';
+import { Column, DataType, HasOne, PrimaryKey, Table } from 'sequelize-typescript';
 
+import { Model } from '../structures/Model';
 import { Quiz } from './Quiz';
 
 @Table({

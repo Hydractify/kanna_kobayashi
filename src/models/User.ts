@@ -8,12 +8,11 @@ import {
 	DataType,
 	HasMany,
 	HasOne,
-	Model,
 	PrimaryKey,
 	Table,
 } from 'sequelize-typescript';
-import { inspect } from 'util';
 
+import { Model } from '../structures/Model';
 import { Badges } from '../types/Badges';
 import { PermLevels } from '../types/PermLevels';
 import { UserTypes } from '../types/UserTypes';
@@ -40,13 +39,6 @@ export class User extends Model<User> {
 		const [user]: [User, boolean] = await User.findCreateFind<User>({ where: { id } });
 
 		return user;
-	}
-
-	/**
-	 * Custom inspect method returning the actual data values of the object to avoid unnecessary evals.
-	 */
-	public [inspect.custom]() {
-		return this.dataValues;
 	}
 
 	/**

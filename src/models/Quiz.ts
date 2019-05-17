@@ -1,4 +1,6 @@
-import { AllowNull, Column, DataType, Model, PrimaryKey, Table, Validate } from 'sequelize-typescript';
+import { AllowNull, Column, DataType, PrimaryKey, Table, Validate } from 'sequelize-typescript';
+
+import { Model } from '../structures/Model';
 
 @Table({
 	createdAt: false,

@@ -3,11 +3,11 @@ import {
 	BelongsToMany,
 	Column,
 	DataType,
-	Model,
 	PrimaryKey,
 	Table,
 } from 'sequelize-typescript';
 
+import { Model } from '../structures/Model';
 import { Badges } from '../types/Badges';
 import { User } from './User';
 import { UserItem } from './UserItem';
