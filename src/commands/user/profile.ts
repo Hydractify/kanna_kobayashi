@@ -87,7 +87,7 @@ class ProfileCommand extends Command {
 
 		if (typeof userModel.timezone === 'number') {
 			const time: string = moment().utc().add(userModel.timezone, 'hours').format('dddd Do H:mm');
-			const timezone: string | number = userModel.timezone > 0 ? `+${userModel.timezone}` : userModel.timezone;
+			const timezone: string | number = userModel.timezone >= 0 ? `+${userModel.timezone}` : userModel.timezone;
 			userTime = `${time} (UTC ${timezone})`;
 		}
 
@@ -102,13 +102,14 @@ class ProfileCommand extends Command {
 			.addField('Relationship', partnerString, true);
 
 		if (!userModel.partnerHidden && user === author && userModel.partnerId) {
+			const offset: number = authorModel.timezone || 0;
 			const anniversary: string = moment(userModel.partnerSince!)
 				// .utc() because we .add() the utc offset to display the correct date
 				.utc()
-				.add(authorModel.timezone || 0, 'hours')
+				.add(offset, 'hours')
 				.format('YYYY-MM-DD');
 
-			embed.addField('Relationship Anniversary', anniversary, true);
+			embed.addField('Relationship Anniversary', `${anniversary} (UTC ${offset >= 0 ? '+' : ''}${offset})`, true);
 		}
 
 		return embed;
