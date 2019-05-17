@@ -98,9 +98,10 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 			if (reaction.me) reaction.users.remove().catch(() => undefined);
 		}
 
-		return message.edit(await (this.handler.resolveCommand('profile') as ProfileCommand)
-			.fetchEmbed({ author: user, guild: message.guild }, pickedUser),
-		);
+		const userEmbed: MessageEmbed = await (this.handler.resolveCommand('profile') as ProfileCommand)
+			.fetchEmbed({ author: user, guild: message.guild }, await user.fetchModel(), pickedUser);
+
+		return message.edit(userEmbed);
 	}
 
 	public async run(

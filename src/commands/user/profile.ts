@@ -7,6 +7,7 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { titleCase } from '../../util/Util';
 
 class ProfileCommand extends Command {
@@ -35,13 +36,17 @@ class ProfileCommand extends Command {
 		return [user];
 	}
 
-	public async run(message: Message, [user]: [User]): Promise<Message | Message[]> {
-		const embed: MessageEmbed = await this.fetchEmbed(message, user);
+	public async run(message: Message, [user]: [User], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, user);
 		return message.channel.send(embed);
 	}
 
-	public async fetchEmbed({ author, guild }: { author: User, guild: Guild }, user: User): Promise<MessageEmbed> {
-		const [userModel] = await UserModel.findCreateFind({
+	public async fetchEmbed(
+		{ author, guild }: { author: User, guild: Guild },
+		authorModel: UserModel,
+		user: User,
+	): Promise<MessageEmbed> {
+		const [userModel]: [UserModel, boolean] = await UserModel.findCreateFind({
 			include: [
 				{
 					as: 'badges',
@@ -81,8 +86,8 @@ class ProfileCommand extends Command {
 		let userTime: string = 'No timezone set.';
 
 		if (typeof userModel.timezone === 'number') {
-			const time = moment().utc().subtract(-(userModel.timezone), 'hours').format('dddd Do H:mm');
-			const timezone = userModel.timezone > 0 ? `+${userModel.timezone}` : userModel.timezone;
+			const time: string = moment().utc().add(userModel.timezone, 'hours').format('dddd Do H:mm');
+			const timezone: string | number = userModel.timezone > 0 ? `+${userModel.timezone}` : userModel.timezone;
 			userTime = `${time} (UTC ${timezone})`;
 		}
 
@@ -97,7 +102,13 @@ class ProfileCommand extends Command {
 			.addField('Relationship', partnerString, true);
 
 		if (!userModel.partnerHidden && user === author && userModel.partnerId) {
-			embed.addField('Relationship Anniversary', moment(userModel.partnerSince!).format('YYYY-MM-DD'), true);
+			const anniversary: string = moment(userModel.partnerSince!)
+				// .utc() because we .add() the utc offset to display the correct date
+				.utc()
+				.add(authorModel.timezone || 0, 'hours')
+				.format('YYYY-MM-DD');
+
+			embed.addField('Relationship Anniversary', anniversary, true);
 		}
 
 		return embed;
