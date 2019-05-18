@@ -10,6 +10,7 @@ import {
 	User,
 } from 'discord.js';
 import { join } from 'path';
+import { Counter, register } from 'prom-client';
 import { captureBreadcrumb } from 'raven';
 
 import { ListenerUtil } from '../decorators/ListenerUtil';
@@ -40,6 +41,24 @@ export class Client extends DJSClient {
 	public readonly webhook: WebhookLogger = WebhookLogger.instance;
 
 	/**
+	 * Counter for errors of any kind.
+	 */
+	public readonly errorCount: Counter = new Counter({
+		help: 'Number of occurred errors',
+		labelNames: ['type'],
+		name: 'kanna_kobayashi_error_count',
+	});
+
+	/**
+	 * Counter for received gateway events.
+	 */
+	private readonly _eventCount: Counter = new Counter({
+		help: 'Number of events received',
+		labelNames: ['type'],
+		name: 'kanna_kobayashi_event_count',
+	});
+
+	/**
 	 * Instantiate the client
 	 */
 	public constructor(options: ClientOptions) {
@@ -48,7 +67,23 @@ export class Client extends DJSClient {
 		this.commandHandler = new CommandHandler(this);
 		this.commandHandler.loadCategoriesIn(join(__dirname, '..', 'commands'));
 
+		// Pad the number with zeros at the beginning for sorting
+		const shardId: string = (this.options.shards as [number])[0]
+			.toString()
+			.padStart(this.options.totalShardCount!.toString().length, '0');
+
+		register.setDefaultLabels({ shard_id: shardId });
+
 		registerListeners(this);
+	}
+
+	/**
+	 * Fetches the metrics of the current process.
+	 *
+	 * (Used internally when accessing /metrics in the Sharding Manager)
+	 */
+	public getMetrics() {
+		return register.getMetricsAsJSON();
 	}
 
 	@on('shardReady')
@@ -80,6 +115,8 @@ export class Client extends DJSClient {
 	@on('shardError')
 	@RavenContext
 	protected _onError(error: Error, id: number): void {
+		this.errorCount.inc({ type: 'WebSocket' });
+
 		this.webhook.error('ShardError', id, error);
 	}
 
@@ -180,6 +217,7 @@ export class Client extends DJSClient {
 			} catch (e) {
 				// Ignore Unknown Message errors
 				if (e.code === 10008) return;
+				this.errorCount.inc({ type: 'Reaction' });
 				this.webhook.error('ReactionError', reaction.message.guild.shardID, e);
 
 				return;
@@ -290,5 +328,13 @@ export class Client extends DJSClient {
 
 			return;
 		}
+	}
+
+	@on('raw')
+	@RavenContext
+	protected _onRaw(event: { op: number, d: any, s?: number, t?: string }): void {
+		this._eventCount.inc({
+			type: event.t || event.op,
+		});
 	}
 }

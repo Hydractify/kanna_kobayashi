@@ -10,6 +10,7 @@ import {
 } from 'discord.js';
 import { readdir } from 'fs';
 import { extname, join } from 'path';
+import { Counter } from 'prom-client';
 import { captureBreadcrumb, captureException, captureMessage } from 'raven';
 import { promisify } from 'util';
 
@@ -56,10 +57,20 @@ export class CommandHandler {
 	 * Array of always valid prefixes
 	 */
 	private readonly _prefixes: string[];
+
+	/**
+	 * Counter for the amount of commands ran.
+	 */
+	private readonly _commandCounter: Counter = new Counter({
+		help: 'Total amount of commands received',
+		name: 'kanna_kobayashi_command_count',
+	});
+
 	/**
 	 * Reference to the logger
 	 */
 	private readonly logger!: Logger;
+
 	/**
 	 * Instantiate a new command handler
 	 */
@@ -242,6 +253,7 @@ export class CommandHandler {
 				| [undefined, undefined, undefined] = this._matchCommand(message, guildModel);
 			if (!command || !commandName || !args) return;
 
+			this._commandCounter.inc();
 			captureBreadcrumb({ category: 'Command', data: { commandName }, level: 'debug' });
 
 			const [authorModel, ownerModel]: [UserModel, UserModel, GuildMember | undefined] =
@@ -292,6 +304,7 @@ export class CommandHandler {
 					await message.reply(`you advanced to level **${newLevel}**! ${Emojis.KannaHug}`);
 				}
 			} catch (error) {
+				this.client.errorCount.inc({ type: 'Command' });
 				captureException(error, {
 					extra: {
 						channel_deleted: message.channel.deleted,

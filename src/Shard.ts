@@ -2,7 +2,10 @@
 import 'source-map-support/register';
 
 import { Shard, ShardingManager } from 'discord.js';
+import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { join } from 'path';
+import { AggregatorRegistry, register } from 'prom-client';
+import { parse } from 'url';
 
 import { WebhookLogger } from './structures/WebhookLogger';
 
@@ -28,3 +31,15 @@ manager.on('shardCreate', (shard: Shard) => {
 		.on('error', (error: Error) => webhook.error('Shard Error', shard.id, 'Shard errored:', error))
 		.on('spawn', () => webhook.info('Shard Spawn', shard.id, 'Shard spawned.'));
 });
+
+createServer(async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
+	if (parse(req.url!).pathname === '/metrics') {
+		const metrics: object[][] = await manager.broadcastEval('this.getMetrics()');
+		res.writeHead(200, { 'content-type': register.contentType });
+		res.write(AggregatorRegistry.aggregate(metrics).metrics());
+	} else {
+		res.writeHead(404, { 'content-type': register.contentType });
+		res.write('Route not found');
+	}
+	res.end();
+}).listen(9001, () => webhook.info('Prometheus', 'Listening for requests...'));
