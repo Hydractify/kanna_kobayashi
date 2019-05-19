@@ -16,7 +16,7 @@ process.on('unhandledRejection', (error: Error) => {
 	webhook.error('REJECTION', error);
 });
 
-const { clientToken: token }: { clientToken: string } = require('../data');
+const { clientToken: token, httpPort }: { clientToken: string } = require('../data');
 
 const manager: ShardingManager = new ShardingManager(join(__dirname, 'index.js'), {
 	token,
@@ -49,4 +49,4 @@ createServer(async (req: IncomingMessage, res: ServerResponse): Promise<void> =>
 		res.write('Internal Server Error');
 	}
 	res.end();
-}).listen(9001, () => webhook.info('Prometheus', 'Listening for requests...'));
+}).listen(httpPort, () => webhook.info('Prometheus', 'Listening for requests...'));

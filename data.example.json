@@ -9,5 +9,6 @@
 		"id": "",
 		"secret": ""
 	},
-	"weebToken": "Bearer <Token>"
+	"weebToken": "Bearer <Token>",
+	"httpPort": 9000
 }
