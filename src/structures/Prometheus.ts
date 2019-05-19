@@ -32,13 +32,19 @@ export class Prometheus {
 	 */
 	private readonly timers: NodeJS.Timer[] = [];
 
-	/** Gauge for the current memory usage */
+	/** Gauge for the memory usage */
 	private readonly _memory: Gauge;
 	/** Gauge for the node version */
 	private readonly _nodeVersion: Gauge;
 	/** Gauge for the bot version and commit hash */
 	private readonly _kannaVersion: Gauge;
+	/** Gauge for the cpu usage */
+	private readonly _cpu: Gauge;
 
+	/** The last cpu time used to get diffs */
+	private _lastCpuUsage: { user: number, system: number } = { user: 0, system: 0 };
+
+	/** Whether the Prometheus singleton is already started */
 	private started: boolean = false;
 
 	/**
@@ -63,9 +69,14 @@ export class Prometheus {
 		});
 
 		this._kannaVersion = new Gauge({
-			help: 'Current version of the bot',
+			help: 'Version of the bot',
 			labelNames: ['version', 'commit'],
 			name: 'kanna_kobayashi_version',
+		});
+
+		this._cpu = new Gauge({
+			help: 'CPU time of this process',
+			name: 'kanna_kobayashi_cpu',
 		});
 	}
 
@@ -77,8 +88,17 @@ export class Prometheus {
 		this.started = true;
 
 		this.timers.push(
-			setInterval(() =>
-				this._memory.set(process.memoryUsage().rss, Date.now()), TIMEOUT),
+			setInterval(
+				() => this._memory.set(process.memoryUsage().rss, Date.now()),
+				TIMEOUT,
+			),
+			setInterval(
+				() => {
+					const { user, system } = this._lastCpuUsage = process.cpuUsage(this._lastCpuUsage);
+					this._cpu.set(user + system, Date.now());
+				},
+				TIMEOUT,
+			),
 		);
 		for (const timer of this.timers) timer.unref();
 
