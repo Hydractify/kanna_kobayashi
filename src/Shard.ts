@@ -16,7 +16,7 @@ process.on('unhandledRejection', (error: Error) => {
 	webhook.error('REJECTION', error);
 });
 
-const { clientToken: token, httpPort }: { clientToken: string } = require('../data');
+const { clientToken: token, httpPort }: { clientToken: string, httpPort: number } = require('../data');
 
 const manager: ShardingManager = new ShardingManager(join(__dirname, 'index.js'), {
 	token,
