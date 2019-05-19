@@ -10,7 +10,7 @@ import {
 	User,
 } from 'discord.js';
 import { join } from 'path';
-import { Counter, register } from 'prom-client';
+import { Counter, Gauge, register } from 'prom-client';
 import { captureBreadcrumb } from 'raven';
 
 import { ListenerUtil } from '../decorators/ListenerUtil';
@@ -59,6 +59,14 @@ export class Client extends DJSClient {
 	});
 
 	/**
+	 * Gauge for the current guild count
+	 */
+	private readonly _guildCount: Gauge = new Gauge({
+		help: 'Number of guilds',
+		name: 'kanna_kobayashi_guild_count',
+	});
+
+	/**
 	 * Instantiate the client
 	 */
 	public constructor(options: ClientOptions) {
@@ -95,6 +103,8 @@ export class Client extends DJSClient {
 	@on('ready')
 	@RavenContext
 	protected _onReady(): void {
+		this._guildCount.set(this.guilds.size);
+
 		this.webhook.info('Ready', 'Manager', 'Logged in and processing events!');
 	}
 
@@ -124,6 +134,7 @@ export class Client extends DJSClient {
 	@on('guildDelete', true)
 	@RavenContext
 	protected async _onGuild(guild: Guild, left: boolean): Promise<void> {
+		this._guildCount.set(this.guilds.size);
 		captureBreadcrumb({ category: left ? 'guildDelete' : 'guildCreate', level: 'debug' });
 
 		if (!left && guild.memberCount !== guild.members.size) await guild.members.fetch();
