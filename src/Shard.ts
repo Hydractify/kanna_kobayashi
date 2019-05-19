@@ -33,13 +33,20 @@ manager.on('shardCreate', (shard: Shard) => {
 });
 
 createServer(async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
-	if (parse(req.url!).pathname === '/metrics') {
-		const metrics: object[][] = await manager.broadcastEval('this.getMetrics()');
-		res.writeHead(200, { 'content-type': register.contentType });
-		res.write(AggregatorRegistry.aggregate(metrics).metrics());
-	} else {
-		res.writeHead(404, { 'content-type': register.contentType });
-		res.write('Route not found');
+	try {
+		if (parse(req.url!).pathname === '/metrics') {
+			const metrics: object[][] = await manager.broadcastEval('this.getMetrics()');
+			res.writeHead(200, { 'content-type': register.contentType });
+			res.write(AggregatorRegistry.aggregate(metrics).metrics());
+		} else {
+			res.writeHead(404, { 'content-type': register.contentType });
+			res.write('Route not found');
+		}
+	} catch (e) {
+		webhook.error('Prometheus', e);
+
+		res.writeHead(500, { 'content-type': register.contentType });
+		res.write('Internal Server Error');
 	}
 	res.end();
 }).listen(9001, () => webhook.info('Prometheus', 'Listening for requests...'));
