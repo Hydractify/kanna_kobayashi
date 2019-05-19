@@ -82,6 +82,9 @@ export class Client extends DJSClient {
 
 		register.setDefaultLabels({ shard_id: shardId });
 
+		// To get a stat here, not simply nothing
+		this.errorCount.inc(0);
+
 		registerListeners(this);
 	}
 
