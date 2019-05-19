@@ -10,6 +10,7 @@
 		"moment-duration-format": "^2.2.2",
 		"node-fetch": "^2.2.0",
 		"pg": "^7.4.3",
+		"prom-client": "^11.3.0",
 		"raven": "github:spaceeec/raven-node#pg_fix",
 		"reflect-metadata": "^0.1.12",
 		"sequelize": "4.38.0",
