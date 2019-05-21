@@ -94,8 +94,9 @@ export class Prometheus {
 			),
 			setInterval(
 				() => {
-					const { user, system } = this._lastCpuUsage = process.cpuUsage(this._lastCpuUsage);
-					this._cpu.set(user + system, Date.now());
+					let oldUsage: number = this._lastCpuUsage.system + this._lastCpuUsage.user;
+					const { user, system } = this._lastCpuUsage = process.cpuUsage();
+					this._cpu.set((user + system) - oldUsage, Date.now());
 				},
 				TIMEOUT,
 			),
