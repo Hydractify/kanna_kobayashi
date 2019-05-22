@@ -13,7 +13,7 @@ const webhook: WebhookLogger = WebhookLogger.instance;
 webhook.info('Manager Spawn', 'Manager', 'Manager spawned.');
 
 process.on('unhandledRejection', (error: Error) => {
-	webhook.error('REJECTION', error);
+	webhook.error('REJECTION', 'Manager', error);
 });
 
 const { clientToken: token, httpPort }: { clientToken: string, httpPort: number } = require('../data');
@@ -27,9 +27,9 @@ manager.spawn(manager.totalShards, 5500, false);
 manager.on('shardCreate', (shard: Shard) => {
 	webhook.info('Shard Create', shard.id, 'Shard created.');
 	shard
-		.on('death', () => webhook.error('Shard Death', shard.id, 'Shard died.'))
+		.on('death', () => webhook.warn('Shard Death', shard.id, 'Shard died.'))
 		.on('error', (error: Error) => webhook.error('Shard Error', shard.id, 'Shard errored:', error))
-		.on('spawn', () => webhook.info('Shard Spawn', shard.id, 'Shard spawned.'));
+		.on('spawn', () => webhook.warn('Shard Spawn', shard.id, 'Shard spawned.'));
 });
 
 createServer(async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
@@ -43,10 +43,10 @@ createServer(async (req: IncomingMessage, res: ServerResponse): Promise<void> =>
 			res.write('Route not found');
 		}
 	} catch (e) {
-		webhook.error('Prometheus', e);
+		webhook.error('Prometheus', 'Manager', e);
 
 		res.writeHead(500, { 'content-type': register.contentType });
 		res.write('Internal Server Error');
 	}
 	res.end();
-}).listen(httpPort, () => webhook.info('Prometheus', 'Listening for requests...'));
+}).listen(httpPort, () => webhook.info('Prometheus', 'Manager', 'Listening for requests...'));

@@ -323,7 +323,7 @@ export class CommandHandler {
 					},
 				});
 
-				this.client.webhook.error(error);
+				this.client.webhook.error('CommandError', message.guild.shardID, error);
 				message.reply(
 					'**an errror occured, but rest assured! It has already been reported and will be fixed in no time!**',
 				).catch(() => null);

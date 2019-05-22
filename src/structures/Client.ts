@@ -299,46 +299,15 @@ export class Client extends DJSClient {
 		const id: number | 'Manager' = rawId === 'Manager' ? rawId : parseInt(rawId);
 
 		// tslint:disable-next-line:no-conditional-assignment
-		if (exec = /^Fetched Gateway Information *\n *URL: *(.+) *\n *Recommended Shards: *(.+)/.exec(info2)) {
-			this.webhook.info('Debug', id, 'URL: ', exec[1], 'Recommend Shards:', exec[2]);
-
-			return;
-		}
-
-		// tslint:disable-next-line:no-conditional-assignment
 		if (exec = /^Session Limit Information *\n *Total: *(.+) *\n *Remaining: *(.+)/.exec(info2)) {
-			this.webhook.info('Debug', id, 'Identifies:', exec[2], '/', exec[1]);
+			this.webhook.info('Session Limit Information', id, 'Identifies:', exec[2], '/', exec[1]);
 
 			return;
 		}
 
 		// tslint:disable-next-line:no-conditional-assignment
-		if (exec = /^WebSocket was closed. *\n *Event Code: *(.+) *\n *Clean: .+ *\n *Reason: *(.+)/.exec(info2)) {
-			this.webhook.info('Debug', id, 'WebSocket Closed', exec[1], ':', exec[2]);
-
-			return;
-		}
-
-		if (/^Warning: attempted |^Opened |^Attempting |^Identify |^READY /.test(info2)) {
-			this.webhook.debug('Debug', id, info2);
-
-			return;
-		}
-
-		if (/^RESUMED /.test(info2)) {
-			this.webhook.info('Resumed', id, info2);
-
-			return;
-		}
-
-		if (/^Session |^Failed /.test(info2)) {
-			this.webhook.warn('Debug', id, info2);
-
-			return;
-		}
-
-		if (/^Couldn't reconnect/.test(info2)) {
-			this.webhook.error('Error', id, info2);
+		if (exec = /^WebSocket was closed. *\n *Event Code: *(.+) *\n *Clean: (.+) *\n *Reason: *(.+)/.exec(info2)) {
+			this.webhook.info('WebSocket was closed', id, 'Code:', exec[1], ' Clean:', exec[2], ' Reason:', exec[2]);
 
 			return;
 		}
