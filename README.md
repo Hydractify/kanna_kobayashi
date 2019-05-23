@@ -22,7 +22,7 @@
 		</a>
 		<br />
 		<a href="https://travis-ci.org/hydractify/kanna_kobayashi">
-			<img src="https://travis-ci.org/hydractify/kanna_kobayashi.svg?style=flat-square" />
+			<img src="https://travis-ci.org/hydractify/kanna_kobayashi.svg" />
 		</a>
 		<a href="https://github.com/Hydractify/kanna_kobayashi/issues">
 			<img src="https://img.shields.io/github/issues/Hydractify/kanna_kobayashi.svg?style=flat-square">
