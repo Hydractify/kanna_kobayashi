@@ -12,7 +12,7 @@
 			<img src="https://img.shields.io/discord/298969150133370880.svg?style=flat-square&logo=discord">
 		</a>
 		<a href="https://www.hydractify.org/patreon">
-			<img src="https://img.shields.io/badge/Patreon-support!-fa6956.svg?style=flat-square" />
+			<img src="https://img.shields.io/badge/Patreon-support!-fa6956.svg?style=flat-square&logo=patreon" />
 		</a>
 		<a href="https://trello.com/hydractify/">
 			<img src="https://img.shields.io/badge/Trello-hydractify-blue.svg?style=flat-square&logo=trello" />
