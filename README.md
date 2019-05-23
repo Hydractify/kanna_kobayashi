@@ -6,31 +6,46 @@
 	</p>
 	<p align="center">
 		<a href="https://github.com/Hydractify/kanna_kobayashi/blob/stable/package.json#L3">
-			<img src="https://img.shields.io/badge/kanna_kobayashi-v4.4.0-fcbbd5.svg" />
+			<img src="https://img.shields.io/badge/kanna_kobayashi-v4.4.0-fcbbd5.svg?style=flat-square" />
 		</a>
 		<a href="https://www.hydractify.org/discord">
-			<img src="https://discordapp.com/api/guilds/298969150133370880/embed.png">
+			<img src="https://img.shields.io/discord/298969150133370880.svg?style=flat-square&logo=discord">
+		</a>
+		<a href="https://www.hydractify.org/patreon">
+			<img src="https://img.shields.io/badge/Patreon-support!-fa6956.svg?style=flat-square" />
+		</a>
+		<a href="https://trello.com/hydractify/">
+			<img src="https://img.shields.io/badge/Trello-hydractify-blue.svg?style=flat-square&logo=trello" />
+		</a>
+		<a href="https://twitter.com/hydractify">
+			<img src="https://img.shields.io/twitter/follow/hydractify.svg?style=social&logo=twitter">
 		</a>
 		<br />
 		<a href="https://travis-ci.org/hydractify/kanna_kobayashi">
-			<img src="https://travis-ci.org/hydractify/kanna_kobayashi.svg" />
+			<img src="https://travis-ci.org/hydractify/kanna_kobayashi.svg?style=flat-square" />
 		</a>
-		<a href="https://www.hydractify.org/patreon">
-			<img src="https://img.shields.io/badge/Patreon-support!-fa6956.svg" />
+		<a href="https://github.com/Hydractify/kanna_kobayashi/issues">
+			<img src="https://img.shields.io/github/issues/Hydractify/kanna_kobayashi.svg?style=flat-square">
 		</a>
-		<a href="https://trello.com/hydractify/">
-		<img src="https://img.shields.io/badge/-Trello-blue.svg" />
+		<a href="https://github.com/Hydractify/kanna_kobayashi/graphs/contributors">
+			<img src="https://img.shields.io/github/contributors/Hydractify/kanna_kobayashi.svg?style=flat-square">
+		</a>
+		<a href="https://github.com/Hydractify/kanna_kobayashi/blob/stable/LICENSE">
+			<img src="https://img.shields.io/github/license/Hydractify/kanna_kobayashi.svg?style=flat-square">
+		</a>
+		<a href="https://graphs.hydractify.org/d/G0kS04WWz/kanna-kobayashi?orgId=1">
+			<img src="https://img.shields.io/badge/Grafana-kanna_kobayashi-orange.svg?style=flat-square&logo=grafana"
 		</a>
 	</p>
 </div>
 
 ## Introduction
 
-Kanna Kobayashi is a community oriented open source bot for Discord, based on the character [Kanna Kamui] from the [anime][kobayashi-san chi no maid dragon] by [KyoAni] (Kyoto Animation Studios). This bot is made with the intent of improving the experience of the end users with one another and also to improve our skills.
+Kanna Kobayashi is a community oriented open source bot for Discord, based on the character [Kanna Kamui] from the [anime] known as [Kobayashi-san Chi no Maid Dragon] by [KyoAni] (Kyoto Animation Studios). This bot is made with the intent of improving the experience of the end users with one another and also to improve our skills.
 
 ## Getting started
 
-The first thing you will need [NodeJS] which we highly recommend to get the current instead of [LTS] as we work with it. We use [Yarn] for dependecy management, so you also will need that. The last thing you need installed is a [PostgreSQL] After you are over installing everything, [clone] our repository into wherever you want, open a terminal in that directory and run `yarn install` in a terminal. The
+The first thing you will need [NodeJS] which we highly recommend to get the current instead of [LTS] as we work with it. We use [Yarn] for dependecy management, so you also will need that. The last thing you need installed is [PostgreSQL]. After you are over installing everything, [clone] our repository into wherever you want, open a terminal in that directory and run `yarn install` in a terminal.
 
 ### Setting up
 
