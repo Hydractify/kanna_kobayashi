@@ -62,7 +62,7 @@ Make a copy of the [`data.example.json`] file as `data.json` and fill the blanks
 		"secret": ""      // webhook's secret
 	},
 	"weebToken": "Bearer <Token>",   // closed api leave it blank ?@ https://docs.weeb.sh/
-	"httpPort": 9000                 // required! don't change this value unless you know what you are doing
+	"httpPort": 9000                 // prometheus port ?@ https://prometheus.io/docs/introduction/overview/ && https://grafana.com/docs/
 }
 ```
 
