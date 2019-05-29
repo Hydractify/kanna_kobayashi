@@ -53,16 +53,16 @@ Make a copy of the [`data.example.json`] file as `data.json` and fill the blanks
 
 ```js
 {
-	"clientToken": "",      // discord application token @ https://discordapp.com/developers/applications/
+	"clientToken": "",      // discord application token -> https://discordapp.com/developers/applications/
 	"dbots": "",            // token for https://discordbots.org/
-	"osuToken": "",         // osu! api token ?@ https://osu.ppy.sh/help/wiki/osu!api
-	"ravenToken": "",       // sentry.io token ?@ https://docs.sentry.io/error-reporting/quickstart/
+	"osuToken": "",         // osu! api token -> https://osu.ppy.sh/help/wiki/osu!api
+	"ravenToken": "",       // sentry.io token -> https://docs.sentry.io/error-reporting/quickstart/
 	"webhook": {
 		"id": "",         // webhook's id
 		"secret": ""      // webhook's secret
 	},
-	"weebToken": "Bearer <Token>",   // closed api leave it blank ?@ https://docs.weeb.sh/
-	"httpPort": 9000                 // prometheus port ?@ https://prometheus.io/docs/introduction/overview/ && https://grafana.com/docs/
+	"weebToken": "Bearer <Token>",   // closed api leave it blank -> https://docs.weeb.sh/
+	"httpPort": 9000                 // prometheus port -> https://prometheus.io/docs/introduction/overview/ && https://grafana.com/docs/
 }
 ```
 
