@@ -1,10 +1,8 @@
 {
 	"clientToken": "",
-	"dbots": "",
 	"dbotsorg": "",
 	"osuToken": "",
 	"ravenToken": "",
-	"sauceNaoToken": "",
 	"webhook": {
 		"id": "",
 		"secret": ""
