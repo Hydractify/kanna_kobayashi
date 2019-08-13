@@ -9,5 +9,5 @@ export type GuildMessage = Omit<NonNullProperties<Message, 'guild' | 'author' | 
 	& { channel: TextChannel };
 
 export const isGuildMessage = (message: any): message is GuildMessage => {
-	return message.guild && message.author && message.channel instanceof TextChannel;
+	return message.guild && message.channel instanceof TextChannel;
 };
