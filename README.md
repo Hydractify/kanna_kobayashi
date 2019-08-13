@@ -34,7 +34,7 @@
 			<img src="https://img.shields.io/github/license/Hydractify/kanna_kobayashi.svg?style=flat-square">
 		</a>
 		<a href="https://graphs.hydractify.org/d/G0kS04WWz/kanna-kobayashi?orgId=1">
-			<img src="https://img.shields.io/badge/Grafana-kanna_kobayashi-orange.svg?style=flat-square&logo=grafana"
+			<img src="https://img.shields.io/badge/Grafana-kanna_kobayashi-orange.svg?style=flat-square&logo=grafana">
 		</a>
 	</p>
 </div>
