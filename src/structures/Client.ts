@@ -17,6 +17,7 @@ import { ListenerUtil } from '../decorators/ListenerUtil';
 import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
+import { isGuildMessage } from '../types/GuildMessage';
 import { IResponsiveEmbedController } from '../types/IResponsiveEmbedController';
 import { UserTypes } from '../types/UserTypes';
 import { updateBotLists } from '../util/botlists';
@@ -142,7 +143,7 @@ export class Client extends DJSClient {
 
 		if (!left && guild.memberCount !== guild.members.size) await guild.members.fetch();
 
-		const totalGuilds: number = await this.shard.fetchClientValues('guilds.size')
+		const totalGuilds: number = await this.shard!.fetchClientValues('guilds.size')
 			.then((result: number[]) => result.reduce((acc: number, current: number) => acc + current));
 		const blacklisted: string = await UserModel.fetch(guild.ownerID)
 			.then((user: UserModel) => user.type === UserTypes.BLACKLISTED ? 'Yes' : 'No');
@@ -199,7 +200,7 @@ export class Client extends DJSClient {
 		}
 
 		if (!member.guild.me) await member.guild.members.fetch(this.user!);
-		if (!channel.permissionsFor(member.guild.me)!.has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
+		if (!channel.permissionsFor(member.guild.me!)!.has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 
 		let message: string | null = guildModel[left ? 'farewellMessage' : 'welcomeMessage'];
 		if (!message) return;
@@ -217,7 +218,7 @@ export class Client extends DJSClient {
 		// Pre discord ready?
 		if (!this.user) return;
 		// Ignore reactions in dms
-		if (!(reaction.message.channel instanceof TextChannel)) return;
+		if (!(isGuildMessage(reaction.message))) return;
 		// Ensure own member is cached in the current guild
 		if (!reaction.message.guild.me) await reaction.message.guild.members.fetch(this.user);
 
@@ -232,12 +233,12 @@ export class Client extends DJSClient {
 				// Ignore Unknown Message errors
 				if (e.code === 10008) return;
 				this.errorCount.inc({ type: 'Reaction' });
-				this.webhook.error('ReactionError', reaction.message.guild.shardID, e);
+				this.webhook.error('ReactionError', reaction.message.guild!.shardID, e);
 
 				return;
 			}
 		}
-		if (reaction.message.author.id !== this.user.id
+		if (reaction.message.author!.id !== this.user.id
 			|| !reaction.message.embeds.length
 			|| !reaction.message.embeds[0].footer
 		) {

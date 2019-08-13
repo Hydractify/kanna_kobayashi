@@ -10,6 +10,7 @@ import { IFuzzyDate } from '../types/anilist/IFuzzyDate';
 import { IMedia } from '../types/anilist/IMedia';
 import { MediaStatus } from '../types/anilist/MediaStatus';
 import { MediaType } from '../types/anilist/MediaType';
+import { GuildMessage } from '../types/GuildMessage';
 import { ICommandInfo } from '../types/ICommandInfo';
 import { chunkArray, replaceMap, titleCase } from '../util/Util';
 import { APIRouter, buildRouter } from './Api';
@@ -103,7 +104,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 	/**
 	 * Build an embed for the passed type of data.
 	 */
-	protected buildEmbed(message: Message, authorModel: UserModel, entry: ICharacter | IMedia): MessageEmbed {
+	protected buildEmbed(message: GuildMessage, authorModel: UserModel, entry: ICharacter | IMedia): MessageEmbed {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setThumbnail(entry.image.large)
 			.setURL(entry.siteUrl);
@@ -201,7 +202,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 	 * Prompts the user to pick one of the search results.
 	 */
 	protected async pick(
-		message: Message,
+		message: GuildMessage,
 		authorModel: UserModel,
 		entries: T[],
 	): Promise<T | undefined> {
@@ -228,11 +229,11 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 				'To cancel this prompt respond with `cancel`, this prompt times out after `30` seconds.',
 			]);
 
-		const prompt: Message = await message.channel.send(embed) as Message;
-		const response: Message | undefined = await message.channel.awaitMessages(
-			(msg: Message) => msg.author.id === message.author.id,
+		const prompt: GuildMessage = await message.channel.send(embed) as GuildMessage;
+		const response: GuildMessage | undefined = await message.channel.awaitMessages(
+			(msg: GuildMessage) => msg.author.id === message.author.id,
 			{ max: 1, time: 3e4 },
-		).then((collected: Collection<string, Message>) => collected.first());
+		).then((collected: Collection<string, Message>) => collected.first() as GuildMessage);
 
 		// We don't care about rejections here, those are most likely 404 anyway
 		prompt.delete().catch(() => undefined);

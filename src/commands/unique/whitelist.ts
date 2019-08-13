@@ -3,6 +3,7 @@ import { GuildMember, Message, User } from 'discord.js';
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 import { UserTypes } from '../../types/UserTypes';
 
@@ -19,7 +20,7 @@ class WhitelistCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, [target, remove]: [string, string]): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, [target, remove]: [string, string]): Promise<Message | Message[]> {
 		// To allow nicknames, I am so sure they will be used.
 		const user: User | undefined = await this.resolver.resolveMember(target, message.guild, false)
 			.then((member: GuildMember | undefined) => member ? member.user : this.resolver.resolveUser(target, false));

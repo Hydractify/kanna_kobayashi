@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { mapIterable, titleCase } from '../../util/Util';
 
@@ -19,7 +20,7 @@ class UserInfoCommand extends Command {
 	}
 
 	public async parseArgs(
-		message: Message,
+		message: GuildMessage,
 		[input]: string[],
 	): Promise<string | [User]> {
 		const user: User | undefined = input
@@ -31,7 +32,11 @@ class UserInfoCommand extends Command {
 		return [user];
 	}
 
-	public async run(message: Message, [user]: [User], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: GuildMessage,
+		[user]: [User],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]> {
 		const member: GuildMember | undefined = message.guild.members.get(user.id) ||
 			await message.guild.members.fetch(user.id).catch(() => undefined);
 
@@ -46,7 +51,7 @@ class UserInfoCommand extends Command {
 		embed
 			.addField('Discriminator', user.discriminator, true)
 			.addField('Status', titleCase((member || user).presence.status), true)
-			.addField('Game', (member || user).presence.activity ? (member || user).presence.activity.name : 'Nothing', true)
+			.addField('Game', (member || user).presence.activity ? (member || user).presence.activity!.name : 'Nothing', true)
 			.addField(
 				'Shared guilds on this shard',
 				this.client.guilds.filter((guild: Guild) => guild.members.has(user.id)).size,
@@ -60,7 +65,7 @@ class UserInfoCommand extends Command {
 			const rolesString: string = mapIterable(roles.values());
 
 			embed
-				.addField('Joined this guild', this._formatTimespan(member.joinedTimestamp), true)
+				.addField('Joined this guild', this._formatTimespan(member.joinedTimestamp!), true)
 				.addField('Roles', rolesString || 'None');
 		}
 

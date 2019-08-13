@@ -1,7 +1,6 @@
-import { Message } from 'discord.js';
-
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class HidePartnerCommand extends Command {
@@ -14,7 +13,7 @@ class HidePartnerCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, _: string[], { authorModel }: ICommandRunInfo)
+	public async run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo)
 		: Promise<any> {
 		const response: string = authorModel.partnerHidden
 			? 'your partner is no longer hidden.'

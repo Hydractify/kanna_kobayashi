@@ -5,6 +5,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IShardData } from '../../types/IShardData';
 
@@ -22,11 +23,15 @@ class StatsCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
-		const data: IShardData[] = await this.client.shard.broadcastEval<IShardData>(
+	public async run(
+		message: GuildMessage,
+		args: string[],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]> {
+		const data: IShardData[] = await this.client.shard!.broadcastEval<IShardData>(
 			(client: Client) => ({
 				guilds: client.guilds.size,
-				ids: client.shard.ids,
+				ids: client.shard!.ids,
 				ram: process.memoryUsage().heapUsed / 1024 / 1024,
 				users: client.users.size,
 			}),
@@ -44,8 +49,8 @@ class StatsCommand extends Command {
 		const shardsInfo = this._buildTableString(data);
 
 		const uptime: string = [
-			moment.duration(this.client.uptime).format('d[ Days], hh:mm:ss'),
-			`[${moment.duration(this.client.uptime).humanize()}]`,
+			moment.duration(this.client.uptime!).format('d[ Days], hh:mm:ss'),
+			`[${moment.duration(this.client.uptime!).humanize()}]`,
 		].join(' ');
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)

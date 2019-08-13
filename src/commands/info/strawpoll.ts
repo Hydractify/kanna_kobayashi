@@ -5,6 +5,7 @@ import { APIRouter, buildRouter } from '../../structures/Api';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IStrawPollPoll } from '../../types/IStrawPollPoll';
 
@@ -32,7 +33,11 @@ class StrawPollCommand extends Command {
 		this.baseURL = 'https://www.strawpoll.me';
 	}
 
-	public async run(message: Message, [id]: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: GuildMessage,
+		[id]: string[],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]> {
 		if (id) {
 			const res: string = await Api()[id].get({ type: 'text' }).catch(() => null);
 
@@ -44,14 +49,14 @@ class StrawPollCommand extends Command {
 			return this.showPoll(message, fetchedPoll, authorModel);
 		}
 
-		const messages: Message[] = [message];
+		const messages: Message[] = [message as Message];
 		const data: string[] = [];
 		for (const question of this.questions()) {
 
 			const [prompt, response] = await Promise.all([
 				message.reply(question) as Promise<Message>,
 				message.channel
-					.awaitMessages((msg: Message) => msg.author.id === message.author.id, { max: 1, time: 30 * 1000 })
+					.awaitMessages((msg: GuildMessage) => msg.author.id === message.author.id, { max: 1, time: 30 * 1000 })
 					.then((collected: Collection<Snowflake, Message>) => collected.first()),
 			]);
 			messages.push(prompt);
@@ -89,8 +94,8 @@ class StrawPollCommand extends Command {
 		return this.showPoll(message, poll, authorModel);
 	}
 
-	private cleanup(message: Message, messages: Message[]): undefined | Promise<Collection<Snowflake, Message>> {
-		if (message.guild.me.permissionsIn(message.channel).has('MANAGE_MESSAGES')) {
+	private cleanup(message: GuildMessage, messages: Message[]): undefined | Promise<Collection<Snowflake, Message>> {
+		if (message.guild.me!.permissionsIn(message.channel).has('MANAGE_MESSAGES')) {
 			return message.channel.bulkDelete(messages);
 		}
 	}
@@ -113,7 +118,7 @@ class StrawPollCommand extends Command {
 	}
 
 	private showPoll(
-		message: Message,
+		message: GuildMessage,
 		{ id, multi, options, title, votes }: IStrawPollPoll,
 		authorModel: UserModel,
 	): Promise<Message | Message[]> {

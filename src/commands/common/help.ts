@@ -12,6 +12,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedController';
 import { PermLevels } from '../../types/PermLevels';
@@ -37,7 +38,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[name]: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[] | void> {
@@ -55,7 +56,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 	}
 
 	public async onCollect({ emoji, users, message }: MessageReaction, user: User): Promise<Message | undefined> {
-		const [, rawPage]: RegExpExecArray = /.+? \u200b\| Page (\d+) \|/.exec(message.embeds[0].footer.text!) || [] as any;
+		const [, rawPage]: RegExpExecArray = /.+? \u200b\| Page (\d+) \|/.exec(message.embeds[0].footer!.text!) || [] as any;
 		if (!rawPage) return;
 
 		let page: number = parseInt(rawPage) - 1;
@@ -64,8 +65,8 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 
 		const embeds: MessageEmbed[] = this._mapCategories({
 			author: user,
-			guild: message.guild,
-			member: message.guild.member(user) || await message.guild.members.fetch(user),
+			guild: message.guild!,
+			member: message.guild!.member(user) || await message.guild!.members.fetch(user),
 		}, await user.fetchModel());
 
 		if (emoji.name === '➡') {
@@ -80,7 +81,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 		return message.edit(embeds[page]);
 	}
 
-	private _findCategory(message: Message, name: string, authorModel: UserModel): Promise<Message | Message[]> {
+	private _findCategory(message: GuildMessage, name: string, authorModel: UserModel): Promise<Message | Message[]> {
 		let embed: MessageEmbed | undefined;
 		for (const command of this.handler._commands.values()) {
 			if (command.category.toLowerCase() === name) {
@@ -105,7 +106,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 	}
 
 	private _findCommand(
-		message: Message,
+		message: GuildMessage,
 		name: string,
 		authorModel: UserModel,
 	): Promise<Message | Message[]> | undefined {
@@ -164,7 +165,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController {
 					'(https://github.com/TheDragonProject/Kanna-Kobayashi/wiki)',
 				].join(''));
 
-			embed.footer.text += ` \u200b| Page ${embeds.length + 1} | Help`;
+			embed.footer!.text += ` \u200b| Page ${embeds.length + 1} | Help`;
 
 			for (const command of commands) {
 				if (command.permLevel > permLevel) continue;

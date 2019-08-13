@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
 class RestartCommand extends Command {
@@ -16,18 +17,18 @@ class RestartCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, [shardNumber]: string[]): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, [shardNumber]: string[]): Promise<Message | Message[]> {
 		if (!shardNumber) {
 			await message.reply('Restarting!');
-			return message.client.shard.broadcastEval('process.exit(0)');
+			return this.client.shard!.broadcastEval('process.exit(0)');
 		}
 
 		const shard: number = parseInt(shardNumber);
-		if (isNaN(shard)) return message.reply('You must provide me a number!');
-		else if (shard > (message.client.shard.count - 1)) return message.reply('That is not a valid shard!');
+		if (isNaN(shard)) return message.reply('you must provide me a number!');
+		else if (shard > (this.client.shard!.count - 1)) return message.reply('that is not a valid shard!');
 
-		await message.reply(`Restarting shard ${shardNumber}!`);
-		return message.client.shard.broadcastEval(`if (this.shard.id === ${shardNumber} process.exit(0)`);
+		await message.reply(`restarting shard ${shardNumber}!`);
+		return this.client.shard!.broadcastEval(`if (this.shard.id === ${shardNumber} process.exit(0)`);
 	}
 }
 

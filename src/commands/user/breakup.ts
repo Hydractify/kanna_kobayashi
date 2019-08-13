@@ -5,6 +5,7 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class BreakUpCommand extends Command {
@@ -19,7 +20,11 @@ class BreakUpCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: GuildMessage,
+		args: string[],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]> {
 		if (!authorModel.partnerId) return message.reply(`you do not have a partner! ${Emojis.KannaShy}`);
 		const partnerModel: UserModel = await authorModel.$get<UserModel>('partner') as UserModel;
 		if (!partnerModel) return message.reply(`you do not have a partner! ${Emojis.KannaShy}`);
@@ -27,7 +32,7 @@ class BreakUpCommand extends Command {
 		await message.reply(`are you sure you want to break up with <@${partnerModel.id}>? (**Y**es or **N**o)`);
 
 		const collected: Collection<Snowflake, Message> = await message.channel.awaitMessages(
-			(msg: Message) => message.author.id === msg.author.id && /^(y|n|yes|no)/i.test(msg.content),
+			(msg: GuildMessage) => message.author.id === msg.author.id && /^(y|n|yes|no)/i.test(msg.content),
 			{ time: 5e4, max: 1 });
 
 		if (!collected.size) return message.reply('aborting the command, due to lacking response.');

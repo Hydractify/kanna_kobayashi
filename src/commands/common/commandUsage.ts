@@ -5,6 +5,7 @@ import { CommandLog } from '../../models/CommandLog';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { titleCase } from '../../util/Util';
 
@@ -20,7 +21,7 @@ class CommandUsageCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
 		const [thisMonth, lastHour]: [CommandLog[], CommandLog[]] = await Promise.all([
 			CommandLog.findAll({
 				attributes: [[fn('COUNT', col('command_name')), 'count'], ['command_name', 'commandName']],

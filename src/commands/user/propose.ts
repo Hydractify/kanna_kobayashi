@@ -6,6 +6,7 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class ProposeCommand extends Command {
@@ -21,7 +22,7 @@ class ProposeCommand extends Command {
 	}
 
 	public async parseArgs(
-		message: Message,
+		message: GuildMessage,
 		[input]: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<string | [User]> {
@@ -34,7 +35,7 @@ class ProposeCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[user]: [User],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[] | undefined> {
@@ -54,7 +55,7 @@ class ProposeCommand extends Command {
 	 * @param mentionedUser Mentioned user
 	 * @param authorModel Database model for the author of the message
 	 */
-	private async relationCheck(message: Message, mentionedUser: User, authorModel: UserModel): Promise<boolean> {
+	private async relationCheck(message: GuildMessage, mentionedUser: User, authorModel: UserModel): Promise<boolean> {
 		const partner: UserModel = await authorModel.$get<UserModel>('partner') as UserModel;
 
 		// No partner present, green light for a new one
@@ -90,7 +91,7 @@ class ProposeCommand extends Command {
 			`${mentionedUser} and ${message.author}! Do you two want to marry? (**Y**es or **N**o)`,
 		);
 
-		const filter: CollectorFilter = (msg: Message): boolean => msg.author.id === mentionedUser.id
+		const filter: CollectorFilter = (msg: GuildMessage): boolean => msg.author.id === mentionedUser.id
 			&& /^(y|n|yes|no)/i.test(msg.content);
 
 		const confirmation: Message | undefined = await message.channel.awaitMessages(filter, { time: 10000, max: 1 })
@@ -138,7 +139,7 @@ class ProposeCommand extends Command {
 	 * @param partnerModel Database model for the mentioned user
 	 */
 	private async relationStart(
-		message: Message,
+		message: GuildMessage,
 		mentionedUser: User,
 		authorModel: UserModel,
 		partnerModel: UserModel,
@@ -147,7 +148,7 @@ class ProposeCommand extends Command {
 			`${mentionedUser}, ${message.author} proposed to you! Do you want to accept? (**Y**es / **N**o)`,
 		);
 
-		const filter: CollectorFilter = (msg: Message): boolean => msg.author.id === mentionedUser.id
+		const filter: CollectorFilter = (msg: GuildMessage): boolean => msg.author.id === mentionedUser.id
 			&& /^(y|n|yes|no)/i.test(msg.content);
 
 		const confirmation: Message | undefined = await message.channel.awaitMessages(filter, { time: 90000, max: 1 })

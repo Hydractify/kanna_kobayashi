@@ -1,8 +1,9 @@
-import { Collection, GuildMember, Message, Snowflake } from 'discord.js';
+import { Collection, GuildMember, Snowflake } from 'discord.js';
 import { Op } from 'sequelize';
 
 import { User as UserModel } from '../models/User';
 import { Emojis } from '../types/Emojis';
+import { GuildMessage } from '../types/GuildMessage';
 import { ICommandInfo } from '../types/ICommandInfo';
 import { ICommandRunInfo } from '../types/ICommandRunInfo';
 import { PermLevels } from '../types/PermLevels';
@@ -61,7 +62,7 @@ export abstract class WeebCommand extends Command {
 	 * @virtual
 	 */
 	public async parseArgs(
-		message: Message,
+		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> {
@@ -89,7 +90,7 @@ export abstract class WeebCommand extends Command {
 	 * Compute the base string used in the reponse embed
 	 */
 	protected computeBaseString(
-		message: Message,
+		message: GuildMessage,
 		members: Collection<string, IWeebResolvedMember>,
 		action: string = this.action,
 	): string {
@@ -110,7 +111,7 @@ export abstract class WeebCommand extends Command {
 	 * Fetch an embed with an image of the type of the class.
 	 */
 	protected async fetchEmbed(
-		message: Message,
+		message: GuildMessage,
 		model: UserModel,
 		members: Collection<string, IWeebResolvedMember> | undefined,
 		{ dev, trusted, bot }: IWeebResponseTemplates,
@@ -139,7 +140,7 @@ export abstract class WeebCommand extends Command {
 			}
 		}
 
-		embed.footer.text += ' | Powered by weeb.sh';
+		embed.footer!.text += ' | Powered by weeb.sh';
 
 		return embed;
 	}
@@ -147,7 +148,7 @@ export abstract class WeebCommand extends Command {
 	/**
 	 * Resolves mentioned members in a specific way.
 	 */
-	protected async resolveMembers(input: string[], { author, guild }: Message)
+	protected async resolveMembers(input: string[], { author, guild }: GuildMessage)
 		: Promise<Collection<Snowflake, IWeebResolvedMember>> {
 		const resolved: Collection<Snowflake, IWeebResolvedMember> = new Collection<Snowflake, IWeebResolvedMember>();
 

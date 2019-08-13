@@ -4,6 +4,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { fetchRandom } from '../../structures/weeb';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { RandomImageResult } from '../../types/weeb/RandomImageResult';
 import { chunkArray } from '../../util/Util';
@@ -53,7 +54,7 @@ class ImageCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: Message, [input]: string[]): Promise<string | [string]> {
+	public async parseArgs(message: GuildMessage, [input]: string[]): Promise<string | [string]> {
 		if (!input) return ['types'];
 		input = input.toLowerCase();
 		if (input === 'types' || this.types.includes(input)) return [input];
@@ -62,7 +63,7 @@ class ImageCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[type]: [string],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {

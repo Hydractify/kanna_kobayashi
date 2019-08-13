@@ -8,6 +8,7 @@ import { Beatmap } from '../../structures/osu/Beatmap';
 import { Score } from '../../structures/osu/Score';
 import { User } from '../../structures/osu/User';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { OsuMode } from '../../types/osu/OsuMode';
 
@@ -22,7 +23,7 @@ class OsuUserCommand extends Command {
 
 	}
 
-	public parseArgs(message: Message, [query, modeOrOption, option]: string[]): [string, OsuMode, string] | string {
+	public parseArgs(message: GuildMessage, [query, modeOrOption, option]: string[]): [string, OsuMode, string] | string {
 		if (!query) return 'you have to tell me who you want to look up!';
 
 		let mode: OsuMode = OsuMode.OSU;
@@ -44,7 +45,7 @@ class OsuUserCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[query, mode, option]: [string, OsuMode, 'best' | 'recent' | undefined],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
@@ -73,14 +74,14 @@ class OsuUserCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	private embed(message: Message, authorModel: UserModel, user: User): MessageEmbed {
+	private embed(message: GuildMessage, authorModel: UserModel, user: User): MessageEmbed {
 		return MessageEmbed.common(message, authorModel)
 			.setAuthor(user.username, user.iconURL, user.profileURL)
 			.setDescription(user.countryFlag);
 	}
 
 	private async fetchScores(
-		message: Message,
+		message: GuildMessage,
 		authorModel: UserModel,
 		query: string,
 		mode: OsuMode,

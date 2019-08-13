@@ -6,6 +6,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { Beatmap, Score } from '../../structures/osu';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { OsuMode } from '../../types/osu/OsuMode';
 import { titleCase } from '../../util/Util';
@@ -21,7 +22,7 @@ class OsuBeatmapCommand extends Command {
 	}
 
 	public parseArgs(
-		message: Message,
+		message: GuildMessage,
 		[id, modeOrOption, option]: string[],
 	): [string, OsuMode, string] | string {
 		if (!id) return 'you have to tell me what beatmap you want to lookup!';
@@ -38,7 +39,7 @@ class OsuBeatmapCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[id, mode, option]: [string, OsuMode, string],
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
@@ -67,7 +68,7 @@ class OsuBeatmapCommand extends Command {
 		return duration(seconds, 'seconds').format('hh:mm:ss');
 	}
 
-	private async showBest(message: Message, authorModel: UserModel, beatmap: Beatmap): Promise<Message | Message[]> {
+	private async showBest(message: GuildMessage, authorModel: UserModel, beatmap: Beatmap): Promise<Message | Message[]> {
 		const scores: Required<Score>[] = await beatmap.fetchBestScores();
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
@@ -98,7 +99,7 @@ class OsuBeatmapCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	private showMap(message: Message, authorModel: UserModel, beatmap: Beatmap): Promise<Message | Message[]> {
+	private showMap(message: GuildMessage, authorModel: UserModel, beatmap: Beatmap): Promise<Message | Message[]> {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`${beatmap.artist} -- ${beatmap.title} [${beatmap.version}]`, undefined, beatmap.versionURL())
 			.setImage(beatmap.iconURL)
@@ -144,7 +145,7 @@ class OsuBeatmapCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	private showSet(message: Message, authorModel: UserModel, beatmaps: Beatmap[]): Promise<Message | Message[]> {
+	private showSet(message: GuildMessage, authorModel: UserModel, beatmaps: Beatmap[]): Promise<Message | Message[]> {
 		const [first] = beatmaps;
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)

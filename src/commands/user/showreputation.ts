@@ -4,6 +4,7 @@ import { UserReputation } from '../../models/UserReputation';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class ShowReputationCommand extends Command {
@@ -18,7 +19,7 @@ class ShowReputationCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: Message, args: string[]): Promise<string | [GuildMember, number, number]> {
+	public async parseArgs(message: GuildMessage, args: string[]): Promise<string | [GuildMember, number, number]> {
 		const member: GuildMember | undefined = args.length
 			? await this.resolver.resolveMember(args.join(' '), message.guild, false)
 			: message.member;
@@ -42,7 +43,7 @@ class ShowReputationCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[member, positive, negative]: [GuildMember, number, number],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {

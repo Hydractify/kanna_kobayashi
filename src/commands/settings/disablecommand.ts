@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 import { Guild } from '../../models/Guild';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 
@@ -19,7 +20,7 @@ class DisableCommandCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, args: string[]): [Command] | string {
+	public parseArgs(message: GuildMessage, args: string[]): [Command] | string {
 		if (!args.length) return `you have to give me a command to disable (\`${this.usage}\`)`;
 
 		const command: Command | undefined = this.handler.resolveCommand(args.join(' ').toLocaleLowerCase());
@@ -35,7 +36,7 @@ class DisableCommandCommand extends Command {
 		return [command];
 	}
 
-	public async run(message: Message, [command]: [Command], info: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, [command]: [Command], info: ICommandRunInfo): Promise<Message | Message[]> {
 		const guildModel: Guild = message.guild.model;
 		guildModel.disabledCommands.push(command.name);
 		guildModel.changed('disabledCommands', true);

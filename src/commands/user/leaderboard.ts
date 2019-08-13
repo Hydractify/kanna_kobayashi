@@ -5,6 +5,7 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { GuildMessage, isGuildMessage } from '../../types/GuildMessage';
 import { ILeaderBoardUser } from '../../types/ILeaderBoardUser';
 import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedController';
 import { resolveAmount, titleCase } from '../../util/Util';
@@ -31,7 +32,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		});
 	}
 
-	public parseArgs(message: Message, [input, offset]: string[]): string | [string, number] {
+	public parseArgs(message: GuildMessage, [input, offset]: string[]): string | [string, number] {
 		if (!input) return ['exp', 0];
 		if (this.types.includes(input.toLowerCase())) {
 			if (!offset) return [input, 0];
@@ -51,8 +52,10 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 	): Promise<Message | undefined> {
 		const [embed]: MessageEmbed[] = message.embeds as MessageEmbed[];
 		const [, type, match]: RegExpExecArray = /.+? \u200b\| (.+):(\d+) \|/
-			.exec(message.embeds[0].footer.text!) || [] as any;
+			.exec(message.embeds[0].footer!.text!) || [] as any;
 		let offset: number = parseInt(match);
+
+		if (!isGuildMessage(message)) return;
 
 		if (
 			match === undefined
@@ -105,7 +108,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[type, offset]: [string, number],
 	): Promise<void> {
 		const users: ILeaderBoardUser[] = await this._fetchTop(type, offset);
@@ -124,7 +127,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		const embed: MessageEmbed = MessageEmbed.common({ author }, await author.fetchModel())
 			.setTitle(`${titleCase(type)} Leaderboard`);
 
-		embed.footer.text += ` \u200b| ${type}:${offset} | Leaderboard`;
+		embed.footer!.text += ` \u200b| ${type}:${offset} | Leaderboard`;
 
 		if (!users.length) return embed.setDescription(`There is no user with the rank #${offset}.`);
 

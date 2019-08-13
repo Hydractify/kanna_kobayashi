@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 
 class PingCommand extends Command {
 	public constructor(handler: CommandHandler) {
@@ -14,7 +15,7 @@ class PingCommand extends Command {
 		});
 	}
 
-	public async run(message: Message): Promise<Message> {
+	public async run(message: GuildMessage): Promise<Message> {
 		const sent: Message = await message.channel.send(
 			`Searching for insects... ${Emojis.KannaDetective}`,
 		) as Message;

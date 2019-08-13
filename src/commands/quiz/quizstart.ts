@@ -5,6 +5,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 import { titleCase } from '../../util/Util';
@@ -22,7 +23,11 @@ class QuizStartCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: GuildMessage,
+		args: string[],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]> {
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
 		if (!quiz || !quiz.name || !quiz.photo) {
 			return message.reply([
@@ -49,8 +54,9 @@ class QuizStartCommand extends Command {
 				|| (Boolean(lastName) && content.startsWith(lastName));
 		};
 
-		const answer: Message | undefined = await message.channel.awaitMessages(filter, { max: 1, time: quiz.duration * 6e4 })
-			.then((collected: Collection<Snowflake, Message>) => collected.first());
+		const answer: GuildMessage | undefined = await message.channel
+			.awaitMessages(filter, { max: 1, time: quiz.duration * 6e4 })
+			.then((collected: Collection<Snowflake, Message>) => collected.first() as GuildMessage);
 
 		eventEmbed.fields[0].value = `~~${eventEmbed.fields[0].value}~~ Time is over!`;
 		await eventMessage.edit(eventEmbed).catch(() => undefined);

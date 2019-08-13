@@ -5,6 +5,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { mapIterable, titleCase } from '../../util/Util';
 
@@ -26,7 +27,11 @@ class ModListCommand extends Command {
 		});
 	}
 
-	public modList(message: Message, members: GuildMemberStore, authorModel: UserModel): Promise<Message | Message[]> {
+	public modList(
+		message: GuildMessage,
+		members: GuildMemberStore,
+		authorModel: UserModel,
+	): Promise<Message | Message[]> {
 		const mods: { [key: string]: Set<string> } = {
 			dnd: new Set<string>(),
 			idle: new Set<string>(),
@@ -54,7 +59,7 @@ class ModListCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	public parseArgs(message: Message, [input]: string[]): [string | undefined] | string {
+	public parseArgs(message: GuildMessage, [input]: string[]): [string | undefined] | string {
 		if (!input) return [undefined];
 
 		input = input.toLowerCase();
@@ -63,7 +68,7 @@ class ModListCommand extends Command {
 		return `"${input}" is not a valid status! Valid statuses are ${Array.from(this.statuses.keys()).join(', ')}`;
 	}
 
-	public async run(message: Message, [status]: [string | undefined], { authorModel }: ICommandRunInfo)
+	public async run(message: GuildMessage, [status]: [string | undefined], { authorModel }: ICommandRunInfo)
 		: Promise<Message | Message[]> {
 		if (message.guild.memberCount !== message.guild.members.size) await message.guild.members.fetch();
 

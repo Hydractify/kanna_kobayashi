@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 
 class EightballCommand extends Command {
 	private _responses: string[] = [
@@ -23,13 +24,13 @@ class EightballCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, args: string[]): string[] | string {
+	public parseArgs(message: GuildMessage, args: string[]): string[] | string {
 		if (!args.length) return `you have to ask a question! ${Emojis.KannaDetective}`;
 
 		return args;
 	}
 
-	public run(message: Message, options: string[]): Promise<Message | Message[]> {
+	public run(message: GuildMessage, options: string[]): Promise<Message | Message[]> {
 		return message.reply(this._responses[Math.floor(Math.random() * this._responses.length)]);
 	}
 }

@@ -4,6 +4,7 @@ import { promisify } from 'util';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { IExecResult } from '../../types/IExecResult';
 import { PermLevels } from '../../types/PermLevels';
 
@@ -22,7 +23,7 @@ class ExecCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, args: string[]): Promise<Message | Message[]> {
 		const statusMessage: Message = await message.channel.send('Executing...') as Message;
 		const { error, stdout, stderr }: IExecResult = await execAsync(args.join(' '))
 			.catch((err: Error & { stderr: string; stdout: string }) =>

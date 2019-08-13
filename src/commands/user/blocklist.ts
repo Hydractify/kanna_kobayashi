@@ -4,6 +4,7 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 const { APIErrors } = Constants;
@@ -18,7 +19,11 @@ class BlockListCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: GuildMessage,
+		args: string[],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]> {
 		const blocked: UserModel[] = await authorModel.$get('blocked') as UserModel[];
 
 		try {

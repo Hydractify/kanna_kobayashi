@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { Command as GuildInfoCommand } from './guild';
 
@@ -21,7 +22,7 @@ class LookupCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, [code]: string[]): string | Promise<string | Invite[]> {
+	public parseArgs(message: GuildMessage, [code]: string[]): string | Promise<string | Invite[]> {
 		if (!code) return 'you have to give me an invite link or code!';
 
 		return this.client.fetchInvite(code)
@@ -30,12 +31,12 @@ class LookupCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[{ channel, guild, presenceCount, memberCount }]: [Invite],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
 		// This shard is part of that guild, give full info
-		if (this.client.guilds.has(guild.id)) {
+		if (this.client.guilds.has(guild!.id)) {
 			return (this.handler.resolveCommand('guildinfo') as GuildInfoCommand).run(
 				message,
 				[],
@@ -43,17 +44,17 @@ class LookupCommand extends Command {
 			);
 		}
 
-		const iconURL: string = guild.iconURL();
+		const iconURL: string | null = guild!.iconURL();
 
-		const createdAt: moment.Moment = moment(guild.createdAt);
+		const createdAt: moment.Moment = moment(guild!.createdAt);
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setTitle(`Info about ${guild.name}`)
+			.setTitle(`Info about ${guild!.name}`)
 			.setThumbnail(iconURL)
 
 			.addField(
 				'Guild ID',
-				guild.id,
+				guild!.id,
 			)
 
 			.addField(

@@ -7,6 +7,7 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { EmojiMatchType } from '../../types/EmojiMatchType';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class EmojiInfoCommand extends Command {
@@ -25,10 +26,10 @@ class EmojiInfoCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: Message, [emojiName]: string[]): Promise<string | [Emoji]> {
+	public async parseArgs(message: GuildMessage, [emojiName]: string[]): Promise<string | [Emoji]> {
 		if (!emojiName) return 'you have to give me something to search for!';
 
-		const results: [EmojiMatchType | undefined, Emoji | undefined][] = await this.client.shard.broadcastEval(
+		const results: [EmojiMatchType | undefined, Emoji | undefined][] = await this.client.shard!.broadcastEval(
 			// tslint:disable-next-line:no-shadowed-variable
 			(client: Client, [name, emojiName]: string[]): [EmojiMatchType | undefined, Emoji | undefined] =>
 				(client.commandHandler.resolveCommand(name) as EmojiInfoCommand).searchEmoji(emojiName),
@@ -54,7 +55,7 @@ class EmojiInfoCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[emoji]: [Emoji],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {
