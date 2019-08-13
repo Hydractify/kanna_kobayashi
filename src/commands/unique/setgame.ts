@@ -2,6 +2,7 @@ import { Client, Message, Presence, WebSocketShard } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
 class SetGameCommand extends Command {
@@ -18,12 +19,12 @@ class SetGameCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, args: string[]): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, args: string[]): Promise<Message | Message[]> {
 		if (!args.length) {
-			const totalGuilds: number = await this.client.shard.fetchClientValues('guilds.size')
+			const totalGuilds: number = await this.client.shard!.fetchClientValues('guilds.size')
 				.then((result: number[]) => result.reduce((acc: number, current: number) => acc + current));
 
-			await this.client.shard.broadcastEval(this.setActivity, [`k!help | on ${totalGuilds} guilds`]);
+			await this.client.shard!.broadcastEval(this.setActivity, [`k!help | on ${totalGuilds} guilds`]);
 		} else {
 			let stream: string = '';
 			if (args[0].toLowerCase() === 'stream') {
@@ -31,7 +32,7 @@ class SetGameCommand extends Command {
 				stream = 'https://twitch.tv/wizardlink';
 			}
 
-			await this.client.shard.broadcastEval(this.setActivity, [args.join(' '), stream]);
+			await this.client.shard!.broadcastEval(this.setActivity, [args.join(' '), stream]);
 		}
 
 		return message.channel.send('Updated presence status successfully on all shards!');

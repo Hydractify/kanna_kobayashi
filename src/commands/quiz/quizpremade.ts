@@ -5,6 +5,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 
@@ -36,7 +37,7 @@ class QuizPremadeCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[] | undefined> {

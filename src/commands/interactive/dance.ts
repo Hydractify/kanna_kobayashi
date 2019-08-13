@@ -4,6 +4,7 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { WeebCommand } from '../../structures/WeebCommand';
 import { Emojis } from '../../types/Emojis';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
@@ -20,7 +21,7 @@ class DanceCommand extends WeebCommand {
 	}
 
 	public async parseArgs(
-		message: Message,
+		message: GuildMessage,
 		args: string[],
 	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> {
 		if (!args.length) return [undefined];
@@ -32,7 +33,7 @@ class DanceCommand extends WeebCommand {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember> | undefined],
 		{ authorModel, commandName }: ICommandRunInfo,
 	): Promise<Message | Message[]> {

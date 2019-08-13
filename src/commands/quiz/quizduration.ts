@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 import { Quiz } from '../../models/Quiz';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 import { resolveDuration } from '../../util/Util';
 
@@ -23,7 +24,7 @@ class QuizDurationCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, [option, ...time]: string[]): string | ['set', number] | ['view', undefined] {
+	public parseArgs(message: GuildMessage, [option, ...time]: string[]): string | ['set', number] | ['view', undefined] {
 		if (!option) {
 			return [
 				'you need to tell me whether you want to',
@@ -52,7 +53,7 @@ class QuizDurationCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[option, time]: ['set', number] | ['view', undefined],
 	): Promise<Message | Message[]> {
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;

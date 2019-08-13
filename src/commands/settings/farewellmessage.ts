@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 import { Guild } from '../../models/Guild';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
 class FarewellMessageCommand extends Command {
@@ -21,13 +22,13 @@ class FarewellMessageCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, args: string[]): [string | false | undefined] {
+	public parseArgs(message: GuildMessage, args: string[]): [string | false | undefined] {
 		if (!args.length) return [undefined];
 		if (args[0].toLowerCase() === 'remove') return [false];
 		return [args.join(' ')];
 	}
 
-	public async run(message: Message, [value]: [string | false | undefined])
+	public async run(message: GuildMessage, [value]: [string | false | undefined])
 		: Promise<Message | Message[]> {
 		const guild: Guild = message.guild.model;
 

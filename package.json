@@ -4,26 +4,26 @@
 	"description": "A robot made for Discord.",
 	"main": "bin/shard.js",
 	"dependencies": {
-		"@types/ws": "^6.0.1",
 		"discord.js": "discordjs/discord.js",
-		"moment": "^2.22.2",
-		"moment-duration-format": "^2.2.2",
-		"node-fetch": "^2.2.0",
+		"moment": "^2.24.0",
+		"moment-duration-format": "^2.3.2",
+		"node-fetch": "^2.6.0",
 		"pg": "^7.4.3",
-		"prom-client": "^11.3.0",
+		"prom-client": "^11.5.3",
 		"raven": "github:spaceeec/raven-node#pg_fix",
-		"reflect-metadata": "^0.1.12",
+		"reflect-metadata": "^0.1.13",
 		"sequelize": "4.38.0",
 		"sequelize-typescript": "v0.6.6",
-		"source-map-support": "^0.5.9"
+		"source-map-support": "^0.5.13"
 	},
 	"devDependencies": {
+		"@types/ws": "^6.0.2",
 		"@types/moment-duration-format": "^2.2.2",
-		"@types/node": "^10.9.4",
-		"@types/node-fetch": "^2.1.2",
-		"@types/raven": "^2.5.1",
-		"tslint": "^5.11.0",
-		"typescript": "^3.0.3"
+		"@types/node": "^12.7.1",
+		"@types/node-fetch": "^2.5.0",
+		"@types/raven": "^2.5.3",
+		"tslint": "^5.18.0",
+		"typescript": "^3.5.3"
 	},
 	"scripts": {
 		"build": "tsc -p ./",

@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 import { Guild } from '../../models/Guild';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 
@@ -19,7 +20,7 @@ class EnableCommandCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, args: string[]): [Command] | string {
+	public parseArgs(message: GuildMessage, args: string[]): [Command] | string {
 		if (!args.length) return `you have to give me a command to enable (\`${this.usage}\`)`;
 
 		const command: Command | undefined = this.handler.resolveCommand(args.join(' ').toLocaleLowerCase());
@@ -33,7 +34,7 @@ class EnableCommandCommand extends Command {
 		return [command];
 	}
 
-	public async run(message: Message, [command]: [Command], info: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, [command]: [Command], info: ICommandRunInfo): Promise<Message | Message[]> {
 		const guildModel: Guild = message.guild.model;
 		guildModel.disabledCommands.splice(
 			guildModel.disabledCommands.indexOf(command.name),

@@ -2,6 +2,7 @@ import { GuildChannel, Message } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
 class NotifChannelCommand extends Command {
@@ -21,7 +22,7 @@ class NotifChannelCommand extends Command {
 		});
 	}
 
-	public async run(message: Message, [target]: string[]): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, [target]: string[]): Promise<Message | Message[]> {
 		// Nothing passed, show current
 		if (!target) {
 			const alreadyChannel: GuildChannel | undefined = message.guild.channels

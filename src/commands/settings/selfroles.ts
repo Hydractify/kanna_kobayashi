@@ -2,6 +2,7 @@ import { Message, Role } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 import { mapIterable } from '../../util/Util';
@@ -28,7 +29,7 @@ class SelfRolesCommand extends Command {
 	}
 
 	public parseArgs(
-		message: Message,
+		message: GuildMessage,
 		[type, role]: string[],
 		{ authorModel }: ICommandRunInfo,
 	): string | [string, Role] | [undefined, undefined] {
@@ -58,7 +59,7 @@ class SelfRolesCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[type, role]: ['add' | 'toggle' | 'remove' | undefined, Role],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[] | undefined> {
@@ -95,7 +96,7 @@ class SelfRolesCommand extends Command {
 			message.guild.model.selfRoleIds = roles.concat(role.id);
 			await message.guild.model.save();
 
-			if (message.guild.me.roles.highest.position <= role.position) {
+			if (message.guild.me!.roles.highest.position <= role.position) {
 				return message.reply([
 					`added the \`@${role.name}\` role to the self assignable roles!`,
 					'Note: The role is not below my highest role, I can not assign or remove it!',
@@ -126,7 +127,7 @@ class SelfRolesCommand extends Command {
 				return message.reply(`the \`@${role.name}\` role is not self assignable!`);
 			}
 
-			if (message.guild.me.roles.highest.position <= role.position) {
+			if (message.guild.me!.roles.highest.position <= role.position) {
 				return message.reply(`the \`@${role.name}\` role is self assigneable, but it is not lower than my highest role!`);
 			}
 

@@ -4,6 +4,7 @@ import { AniListCommand } from '../../structures/AniListCommand';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { IMedia } from '../../types/anilist/IMedia';
 import { MediaType } from '../../types/anilist/MediaType';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class MangaCommand extends AniListCommand<IMedia> {
@@ -17,7 +18,11 @@ class MangaCommand extends AniListCommand<IMedia> {
 		});
 	}
 
-	public async run(message: Message, args: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: GuildMessage,
+		args: string[],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]> {
 		if (!args.length) return message.reply('you have to tell me what manga you are looking for!');
 
 		const entries: IMedia[] | undefined = await this.search(args.join(' '));

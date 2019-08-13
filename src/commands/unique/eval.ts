@@ -3,6 +3,7 @@ import { inspect, InspectOptions } from 'util';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 
@@ -25,13 +26,13 @@ class EvalCommand extends Command {
 		});
 	}
 
-	public async run(message: Discord.Message, args: string[], { commandName, authorModel }: ICommandRunInfo)
+	public async run(message: GuildMessage, args: string[], { commandName, authorModel }: ICommandRunInfo)
 		: Promise<Discord.Message | Discord.Message[]> {
 		let code: string = args.join(' ');
 		if (code.includes('await')) code = `(async()=>{${code}})()`;
 		try {
 			let evaled: any = ['broadcasteval', 'beval'].includes(commandName)
-				? await this.client.shard.broadcastEval(code)
+				? await this.client.shard!.broadcastEval(code)
 				// tslint:disable-next-line:no-eval
 				: await eval(code);
 

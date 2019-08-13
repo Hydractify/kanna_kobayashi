@@ -7,6 +7,7 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { titleCase } from '../../util/Util';
 
@@ -22,7 +23,7 @@ class ProfileCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: Message, [input]: string[]): Promise<string | [User]> {
+	public async parseArgs(message: GuildMessage, [input]: string[]): Promise<string | [User]> {
 		if (!input) return [message.author];
 
 		const user: User | undefined = await this.resolver.resolveMember(input, message.guild, false)
@@ -36,7 +37,10 @@ class ProfileCommand extends Command {
 		return [user];
 	}
 
-	public async run(message: Message, [user]: [User], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: GuildMessage,
+		[user]: [User], { authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]> {
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, user);
 		return message.channel.send(embed);
 	}

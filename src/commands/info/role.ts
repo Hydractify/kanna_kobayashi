@@ -3,6 +3,7 @@ import { Message, Role } from 'discord.js';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class RoleInfoCommand extends Command {
@@ -19,7 +20,7 @@ class RoleInfoCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, [roleName]: [string]): string | [Role] {
+	public parseArgs(message: GuildMessage, [roleName]: [string]): string | [Role] {
 		if (!roleName) return 'you need to give me a role name to search for.';
 
 		const role: Role | undefined = this.resolver.resolveRole(roleName, message.guild.roles, false);
@@ -29,7 +30,7 @@ class RoleInfoCommand extends Command {
 		return [role];
 	}
 
-	public run(message: Message, [role]: [Role], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public run(message: GuildMessage, [role]: [Role], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`Information about ${role.name}`)
 			.setThumbnail(message.guild.iconURL())

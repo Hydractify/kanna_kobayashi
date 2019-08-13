@@ -1,6 +1,5 @@
-import { Message } from 'discord.js';
-
 import { User as UserModel } from '../models/User';
+import { GuildMessage } from '../types/GuildMessage';
 import { ICommandInfo } from '../types/ICommandInfo';
 import { ICommandRunInfo } from '../types/ICommandRunInfo';
 import { Command } from './Command';
@@ -64,7 +63,7 @@ export abstract class ImageEmbedCommand extends Command {
 	 * Default basic implementation for an image embed command.
 	 * @virtual
 	 */
-	public run(message: Message, _: any[], { authorModel }: ICommandRunInfo): any {
+	public run(message: GuildMessage, _: any[], { authorModel }: ICommandRunInfo): any {
 		const embed: MessageEmbed = this.imageEmbed(message, authorModel);
 
 		return message.channel.send(this.messageContent, embed);
@@ -73,7 +72,7 @@ export abstract class ImageEmbedCommand extends Command {
 	/**
 	 * Build an embed for this ImageEmbedCommand, will pick a random image from the pool.
 	 */
-	protected imageEmbed(message: Message, userModel: UserModel): MessageEmbed {
+	protected imageEmbed(message: GuildMessage, userModel: UserModel): MessageEmbed {
 		const image: string = this.baseURL
 			? `${this.baseURL}${Math.floor(Math.random() * this.maxNumber!) + 1}.gif`
 			: this.images![Math.floor(Math.random() * this.images!.length)];

@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class TimezoneCommand extends Command {
@@ -16,7 +17,7 @@ class TimezoneCommand extends Command {
 	}
 
 	public parseArgs(
-		message: Message,
+		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
 	): (number | string)[] | string {
@@ -36,7 +37,7 @@ class TimezoneCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[offset]: number[] | string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {

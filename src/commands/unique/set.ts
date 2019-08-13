@@ -5,6 +5,7 @@ import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { Badges } from '../../types/Badges';
+import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
 type PartnerArgs = ['partner', User, User, boolean];
@@ -28,7 +29,7 @@ class SetCommand extends Command {
 	}
 
 	public async parseArgs(
-		message: Message,
+		message: GuildMessage,
 		[type, ...args]: string[],
 	): Promise<SetCommandArgs | string> {
 		if (!type) return 'you need to specify a type.';
@@ -81,7 +82,7 @@ class SetCommand extends Command {
 		return 'invalid type.';
 	}
 
-	public async run(message: Message, args: SetCommandArgs): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, args: SetCommandArgs): Promise<Message | Message[]> {
 		if (args[0] === 'partner') {
 			const transaction: Transaction = await this.sequelize.transaction();
 

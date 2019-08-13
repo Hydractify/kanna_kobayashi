@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 
@@ -20,7 +21,11 @@ class PrefixCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, args: string[], { authorModel }: ICommandRunInfo): string | [string | undefined] {
+	public parseArgs(
+		message: GuildMessage,
+		args: string[],
+		{ authorModel }: ICommandRunInfo,
+	): string | [string | undefined] {
 		if (args.length) {
 			if (authorModel.permLevel(message.member) < PermLevels.HUMANTAMER) {
 				return 'you do not have the required permission level to change the prefix!';
@@ -41,7 +46,7 @@ class PrefixCommand extends Command {
 		return [undefined];
 	}
 
-	public async run(message: Message, [newPrefix]: [string | undefined]): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, [newPrefix]: [string | undefined]): Promise<Message | Message[]> {
 		if (!newPrefix) {
 			const prefixes: string =
 				`always working prefixes are: \`@${this.client.user!.tag} \u200b\`, \`k!\` and \`kanna \u200b\``;

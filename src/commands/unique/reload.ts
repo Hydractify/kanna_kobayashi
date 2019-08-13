@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 import { Client } from '../../structures/Client';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { IPlainError } from '../../types/IPlainError';
 import { PermLevels } from '../../types/PermLevels';
 
@@ -19,7 +20,7 @@ class ReloadCommand extends Command {
 			usage: 'reload <...Command>',
 		});
 	}
-	public parseArgs(message: Message, args: string[]): string | string[] {
+	public parseArgs(message: GuildMessage, args: string[]): string | string[] {
 		if (!args.length) return 'you should supply at least one command to reload.';
 
 		for (const name of args) {
@@ -30,8 +31,8 @@ class ReloadCommand extends Command {
 		return args;
 	}
 
-	public async run(message: Message, commands: string[]): Promise<Message | Message[]> {
-		const results: [number[], [string, IPlainError][]][] = await this.client.shard
+	public async run(message: GuildMessage, commands: string[]): Promise<Message | Message[]> {
+		const results: [number[], [string, IPlainError][]][] = await this.client.shard!
 			.broadcastEval(this.reloadCommands, commands);
 
 		const errorMap = new Map<string, string[]>();
@@ -63,7 +64,7 @@ class ReloadCommand extends Command {
 			}
 		}
 
-		return [client.shard.ids, failures];
+		return [client.shard!.ids, failures];
 	}
 }
 

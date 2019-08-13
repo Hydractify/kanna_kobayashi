@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 import { Guild } from '../../models/Guild';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 
 class CommandStatusCommand extends Command {
 	public constructor(handler: CommandHandler) {
@@ -15,7 +16,7 @@ class CommandStatusCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, args: string[]): Command[] | string[] | string {
+	public parseArgs(message: GuildMessage, args: string[]): Command[] | string[] | string {
 		if (!args.length) return args;
 
 		const command: Command | undefined = this.handler.resolveCommand(args.join(' ').toLowerCase());
@@ -26,7 +27,7 @@ class CommandStatusCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[command]: [Command | undefined],
 	): Promise<Message | Message[]> {
 		const guildModel: Guild = message.guild.model;

@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
 class RemovePrefixCommand extends Command {
@@ -16,7 +17,7 @@ class RemovePrefixCommand extends Command {
 		});
 	}
 
-	public async run(message: Message): Promise<Message | Message[]> {
+	public async run(message: GuildMessage): Promise<Message | Message[]> {
 		if (!message.guild.model.prefix) return message.reply('there is no custom prefix set up.');
 
 		message.guild.model.prefix = null;

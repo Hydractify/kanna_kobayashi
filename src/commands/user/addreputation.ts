@@ -3,6 +3,7 @@ import { GuildMember, Message } from 'discord.js';
 import { UserReputation } from '../../models/UserReputation';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { UserReputationTypes } from '../../types/UserReputationTypes';
 
 class AddReputationCommand extends Command {
@@ -16,7 +17,10 @@ class AddReputationCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: Message, [target]: string[]): Promise<string | [GuildMember, UserReputation | null]> {
+	public async parseArgs(
+		message: GuildMessage,
+		[target]: string[],
+	): Promise<string | [GuildMember, UserReputation | null]> {
 		if (!target) return 'you need to tell me who you want to add a positive reputation to.';
 
 		const member: GuildMember | undefined = await this.resolver.resolveMember(target, message.guild, false);
@@ -37,7 +41,7 @@ class AddReputationCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[member, already]: [GuildMember, UserReputation | null],
 	): Promise<Message | Message[]> {
 		if (already) {

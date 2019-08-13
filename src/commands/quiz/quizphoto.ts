@@ -4,6 +4,7 @@ import { Quiz } from '../../models/Quiz';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 import { titleCase } from '../../util/Util';
@@ -24,7 +25,7 @@ class QuizPhotoCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: Message, [option, photo]: string[]): string | ['set', string] | ['view', undefined] {
+	public parseArgs(message: GuildMessage, [option, photo]: string[]): string | ['set', string] | ['view', undefined] {
 		if (!option) {
 			return [
 				'you need to tell me whether you want to',
@@ -47,7 +48,7 @@ class QuizPhotoCommand extends Command {
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		[option, photo]: ['set', string] | ['view', undefined],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {

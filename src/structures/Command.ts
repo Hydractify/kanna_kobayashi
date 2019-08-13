@@ -1,5 +1,4 @@
 import {
-	Message,
 	MessageAdditions,
 	MessageOptions,
 	Permissions,
@@ -15,6 +14,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { Sequelize as sequelize } from '../decorators/SequelizeDecorator';
 import { CommandLog } from '../models/CommandLog';
 import { User as UserModel } from '../models/User';
+import { GuildMessage } from '../types/GuildMessage';
 import { ICommandInfo } from '../types/ICommandInfo';
 import { ICommandRunInfo } from '../types/ICommandRunInfo';
 import { MaybePromise } from '../types/MaybePromise';
@@ -160,10 +160,10 @@ export abstract class Command {
 	 * Determines whether the command may be called by the executing user.
 	 * Resolves with true on success or with a reason string on failure.
 	 */
-	public async canCall(message: Message, authorModel: UserModel): Promise<true | string> {
+	public async canCall(message: GuildMessage, authorModel: UserModel): Promise<true | string> {
 		if (this.clientPermissions.length) {
 			const missing: PermissionString[] = (message.channel as TextChannel)
-				.permissionsFor(message.guild.me)!
+				.permissionsFor(message.guild.me!)!
 				.missing(this.clientPermissions);
 
 			if (missing.length) {
@@ -240,7 +240,7 @@ export abstract class Command {
 	 * @virtual
 	 */
 	public parseArgs(
-		message: Message,
+		message: GuildMessage,
 		args: string[],
 		info: ICommandRunInfo,
 	): MaybePromise<any[] | string | MessageOptions | MessageAdditions> {
@@ -251,5 +251,5 @@ export abstract class Command {
 	 * Main entry point for the actual execution of the command.
 	 * @abstract
 	 */
-	public abstract run(message: Message, args: any[], info: ICommandRunInfo): MaybePromise<any>;
+	public abstract run(message: GuildMessage, args: any[], info: ICommandRunInfo): MaybePromise<any>;
 }

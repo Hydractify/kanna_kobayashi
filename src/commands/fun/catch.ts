@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 
 class CatchCommand extends Command {
 	public constructor(handler: CommandHandler) {
@@ -14,7 +15,7 @@ class CatchCommand extends Command {
 		});
 	}
 
-	public async run(message: Message): Promise<Message | Message[]> {
+	public async run(message: GuildMessage): Promise<Message | Message[]> {
 		let bugAmount: number = 0;
 
 		const bugChance: number = Math.floor(Math.random() * 100) + 1;

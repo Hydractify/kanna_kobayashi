@@ -4,6 +4,7 @@ import { AniListCommand } from '../../structures/AniListCommand';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { IMedia } from '../../types/anilist/IMedia';
 import { MediaType } from '../../types/anilist/MediaType';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class AnimeCommand extends AniListCommand<IMedia> {
@@ -17,14 +18,14 @@ class AnimeCommand extends AniListCommand<IMedia> {
 		});
 	}
 
-	public parseArgs(message: Message, args: string[]): string | string[] {
+	public parseArgs(message: GuildMessage, args: string[]): string | string[] {
 		if (!args.length) return 'you have to tell me what anime you are looking for!';
 
 		return args;
 	}
 
 	public async run(
-		message: Message,
+		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]> {

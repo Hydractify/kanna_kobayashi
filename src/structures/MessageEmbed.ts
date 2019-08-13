@@ -40,6 +40,14 @@ export class MessageEmbed extends DJSMessageEmbed {
 	public apiTransform(): MessageEmbedOptions {
 		return (this as any)._apiTransform();
 	}
+
+	public setThumbnail(thumbnail: string | null): this {
+		return super.setThumbnail(thumbnail!);
+	}
+
+	public setAuthor(name: any, iconURL?: string | null, url?: string): this {
+		return super.setAuthor(name, iconURL!, url);
+	}
 }
 
 // Messing with original prototype instead of the extended one because d.js internally uses their own embed class

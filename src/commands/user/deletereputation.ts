@@ -3,6 +3,7 @@ import { GuildMember, Message } from 'discord.js';
 import { UserReputation } from '../../models/UserReputation';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 
 class DeleteReputationCommand extends Command {
 	public constructor(handler: CommandHandler) {
@@ -16,7 +17,7 @@ class DeleteReputationCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: Message, [target]: string[]): Promise<string | [GuildMember, UserReputation]> {
+	public async parseArgs(message: GuildMessage, [target]: string[]): Promise<string | [GuildMember, UserReputation]> {
 		if (!target) return 'you need to tell me whose reputation from yourself you want to delete.';
 
 		const member: GuildMember | undefined = await this.resolver.resolveMember(target, message.guild, false);
@@ -38,7 +39,10 @@ class DeleteReputationCommand extends Command {
 		return [member, reputation];
 	}
 
-	public async run(message: Message, [member, reputation]: [GuildMember, UserReputation]): Promise<Message | Message[]> {
+	public async run(
+		message: GuildMessage,
+		[member, reputation]: [GuildMember, UserReputation],
+	): Promise<Message | Message[]> {
 		await reputation.destroy();
 
 		return message.reply(

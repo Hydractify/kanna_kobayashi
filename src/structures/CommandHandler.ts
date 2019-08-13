@@ -5,7 +5,6 @@ import {
 	Message,
 	MessageAttachment,
 	MessageOptions,
-	TextChannel,
 	User,
 } from 'discord.js';
 import { readdir } from 'fs';
@@ -20,6 +19,7 @@ import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
 import { Emojis } from '../types/Emojis';
+import { isGuildMessage } from '../types/GuildMessage';
 import { UserTypes } from '../types/UserTypes';
 import { Client } from './Client';
 import { Command } from './Command';
@@ -207,13 +207,13 @@ export class CommandHandler {
 		}
 
 		// Keep "Requested by" embeds
-		if (message.author.id === this.client.user!.id
+		if (message.author!.id === this.client.user!.id
 			&& message.embeds.length && message.embeds[0].footer
 			&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text!)
 		) return;
 
 		try {
-			if (message.author.bot || !(message.channel instanceof TextChannel)) return;
+			if (!isGuildMessage(message) || message.author.bot) return;
 
 			if (!message.member) {
 				captureMessage('Uncached member',
@@ -241,9 +241,9 @@ export class CommandHandler {
 						member_channel: message.channel.permissionsFor(message.member),
 						member_guild: message.member.permissions,
 						self_channel: message.channel.permissionsFor(this.client.user!),
-						self_guild: message.guild.me.permissions,
+						self_guild: message.guild.me!.permissions,
 					},
-					shard_ids: this.client.shard.ids.map((id: number) => id.toLocaleString()).join(', '),
+					shard_ids: this.client.shard!.ids.map((id: number) => id.toLocaleString()).join(', '),
 				},
 				level: 'debug',
 			});
@@ -266,7 +266,7 @@ export class CommandHandler {
 			if (authorModel.type === UserTypes.BLACKLISTED) return;
 			if (ownerModel.type === UserTypes.BLACKLISTED) return;
 
-			if (!message.channel.permissionsFor(message.guild.me)!.has('SEND_MESSAGES')) {
+			if (!message.channel.permissionsFor(message.guild.me!)!.has('SEND_MESSAGES')) {
 				message.author.send('I do not have permission to send in the channel of your command!')
 					.catch(() => undefined);
 
@@ -314,7 +314,7 @@ export class CommandHandler {
 							member_channel: message.channel.permissionsFor(message.member),
 							member_guild: message.member.permissions,
 							self_channel: message.channel.permissionsFor(this.client.user!),
-							self_guild: message.guild.me.permissions,
+							self_guild: message.guild.me!.permissions,
 						},
 					},
 					// Sentry does not allow to filter based on breadcrumbs, but via tags

@@ -2,6 +2,7 @@ import { Message, User } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
+import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 class BlockCommand extends Command {
@@ -15,7 +16,7 @@ class BlockCommand extends Command {
 	}
 
 	public async parseArgs(
-		message: Message,
+		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<[User] | string> {
@@ -35,7 +36,11 @@ class BlockCommand extends Command {
 		return [user];
 	}
 
-	public async run(message: Message, [user]: [User], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(
+		message: GuildMessage,
+		[user]: [User],
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]> {
 		await authorModel.$add('blocked', user.id);
 
 		return message.reply(`successfully blocked ${user.tag}!`);
