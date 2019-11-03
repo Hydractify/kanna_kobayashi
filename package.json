@@ -33,7 +33,7 @@
 		"dev": "export DEBUG=*|| set DEBUG=*&& export NODE_ENV=dev|| set NODE_ENV=dev&& npm run start",
 		"prod": "export NODE_ENV=production|| set NODE_ENV=production&& npm run start",
 		"start": "cd bin && node ./Shard.js",
-		"test": "tslint -p ./",
+		"test": "eslint --ext .js,.ts src/",
 		"testing": "export NODE_ENV=testing|| set NODE_ENV=testing&& npm run start",
 		"typings": "node ./static/typings.js",
 		"watch": "tsc -w -p ./"
