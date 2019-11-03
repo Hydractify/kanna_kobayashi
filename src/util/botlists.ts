@@ -16,7 +16,8 @@ const DBotsOrg: () => APIRouter = buildRouter({
 	},
 });
 
-export async function updateBotLists(this: Client): Promise<void> {
+export async function updateBotLists(this: Client): Promise<void> 
+{
 	const count: number = await this.shard!.fetchClientValues('guilds.size')
 		.then((res: number[]) => res.reduce((p: number, c: number) => p + c));
 
@@ -25,9 +26,12 @@ export async function updateBotLists(this: Client): Promise<void> {
 
 	const data: { server_count: number } = { server_count: count };
 
-	try {
+	try 
+	{
 		await DBotsOrg().api.bots(this.user!.id).stats.post({ data });
-	} catch (error) {
+	}
+	catch (error) 
+	{
 		captureException(error, {
 			extra: { guild_count: count },
 			tags: { service: 'dbotsorg' },

@@ -9,7 +9,8 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 
-class QuizPremadeCommand extends Command {
+class QuizPremadeCommand extends Command 
+{
 
 	private emojis: string[] = [
 		Emojis.KannaMad.slice(2, -1),
@@ -24,7 +25,8 @@ class QuizPremadeCommand extends Command {
 		'9%E2%83%A3',
 	];
 
-	public constructor(handler: CommandHandler) {
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['qpremade'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'USE_EXTERNAL_EMOJIS', 'READ_MESSAGE_HISTORY'],
@@ -40,7 +42,8 @@ class QuizPremadeCommand extends Command {
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[] | undefined> {
+	): Promise<Message | Message[] | undefined> 
+	{
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setTitle('Take your pick!')
 			.setDescription('This will replace the current set up quiz in this guild.')
@@ -70,7 +73,8 @@ class QuizPremadeCommand extends Command {
 
 		const pickMessage: Message = await message.channel.send(embed) as Message;
 
-		for (const emoji of this.emojis) {
+		for (const emoji of this.emojis) 
+		{
 			await pickMessage.react(emoji);
 		}
 
@@ -87,10 +91,13 @@ class QuizPremadeCommand extends Command {
 			name: string;
 			photo: string;
 		} = Quiz.preMade[this.emojis.indexOf(reactions.first()!.emoji.identifier)];
-		if (already) {
+		if (already) 
+		{
 			already.set(quiz);
 			await already.save();
-		} else {
+		}
+		else 
+		{
 			await message.guild.model.$create('quiz', { guildId: message.guild.id, ...quiz });
 		}
 

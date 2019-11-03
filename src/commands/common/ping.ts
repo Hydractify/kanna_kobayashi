@@ -5,8 +5,10 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
 import { GuildMessage } from '../../types/GuildMessage';
 
-class PingCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class PingCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			description: 'See how long I need to see your message and send a response',
 			examples: ['ping'],
@@ -15,7 +17,8 @@ class PingCommand extends Command {
 		});
 	}
 
-	public async run(message: GuildMessage): Promise<Message> {
+	public async run(message: GuildMessage): Promise<Message> 
+	{
 		const sent: Message = await message.channel.send(
 			`Searching for insects... ${Emojis.KannaDetective}`,
 		) as Message;

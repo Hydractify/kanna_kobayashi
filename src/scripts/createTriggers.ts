@@ -30,13 +30,15 @@ instance.start().then(() =>
 )
 	.then(
 		// Resolve
-		() => {
+		() => 
+		{
 			Logger.instance.info('SUCCESS', 'Created function and triggers');
 			process.exit(0);
 		},
 		// Reject
-		(error: Error) => {
+		(error: Error) => 
+		{
 			Logger.instance.error('ERROR', error);
 			process.exit(1);
 		},
-);
+	);

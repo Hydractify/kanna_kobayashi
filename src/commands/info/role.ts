@@ -6,8 +6,10 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class RoleInfoCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class RoleInfoCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['rr', 'rinfo'],
 			clientPermissions: ['EMBED_LINKS'],
@@ -20,7 +22,8 @@ class RoleInfoCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: GuildMessage, [roleName]: [string]): string | [Role] {
+	public parseArgs(message: GuildMessage, [roleName]: [string]): string | [Role] 
+	{
 		if (!roleName) return 'you need to give me a role name to search for.';
 
 		const role: Role | undefined = this.resolver.resolveRole(roleName, message.guild.roles, false);
@@ -30,7 +33,8 @@ class RoleInfoCommand extends Command {
 		return [role];
 	}
 
-	public run(message: GuildMessage, [role]: [Role], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public run(message: GuildMessage, [role]: [Role], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> 
+	{
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`Information about ${role.name}`)
 			.setThumbnail(message.guild.iconURL())

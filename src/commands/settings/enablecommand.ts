@@ -7,8 +7,10 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 
-class EnableCommandCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class EnableCommandCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['enable'],
 			description: 'Enable a command',
@@ -20,21 +22,26 @@ class EnableCommandCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: GuildMessage, args: string[]): [Command] | string {
+	public parseArgs(message: GuildMessage, args: string[]): [Command] | string 
+	{
 		if (!args.length) return `you have to give me a command to enable (\`${this.usage}\`)`;
 
 		const command: Command | undefined = this.handler.resolveCommand(args.join(' ').toLocaleLowerCase());
 
-		if (!command) {
+		if (!command) 
+		{
 			return 'I could not find a command with that name or alias.';
-		} else if (!message.guild.model.disabledCommands.includes(command.name)) {
+		}
+		else if (!message.guild.model.disabledCommands.includes(command.name)) 
+		{
 			return `the **${command.name}** command is already server wide enabled.`;
 		}
 
 		return [command];
 	}
 
-	public async run(message: GuildMessage, [command]: [Command], info: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, [command]: [Command], info: ICommandRunInfo): Promise<Message | Message[]> 
+	{
 		const guildModel: Guild = message.guild.model;
 		guildModel.disabledCommands.splice(
 			guildModel.disabledCommands.indexOf(command.name),

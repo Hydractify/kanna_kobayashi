@@ -8,7 +8,8 @@ import { Model } from '../structures/Model';
 	underscored: true,
 	updatedAt: false,
 })
-export class UserBlock extends Model<UserBlock> {
+export class UserBlock extends Model<UserBlock> 
+{
 	/**
 	 * Target id
 	 */

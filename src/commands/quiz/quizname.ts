@@ -9,8 +9,10 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 import { titleCase } from '../../util/Util';
 
-class QuizNameCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class QuizNameCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['qname'],
 			clientPermissions: ['EMBED_LINKS'],
@@ -25,8 +27,10 @@ class QuizNameCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: GuildMessage, [option, ...name]: string[]): string | ['set', string] | ['view', undefined] {
-		if (!option) {
+	public parseArgs(message: GuildMessage, [option, ...name]: string[]): string | ['set', string] | ['view', undefined] 
+	{
+		if (!option) 
+		{
 			return [
 				'you need to tell me whether you want to',
 				'`set` a new name, or `view` the current one?',
@@ -37,7 +41,8 @@ class QuizNameCommand extends Command {
 
 		if (option === 'view') return ['view', undefined];
 
-		if (option === 'set') {
+		if (option === 'set') 
+		{
 			if (!name.length) return 'to set a name, you have to specify one.';
 
 			return ['set', name.join(' ')];
@@ -50,15 +55,19 @@ class QuizNameCommand extends Command {
 		message: GuildMessage,
 		[option, name]: ['set', string] | ['view', undefined],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]> 
+	{
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
-		if (option === 'view') {
+		if (option === 'view') 
+		{
 			if (!quiz) return message.reply('there is no quiz set up.');
-			if (!quiz.name) {
+			if (!quiz.name) 
+			{
 				return message.reply('the set up quiz has no answer associated with it.');
 			}
 
-			if (quiz.photo) {
+			if (quiz.photo) 
+			{
 				const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 					.setTitle('Current quiz:')
 					.setDescription(titleCase(quiz.name))
@@ -74,23 +83,28 @@ class QuizNameCommand extends Command {
 		}
 
 		let toSend: string[] | MessageEmbed | undefined;
-		if (quiz) {
+		if (quiz) 
+		{
 			quiz.name = name!;
 			await quiz.save();
-			if (quiz.photo) {
+			if (quiz.photo) 
+			{
 				toSend = MessageEmbed
 					.common(message, authorModel)
 					.setTitle(titleCase(quiz.name))
 					.setImage(quiz.photo);
 			}
-		} else {
+		}
+		else 
+		{
 			await message.guild.model.$create('quiz', {
 				guildId: message.guild.id,
 				name,
 			});
 		}
 
-		if (!toSend) {
+		if (!toSend) 
+		{
 			toSend = [
 				`Set the answer to \`${titleCase(name!)}\`.`,
 				'_There is no photo associated with this quiz!_',

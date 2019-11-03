@@ -10,8 +10,10 @@ import { Emojis } from '../../types/Emojis';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class EmojiInfoCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class EmojiInfoCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['einfo', 'ee', 'emoji'],
 			clientPermissions: ['EMBED_LINKS'],
@@ -26,7 +28,8 @@ class EmojiInfoCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: GuildMessage, [emojiName]: string[]): Promise<string | [Emoji]> {
+	public async parseArgs(message: GuildMessage, [emojiName]: string[]): Promise<string | [Emoji]> 
+	{
 		if (!emojiName) return 'you have to give me something to search for!';
 
 		const results: [EmojiMatchType | undefined, Emoji | undefined][] = await this.client.shard!.broadcastEval(
@@ -37,7 +40,8 @@ class EmojiInfoCommand extends Command {
 		);
 
 		let emoji: Emoji | undefined;
-		for (const result of results) {
+		for (const result of results) 
+		{
 			if (!result) continue;
 			let type: EmojiMatchType | undefined;
 			[type, emoji] = result;
@@ -58,7 +62,8 @@ class EmojiInfoCommand extends Command {
 		message: GuildMessage,
 		[emoji]: [Emoji],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]> 
+	{
 		const createdAtString: string = moment(emoji.createdTimestamp).format('MM/DD/YYYY (HH:mm)');
 		const createdBeforeString: string = moment(emoji.createdTimestamp).fromNow();
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
@@ -72,11 +77,13 @@ class EmojiInfoCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	public searchEmoji(emojiName: string): [EmojiMatchType | undefined, Emoji | undefined] {
+	public searchEmoji(emojiName: string): [EmojiMatchType | undefined, Emoji | undefined] 
+	{
 		if (this.client.emojis.has(emojiName)) return [EmojiMatchType.EXACT, this.client.emojis.get(emojiName)];
 		const lowerCasedName: string = emojiName.toLowerCase();
 		let inExactMatch: Emoji | undefined;
-		for (const emoji of this.client.emojis.values()) {
+		for (const emoji of this.client.emojis.values()) 
+		{
 			if (emoji.name === emojiName) return [EmojiMatchType.EXACT, emoji];
 			if (emoji.name.toLowerCase() === lowerCasedName) inExactMatch = emoji;
 		}

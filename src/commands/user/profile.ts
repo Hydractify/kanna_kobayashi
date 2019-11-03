@@ -11,8 +11,10 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { titleCase } from '../../util/Util';
 
-class ProfileCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class ProfileCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['pf'],
 			clientPermissions: ['EMBED_LINKS'],
@@ -23,7 +25,8 @@ class ProfileCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: GuildMessage, [input]: string[]): Promise<string | [User]> {
+	public async parseArgs(message: GuildMessage, [input]: string[]): Promise<string | [User]> 
+	{
 		if (!input) return [message.author];
 
 		const user: User | undefined = await this.resolver.resolveMember(input, message.guild, false)
@@ -40,16 +43,18 @@ class ProfileCommand extends Command {
 	public async run(
 		message: GuildMessage,
 		[user]: [User], { authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]> 
+	{
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, user);
 		return message.channel.send(embed);
 	}
 
 	public async fetchEmbed(
-		{ author, guild }: { author: User, guild: Guild },
+		{ author, guild }: { author: User; guild: Guild },
 		authorModel: UserModel,
 		user: User,
-	): Promise<MessageEmbed> {
+	): Promise<MessageEmbed> 
+	{
 		const [userModel]: [UserModel, boolean] = await UserModel.findCreateFind({
 			include: [
 				{
@@ -76,7 +81,8 @@ class ProfileCommand extends Command {
 
 		let partnerString: string = 'Hidden';
 
-		if (!userModel.partnerHidden) {
+		if (!userModel.partnerHidden) 
+		{
 			const partner: User | undefined = userModel.partnerId
 				? this.client.users.get(userModel.partnerId)
 				|| await this.client.users.fetch(userModel.partnerId).catch(() => undefined)
@@ -89,7 +95,8 @@ class ProfileCommand extends Command {
 
 		let userTime: string = 'No timezone set.';
 
-		if (typeof userModel.timezone === 'number') {
+		if (typeof userModel.timezone === 'number') 
+		{
 			const time: string = moment().utc().add(userModel.timezone, 'hours').format('dddd Do H:mm');
 			const timezone: string | number = userModel.timezone >= 0 ? `+${userModel.timezone}` : userModel.timezone;
 			userTime = `${time} (UTC ${timezone})`;
@@ -105,7 +112,8 @@ class ProfileCommand extends Command {
 			.addField('Time', userTime, true)
 			.addField('Relationship', partnerString, true);
 
-		if (!userModel.partnerHidden && user === author && userModel.partnerId) {
+		if (!userModel.partnerHidden && user === author && userModel.partnerId) 
+		{
 			const offset: number = authorModel.timezone || 0;
 			const anniversary: string = moment(userModel.partnerSince!)
 				// .utc() because we .add() the utc offset to display the correct date
@@ -123,11 +131,13 @@ class ProfileCommand extends Command {
 	 * Maps an array of items (or badges) to a readable string.
 	 * @param items Array of items to map
 	 */
-	private mapItems(items: Badge[]): string {
+	private mapItems(items: Badge[]): string 
+	{
 		if (!items || !items.length) return 'None';
 
 		const formatted: string[] = [];
-		for (const item of items) {
+		for (const item of items) 
+		{
 			formatted.push(titleCase(item.name.replace(/_/g, ' ')));
 		}
 

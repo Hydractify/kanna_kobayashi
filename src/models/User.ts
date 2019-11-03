@@ -30,12 +30,14 @@ import { UserReputation } from './UserReputation';
 	underscored: true,
 	updatedAt: false,
 })
-export class User extends Model<User> {
+export class User extends Model<User> 
+{
 	/**
 	 * Fetch a model by id.
 	 * This will either come from redis, or from postgres if not available.
 	 */
-	public static async fetch(id: string): Promise<User> {
+	public static async fetch(id: string): Promise<User> 
+	{
 		const [user]: [User, boolean] = await User.findCreateFind<User>({ where: { id } });
 
 		return user;
@@ -44,14 +46,16 @@ export class User extends Model<User> {
 	/**
 	 * Current level of the User
 	 */
-	public get level(): number {
+	public get level(): number 
+	{
 		return Math.floor(Math.sqrt(this.exp / 25)) + 1;
 	}
 
 	/**
 	 * Color for this.user!, either random, or preset for DEVs or trusted
 	 */
-	public get color(): number {
+	public get color(): number 
+	{
 		if (this.type === UserTypes.DEV) return 0x00000F;
 		if (this.type === UserTypes.TRUSTED) return 0xFFFFFF;
 
@@ -62,24 +66,30 @@ export class User extends Model<User> {
 	 * Computes the perm level of this.user!,
 	 * optionally based on a member passed.
 	 */
-	public permLevel(member?: GuildMember): PermLevels {
-		if (this.type === UserTypes.DEV) {
+	public permLevel(member?: GuildMember): PermLevels 
+	{
+		if (this.type === UserTypes.DEV) 
+		{
 			return PermLevels.DEV;
 		}
-		if (this.type === UserTypes.TRUSTED) {
+		if (this.type === UserTypes.TRUSTED) 
+		{
 			return PermLevels.TRUSTED;
 		}
 
-		if (member) {
+		if (member) 
+		{
 			const { permissions }: GuildMember = member;
 
-			if (permissions.has('MANAGE_GUILD') || permissions.has(['BAN_MEMBERS', 'KICK_MEMBERS'])) {
+			if (permissions.has('MANAGE_GUILD') || permissions.has(['BAN_MEMBERS', 'KICK_MEMBERS'])) 
+			{
 				return PermLevels.HUMANTAMER;
 			}
 
 			const model: Guild = member.guild.model;
 			if ((model && model.tamerRoleId && member.roles.has(model.tamerRoleId))
-				|| member.roles.find((role: Role) => role.name.toLowerCase() === 'dragon tamer')) {
+				|| member.roles.find((role: Role) => role.name.toLowerCase() === 'dragon tamer')) 
+			{
 				return PermLevels.DRAGONTAMER;
 			}
 		}
@@ -93,7 +103,8 @@ export class User extends Model<User> {
 	 * @param count Optional number of items to give, defaults to 1
 	 * @returns New item count
 	 */
-	public async addItem(item: Badge | Badges, count: number = 1, options: QueryOptions = {}): Promise<number> {
+	public async addItem(item: Badge | Badges, count: number = 1, options: QueryOptions = {}): Promise<number> 
+	{
 		const itemName: string = typeof item === 'string'
 			? item
 			: item.name;
@@ -109,17 +120,17 @@ export class User extends Model<User> {
 						AND "user_items"."user_id"=:userId
 			RETURNING "count";
 			`,
-			{
-				...options,
-				replacements: {
-					count,
-					itemName,
-					userId: this.id,
-				},
-				// Technically an upsert but sequelize
-				// maps select more conveniently here
-				type: QueryTypes.SELECT,
+		{
+			...options,
+			replacements: {
+				count,
+				itemName,
+				userId: this.id,
 			},
+			// Technically an upsert but sequelize
+			// maps select more conveniently here
+			type: QueryTypes.SELECT,
+		},
 		);
 
 		return newCount;

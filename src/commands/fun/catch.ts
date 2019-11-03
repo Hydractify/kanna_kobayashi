@@ -4,8 +4,10 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 
-class CatchCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class CatchCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['bughunt'],
 			description: 'Grab your Bug Net and let\'s go catch some bugs!',
@@ -15,22 +17,34 @@ class CatchCommand extends Command {
 		});
 	}
 
-	public async run(message: GuildMessage): Promise<Message | Message[]> {
+	public async run(message: GuildMessage): Promise<Message | Message[]> 
+	{
 		let bugAmount: number = 0;
 
 		const bugChance: number = Math.floor(Math.random() * 100) + 1;
 
-		if (bugChance === 100) {
+		if (bugChance === 100) 
+		{
 			bugAmount = 6;
-		} else if (bugChance > 90) {
+		}
+		else if (bugChance > 90) 
+		{
 			bugAmount = 5;
-		} else if (bugChance > 80) {
+		}
+		else if (bugChance > 80) 
+		{
 			bugAmount = 4;
-		} else if (bugChance > 70) {
+		}
+		else if (bugChance > 70) 
+		{
 			bugAmount = 3;
-		} else if (bugChance > 60) {
+		}
+		else if (bugChance > 60) 
+		{
 			bugAmount = 2;
-		} else if (bugChance > 50) {
+		}
+		else if (bugChance > 50) 
+		{
 			bugAmount = 1;
 		}
 

@@ -1,8 +1,10 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 
-class DuelCommand extends ImageEmbedCommand {
-	public constructor(handler: CommandHandler) {
+class DuelCommand extends ImageEmbedCommand 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			description: 'Yu-Gi-Oh memes',
 			examples: ['duel'],

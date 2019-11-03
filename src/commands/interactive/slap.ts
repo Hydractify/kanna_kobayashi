@@ -8,8 +8,10 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class SlapCommand extends WeebCommand {
-	public constructor(handler: CommandHandler) {
+class SlapCommand extends WeebCommand 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			action: 'slapped',
 			description: 'Slap someone!',
@@ -24,8 +26,10 @@ class SlapCommand extends WeebCommand {
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
-		if (members.has(this.client.user!.id)) {
+	): Promise<Message | Message[]> 
+	{
+		if (members.has(this.client.user!.id)) 
+		{
 			return message.reply(
 				`you can not slap me! ${Emojis.KannaMad}`,
 			);

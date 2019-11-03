@@ -26,7 +26,8 @@
 
 import { Util } from 'discord.js';
 
-export const generateColor: () => number = (): number => {
+export const generateColor: () => number = (): number => 
+{
 	const h: number = ((Math.random() * 150) + 250) / 60;
 	const s: number = ((Math.random() * 50) + 50) / 100;
 	let v: number = ((Math.random() * 50) + 50) / 100;
@@ -39,7 +40,8 @@ export const generateColor: () => number = (): number => {
 	const t: number = v * 255 * (1 - (s * (1 - f)));
 	v *= 255;
 
-	switch (hi) {
+	switch (hi) 
+	{
 		case 0:
 			return Util.resolveColor([v, t, p]);
 		case 1:

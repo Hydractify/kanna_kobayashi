@@ -7,8 +7,10 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 import { mapIterable } from '../../util/Util';
 
-class SelfRolesCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class SelfRolesCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['selfrole', 'sr'],
 			clientPermissions: ['MANAGE_ROLES'],
@@ -32,23 +34,30 @@ class SelfRolesCommand extends Command {
 		message: GuildMessage,
 		[type, role]: string[],
 		{ authorModel }: ICommandRunInfo,
-	): string | [string, Role] | [undefined, undefined] {
-		if (type) {
+	): string | [string, Role] | [undefined, undefined] 
+	{
+		if (type) 
+		{
 			type = type.toLowerCase();
-			if (!['add', 'remove'].includes(type)) {
+			if (!['add', 'remove'].includes(type)) 
+			{
 				role = type;
 				type = 'toggle';
-			} else if (authorModel.permLevel(message.member) < PermLevels.HUMANTAMER) {
+			}
+			else if (authorModel.permLevel(message.member) < PermLevels.HUMANTAMER) 
+			{
 				return 'you do not have the required permission level to add or remove self assignable roles!';
 			}
 
-			if (!role) {
+			if (!role) 
+			{
 				return 'you should also tell me a role!';
 			}
 
 			const resolved: Role | undefined = this.resolver.resolveRole(role, message.guild.roles, false);
 
-			if (!resolved) {
+			if (!resolved) 
+			{
 				return `could not find a role with ${role}!`;
 			}
 
@@ -62,10 +71,13 @@ class SelfRolesCommand extends Command {
 		message: GuildMessage,
 		[type, role]: ['add' | 'toggle' | 'remove' | undefined, Role],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[] | undefined> {
-		if (!type) {
+	): Promise<Message | Message[] | undefined> 
+	{
+		if (!type) 
+		{
 			const roles: string[] = [];
-			for (const roleId of message.guild.model.selfRoleIds) {
+			for (const roleId of message.guild.model.selfRoleIds) 
+			{
 				const selfRole: Role | undefined = message.guild.roles.get(roleId);
 				// TODO: Remove from database.
 				if (!selfRole) continue;
@@ -73,7 +85,8 @@ class SelfRolesCommand extends Command {
 
 			}
 
-			if (!roles.length) {
+			if (!roles.length) 
+			{
 				return message.reply('there are no self assignable roles set up!');
 			}
 
@@ -82,13 +95,16 @@ class SelfRolesCommand extends Command {
 			return message.reply(`${mapIterable(roles).slice(0, -1)}\``);
 		}
 
-		if (type === 'add') {
+		if (type === 'add') 
+		{
 			const roles: string[] = message.guild.model.selfRoleIds;
-			if (roles.includes(role.id)) {
+			if (roles.includes(role.id)) 
+			{
 				return message.reply(`the \`@${role.name}\` role is already self assignable.`);
 			}
 
-			if (message.member.roles.highest.position <= role.position) {
+			if (message.member.roles.highest.position <= role.position) 
+			{
 				return message.reply('you may only add roles which are positioned below your highest role!');
 			}
 
@@ -96,7 +112,8 @@ class SelfRolesCommand extends Command {
 			message.guild.model.selfRoleIds = roles.concat(role.id);
 			await message.guild.model.save();
 
-			if (message.guild.me!.roles.highest.position <= role.position) {
+			if (message.guild.me!.roles.highest.position <= role.position) 
+			{
 				return message.reply([
 					`added the \`@${role.name}\` role to the self assignable roles!`,
 					'Note: The role is not below my highest role, I can not assign or remove it!',
@@ -106,10 +123,12 @@ class SelfRolesCommand extends Command {
 			return message.reply(`added the \`@${role.name}\` role to the self assignable roles!`);
 		}
 
-		if (type === 'remove') {
+		if (type === 'remove') 
+		{
 			const roles: string[] = message.guild.model.selfRoleIds;
 			const index: number = roles.indexOf(role.id);
-			if (index === -1) {
+			if (index === -1) 
+			{
 				return message.reply(`the \`@${role.name}\` role is not a self assignable.`);
 			}
 
@@ -122,20 +141,26 @@ class SelfRolesCommand extends Command {
 			return message.reply(`removed the \`@${role.name}\` role from the self assignable roles!`);
 		}
 
-		if (type === 'toggle') {
-			if (!message.guild.model.selfRoleIds.includes(role.id)) {
+		if (type === 'toggle') 
+		{
+			if (!message.guild.model.selfRoleIds.includes(role.id)) 
+			{
 				return message.reply(`the \`@${role.name}\` role is not self assignable!`);
 			}
 
-			if (message.guild.me!.roles.highest.position <= role.position) {
+			if (message.guild.me!.roles.highest.position <= role.position) 
+			{
 				return message.reply(`the \`@${role.name}\` role is self assigneable, but it is not lower than my highest role!`);
 			}
 
-			if (message.member.roles.has(role.id)) {
+			if (message.member.roles.has(role.id)) 
+			{
 				await message.member.roles.remove(role, 'Requested removal of selfrole');
 
 				return message.reply(`you no longer have the \`@${role.name}\` role!`);
-			} else {
+			}
+			else 
+			{
 				await message.member.roles.add(role, 'Requestesd selfrole');
 
 				return message.reply(`you now have the \`@${role.name}\` role!`);

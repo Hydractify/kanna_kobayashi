@@ -23,11 +23,13 @@ import { Logger } from './structures/Logger';
 
 let client: Client | undefined;
 
-process.on('unhandledRejection', (error: {} | null | undefined, rejectedPromise: Promise<any>) => {
+process.on('unhandledRejection', (error: {} | null | undefined, rejectedPromise: Promise<any>) => 
+{
 	if (client) client.errorCount.inc({ type: 'PromiseRejection' });
 
 	const promise: Promise<void> = Logger.instance.error('REJECTION', error);
-	if (error instanceof TimeoutError) {
+	if (error instanceof TimeoutError) 
+	{
 		promise.then(() => process.exit(1));
 	}
 });

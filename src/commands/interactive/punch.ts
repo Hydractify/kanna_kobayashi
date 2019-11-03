@@ -8,8 +8,10 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class PunchCommand extends WeebCommand {
-	public constructor(handler: CommandHandler) {
+class PunchCommand extends WeebCommand 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			action: 'punched',
 			description: 'Punch someone!',
@@ -24,8 +26,10 @@ class PunchCommand extends WeebCommand {
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
-		if (members.has(this.client.user!.id)) {
+	): Promise<Message | Message[]> 
+	{
+		if (members.has(this.client.user!.id)) 
+		{
 			return message.reply(
 				`you can not punch me! ${Emojis.KannaMad}`,
 			);

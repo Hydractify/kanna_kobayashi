@@ -7,8 +7,10 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 import { UserTypes } from '../../types/UserTypes';
 
-class BlacklistCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class BlacklistCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			cooldown: 0,
 			description: 'Blacklist a user, disallowing them and their guilds to use the bot',
@@ -20,19 +22,23 @@ class BlacklistCommand extends Command {
 		});
 	}
 
-	public async run(message: GuildMessage, [target, remove]: string[]): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, [target, remove]: string[]): Promise<Message | Message[]> 
+	{
 		// To allow nicknames, I am so sure they will be used.
 		const user: User | undefined = await this.resolver.resolveMember(target, message.guild, false)
 			.then((member: GuildMember | undefined) => member ? member.user : this.resolver.resolveUser(target, false));
 		if (!user) return message.reply(`I could not find a non-bot user by ${target}!`);
 
 		const targetModel: UserModel = await user.fetchModel();
-		if (['DEV', 'TRUSTED'].includes(targetModel.type!)) {
+		if (['DEV', 'TRUSTED'].includes(targetModel.type!)) 
+		{
 			return message.reply('devs or trusted users can not be blacklisted. Maybe entered the wrong user?');
 		}
 
-		if (targetModel.type === UserTypes.BLACKLISTED) {
-			if (remove === 'remove') {
+		if (targetModel.type === UserTypes.BLACKLISTED) 
+		{
+			if (remove === 'remove') 
+			{
 				targetModel.type = null;
 				await targetModel.save();
 
@@ -40,7 +46,9 @@ class BlacklistCommand extends Command {
 			}
 
 			return message.reply(`**${user.tag}** is already blacklisted.`);
-		} else if (remove === 'remove') {
+		}
+		else if (remove === 'remove') 
+		{
 			return message.reply(`**${user.tag}** is not blacklisted.`);
 		}
 

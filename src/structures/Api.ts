@@ -19,7 +19,8 @@ const ua: { [key: string]: string } = {
 };
 
 export const buildRouter: (options: IAPIRouterOptions) => () => APIRouter
-	= (options: IAPIRouterOptions): () => APIRouter => {
+	= (options: IAPIRouterOptions): () => APIRouter => 
+	{
 		options.defaultHeaders = options.defaultHeaders
 			? { ...options.defaultHeaders, ...ua }
 			: { ...ua };
@@ -32,16 +33,21 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 	catchNotFound = true,
 	defaultHeaders = {},
 	defaultQueryParams = {},
-}: IAPIRouterOptions): APIRouter => {
+}: IAPIRouterOptions): APIRouter => 
+{
 	const route: string[] = [''];
 
 	const handler: ProxyHandler<any> = {
-		get(target: () => void, name: string): any {
+		get(target: () => void, name: string): any 
+		{
 			if (reflectors.includes(name)) return (): string => route.join('/');
-			if (methods.includes(name)) {
-				return async <T = any>(options: IAPIOptions = {}): Promise<T> => {
+			if (methods.includes(name)) 
+			{
+				return async <T = any>(options: IAPIOptions = {}): Promise<T> => 
+				{
 					let url: string = `${baseURL}${route.join('/')}`;
-					if (options.query) {
+					if (options.query) 
+					{
 						const queryString: string = (stringify({
 							...defaultQueryParams,
 							...options.query,
@@ -80,7 +86,8 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 
 			return new Proxy<APIRouter>(noop, handler);
 		},
-		apply(target: () => void, _: any, args: any[]): any {
+		apply(target: () => void, _: any, args: any[]): any 
+		{
 			// tslint:disable-next-line:triple-equals
 			route.push(...args.filter((x: any) => x != null));
 
@@ -112,8 +119,8 @@ export interface IAPIOptions {
 	query?: { [name: string]: string | number | boolean };
 	type?: {
 		[K in keyof fetch.Body]: fetch.Body[K] extends () => void
-		? K
-		: never
+			? K
+			: never
 	}[keyof fetch.Body];
 }
 

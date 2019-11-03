@@ -6,8 +6,10 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
-class WelcomeMessageCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class WelcomeMessageCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['joinmessage', 'welcome'],
 			description: 'Sets, displays, or removes the welcome message!',
@@ -22,23 +24,26 @@ class WelcomeMessageCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: GuildMessage, args: string[]): [string | false | undefined] {
+	public parseArgs(message: GuildMessage, args: string[]): [string | false | undefined] 
+	{
 		if (!args.length) return [undefined];
 		if (args[0].toLowerCase() === 'remove') return [false];
 		return [args.join(' ')];
 	}
 
-	public async run(message: GuildMessage, [value]: [string | false | undefined])
-		: Promise<Message | Message[]> {
+	public async run(message: GuildMessage, [value]: [string | false | undefined]): Promise<Message | Message[]> 
+	{
 		const guild: Guild = message.guild.model;
 
-		if (value === undefined) {
+		if (value === undefined) 
+		{
 			if (!guild.welcomeMessage) return message.reply('there currently is no welcome message set up!');
 
 			return message.reply(`the current welcome message is:\n${guild.welcomeMessage}`);
 		}
 
-		if (value === false) {
+		if (value === false) 
+		{
 			if (!guild.welcomeMessage) return message.reply('there currently is no welcome message set up!');
 
 			guild.welcomeMessage = null;

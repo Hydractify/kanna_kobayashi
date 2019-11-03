@@ -10,9 +10,12 @@ export function Loggable<T extends Function>(constructor: T): void;
 export function Loggable<T extends Function>(
 	firstParam: T | string | boolean,
 	defineStatic?: boolean,
-): ClassDecorator | void {
-	if (typeof firstParam === 'string') {
-		return function <R extends Function>(constructor: R): void {
+): ClassDecorator | void 
+{
+	if (typeof firstParam === 'string') 
+	{
+		return function <R extends Function>(constructor: R): void 
+		{
 			const target: object = defineStatic ? constructor : constructor.prototype;
 
 			Reflect.defineProperty(target, 'logger', {
@@ -21,8 +24,10 @@ export function Loggable<T extends Function>(
 		};
 	}
 
-	if (typeof firstParam === 'boolean') {
-		return function <R extends Function>(constructor: R): void {
+	if (typeof firstParam === 'boolean') 
+	{
+		return function <R extends Function>(constructor: R): void 
+		{
 			const target: object = defineStatic ? constructor : constructor.prototype;
 
 			Reflect.defineProperty(target, 'logger', { value: Logger.instance });
@@ -32,11 +37,15 @@ export function Loggable<T extends Function>(
 	Reflect.defineProperty(firstParam.prototype, 'logger', { value: Logger.instance });
 }
 
-function getHandler(prefix: string | undefined): ProxyHandler<Logger> {
+function getHandler(prefix: string | undefined): ProxyHandler<Logger> 
+{
 	return {
-		get: (target: Logger, prop: keyof Logger): (...data: any[]) => Promise<void> | void => {
-			if (typeof target[prop] === 'function') {
-				if (prop === 'setLogLevel') {
+		get: (target: Logger, prop: keyof Logger): (...data: any[]) => Promise<void> | void => 
+		{
+			if (typeof target[prop] === 'function') 
+			{
+				if (prop === 'setLogLevel') 
+				{
 					return (level: LogLevel): void =>
 						target[prop](level);
 				}

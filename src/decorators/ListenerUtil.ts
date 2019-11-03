@@ -27,14 +27,13 @@ import { EventEmitter } from 'events';
  * Represents metadata used to build an event listener
  * and assign it to a class method at runtime
  */
-type ListenerMetadata =
-	{
-		event: string;
-		method: PropertyKey;
-		once: boolean;
-		args: any[];
-		attached?: boolean;
-	};
+interface ListenerMetadata {
+	event: string;
+	method: PropertyKey;
+	once: boolean;
+	args: any[];
+	attached?: boolean;
+}
 
 /**
  * Contains static decorator methods for declaring class methods (within a class extending `EventEmitter`)
@@ -44,7 +43,8 @@ type ListenerMetadata =
  * the old fashioned `<EventEmitter>on/once(...)` way
  * @module ListenerUtil
  */
-export class ListenerUtil {
+export class ListenerUtil 
+{
 	/**
 	 * Attaches any listeners registered via the `on` or `once` decorators.
 	 * Must be called ***after*** `super()`, and only in classes extending `EventEmitter`
@@ -58,15 +58,19 @@ export class ListenerUtil {
 	 * @param {object} [listenerSource] Object with registered methods to link events to
 	 * @returns {void}
 	 */
-	public static registerListeners(emitter: EventEmitter, listenerSource?: object): void {
+	public static registerListeners(emitter: EventEmitter, listenerSource?: object): void 
+	{
 		if (!(emitter instanceof EventEmitter))
+		{
 			throw new TypeError('Listeners can only be registered on classes extending EventEmitter');
+		}
 
 		const listenerTarget: object = typeof listenerSource !== 'undefined' ? listenerSource : emitter;
 		if (typeof Reflect.getMetadata('listeners', listenerTarget.constructor.prototype) === 'undefined') return;
 
 		const metaDataTarget: any = listenerTarget.constructor.prototype;
-		for (const listener of <ListenerMetadata[]>Reflect.getMetadata('listeners', metaDataTarget)) {
+		for (const listener of <ListenerMetadata[]>Reflect.getMetadata('listeners', metaDataTarget)) 
+		{
 			if (!(<any>listenerTarget)[listener.method]) continue;
 			if (listener.attached) continue;
 
@@ -92,7 +96,8 @@ export class ListenerUtil {
 	 * 						  Will be passed after any args passed by the event
 	 * @returns {MethodDecorator}
 	 */
-	public static on(event: string, ...args: any[]): MethodDecorator {
+	public static on(event: string, ...args: any[]): MethodDecorator 
+	{
 		return ListenerUtil._setListenerMetadata(event, false, ...args);
 	}
 
@@ -111,7 +116,8 @@ export class ListenerUtil {
 	 * 						  Will be passed after any args passed by the event
 	 * @returns {MethodDecorator}
 	 */
-	public static once(event: string, ...args: any[]): MethodDecorator {
+	public static once(event: string, ...args: any[]): MethodDecorator 
+	{
 		return ListenerUtil._setListenerMetadata(event, true, ...args);
 	}
 
@@ -120,8 +126,10 @@ export class ListenerUtil {
 	 * metadata for a class method
 	 * @private
 	 */
-	private static _setListenerMetadata(event: string, once: boolean, ...args: any[]): MethodDecorator {
-		return function <T>(target: Object, key: PropertyKey, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> {
+	private static _setListenerMetadata(event: string, once: boolean, ...args: any[]): MethodDecorator 
+	{
+		return function <T>(target: Record<string, any>, key: PropertyKey, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> 
+		{
 			const listeners: ListenerMetadata[] = Reflect.getMetadata('listeners', target) || [];
 			listeners.push({ event, method: key, once, args });
 			Reflect.defineMetadata('listeners', listeners, target);

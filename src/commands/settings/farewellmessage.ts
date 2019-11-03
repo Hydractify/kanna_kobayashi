@@ -6,8 +6,10 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
-class FarewellMessageCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class FarewellMessageCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['leavemessage', 'farewell'],
 			description: 'Sets, displays, or removes the farewell message!',
@@ -22,23 +24,26 @@ class FarewellMessageCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: GuildMessage, args: string[]): [string | false | undefined] {
+	public parseArgs(message: GuildMessage, args: string[]): [string | false | undefined] 
+	{
 		if (!args.length) return [undefined];
 		if (args[0].toLowerCase() === 'remove') return [false];
 		return [args.join(' ')];
 	}
 
-	public async run(message: GuildMessage, [value]: [string | false | undefined])
-		: Promise<Message | Message[]> {
+	public async run(message: GuildMessage, [value]: [string | false | undefined]): Promise<Message | Message[]> 
+	{
 		const guild: Guild = message.guild.model;
 
-		if (value === undefined) {
+		if (value === undefined) 
+		{
 			if (!guild.farewellMessage) return message.reply('there currently is no farewell message set up!');
 
 			return message.reply(`the current farewell message is:\n${guild.farewellMessage}`);
 		}
 
-		if (value === false) {
+		if (value === false) 
+		{
 			if (!guild.farewellMessage) return message.reply('there currently is no farewell message set up!');
 
 			guild.farewellMessage = null;

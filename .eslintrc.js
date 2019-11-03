@@ -39,7 +39,7 @@ module.exports =
 		'curly':
 		[
 			'error',
-			'multi',
+			'multi-line',
 		],
 		'indent': 'off',
 		'quotes':
@@ -77,6 +77,7 @@ module.exports =
 			'error',
 			'always',
 		],
+		'@typescript-eslint/no-inferrable-types': 'off',
 		'@typescript-eslint/no-explicit-any': 'off',
 		'@typescript-eslint/no-var-requires': 'warn',
 	}

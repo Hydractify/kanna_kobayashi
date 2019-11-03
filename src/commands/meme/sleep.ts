@@ -1,8 +1,10 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 
-class SleepCommand extends ImageEmbedCommand {
-	public constructor(handler: CommandHandler) {
+class SleepCommand extends ImageEmbedCommand 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['bosssleeppls'],
 			description: 'It is time to sleep!',

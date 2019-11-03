@@ -8,8 +8,10 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class StareCommand extends WeebCommand {
-	public constructor(handler: CommandHandler) {
+class StareCommand extends WeebCommand 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			action: 'is staring at',
 			description: `Stare at someone ${Emojis.KannaMad}`,
@@ -24,7 +26,8 @@ class StareCommand extends WeebCommand {
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]> 
+	{
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: '_runs_',
 			dev: `**${members.first()!.name}**... Run!`,

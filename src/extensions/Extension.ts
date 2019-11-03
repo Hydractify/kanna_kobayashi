@@ -6,10 +6,12 @@ import { basename, extname } from 'path';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
 
-export async function extendAll(): Promise<void> {
+export async function extendAll(): Promise<void> 
+{
 	// This _HAS_ to be blocking due race conditions with discord.js
 	const files: string[] = readdirSync(__dirname);
-	for (const file of files) {
+	for (const file of files) 
+	{
 		if (extname(file) !== '.js') continue;
 		if (file === basename(__filename)) continue;
 		const { Extension, Target }: {
@@ -53,7 +55,8 @@ declare module 'discord.js' {
 			: Promise<T[]>;
 	}
 
-	class Constants {
+	class Constants 
+	{
 		// tslint:disable-next-line:variable-name
 		public static APIErrors: {
 			UNKNOWN_ACCOUNT: 10001;

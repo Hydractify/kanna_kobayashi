@@ -2,8 +2,10 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 import { Emojis } from '../../types/Emojis';
 
-class DoItCommand extends ImageEmbedCommand {
-	public constructor(handler: CommandHandler) {
+class DoItCommand extends ImageEmbedCommand 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			description: 'You have to do it... For me!',
 			examples: ['doit'],

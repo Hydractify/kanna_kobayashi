@@ -1,9 +1,12 @@
 import { GuildMember, Message } from 'discord.js';
 
-export class GuildMemberExtension {
+export class GuildMemberExtension 
+{
 	// tslint:disable:no-empty
-	set lastMessage(value: Message) { }
-	set lastMessageID(value: string) { }
+	set lastMessage(value: Message) 
+	{ }
+	set lastMessageID(value: string) 
+	{ }
 	// tslint:enable:no-empty
 }
 

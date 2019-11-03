@@ -7,13 +7,15 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 
-class EvalCommand extends Command {
+class EvalCommand extends Command 
+{
 	/**
 	 * Options used to inspect eval output with
 	 */
 	private _inspect: InspectOptions = { depth: 0 };
 
-	public constructor(handler: CommandHandler) {
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['evaluate', 'broadcasteval', 'beval'],
 			cooldown: 0,
@@ -26,11 +28,12 @@ class EvalCommand extends Command {
 		});
 	}
 
-	public async run(message: GuildMessage, args: string[], { commandName, authorModel }: ICommandRunInfo)
-		: Promise<Discord.Message | Discord.Message[]> {
+	public async run(message: GuildMessage, args: string[], { commandName, authorModel }: ICommandRunInfo): Promise<Discord.Message | Discord.Message[]> 
+	{
 		let code: string = args.join(' ');
 		if (code.includes('await')) code = `(async()=>{${code}})()`;
-		try {
+		try 
+		{
 			let evaled: any = ['broadcasteval', 'beval'].includes(commandName)
 				? await this.client.shard!.broadcastEval(code)
 				// tslint:disable-next-line:no-eval
@@ -38,7 +41,8 @@ class EvalCommand extends Command {
 
 			if (typeof evaled !== 'string') evaled = inspect(evaled, this._inspect);
 
-			if (evaled.length > 1990) {
+			if (evaled.length > 1990) 
+			{
 				return await message.channel.send(
 					'Result is too long, sending as file instead.',
 					new Discord.MessageAttachment(Buffer.from(evaled), 'file.txt'),
@@ -46,7 +50,9 @@ class EvalCommand extends Command {
 			}
 
 			return await message.channel.send(evaled || '\u200b', { code: 'js' });
-		} catch (error) {
+		}
+		catch (error) 
+		{
 			return message.channel.send(
 				[
 					'**Error**',
@@ -58,10 +64,12 @@ class EvalCommand extends Command {
 		}
 	}
 
-	protected get depth(): number {
+	protected get depth(): number 
+	{
 		return this._inspect.depth!;
 	}
-	protected set depth(value: number) {
+	protected set depth(value: number) 
+	{
 		this._inspect.depth = value;
 	}
 }

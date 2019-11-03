@@ -7,11 +7,13 @@ import { Loggable, Logger } from './Logger';
  * Singleton PostgreSQL connection
  */
 @Loggable('POSTGRES')
-export class PostgreSQL {
+export class PostgreSQL 
+{
 	/**
 	 * Singleton PostgreSQL instance
 	 */
-	public static get instance(): PostgreSQL {
+	public static get instance(): PostgreSQL 
+	{
 		return this._instance || new this();
 	}
 
@@ -33,8 +35,10 @@ export class PostgreSQL {
 	/**
 	 * Instantiate the PostgreSQL singleton.
 	 */
-	private constructor() {
-		if (PostgreSQL._instance) {
+	private constructor() 
+	{
+		if (PostgreSQL._instance) 
+		{
 			throw new Error('Can not create multiple instances from PostgreSQL singleton.');
 		}
 
@@ -53,7 +57,8 @@ export class PostgreSQL {
 	/**
 	 * Start the PostgreSQL database connection
 	 */
-	public start(): PromiseLike<void> {
+	public start(): PromiseLike<void> 
+	{
 		return this.db.authenticate()
 			.then(() => this.logger.info('Connection established successfully.'))
 			.catch((error: Error) => this.logger.error(error))

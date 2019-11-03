@@ -6,8 +6,10 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { UserReputationTypes } from '../../types/UserReputationTypes';
 
-class RemoveReputationCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class RemoveReputationCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['removerep', '--'],
 			cooldown: 0,
@@ -21,7 +23,8 @@ class RemoveReputationCommand extends Command {
 	public async parseArgs(
 		message: GuildMessage,
 		[target]: string[],
-		): Promise<string | [GuildMember, UserReputation | null]> {
+	): Promise<string | [GuildMember, UserReputation | null]> 
+	{
 		if (!target) return 'you need to tell me who you want to add a negative reputation to.';
 
 		const member: GuildMember | undefined = await this.resolver.resolveMember(target, message.guild, false);
@@ -34,7 +37,8 @@ class RemoveReputationCommand extends Command {
 			},
 		});
 
-		if (already && already.type === UserReputationTypes.NEGATIVE) {
+		if (already && already.type === UserReputationTypes.NEGATIVE) 
+		{
 			return `you already added a negative reputation to **${member.user.tag}**.`;
 		}
 
@@ -44,8 +48,10 @@ class RemoveReputationCommand extends Command {
 	public async run(
 		message: GuildMessage,
 		[member, already]: [GuildMember, UserReputation | null],
-	): Promise<Message | Message[]> {
-		if (already) {
+	): Promise<Message | Message[]> 
+	{
+		if (already) 
+		{
 			already.type = UserReputationTypes.NEGATIVE;
 			await already.save();
 

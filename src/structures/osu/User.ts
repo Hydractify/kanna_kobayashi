@@ -5,12 +5,14 @@ import { Score } from './Score';
 /**
  * Represents an osu! user.
  */
-export class User {
+export class User 
+{
 	/**
 	 * Fetches a full osu! user, scores by passed mode.
 	 * Mode defaults to `OsuMode.OSU`.
 	 */
-	public static async fetch(query: string | number, mode: OsuMode = OsuMode.OSU): Promise<User | undefined> {
+	public static async fetch(query: string | number, mode: OsuMode = OsuMode.OSU): Promise<User | undefined> 
+	{
 		const [data]: { [key: string]: string }[] = await Api().get_user.get({
 			query: {
 				limit: 1,
@@ -129,7 +131,8 @@ export class User {
 	/**
 	 * Instantiate a new osu! user.
 	 */
-	public constructor(data: { [key: string]: string }) {
+	public constructor(data: { [key: string]: string }) 
+	{
 		this.id = data.user_id;
 		this.username = data.username;
 		this.country = data.country;
@@ -154,43 +157,48 @@ export class User {
 	/**
 	 * Unicode flag of the country the user is from
 	 */
-	public get countryFlag(): string {
+	public get countryFlag(): string 
+	{
 		return this.country.split('').map((char: string) => User.FlagChars[char]).join('');
 	}
 
 	/**
 	 * Url pointing to the user (avatar) of the user
 	 */
-	public get iconURL(): string {
+	public get iconURL(): string 
+	{
 		return `https://a.ppy.sh/${this.id}`;
 	}
 
 	/**
 	 * Url pointing to the profile of the user
 	 */
-	public get profileURL(): string {
+	public get profileURL(): string 
+	{
 		return `https://osu.ppy.sh/u/${this.id}`;
 	}
 
 	/**
 	 * Fetch the best plays of the user
 	 */
-	public fetchBest(options: { limit?: number; mode?: OsuMode }): Promise<Score[]> {
+	public fetchBest(options: { limit?: number; mode?: OsuMode }): Promise<Score[]> 
+	{
 		return this.fetch('best', options);
 	}
 
 	/**
 	 * Fetch the recent plays of the user
 	 */
-	public fetchRecent(options: { limit?: number; mode?: OsuMode }): Promise<Score[]> {
+	public fetchRecent(options: { limit?: number; mode?: OsuMode }): Promise<Score[]> 
+	{
 		return this.fetch('recent', options);
 	}
 
 	/**
 	 * Helper method to avoid code duplications when fetching scores
 	 */
-	private async fetch(type: string, { limit = 10, mode = OsuMode.OSU }: { limit?: number; mode?: OsuMode })
-		: Promise<Score[]> {
+	private async fetch(type: string, { limit = 10, mode = OsuMode.OSU }: { limit?: number; mode?: OsuMode }): Promise<Score[]> 
+	{
 		const scores: { [key: string]: string }[] = await Api()[`get_user_${type}`].get({
 			query: {
 				limit,
@@ -201,7 +209,8 @@ export class User {
 		});
 
 		const promises: Promise<Score>[] = [];
-		for (const data of scores) {
+		for (const data of scores) 
+		{
 			const score: Score = new Score(data, { user: this, mode });
 
 			promises.push(score.fetchBeatmap(mode).then(() => score));

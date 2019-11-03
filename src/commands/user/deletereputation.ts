@@ -5,8 +5,10 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 
-class DeleteReputationCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class DeleteReputationCommand extends Command 
+{
+	public constructor(handler: CommandHandler) 
+	{
 		super(handler, {
 			aliases: ['delrep', 'deleterep'],
 			cooldown: 0,
@@ -17,12 +19,14 @@ class DeleteReputationCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: GuildMessage, [target]: string[]): Promise<string | [GuildMember, UserReputation]> {
+	public async parseArgs(message: GuildMessage, [target]: string[]): Promise<string | [GuildMember, UserReputation]> 
+	{
 		if (!target) return 'you need to tell me whose reputation from yourself you want to delete.';
 
 		const member: GuildMember | undefined = await this.resolver.resolveMember(target, message.guild, false);
 		if (!member) return `I could not find a non-bot member with the name or id ${target}.`;
-		if (member.id === message.author.id) {
+		if (member.id === message.author.id) 
+		{
 			return 'you can not add a reputation to yourself, thus you can not delete one from yourself.';
 		}
 		const reputation: UserReputation | null = await UserReputation.findOne<UserReputation>({
@@ -32,7 +36,8 @@ class DeleteReputationCommand extends Command {
 			},
 		});
 
-		if (!reputation) {
+		if (!reputation) 
+		{
 			return `you never added a reputation to **${member.user.tag}**!`;
 		}
 
@@ -42,7 +47,8 @@ class DeleteReputationCommand extends Command {
 	public async run(
 		message: GuildMessage,
 		[member, reputation]: [GuildMember, UserReputation],
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]> 
+	{
 		await reputation.destroy();
 
 		return message.reply(
