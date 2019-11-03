@@ -1,22 +1,18 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
-		"outDir": "bin",
-		"sourceMap": true,
-		"target": "esnext",
-		"lib": [
-			"esnext"
-		],
-		"rootDir": "src",
-		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"inlineSources": true,
+		"lib": ["esnext"],
+		"module": "commonjs",
 		"noImplicitAny": true,
 		"noUnusedLocals": true,
-		"strict": true
+		"outDir": "bin",
+		"rootDir": "src",
+		"sourceMap": true,
+		"sourceRoot": "/",
+		"strict": true,
+		"target": "esnext"
 	},
-	"exclude": [
-		"node_modules",
-		"bin",
-		"old"
-	]
+	"exclude": ["bin", "node_modules"]
 }

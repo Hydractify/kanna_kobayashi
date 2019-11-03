@@ -17,12 +17,14 @@
 		"source-map-support": "^0.5.13"
 	},
 	"devDependencies": {
-		"@types/ws": "^6.0.2",
 		"@types/moment-duration-format": "^2.2.2",
 		"@types/node": "^12.7.1",
 		"@types/node-fetch": "^2.5.0",
 		"@types/raven": "^2.5.3",
-		"tslint": "^5.18.0",
+		"@types/ws": "^6.0.2",
+		"@typescript-eslint/eslint-plugin": "^1.11.0",
+		"@typescript-eslint/parser": "^1.11.0",
+		"eslint": "^6.0.0",
 		"typescript": "^3.5.3"
 	},
 	"scripts": {
