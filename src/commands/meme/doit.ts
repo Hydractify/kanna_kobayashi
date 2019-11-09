@@ -11,7 +11,7 @@ class DoItCommand extends ImageEmbedCommand
 			examples: ['doit'],
 			images: ['https://www.hydractify.org/memes/doit/1.jpg'],
 			messageContent: `${Emojis.KannaMad} | **Do it!**`,
-			usage: 'dance',
+			usage: 'doit',
 		});
 	}
 }
