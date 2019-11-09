@@ -131,7 +131,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 		}
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
-			.setAuthor(`${titleCase(command.name)}'s Info`, this.client.user!.displayAvatarURL())
+			.setAuthor(`${titleCase(command.name)}${/s$/.test(command.name) ? '\'' : '\'s'} Info`, this.client.user!.displayAvatarURL())
 			.setDescription(command.description)
 			.setURL('https://thedragonproject.network/guild')
 			.setThumbnail(message.guild.iconURL());
