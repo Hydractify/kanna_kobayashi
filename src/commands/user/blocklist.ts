@@ -17,7 +17,7 @@ class BlockListCommand extends Command
 			description: 'Block a user, disallowing them from using any interactive commands on you.',
 			examples: ['block space'],
 			exp: 0,
-			usage: 'block <User>',
+			usage: 'blocklist',
 		});
 	}
 

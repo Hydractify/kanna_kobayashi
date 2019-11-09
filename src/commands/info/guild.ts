@@ -17,7 +17,7 @@ class GuildInfoCommand extends Command
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Inspect information about this guild',
 			examples: ['guildinfo'],
-			usage: 'guilinfo',
+			usage: 'guildinfo',
 		});
 	}
 
