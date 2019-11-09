@@ -11,7 +11,7 @@ class AvatarCommand extends Command
 	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
-			aliases: ['av', 'image'],
+			aliases: ['av', 'avi', 'pfp'],
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Take a closer look at the avatar of a user',
 			examples: ['avatar @space#0302'],
