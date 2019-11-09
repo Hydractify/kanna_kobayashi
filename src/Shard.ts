@@ -21,7 +21,7 @@ const manager: ShardingManager = new ShardingManager(join(__dirname, 'index.js')
 	token,
 });
 
-manager.spawn(manager.totalShards, 5500, false);
+manager.spawn(manager.totalShards, 5500, Infinity);
 
 manager.on('shardCreate', (shard: Shard) =>
 {
