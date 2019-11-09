@@ -18,7 +18,6 @@ module.exports =
 			jsx: false,
 		},
 		ecmaVersion: 2019,
-		project: `${__dirname}/tsconfig.json`,
 		sourceType: 'module',
 	},
 	plugins:
