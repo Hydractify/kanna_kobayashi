@@ -28,7 +28,8 @@ import { Resolver } from './Resolver';
  * Represents an abstract Command
  */
 @sequelize
-export abstract class Command {
+export abstract class Command
+{
 	/**
 	 * Array of aliases for the command
 	 */
@@ -113,30 +114,40 @@ export abstract class Command {
 		patreonOnly = false,
 		permLevel = PermLevels.EVERYONE,
 		usage,
-	}: ICommandInfo) {
+	}: ICommandInfo)
+	{
 		this.name = this.constructor.name.replace(/Command$/, '').toLowerCase();
 
 		// Assert correct type
-		if (!(handler instanceof CommandHandler)) {
+		if (!(handler instanceof CommandHandler))
+		{
 			throw new TypeError(`Command ${this.name}'s handler is not instanceof CommandHandler!`);
 		}
-		if (!(aliases instanceof Array)) {
+		if (!(aliases instanceof Array))
+		{
 			throw new TypeError(`Command ${this.name}'s aliases is not instanceof array!`);
 		}
-		if (!(clientPermissions instanceof Array)) {
+		if (!(clientPermissions instanceof Array))
+		{
 			throw new TypeError(`Command ${this.name}'s clientPermissions is not instanceof array!`);
 		}
-		if (!description) {
+		if (!description)
+		{
 			throw new Error(`Command ${this.name} does not have a description!`);
 		}
-		if (!(examples instanceof Array)) {
+		if (!(examples instanceof Array))
+		{
 			throw new TypeError(`Command ${this.name}'s examples is not instanceof array!`);
 		}
 		// Assert correct value
-		for (const permission of clientPermissions) {
-			try {
+		for (const permission of clientPermissions)
+		{
+			try
+			{
 				Permissions.resolve(permission);
-			} catch (error) {
+			}
+			catch (error)
+			{
 				throw new RangeError(`${permission} is not a valid permission string!`);
 			}
 		}
@@ -160,13 +171,16 @@ export abstract class Command {
 	 * Determines whether the command may be called by the executing user.
 	 * Resolves with true on success or with a reason string on failure.
 	 */
-	public async canCall(message: GuildMessage, authorModel: UserModel): Promise<true | string> {
-		if (this.clientPermissions.length) {
+	public async canCall(message: GuildMessage, authorModel: UserModel): Promise<true | string>
+	{
+		if (this.clientPermissions.length)
+		{
 			const missing: PermissionString[] = (message.channel as TextChannel)
 				.permissionsFor(message.guild.me!)!
 				.missing(this.clientPermissions);
 
-			if (missing.length) {
+			if (missing.length)
+			{
 				const missingPermsString: string = missing.map((perm: string) =>
 					titleCase(perm.replace(/_/g, ' ')),
 				).join(', ');
@@ -176,19 +190,23 @@ export abstract class Command {
 		}
 
 		const permLevel: PermLevels = authorModel.permLevel(message.member);
-		if (this.patreonOnly && authorModel.tier <= 0 && permLevel < PermLevels.TRUSTED) {
+		if (this.patreonOnly && authorModel.tier <= 0 && permLevel < PermLevels.TRUSTED)
+		{
 			return `**${this.name}** is for patreons only!`;
 		}
 
-		if (this.permLevel > permLevel) {
+		if (this.permLevel > permLevel)
+		{
 			return `you do not have the required permission level to use **${this.name}**!`;
 		}
 
-		if (!this.guarded && message.guild.model.disabledCommands.includes(this.name)) {
+		if (!this.guarded && message.guild.model.disabledCommands.includes(this.name))
+		{
 			return `the **${this.name}** command is currently server wide disabled!`;
 		}
 
-		if (permLevel < PermLevels.TRUSTED) {
+		if (permLevel < PermLevels.TRUSTED)
+		{
 			const [commandLog] = await authorModel.$get<CommandLog>('CommandLogs', {
 				limit: 1,
 				order: [['run', 'DESC']],
@@ -199,7 +217,8 @@ export abstract class Command {
 				? (commandLog.run.getTime() + this.cooldown) - Date.now()
 				: 0;
 
-			if (timeLeft > 0) {
+			if (timeLeft > 0)
+			{
 				const timeLeftString: string = duration(timeLeft, 'milliseconds')
 					.format('d [days], h [hours], m [minutes], s [seconds]');
 
@@ -214,7 +233,8 @@ export abstract class Command {
 	 * Should be overriden if custom re-requiring or other resource freeing action is required.
 	 * @virtual
 	 */
-	public async free(): Promise<void> {
+	public async free(): Promise<void>
+	{
 		delete require.cache[require.resolve(this.location)];
 	}
 
@@ -223,7 +243,8 @@ export abstract class Command {
 	 *
 	 * Returns the new level if user level'd up, or void if not.
 	 */
-	public async grantRewards(user: User, userModel: UserModel): Promise<number | void> {
+	public async grantRewards(user: User, userModel: UserModel): Promise<number | void>
+	{
 		if (!this.exp) return;
 
 		const { level } = userModel;
@@ -242,8 +263,10 @@ export abstract class Command {
 	public parseArgs(
 		message: GuildMessage,
 		args: string[],
+		/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 		info: ICommandRunInfo,
-	): MaybePromise<any[] | string | MessageOptions | MessageAdditions> {
+	): MaybePromise<any[] | string | MessageOptions | MessageAdditions>
+	{
 		return args;
 	}
 

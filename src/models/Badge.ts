@@ -19,7 +19,8 @@ import { UserItem } from './UserItem';
 	underscored: true,
 	updatedAt: false,
 })
-export class Badge extends Model<Badge> {
+export class Badge extends Model<Badge>
+{
 	@Column
 	public description!: string;
 
@@ -41,13 +42,15 @@ export class Badge extends Model<Badge> {
 	// tslint:disable-next-line:variable-name
 	private UserItem: UserItem | undefined;
 
-	public getCount(): number {
+	public getCount(): number
+	{
 		if (!this.UserItem) throw new Error(`This "${this.name}" is not associated with any user!`);
 
 		return this.UserItem.count;
 	}
 
-	public async setAndSaveCount(value: number): Promise<this> {
+	public async setAndSaveCount(value: number): Promise<this>
+	{
 		if (!this.UserItem) throw new Error(`This "${this.name}" is not associated with any user!`);
 
 		this.UserItem.count = value;
@@ -60,7 +63,8 @@ export class Badge extends Model<Badge> {
 	 * Additional meta data about an item, such as the holder id and the item count
 	 * **Only present if fetched via association!**
 	 */
-	public get userItem(): UserItem | undefined {
+	public get userItem(): UserItem | undefined
+	{
 		return this.UserItem;
 	}
 }

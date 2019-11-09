@@ -32,7 +32,8 @@ const Api: () => APIRouter = buildRouter({
 /**
  * Abstract command to provide Anilist functionality for commands in an easy manner.
  */
-export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Command {
+export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Command
+{
 
 	/**
 	 * Object literal filled with chars to replace html entities with their actual representations
@@ -65,29 +66,37 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 	/**
 	 * Derives from the AniListCommand class.
 	 */
-	protected constructor(handler: CommandHandler, options: ICommandInfo & { type: MediaType }) {
+	protected constructor(handler: CommandHandler, options: ICommandInfo & { type: MediaType })
+	{
 		super(handler, options);
 
-		if (!options.type) {
+		if (!options.type)
+		{
 			throw new Error(`${this.name} (deriving from AniListCommand is missing a type!`);
 		}
 
 		this.type = options.type;
 
-		if (this.type === MediaType.CHARACTER) {
+		if (this.type === MediaType.CHARACTER)
+		{
 			readFileAsync(join(__dirname, '..', '..', 'static', 'anilist', 'character.graphql'), { encoding: 'utf-8' })
-				.then((query: string) => {
+				.then((query: string) =>
+				{
 					this.query = query;
 				});
-		} else {
+		}
+		else
+		{
 			readFileAsync(join(__dirname, '..', '..', 'static', 'anilist', 'media.graphql'), { encoding: 'utf-8' })
-				.then((query: string) => {
+				.then((query: string) =>
+				{
 					this.query = query;
 				});
 		}
 	}
 
-	public async free(): Promise<void> {
+	public async free(): Promise<void>
+	{
 		delete require.cache[require.resolve(__filename)];
 
 		super.free();
@@ -97,20 +106,24 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 	 * Whether the passed entry is a char
 	 * Purely to satisfy TS.
 	 */
-	public isChar(entry: ICharacter | IMedia): entry is ICharacter {
+	/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+	public isChar(entry: ICharacter | IMedia): entry is ICharacter
+	{
 		return this.type === MediaType.CHARACTER;
 	}
 
 	/**
 	 * Build an embed for the passed type of data.
 	 */
-	protected buildEmbed(message: GuildMessage, authorModel: UserModel, entry: ICharacter | IMedia): MessageEmbed {
+	protected buildEmbed(message: GuildMessage, authorModel: UserModel, entry: ICharacter | IMedia): MessageEmbed
+	{
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setThumbnail(entry.image.large)
 			.setURL(entry.siteUrl);
 
 		// Whether this entry is a character entry
-		if (this.isChar(entry)) {
+		if (this.isChar(entry))
+		{
 			embed.setTitle(`${entry.name.first || '\u200b'} ${entry.name.last || '\u200b'}`)
 				.setDescription(entry.name.native || '');
 
@@ -143,13 +156,16 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 				true,
 			);
 
-		if (this.type === MediaType.ANIME) {
+		if (this.type === MediaType.ANIME)
+		{
 			embed.addField(
 				'Episodes',
 				entry.episodes || 'n/a',
 				true,
 			);
-		} else {
+		}
+		else
+		{
 			embed.addField(
 				'Chapters | Volumes',
 				`${entry.chapters || 'n/a'} | ${entry.volumes || 'n/a'}`,
@@ -157,11 +173,13 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 			);
 		}
 
-		if (entry.startDate) {
+		if (entry.startDate)
+		{
 			let title: string = 'Start';
 			let value: string = this.formatFuzzy(entry.startDate);
 
-			if (entry.status === MediaStatus.FINISHED) {
+			if (entry.status === MediaStatus.FINISHED)
+			{
 				title = 'Period';
 				value += ` - ${this.formatFuzzy(entry.endDate)}`;
 			}
@@ -182,7 +200,8 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 				true,
 			);
 
-		if (this.type === MediaType.ANIME && entry.source) {
+		if (this.type === MediaType.ANIME && entry.source)
+		{
 			embed.addField('Origin', titleCase(entry.source.replace(/_/g, ' ').toLowerCase()), true);
 		}
 
@@ -192,7 +211,8 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 	/**
 	 * Formats the fuzzy dates provided from anilist. (Using timestamps is way overrated.)
 	 */
-	protected formatFuzzy(input: IFuzzyDate): string {
+	protected formatFuzzy(input: IFuzzyDate): string
+	{
 		if (!input) return '';
 
 		return `${input.day || '??'}.${input.month || '??'}.${input.year || '????'}`;
@@ -205,17 +225,23 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		message: GuildMessage,
 		authorModel: UserModel,
 		entries: T[],
-	): Promise<T | undefined> {
+	): Promise<T | undefined>
+	{
 		const mapped: string[] = [];
 		const { length }: string = String(entries.length);
 		let count: number = 0;
 
-		if (this.type === MediaType.CHARACTER) {
-			for (const entry of entries as ICharacter[]) {
+		if (this.type === MediaType.CHARACTER)
+		{
+			for (const entry of entries as ICharacter[])
+			{
 				mapped.push(`\`${String(++count).padEnd(length)}\` - ${entry.name.first} ${entry.name.last || ''}`);
 			}
-		} else {
-			for (const entry of entries as IMedia[]) {
+		}
+		else
+		{
+			for (const entry of entries as IMedia[])
+			{
 				mapped.push(`\`${String(++count).padEnd(length)}\` - ${entry.title.english || entry.title.romaji}`);
 			}
 		}
@@ -240,7 +266,8 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		// Only try to delete if one is present and we have manage messages in the current channel
 		if (response && response.deletable) response.delete().catch(() => undefined);
 
-		if (!response || response.content.toLowerCase() === 'cancel') {
+		if (!response || response.content.toLowerCase() === 'cancel')
+		{
 			return undefined;
 		}
 
@@ -250,7 +277,8 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 	/**
 	 * Search for the specified type on anilist, returns an array of results or `undefined` when nothing was found.
 	 */
-	protected async search(query: string): Promise<T[] | undefined> {
+	protected async search(query: string): Promise<T[] | undefined>
+	{
 		const response: {
 			data?: {
 				result: {
@@ -263,10 +291,10 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 				locations: {
 					line: number;
 					column: number;
-				}[]
+				}[];
 				validation?: {
 					[name: string]: string[];
-				}
+				};
 			}[];
 		} = await Api().post({
 			data: {
@@ -275,17 +303,20 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 			},
 		});
 
-		if (response.errors) {
+		if (response.errors)
+		{
 			const error: Error = new Error();
 			Object.assign(error, response.errors.shift());
-			if (response.errors.length) {
+			if (response.errors.length)
+			{
 				(error as any).extra = response.errors;
 			}
 
 			throw error;
 		}
 
-		if (!response.data || !response.data.result.results.length) {
+		if (!response.data || !response.data.result.results.length)
+		{
 			// Nothing found
 			return undefined;
 		}

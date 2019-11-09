@@ -8,8 +8,10 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class HighFiveCommand extends WeebCommand {
-	public constructor(handler: CommandHandler) {
+class HighFiveCommand extends WeebCommand
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			action: 'high-fived',
 			aliases: ['high5'],
@@ -25,7 +27,8 @@ class HighFiveCommand extends WeebCommand {
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]>
+	{
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `Yay! ${Emojis.KannaHug}`,
 			dev: `High-five with me **${message.author}**! ${Emojis.KannaHug}`,

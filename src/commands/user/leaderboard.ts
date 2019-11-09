@@ -11,11 +11,13 @@ import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedControll
 import { resolveAmount, titleCase } from '../../util/Util';
 import { Command as ProfileCommand } from './profile';
 
-class LeaderboardCommand extends Command implements IResponsiveEmbedController {
+class LeaderboardCommand extends Command implements IResponsiveEmbedController
+{
 	public emojis: string[] = ['⬅', '1⃣', '2⃣', '3⃣', '4⃣', '➡'];
 	public types: string[] = ['exp', 'reputation'];
 
-	public constructor(handler: CommandHandler) {
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['lb'],
 			clientPermissions: ['ADD_REACTIONS', 'EMBED_LINKS', 'READ_MESSAGE_HISTORY'],
@@ -32,9 +34,11 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		});
 	}
 
-	public parseArgs(message: GuildMessage, [input, offset]: string[]): string | [string, number] {
+	public parseArgs(message: GuildMessage, [input, offset]: string[]): string | [string, number]
+	{
 		if (!input) return ['exp', 0];
-		if (this.types.includes(input.toLowerCase())) {
+		if (this.types.includes(input.toLowerCase()))
+		{
 			if (!offset) return [input, 0];
 
 			const num: number = resolveAmount(offset);
@@ -49,7 +53,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 	public async onCollect(
 		{ message, emoji, users: reactors }: MessageReaction,
 		user: User,
-	): Promise<Message | undefined> {
+	): Promise<Message | undefined>
+	{
 		const [embed]: MessageEmbed[] = message.embeds as MessageEmbed[];
 		const [, type, match]: RegExpExecArray = /.+? \u200b\| (.+):(\d+) \|/
 			.exec(message.embeds[0].footer!.text!) || [] as any;
@@ -64,7 +69,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		) return;
 		await reactors.remove(user).catch(() => undefined);
 
-		if (emoji.name === '➡') {
+		if (emoji.name === '➡')
+		{
 			// We are already on the last page
 			if (!embed.fields.length) return;
 			offset += 4;
@@ -73,7 +79,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 			const newEmbed: MessageEmbed = await this._fetchEmbed(user, type, offset, message.guild, users);
 			return message.edit(newEmbed);
 		}
-		if (emoji.name === '⬅') {
+		if (emoji.name === '⬅')
+		{
 			// We are already on the first page
 			if (offset <= 0) return;
 			// Don't go further down than 0
@@ -97,7 +104,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		const pickedUser: User = this.client.users.get(picked.id)
 			|| await this.client.users.fetch(picked.id);
 
-		for (const reaction of message.reactions.values()) {
+		for (const reaction of message.reactions.values())
+		{
 			if (reaction.me) reaction.users.remove().catch(() => undefined);
 		}
 
@@ -110,7 +118,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 	public async run(
 		message: GuildMessage,
 		[type, offset]: [string, number],
-	): Promise<void> {
+	): Promise<void>
+	{
 		const users: ILeaderBoardUser[] = await this._fetchTop(type, offset);
 		const embed: MessageEmbed = await this._fetchEmbed(message.author, type, offset, message.guild, users);
 		const leaderboardMessage: Message = await message.channel.send(embed) as Message;
@@ -123,7 +132,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		offset: number,
 		guild: Guild,
 		users: ILeaderBoardUser[],
-	): Promise<MessageEmbed> {
+	): Promise<MessageEmbed>
+	{
 		const embed: MessageEmbed = MessageEmbed.common({ author }, await author.fetchModel())
 			.setTitle(`${titleCase(type)} Leaderboard`);
 
@@ -138,7 +148,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 				` with the highest ${type} as of now.`,
 			].join(''))
 			.setThumbnail(guild.iconURL());
-		for (let i: number = 0; i < users.length; ++i) {
+		for (let i: number = 0; i < users.length; ++i)
+		{
 			const user: ILeaderBoardUser = users[i];
 			const { tag }: User = this.client.users.get(user.id)
 				|| await this.client.users.fetch(user.id);
@@ -160,7 +171,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 		type: string,
 		offset: number,
 		limit: number = 4,
-	): Promise<ILeaderBoardUser[]> {
+	): Promise<ILeaderBoardUser[]>
+	{
 		const users: ILeaderBoardUser[] = await this.sequelize.query(
 			// Not worth figuring out how to tell sequelize to build this query
 			`SELECT
@@ -182,7 +194,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController {
 			},
 		);
 
-		for (const user of users) {
+		for (const user of users)
+		{
 			// Only the finest js hacks; Calling the level getter of the user model in the context of the newly fetched "user"
 			user.level = Object.getOwnPropertyDescriptor(UserModel.prototype, 'level')!.get!.call(user);
 		}

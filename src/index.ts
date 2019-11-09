@@ -6,6 +6,7 @@ import { WebhookLogger } from './structures/WebhookLogger';
 WebhookLogger.instance.warn('Process spawn', parseInt(process.env.SHARDS!), `Process spawned (${process.env.SHARDS})`);
 
 import { config } from 'raven';
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { ravenToken, clientToken } = require('../data');
 config(process.env.NODE_ENV && process.env.NODE_ENV !== 'dev' && ravenToken, {
 	autoBreadcrumbs: true,
@@ -17,17 +18,20 @@ config(process.env.NODE_ENV && process.env.NODE_ENV !== 'dev' && ravenToken, {
 import { extendAll } from './extensions/Extension';
 extendAll();
 
-// tslint:disable-next-line:no-submodule-imports no-implicit-dependencies
 const { TimeoutError } = require('generic-pool/lib/errors');
+/* eslint-enable @typescript-eslint/no-var-requires */
 import { Logger } from './structures/Logger';
 
+/* eslint-disable-next-line prefer-const */
 let client: Client | undefined;
 
-process.on('unhandledRejection', (error: {} | null | undefined, rejectedPromise: Promise<any>) => {
+process.on('unhandledRejection', (error: {} | null | undefined) =>
+{
 	if (client) client.errorCount.inc({ type: 'PromiseRejection' });
 
 	const promise: Promise<void> = Logger.instance.error('REJECTION', error);
-	if (error instanceof TimeoutError) {
+	if (error instanceof TimeoutError)
+	{
 		promise.then(() => process.exit(1));
 	}
 });

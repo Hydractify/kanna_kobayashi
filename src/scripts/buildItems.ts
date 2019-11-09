@@ -4,12 +4,14 @@ import { PostgreSQL } from '../structures/PostgreSQL';
 
 import { BADGES } from './itemList';
 
-PostgreSQL.instance.start().then(async () => {
+PostgreSQL.instance.start().then(async () =>
+{
 	await Badge.bulkCreate(BADGES)
-	.catch((error) => {
-		Logger.instance.error('ERROR', error);
-		process.exit(1);
-	});
+		.catch((error) =>
+		{
+			Logger.instance.error('ERROR', error);
+			process.exit(1);
+		});
 	Logger.instance.info('SUCESS', 'Created the badges.');
 
 	return process.exit(0);

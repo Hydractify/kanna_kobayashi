@@ -6,16 +6,21 @@ import { basename, extname } from 'path';
 import { Guild as GuildModel } from '../models/Guild';
 import { User as UserModel } from '../models/User';
 
-export async function extendAll(): Promise<void> {
+export async function extendAll(): Promise<void>
+{
 	// This _HAS_ to be blocking due race conditions with discord.js
 	const files: string[] = readdirSync(__dirname);
-	for (const file of files) {
+	for (const file of files)
+	{
 		if (extname(file) !== '.js') continue;
 		if (file === basename(__filename)) continue;
+
+		/* eslint-disable */
 		const { Extension, Target }: {
 			Extension: Function;
 			Target: Function;
 		} = require(`./${file}`);
+		/* eslint-enable */
 
 		Object.defineProperties(
 			Target.prototype,
@@ -25,6 +30,7 @@ export async function extendAll(): Promise<void> {
 }
 
 declare module 'discord.js' {
+	/* eslint-disable @typescript-eslint/interface-name-prefix */
 	interface Guild {
 		model: GuildModel;
 
@@ -52,9 +58,11 @@ declare module 'discord.js' {
 			? T extends Promise<infer U> ? U[] : T[]
 			: Promise<T[]>;
 	}
+	/* eslint-enable @typescript-eslint/interface-name-prefix */
 
-	class Constants {
-		// tslint:disable-next-line:variable-name
+	/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+	class Constants
+	{
 		public static APIErrors: {
 			UNKNOWN_ACCOUNT: 10001;
 			UNKNOWN_APPLICATION: 10002;

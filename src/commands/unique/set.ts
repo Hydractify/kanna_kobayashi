@@ -12,8 +12,10 @@ type PartnerArgs = ['partner', User, User, boolean];
 type PatronArgs = ['patron', User, number];
 type SetCommandArgs = PartnerArgs | PatronArgs;
 
-class SetCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class SetCommand extends Command
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			cooldown: 0,
 			description: 'Command to help with various administrative tasks.',
@@ -31,25 +33,30 @@ class SetCommand extends Command {
 	public async parseArgs(
 		message: GuildMessage,
 		[type, ...args]: string[],
-	): Promise<SetCommandArgs | string> {
+	): Promise<SetCommandArgs | string>
+	{
 		if (!type) return 'you need to specify a type.';
 
 		type = type.toLowerCase();
 
-		if (type === 'partner') {
-			if (args.length < 3) {
+		if (type === 'partner')
+		{
+			if (args.length < 3)
+			{
 				return 'this type requires two user and whether they are married. You seem to be missing at least one.';
 			}
 
 			const [strOne, strTwo, strMarried]: string[] = args;
 
 			const userOne: User | undefined = await this.resolver.resolveUser(strOne, false);
-			if (!userOne) {
+			if (!userOne)
+			{
 				return `could not resolve ${strOne} the a user.`;
 			}
 
 			const userTwo: User | undefined = await this.resolver.resolveUser(strTwo, false);
-			if (!userTwo) {
+			if (!userTwo)
+			{
 				return `could not resolve ${strTwo} the a user.`;
 			}
 
@@ -58,21 +65,25 @@ class SetCommand extends Command {
 			return [type, userOne, userTwo, married];
 		}
 
-		if (type === 'patron') {
-			if (args.length < 2) {
+		if (type === 'patron')
+		{
+			if (args.length < 2)
+			{
 				return 'this type requires a user and a tier. You seem to be missing at least one.';
 			}
 
 			const [strOne, strTier]: string[] = args;
 
 			const userOne: User | undefined = await this.resolver.resolveUser(strOne, false);
-			if (!userOne) {
+			if (!userOne)
+			{
 				return `could not resolve ${strOne} the a user.`;
 			}
 
 			const tier: number = parseInt(strTier);
 
-			if (isNaN(tier) || tier < 0) {
+			if (isNaN(tier) || tier < 0)
+			{
 				return `${strTier} is an invalid tier, it must be a non negative integer.`;
 			}
 
@@ -82,32 +93,42 @@ class SetCommand extends Command {
 		return 'invalid type.';
 	}
 
-	public async run(message: GuildMessage, args: SetCommandArgs): Promise<Message | Message[]> {
-		if (args[0] === 'partner') {
+	public async run(message: GuildMessage, args: SetCommandArgs): Promise<Message | Message[]>
+	{
+		if (args[0] === 'partner')
+		{
 			const transaction: Transaction = await this.sequelize.transaction();
 
-			try {
+			try
+			{
 				await this._setPartner(transaction, args[1], args[2], args[3]);
 				await transaction.commit();
 
 				return message.reply(`successfully set partner statuses of **${args[1].tag}** and **${args[2].tag}**.`);
-			} catch (error) {
+			}
+			catch (error)
+			{
 				await transaction.rollback();
 
 				throw error;
 			}
 		}
 
-		if (args[0] === 'patron') {
+		if (args[0] === 'patron')
+		{
 			const transaction: Transaction = await this.sequelize.transaction();
 
-			try {
+			try
+			{
 				const model: UserModel = await args[1].fetchModel();
 				model.tier = args[2];
 
-				if (args[2] === 0) {
+				if (args[2] === 0)
+				{
 					await model.$remove('badges', Badges.PATRON, { transaction });
-				} else {
+				}
+				else
+				{
 					await model.$add('badges', Badges.PATRON, { transaction });
 				}
 
@@ -115,7 +136,9 @@ class SetCommand extends Command {
 				await transaction.commit();
 
 				return message.reply(`successfully set patron status of **${args[1].tag}**.`);
-			} catch (error) {
+			}
+			catch (error)
+			{
 				await transaction.commit();
 
 				throw error;
@@ -125,10 +148,12 @@ class SetCommand extends Command {
 		throw new RangeError('Unknown type, should not be possible.');
 	}
 
-	private async _setPartner(transaction: Transaction, userOne: User, userTwo: User, married: boolean): Promise<void> {
+	private async _setPartner(transaction: Transaction, userOne: User, userTwo: User, married: boolean): Promise<void>
+	{
 		const [modelOne, modelTwo]: [UserModel, UserModel] = await Promise.all([userOne.fetchModel(), userTwo.fetchModel()]);
 
-		if (modelOne.partnerId) {
+		if (modelOne.partnerId)
+		{
 			const partner: UserModel = await modelOne.$get('partner') as UserModel;
 			partner.partnerId = null;
 			partner.partnerMarried = null;
@@ -137,7 +162,8 @@ class SetCommand extends Command {
 			await partner.save({ transaction });
 		}
 
-		if (modelTwo.partnerId) {
+		if (modelTwo.partnerId)
+		{
 			const partner: UserModel = await modelTwo.$get('partner') as UserModel;
 			partner.partnerId = null;
 			partner.partnerMarried = null;

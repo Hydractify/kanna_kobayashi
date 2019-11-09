@@ -9,8 +9,10 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { titleCase } from '../../util/Util';
 
-class CommandUsageCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class CommandUsageCommand extends Command
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['usage'],
 			clientPermissions: ['EMBED_LINKS'],
@@ -21,7 +23,8 @@ class CommandUsageCommand extends Command {
 		});
 	}
 
-	public async run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> {
+	public async run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]>
+	{
 		const [thisMonth, lastHour]: [CommandLog[], CommandLog[]] = await Promise.all([
 			CommandLog.findAll({
 				attributes: [[fn('COUNT', col('command_name')), 'count'], ['command_name', 'commandName']],
@@ -38,10 +41,13 @@ class CommandUsageCommand extends Command {
 
 		let allTimeCount: number = 0;
 		const thisMonthTop5: string[] = [];
-		for (let { dataValues: { count, commandName } } of thisMonth as any) {
+		/* eslint-disable-next-line prefer-const */
+		for (let { dataValues: { count, commandName } } of thisMonth as any)
+		{
 			count = Number(count);
 			allTimeCount += count;
-			if (thisMonthTop5.length <= 5) {
+			if (thisMonthTop5.length <= 5)
+			{
 				thisMonthTop5.push(
 					`${thisMonthTop5.length + 1}. ${titleCase(commandName.replace(/([A-Z])/g, ' $1'))}: ${count.toLocaleString()}`,
 				);
@@ -50,10 +56,13 @@ class CommandUsageCommand extends Command {
 
 		let lastHourCount: number = 0;
 		const lastHourTop5: string[] = [];
-		for (let { dataValues: { count, commandName } } of lastHour as any) {
+		/* eslint-disable-next-line prefer-const */
+		for (let { dataValues: { count, commandName } } of lastHour as any)
+		{
 			count = Number(count);
 			lastHourCount += count;
-			if (lastHourTop5.length <= 5) {
+			if (lastHourTop5.length <= 5)
+			{
 				lastHourTop5.push(
 					`${lastHourTop5.length + 1}. ${titleCase(commandName.replace(/([A-Z])/g, ' $1'))}: ${count.toLocaleString()}`,
 				);

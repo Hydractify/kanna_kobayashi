@@ -1,8 +1,10 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 
-class RainCommand extends ImageEmbedCommand {
-	public constructor(handler: CommandHandler) {
+class RainCommand extends ImageEmbedCommand
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			description: 'Get your umbrella and lets go have fun!',
 			examples: ['rain'],

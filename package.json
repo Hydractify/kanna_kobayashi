@@ -22,9 +22,9 @@
 		"@types/node-fetch": "^2.5.0",
 		"@types/raven": "^2.5.3",
 		"@types/ws": "^6.0.2",
-		"@typescript-eslint/eslint-plugin": "^1.11.0",
-		"@typescript-eslint/parser": "^1.11.0",
-		"eslint": "^6.0.0",
+		"@typescript-eslint/eslint-plugin": "^2.6.0",
+		"@typescript-eslint/parser": "^2.6.0",
+		"eslint": "^6.6.0",
 		"typescript": "^3.5.3"
 	},
 	"scripts": {

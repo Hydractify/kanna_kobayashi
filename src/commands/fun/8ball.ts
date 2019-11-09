@@ -5,7 +5,8 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
 import { GuildMessage } from '../../types/GuildMessage';
 
-class EightballCommand extends Command {
+class EightballCommand extends Command
+{
 	private _responses: string[] = [
 		`'I want it too! ${Emojis.KannaHug}`,
 		`aye! ${Emojis.KannaHungry}`,
@@ -15,7 +16,8 @@ class EightballCommand extends Command {
 		`I have to gather more information first ${Emojis.KannaDetective}`,
 	];
 
-	public constructor(handler: CommandHandler) {
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['8b', '8ball'],
 			description: 'Ask the famous 8 ball a question!',
@@ -24,13 +26,15 @@ class EightballCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: GuildMessage, args: string[]): string[] | string {
+	public parseArgs(message: GuildMessage, args: string[]): string[] | string
+	{
 		if (!args.length) return `you have to ask a question! ${Emojis.KannaDetective}`;
 
 		return args;
 	}
 
-	public run(message: GuildMessage, options: string[]): Promise<Message | Message[]> {
+	public run(message: GuildMessage): Promise<Message | Message[]>
+	{
 		return message.reply(this._responses[Math.floor(Math.random() * this._responses.length)]);
 	}
 }

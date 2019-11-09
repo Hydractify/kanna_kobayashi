@@ -7,8 +7,10 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 import { resolveDuration } from '../../util/Util';
 
-class QuizDurationCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class QuizDurationCommand extends Command
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['qduration'],
 			description: 'Change or view the selected duration of the quiz!',
@@ -24,8 +26,10 @@ class QuizDurationCommand extends Command {
 		});
 	}
 
-	public parseArgs(message: GuildMessage, [option, ...time]: string[]): string | ['set', number] | ['view', undefined] {
-		if (!option) {
+	public parseArgs(message: GuildMessage, [option, ...time]: string[]): string | ['set', number] | ['view', undefined]
+	{
+		if (!option)
+		{
 			return [
 				'you need to tell me whether you want to',
 				'`set` a new duration, or `view` the current one.',
@@ -36,7 +40,8 @@ class QuizDurationCommand extends Command {
 
 		if (option === 'view') return ['view', undefined];
 
-		if (option === 'set') {
+		if (option === 'set')
+		{
 			if (!time) return 'you also need to tell me how long quizzes should be.';
 
 			const parsed: number = resolveDuration(time.join(' '));
@@ -55,10 +60,12 @@ class QuizDurationCommand extends Command {
 	public async run(
 		message: GuildMessage,
 		[option, time]: ['set', number] | ['view', undefined],
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]>
+	{
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
 
-		if (option === 'view') {
+		if (option === 'view')
+		{
 			if (!quiz) return message.reply('there is no quiz set up.');
 
 			return message.reply(
@@ -66,10 +73,13 @@ class QuizDurationCommand extends Command {
 			);
 		}
 
-		if (quiz) {
+		if (quiz)
+		{
 			quiz.duration = time!;
 			await quiz.save();
-		} else {
+		}
+		else
+		{
 			await message.guild.model.$create('quiz', {
 				duration: time,
 				guildId: message.guild.id,

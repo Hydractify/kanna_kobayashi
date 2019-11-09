@@ -7,8 +7,10 @@ import { MediaType } from '../../types/anilist/MediaType';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class CharacterCommand extends AniListCommand<ICharacter> {
-	public constructor(handler: CommandHandler) {
+class CharacterCommand extends AniListCommand<ICharacter>
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['char'],
 			clientPermissions: ['EMBED_LINKS'],
@@ -19,7 +21,8 @@ class CharacterCommand extends AniListCommand<ICharacter> {
 		});
 	}
 
-	public parseArgs(message: GuildMessage, args: string[]): string | string[] {
+	public parseArgs(message: GuildMessage, args: string[]): string | string[]
+	{
 		if (!args.length) return 'you have to tell me what character you are looking for!';
 
 		return args;
@@ -29,7 +32,8 @@ class CharacterCommand extends AniListCommand<ICharacter> {
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]>
+	{
 		const entries: ICharacter[] | undefined = await this.search(args.join(' '));
 
 		if (!entries) return message.reply('I could not find a single character matching your search!');

@@ -9,7 +9,8 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { RandomImageResult } from '../../types/weeb/RandomImageResult';
 import { chunkArray } from '../../util/Util';
 
-class ImageCommand extends Command {
+class ImageCommand extends Command
+{
 	/**
 	 * The allowed types to be requested to weeb.sh
 	 */
@@ -44,7 +45,8 @@ class ImageCommand extends Command {
 		'handholding',
 	];
 
-	public constructor(handler: CommandHandler) {
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['weeb', 'images'],
 			clientPermissions: ['EMBED_LINKS'],
@@ -54,7 +56,8 @@ class ImageCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: GuildMessage, [input]: string[]): Promise<string | [string]> {
+	public async parseArgs(message: GuildMessage, [input]: string[]): Promise<string | [string]>
+	{
 		if (!input) return ['types'];
 		input = input.toLowerCase();
 		if (input === 'types' || this.types.includes(input)) return [input];
@@ -66,9 +69,11 @@ class ImageCommand extends Command {
 		message: GuildMessage,
 		[type]: [string],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]>
+	{
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel);
-		if (type === 'types') {
+		if (type === 'types')
+		{
 			const types: string = chunkArray(this.types, 3)
 				.map((chunk: string[]) => chunk.join(', '))
 				.join(',\n');
@@ -76,7 +81,9 @@ class ImageCommand extends Command {
 			embed
 				.setAuthor('Image Types', message.author.displayAvatarURL())
 				.setDescription(types);
-		} else {
+		}
+		else
+		{
 			const image: RandomImageResult = await fetchRandom({ type });
 
 			embed.setImage(image.url);

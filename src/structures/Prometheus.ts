@@ -9,11 +9,13 @@ const TIMEOUT = 10000;
  * Prometheus Singleton
  */
 @Loggable('PROMETHEUS')
-export class Prometheus {
+export class Prometheus
+{
 	/**
 	 * Singleton Prometheus instance
 	 */
-	public static get instance(): Prometheus {
+	public static get instance(): Prometheus
+	{
 		return this._instance || new this();
 	}
 
@@ -42,7 +44,7 @@ export class Prometheus {
 	private readonly _cpu: Gauge;
 
 	/** The last cpu time used to get diffs */
-	private _lastCpuUsage: { user: number, system: number } = { user: 0, system: 0 };
+	private _lastCpuUsage: { user: number; system: number } = { user: 0, system: 0 };
 
 	/** Whether the Prometheus singleton is already started */
 	private started: boolean = false;
@@ -50,8 +52,10 @@ export class Prometheus {
 	/**
 	 * Instantiate the Prometheus singleton.
 	 */
-	private constructor() {
-		if (Prometheus._instance) {
+	private constructor()
+	{
+		if (Prometheus._instance)
+		{
 			throw new Error('Can not create multiple instances from Prometheus singleton.');
 		}
 
@@ -83,7 +87,8 @@ export class Prometheus {
 	/**
 	 * Start Prometheus timers
 	 */
-	public start(): void {
+	public start(): void
+	{
 		if (this.started) return;
 		this.started = true;
 
@@ -93,7 +98,8 @@ export class Prometheus {
 				TIMEOUT,
 			),
 			setInterval(
-				() => {
+				() =>
+				{
 					const oldUsage: number = this._lastCpuUsage.system + this._lastCpuUsage.user;
 					const { user, system } = this._lastCpuUsage = process.cpuUsage();
 					this._cpu.set((user + system) - oldUsage, Date.now());
@@ -105,6 +111,7 @@ export class Prometheus {
 
 		this._nodeVersion.set({ version: process.versions.node }, 1);
 
+		/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 		const { version } = require('../../package.json');
 		const commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8', cwd: __dirname });
 
@@ -116,11 +123,13 @@ export class Prometheus {
 	/**
 	 * Stop Prometheus timers
 	 */
-	public stop(): void {
+	public stop(): void
+	{
 		if (!this.started) return;
 		this.started = false;
 
-		for (const timer of this.timers) {
+		for (const timer of this.timers)
+		{
 			clearInterval(timer);
 		}
 	}

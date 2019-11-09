@@ -8,13 +8,13 @@ import { IPixivData } from './IPixivData';
 import { ISankakuData } from './ISankakuData';
 
 type DefaultData = IPixivData
-	| IDeviantArtData
-	| IPawooData
-	| ISankakuData
-	| IBcyData
-	| IAnidbData
-	| INicoVideoData
-	| IDanbooruData;
+| IDeviantArtData
+| IPawooData
+| ISankakuData
+| IBcyData
+| IAnidbData
+| INicoVideoData
+| IDanbooruData;
 
 export interface ISauceNaoResult<T = DefaultData> {
 	header: {

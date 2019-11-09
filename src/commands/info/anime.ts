@@ -7,8 +7,10 @@ import { MediaType } from '../../types/anilist/MediaType';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class AnimeCommand extends AniListCommand<IMedia> {
-	public constructor(handler: CommandHandler) {
+class AnimeCommand extends AniListCommand<IMedia>
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
 			description: 'Search for a specific anime on anilist',
@@ -18,7 +20,8 @@ class AnimeCommand extends AniListCommand<IMedia> {
 		});
 	}
 
-	public parseArgs(message: GuildMessage, args: string[]): string | string[] {
+	public parseArgs(message: GuildMessage, args: string[]): string | string[]
+	{
 		if (!args.length) return 'you have to tell me what anime you are looking for!';
 
 		return args;
@@ -28,7 +31,8 @@ class AnimeCommand extends AniListCommand<IMedia> {
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]>
+	{
 		const entries: IMedia[] | undefined = await this.search(args.join(' '));
 
 		if (!entries) return message.reply('I could not find a single anime matching your search!');

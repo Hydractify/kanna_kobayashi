@@ -8,8 +8,10 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class PokeCommand extends WeebCommand {
-	public constructor(handler: CommandHandler) {
+class PokeCommand extends WeebCommand
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			action: 'poked',
 			description: 'G-get someone\'s attention!',
@@ -24,7 +26,8 @@ class PokeCommand extends WeebCommand {
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]>
+	{
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `W-what did I do this time **${message.member.displayName}**!`,
 			dev: `Notice them **${members.first()!.name}**!`,

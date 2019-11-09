@@ -1,5 +1,6 @@
 import { APIRouter, buildRouter } from '../Api';
 
+/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { osuToken } = require('../../../data');
 const api: () => APIRouter = buildRouter({
 	baseURL: 'https://osu.ppy.sh/api',

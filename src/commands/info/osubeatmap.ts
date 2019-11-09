@@ -11,8 +11,10 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { OsuMode } from '../../types/osu/OsuMode';
 import { titleCase } from '../../util/Util';
 
-class OsuBeatmapCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class OsuBeatmapCommand extends Command
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['beatmap', 'osuset', 'set'],
 			description: 'Search for osu! Beatmaps!',
@@ -24,11 +26,13 @@ class OsuBeatmapCommand extends Command {
 	public parseArgs(
 		message: GuildMessage,
 		[id, modeOrOption, option]: string[],
-	): [string, OsuMode, string] | string {
+	): [string, OsuMode, string] | string
+	{
 		if (!id) return 'you have to tell me what beatmap you want to lookup!';
 
 		let mode: OsuMode = OsuMode.OSU;
-		if (modeOrOption) {
+		if (modeOrOption)
+		{
 			modeOrOption = modeOrOption.toUpperCase();
 			const tmpMode: OsuMode = OsuMode[modeOrOption as any] as any;
 			if (tmpMode) mode = tmpMode;
@@ -42,15 +46,20 @@ class OsuBeatmapCommand extends Command {
 		message: GuildMessage,
 		[id, mode, option]: [string, OsuMode, string],
 		{ authorModel, commandName }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
-		if (!commandName.includes('set')) {
+	): Promise<Message | Message[]>
+	{
+		if (!commandName.includes('set'))
+		{
 			const best: boolean = Boolean(option) && option.toLowerCase() === 'best';
 
 			const beatmap: Beatmap | undefined = await Beatmap.fetch(id, mode);
 
-			if (!beatmap) {
+			if (!beatmap)
+			{
 				if (best) return message.reply('I could not find a beatmap with that id!');
-			} else {
+			}
+			else
+			{
 				return best
 					? this.showBest(message, authorModel, beatmap)
 					: this.showMap(message, authorModel, beatmap);
@@ -64,11 +73,13 @@ class OsuBeatmapCommand extends Command {
 		return this.showSet(message, authorModel, beatmaps);
 	}
 
-	private formatLength(seconds: number): string {
+	private formatLength(seconds: number): string
+	{
 		return duration(seconds, 'seconds').format('hh:mm:ss');
 	}
 
-	private async showBest(message: GuildMessage, authorModel: UserModel, beatmap: Beatmap): Promise<Message | Message[]> {
+	private async showBest(message: GuildMessage, authorModel: UserModel, beatmap: Beatmap): Promise<Message | Message[]>
+	{
 		const scores: Required<Score>[] = await beatmap.fetchBestScores();
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
@@ -81,7 +92,8 @@ class OsuBeatmapCommand extends Command {
 				`**OD:** ${beatmap.overallDifficulty.toFixed(1)} **AR:** ${beatmap.approachRate.toFixed(1)}`,
 			]);
 
-		for (const score of scores) {
+		for (const score of scores)
+		{
 			embed.addField(
 				// Already there, resolved instantly
 				`${(await score.fetchUser()).username} -- ${score.rankEmoji}`,
@@ -99,7 +111,8 @@ class OsuBeatmapCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	private showMap(message: GuildMessage, authorModel: UserModel, beatmap: Beatmap): Promise<Message | Message[]> {
+	private showMap(message: GuildMessage, authorModel: UserModel, beatmap: Beatmap): Promise<Message | Message[]>
+	{
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`${beatmap.artist} -- ${beatmap.title} [${beatmap.version}]`, undefined, beatmap.versionURL())
 			.setImage(beatmap.iconURL)
@@ -145,7 +158,8 @@ class OsuBeatmapCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	private showSet(message: GuildMessage, authorModel: UserModel, beatmaps: Beatmap[]): Promise<Message | Message[]> {
+	private showSet(message: GuildMessage, authorModel: UserModel, beatmaps: Beatmap[]): Promise<Message | Message[]>
+	{
 		const [first] = beatmaps;
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
@@ -173,7 +187,8 @@ class OsuBeatmapCommand extends Command {
 
 		beatmaps.sort((a: Beatmap, b: Beatmap) => b.difficultyRating - a.difficultyRating);
 
-		for (const diff of beatmaps) {
+		for (const diff of beatmaps)
+		{
 			embed.addField(
 				`${diff.version} -- ${diff.difficultyRating.toFixed(2)}\\⭐`,
 				[
@@ -187,7 +202,8 @@ class OsuBeatmapCommand extends Command {
 		}
 
 		const remainder: number = (embed.fields.length + 2) % 3;
-		if (remainder !== 0) {
+		if (remainder !== 0)
+		{
 			embed.addBlankField(true);
 			if (remainder === 1) embed.addBlankField(true);
 		}

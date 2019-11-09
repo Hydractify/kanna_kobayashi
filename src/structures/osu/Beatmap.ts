@@ -11,11 +11,13 @@ import { Score } from './Score';
 /**
  * Represents an osu! beatmap.
  */
-export class Beatmap {
+export class Beatmap
+{
 	/**
 	 * Fetch an osu! beatmap by id, mode defaults to `OsuMode.OSU`.
 	 */
-	public static async fetch(id: string | number, mode: OsuMode = OsuMode.OSU): Promise<Beatmap | undefined> {
+	public static async fetch(id: string | number, mode: OsuMode = OsuMode.OSU): Promise<Beatmap | undefined>
+	{
 		const [data]: { [key: string]: string }[] = await Api().get_beatmaps.get({
 			query: {
 				a: 1,
@@ -33,7 +35,8 @@ export class Beatmap {
 	/**
 	 * Fetch a full set of osu! beatmaps.
 	 */
-	public static async fetchSet(id: string | number): Promise<Beatmap[] | undefined> {
+	public static async fetchSet(id: string | number): Promise<Beatmap[] | undefined>
+	{
 		const data: { [key: string]: string }[] = await Api().get_beatmaps.get({
 			query: { s: id },
 		});
@@ -147,7 +150,8 @@ export class Beatmap {
 	/**
 	 * Instantiate a new beatmap
 	 */
-	public constructor(data: { [key: string]: string }) {
+	public constructor(data: { [key: string]: string })
+	{
 		this.approved = Number(data.approved);
 		this.approvedAt = data.approved_date ? utc(`${data.approved_date}+08:00`) : undefined;
 		this.updatedAt = utc(`${data.last_update}+80:00`);
@@ -184,35 +188,40 @@ export class Beatmap {
 	/**
 	 * Human readable representation of the language of the song of the beatmap
 	 */
-	public get languageString(): string {
+	public get languageString(): string
+	{
 		return titleCase(BeatmapLanguage[this.language]);
 	}
 
 	/**
 	 * Human readable representation of the genre of the song of the beatmap
 	 */
-	public get genreString(): string {
+	public get genreString(): string
+	{
 		return titleCase(BeatmapGenre[this.genre]);
 	}
 
 	/**
 	 * Human readable representation of the state of the beatmap
 	 */
-	public get stateString(): string {
+	public get stateString(): string
+	{
 		return titleCase(BeatmapState[this.approved]);
 	}
 
 	/**
 	 * Url pointing to the thumbnail of the beatmap
 	 */
-	public get iconURL(): string {
+	public get iconURL(): string
+	{
 		return `https://b.ppy.sh/thumb/${this.setId}l.jpg`;
 	}
 
 	/**
 	 * Url pointing to the website of the set
 	 */
-	public get setURL(): string {
+	public get setURL(): string
+	{
 		return `https://osu.ppy.sh/s/${this.setId}`;
 	}
 
@@ -221,7 +230,8 @@ export class Beatmap {
 	 */
 	public async fetchBestScores(
 		{ limit = 10, mode = this.mode }: { limit?: number; mode?: OsuMode } = {},
-	): Promise<Required<Score>[]> {
+	): Promise<Required<Score>[]>
+	{
 		const scores: { [key: string]: string }[] = await Api().get_scores.get({
 			query: {
 				b: this.id,
@@ -231,7 +241,8 @@ export class Beatmap {
 		});
 
 		const promises: Promise<Required<Score>>[] = [];
-		for (const data of scores) {
+		for (const data of scores)
+		{
 			const score: Required<Score> = new Score(data, { beatmap: this, mode }) as Required<Score>;
 			promises.push(score.fetchUser().then(() => score));
 		}
@@ -242,7 +253,8 @@ export class Beatmap {
 	/**
 	 * Url pointing to the website of the version
 	 */
-	public versionURL(mode: OsuMode = this.mode): string {
+	public versionURL(mode: OsuMode = this.mode): string
+	{
 		return `https://osu.ppy.sh/b/${this.id}&m${mode}`;
 	}
 }

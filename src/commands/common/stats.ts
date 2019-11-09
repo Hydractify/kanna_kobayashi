@@ -9,10 +9,13 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IShardData } from '../../types/IShardData';
 
+/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { version } = require('../../../package');
 
-class StatsCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class StatsCommand extends Command
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['kannastats', 'bstats'],
 			cooldown: 0,
@@ -27,7 +30,8 @@ class StatsCommand extends Command {
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]>
+	{
 		const data: IShardData[] = await this.client.shard!.broadcastEval<IShardData>(
 			(client: Client) => ({
 				guilds: client.guilds.size,
@@ -40,7 +44,8 @@ class StatsCommand extends Command {
 		let totalGuilds: number = 0;
 		let totalUsers: number = 0;
 		let totalRam: number = 0;
-		for (const { guilds, users, ram } of data) {
+		for (const { guilds, users, ram } of data)
+		{
 			totalGuilds += guilds;
 			totalUsers += users;
 			totalRam += ram;
@@ -66,7 +71,8 @@ class StatsCommand extends Command {
 		return message.channel.send(embed);
 	}
 
-	private _buildTableString(data: IShardData[]): string {
+	private _buildTableString(data: IShardData[]): string
+	{
 		// 'IDs'.length
 		let longestId: number = 3;
 		// 'Guilds'.length
@@ -76,7 +82,8 @@ class StatsCommand extends Command {
 		// 'Users'.length
 		let longestUser: number = 5;
 
-		for (const { guilds, ids, ram, users } of data) {
+		for (const { guilds, ids, ram, users } of data)
+		{
 			let tmp: number;
 
 			tmp = ids.map((id: number) => id.toLocaleString()).join(', ').length;
@@ -115,7 +122,8 @@ class StatsCommand extends Command {
 			'║\n',
 		].join('');
 
-		for (const { guilds, ids, ram, users } of data) {
+		for (const { guilds, ids, ram, users } of data)
+		{
 			shardInfo += [
 				'║', this._pad(ids.map((id: number) => id.toLocaleString()).join(', '), longestId),
 				'|', this._pad(`${ram.toFixed(2)} MB`, longestRam),
@@ -136,7 +144,8 @@ class StatsCommand extends Command {
 		return shardInfo;
 	}
 
-	private _pad(value: string, length: number): string {
+	private _pad(value: string, length: number): string
+	{
 		if (value.length >= length) return value;
 		length -= value.length;
 

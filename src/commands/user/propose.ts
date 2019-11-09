@@ -9,8 +9,10 @@ import { Emojis } from '../../types/Emojis';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class ProposeCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class ProposeCommand extends Command
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['marry'],
 			cooldown: 1e4,
@@ -24,8 +26,8 @@ class ProposeCommand extends Command {
 	public async parseArgs(
 		message: GuildMessage,
 		[input]: string[],
-		{ authorModel }: ICommandRunInfo,
-	): Promise<string | [User]> {
+	): Promise<string | [User]>
+	{
 		if (!input) return `you are missing someone to propose to! (\`${this.usage}\`)`;
 		const member: GuildMember | undefined = await this.resolver.resolveMember(input, message.guild, false);
 		if (!member) return `I could not find a non-bot user with the name or id ${input}`;
@@ -38,7 +40,8 @@ class ProposeCommand extends Command {
 		message: GuildMessage,
 		[user]: [User],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[] | undefined> {
+	): Promise<Message | Message[] | undefined>
+	{
 
 		const checked: boolean = await this.relationCheck(message, user, authorModel);
 
@@ -55,14 +58,16 @@ class ProposeCommand extends Command {
 	 * @param mentionedUser Mentioned user
 	 * @param authorModel Database model for the author of the message
 	 */
-	private async relationCheck(message: GuildMessage, mentionedUser: User, authorModel: UserModel): Promise<boolean> {
+	private async relationCheck(message: GuildMessage, mentionedUser: User, authorModel: UserModel): Promise<boolean>
+	{
 		const partner: UserModel = await authorModel.$get<UserModel>('partner') as UserModel;
 
 		// No partner present, green light for a new one
 		if (!partner) return true;
 
 		// Mentioned user is not the current user
-		if (partner.id !== mentionedUser.id) {
+		if (partner.id !== mentionedUser.id)
+		{
 
 			await message.reply(`you are already in a relationship with somebody else... ${Emojis.KannaScared}`);
 
@@ -72,7 +77,8 @@ class ProposeCommand extends Command {
 		// Are those two together for at least a month?
 		// Days * hours * minutes * seconds * milliseconds (large to small)
 		const until = partner.partnerSince!.valueOf() + (30 * 24 * 60 * 60 * 1000);
-		if (until > message.createdTimestamp) {
+		if (until > message.createdTimestamp)
+		{
 			await message.reply([
 				`sorry but not enough time has passed since you two got together! ${Emojis.KannaShy}`,
 				`Try again ${moment(until).fromNow()}.`,
@@ -81,7 +87,8 @@ class ProposeCommand extends Command {
 			return false;
 		}
 
-		if (authorModel.partnerMarried) {
+		if (authorModel.partnerMarried)
+		{
 			await message.reply('you two are already married.');
 
 			return false;
@@ -97,7 +104,8 @@ class ProposeCommand extends Command {
 		const confirmation: Message | undefined = await message.channel.awaitMessages(filter, { time: 10000, max: 1 })
 			.then((collected: Collection<Snowflake, Message>) => collected.first());
 
-		if (!confirmation) {
+		if (!confirmation)
+		{
 			await message.reply([
 				'looks like you got no response, so',
 				`I had to cancel the command ${Emojis.KannaSad}`,
@@ -106,7 +114,8 @@ class ProposeCommand extends Command {
 			return false;
 		}
 
-		if (/^(y|yes)/i.test(confirmation.content)) {
+		if (/^(y|yes)/i.test(confirmation.content))
+		{
 			const transaction: Transaction = await this.sequelize.transaction();
 
 			partner.partnerMarried = true;
@@ -143,7 +152,8 @@ class ProposeCommand extends Command {
 		mentionedUser: User,
 		authorModel: UserModel,
 		partnerModel: UserModel,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]>
+	{
 		await message.channel.send(
 			`${mentionedUser}, ${message.author} proposed to you! Do you want to accept? (**Y**es / **N**o)`,
 		);
@@ -154,14 +164,16 @@ class ProposeCommand extends Command {
 		const confirmation: Message | undefined = await message.channel.awaitMessages(filter, { time: 90000, max: 1 })
 			.then((collected: Collection<Snowflake, Message>) => collected.first());
 
-		if (!confirmation) {
+		if (!confirmation)
+		{
 			return message.reply([
 				'looks like you got no response, so',
 				`I had to cancel the command ${Emojis.KannaSad}`,
 			].join(' '));
 		}
 
-		if (/^(y|yes)/i.test(confirmation.content)) {
+		if (/^(y|yes)/i.test(confirmation.content))
+		{
 			const transaction: Transaction = await this.sequelize.transaction();
 
 			// Sequelize method seems to not work as expected /shrug

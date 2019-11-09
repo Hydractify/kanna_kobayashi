@@ -1,8 +1,10 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 
-class YummyCommand extends ImageEmbedCommand {
-	public constructor(handler: CommandHandler) {
+class YummyCommand extends ImageEmbedCommand
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			description: 'The pure art of noodles',
 			examples: ['yummy'],

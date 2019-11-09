@@ -6,8 +6,10 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class AvatarCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class AvatarCommand extends Command
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['av', 'image'],
 			clientPermissions: ['EMBED_LINKS'],
@@ -17,7 +19,8 @@ class AvatarCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: GuildMessage, [input]: string[]): Promise<[User] | string> {
+	public async parseArgs(message: GuildMessage, [input]: string[]): Promise<[User] | string>
+	{
 		if (!input) return [message.author];
 
 		const member: GuildMember | undefined = await this.resolver.resolveMember(input, message.guild);
@@ -34,7 +37,8 @@ class AvatarCommand extends Command {
 		message: GuildMessage,
 		[user]: [User],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]>
+	{
 		const embed: MessageEmbed = MessageEmbed.image(message, authorModel, user.displayAvatarURL({ size: 2048 }))
 			.setAuthor(`${user.tag}'s avatar`, user.displayAvatarURL(), user.displayAvatarURL());
 

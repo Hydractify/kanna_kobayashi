@@ -31,7 +31,8 @@ const { on, once, registerListeners }: typeof ListenerUtil = ListenerUtil;
 /**
  * Extended discord.js client
  */
-export class Client extends DJSClient {
+export class Client extends DJSClient
+{
 	/**
 	 * Command handler of the client
 	 */
@@ -70,7 +71,8 @@ export class Client extends DJSClient {
 	/**
 	 * Instantiate the client
 	 */
-	public constructor(options: ClientOptions) {
+	public constructor(options: ClientOptions)
+	{
 		super(options);
 
 		this.commandHandler = new CommandHandler(this);
@@ -81,6 +83,7 @@ export class Client extends DJSClient {
 			.toString()
 			.padStart(this.options.totalShardCount!.toString().length, '0');
 
+		/* eslint-disable-next-line @typescript-eslint/camelcase */
 		register.setDefaultLabels({ shard_id: shardId });
 
 		// To get a stat here, not simply nothing
@@ -94,19 +97,23 @@ export class Client extends DJSClient {
 	 *
 	 * (Used internally when accessing /metrics in the Sharding Manager)
 	 */
-	public getMetrics() {
+	/* eslint-disable-next-line @typescript-eslint/explicit-function-return-type */
+	public getMetrics()
+	{
 		return register.getMetricsAsJSON();
 	}
 
 	@on('shardReady')
 	@RavenContext
-	protected _onShardReady(id: number): void {
+	protected _onShardReady(id: number): void
+	{
 		this.webhook.info('Ready', id, 'Up and running!');
 	}
 
 	@on('ready')
 	@RavenContext
-	protected _onReady(): void {
+	protected _onReady(): void
+	{
 		this._guildCount.set(this.guilds.size);
 
 		this.webhook.info('Ready', 'Manager', 'Logged in and processing events!');
@@ -114,21 +121,25 @@ export class Client extends DJSClient {
 
 	@once('ready')
 	@RavenContext
-	protected _onceReady(): void {
-		if (this.user!.id === '297459926505095180' && false) {
+	protected _onceReady(): void
+	{
+		if (this.user!.id === '297459926505095180')
+		{
 			this.setInterval(updateBotLists.bind(this), 30 * 60 * 1000);
 		}
 	}
 
 	@on('shardDisconnect')
 	@RavenContext
-	protected _onDisconnect({ code, reason }: { code: number; reason: string }, id: number): void {
+	protected _onDisconnect({ code, reason }: { code: number; reason: string }, id: number): void
+	{
 		this.webhook.warn('shardDisconnect', id, `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
 	}
 
 	@on('shardError')
 	@RavenContext
-	protected _onError(error: Error, id: number): void {
+	protected _onError(error: Error, id: number): void
+	{
 		this.errorCount.inc({ type: 'WebSocket' });
 
 		this.webhook.error('ShardError', id, error);
@@ -137,7 +148,8 @@ export class Client extends DJSClient {
 	@on('guildCreate', false)
 	@on('guildDelete', true)
 	@RavenContext
-	protected async _onGuild(guild: Guild, left: boolean): Promise<void> {
+	protected async _onGuild(guild: Guild, left: boolean): Promise<void>
+	{
 		this._guildCount.set(this.guilds.size);
 		captureBreadcrumb({ category: left ? 'guildDelete' : 'guildCreate', level: 'debug' });
 
@@ -171,7 +183,8 @@ export class Client extends DJSClient {
 	@on('guildMemberAdd', false)
 	@on('guildMemberRemove', true)
 	@RavenContext
-	protected async _onGuildMember(member: GuildMember, left: boolean): Promise<void> {
+	protected async _onGuildMember(member: GuildMember, left: boolean): Promise<void>
+	{
 		captureBreadcrumb({
 			category: left ? 'guildMemberRemove' : 'guildMemberAdd',
 			data: {
@@ -192,7 +205,8 @@ export class Client extends DJSClient {
 		if (!guildModel.notificationChannelId) return;
 		const channel: GuildChannel | undefined = member.guild.channels.get(guildModel.notificationChannelId);
 
-		if (!(channel instanceof TextChannel)) {
+		if (!(channel instanceof TextChannel))
+		{
 			guildModel.notificationChannelId = null;
 			guildModel.save();
 
@@ -214,7 +228,8 @@ export class Client extends DJSClient {
 
 	@on('messageReactionAdd')
 	@RavenContext
-	protected async _onMessageReactionAdd(reaction: MessageReaction, user: User): Promise<any> {
+	protected async _onMessageReactionAdd(reaction: MessageReaction, user: User): Promise<any>
+	{
 		// Pre discord ready?
 		if (!this.user) return;
 		// Ignore reactions in dms
@@ -222,14 +237,18 @@ export class Client extends DJSClient {
 		// Ensure own member is cached in the current guild
 		if (!reaction.message.guild.me) await reaction.message.guild.members.fetch(this.user);
 
-		if (reaction.message.partial) {
+		if (reaction.message.partial)
+		{
 			// Only attempt to fetch if we can actually fetch
 			if (!reaction.message.channel.permissionsFor(this.user)!.has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'])) return;
 
-			try {
+			try
+			{
 				// If the message gets uncached, discord.js won't find a reference to it and creates a new instance
 				reaction.message = await reaction.message.fetch();
-			} catch (e) {
+			}
+			catch (e)
+			{
 				// Ignore Unknown Message errors
 				if (e.code === 10008) return;
 				this.errorCount.inc({ type: 'Reaction' });
@@ -241,7 +260,8 @@ export class Client extends DJSClient {
 		if (reaction.message.author!.id !== this.user.id
 			|| !reaction.message.embeds.length
 			|| !reaction.message.embeds[0].footer
-		) {
+		)
+		{
 			reaction.message.channel.messages.delete(reaction.message.id);
 
 			return;
@@ -256,21 +276,24 @@ export class Client extends DJSClient {
 		const [, tag, name]: RegExpExecArray = /^Requested by (.+?) \u200b\|.* (.+)$/
 			.exec(reaction.message.embeds[0].footer.text!)
 			|| [] as any;
-		if (!tag || !name) {
+		if (!tag || !name)
+		{
 			reaction.message.channel.messages.delete(reaction.message.id);
 
 			return;
 		}
 
 		const command: IResponsiveEmbedController = this.commandHandler.resolveCommand(name.toLowerCase()) as any;
-		if (!command) {
+		if (!command)
+		{
 			reaction.message.channel.messages.delete(reaction.message.id);
 
 			return;
 		}
 
 		if (user.tag !== tag || !command.emojis || !command.onCollect
-			|| !command.emojis.includes(reaction.emoji.name)) {
+			|| !command.emojis.includes(reaction.emoji.name))
+		{
 			reaction.message.channel.messages.delete(reaction.message.id);
 
 			return;
@@ -281,33 +304,38 @@ export class Client extends DJSClient {
 
 	@on('shardReconnecting')
 	@RavenContext
-	protected _onReconnecting(id: number): void {
+	protected _onReconnecting(id: number): void
+	{
 		this.webhook.info('Reconnecting', id, 'Shard is reconnecting...');
 	}
 
 	@on('warn')
 	@RavenContext
-	protected _onWarn(warning: string): void {
+	protected _onWarn(warning: string): void
+	{
 		this.webhook.warn('Client Warn', warning);
 	}
 
 	@on('debug')
 	@RavenContext
-	protected _onDebug(info: string): void {
+	protected _onDebug(info: string): void
+	{
 		let exec: RegExpExecArray | null = /^\[WS => (?:Shard )?(\d+|Manager)\] +([\s\S]+)$/.exec(info);
 		if (!exec) return;
 		const [, rawId, info2]: [string, string, string] = exec as any;
 		const id: number | 'Manager' = rawId === 'Manager' ? rawId : parseInt(rawId);
 
-		// tslint:disable-next-line:no-conditional-assignment
-		if (exec = /^Session Limit Information *\n *Total: *(.+) *\n *Remaining: *(.+)/.exec(info2)) {
+		/* eslint-disable-next-line no-cond-assign */
+		if (exec = /^Session Limit Information *\n *Total: *(.+) *\n *Remaining: *(.+)/.exec(info2))
+		{
 			this.webhook.info('Session Limit Information', id, 'Identifies:', exec[2], '/', exec[1]);
 
 			return;
 		}
 
-		// tslint:disable-next-line:no-conditional-assignment
-		if (exec = /^WebSocket was closed. *\n *Event Code: *(.+) *\n *Clean: (.+) *\n *Reason: *(.+)/.exec(info2)) {
+		/* eslint-disable-next-line no-cond-assign */
+		if (exec = /^WebSocket was closed. *\n *Event Code: *(.+) *\n *Clean: (.+) *\n *Reason: *(.+)/.exec(info2))
+		{
 			this.webhook.info('WebSocket was closed', id, 'Code:', exec[1], ' Clean:', exec[2], ' Reason:', exec[2]);
 
 			return;
@@ -316,7 +344,8 @@ export class Client extends DJSClient {
 
 	@on('raw')
 	@RavenContext
-	protected _onRaw(event: { op: number, d: any, s?: number, t?: string }): void {
+	protected _onRaw(event: { op: number; d: any; s?: number; t?: string }): void
+	{
 		this._eventCount.inc({
 			type: event.t || event.op,
 		});

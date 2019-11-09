@@ -2,8 +2,10 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 import { Emojis } from '../../types/Emojis';
 
-class HungryCommand extends ImageEmbedCommand {
-	public constructor(handler: CommandHandler) {
+class HungryCommand extends ImageEmbedCommand
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['food'],
 			description: 'See Kanna satisfy her hunger! (And curiosity)',

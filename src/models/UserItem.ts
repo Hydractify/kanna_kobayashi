@@ -8,7 +8,8 @@ import { Model } from '../structures/Model';
 	underscored: true,
 	updatedAt: false,
 })
-export class UserItem extends Model<UserItem> {
+export class UserItem extends Model<UserItem>
+{
 	@Column({
 		defaultValue: 1,
 		type: DataType.INTEGER,

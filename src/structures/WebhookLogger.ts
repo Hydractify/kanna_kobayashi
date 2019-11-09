@@ -4,20 +4,24 @@ import { colors, LogLevel } from '../types/LogLevel';
 import { Logger } from './Logger';
 import { MessageEmbed } from './MessageEmbed';
 
+/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { webhook: { id, secret } } = require('../../data.json');
 
 const webhook: WebhookClient = new WebhookClient(id, secret);
 
-export class WebhookLogger extends Logger {
+export class WebhookLogger extends Logger
+{
 	protected static _instance: WebhookLogger;
 
-	public static get instance(): WebhookLogger {
+	public static get instance(): WebhookLogger
+	{
 		return this._instance || new this();
 	}
 
 	private _webhookLevel: LogLevel = LogLevel.SILLY;
 
-	protected _write(level: LogLevel, tag: string, data: any[]): void {
+	protected _write(level: LogLevel, tag: string, data: any[]): void
+	{
 		super._write(level, `Webhook][${tag}`, data);
 		if (this._webhookLevel < level) return;
 
@@ -40,9 +44,12 @@ export class WebhookLogger extends Logger {
 			username: 'Kanna Status',
 		};
 
-		if (cleaned.length <= 2048) {
+		if (cleaned.length <= 2048)
+		{
 			embed.setDescription(cleaned);
-		} else {
+		}
+		else
+		{
 			embed.setDescription('Data is too long, falling back to file.');
 			options.files = [new MessageAttachment(Buffer.from(cleaned), 'file.txt')];
 		}

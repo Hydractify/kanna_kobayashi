@@ -7,8 +7,10 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class ShowReputationCommand extends Command {
-	public constructor(handler: CommandHandler) {
+class ShowReputationCommand extends Command
+{
+	public constructor(handler: CommandHandler)
+	{
 		super(handler, {
 			aliases: ['showrep'],
 			clientPermissions: ['EMBED_LINKS'],
@@ -19,7 +21,8 @@ class ShowReputationCommand extends Command {
 		});
 	}
 
-	public async parseArgs(message: GuildMessage, args: string[]): Promise<string | [GuildMember, number, number]> {
+	public async parseArgs(message: GuildMessage, args: string[]): Promise<string | [GuildMember, number, number]>
+	{
 		const member: GuildMember | undefined = args.length
 			? await this.resolver.resolveMember(args.join(' '), message.guild, false)
 			: message.member;
@@ -30,7 +33,8 @@ class ShowReputationCommand extends Command {
 			attributes: ['type'],
 			group: ['type'],
 			where: { repId: member.id },
-		}).then((results: any) => {
+		}).then((results: any) =>
+		{
 			const reps: { [key: string]: number } = {};
 			for (const result of results) reps[result.type] = result.count;
 
@@ -46,7 +50,8 @@ class ShowReputationCommand extends Command {
 		message: GuildMessage,
 		[member, positive, negative]: [GuildMember, number, number],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> {
+	): Promise<Message | Message[]>
+	{
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`Reputation for ${member.user.tag}`, this.client.user!.displayAvatarURL());
 		// One is always present here
