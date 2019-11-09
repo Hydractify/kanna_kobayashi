@@ -14,9 +14,6 @@
 		<a href="https://www.hydractify.org/patreon">
 			<img src="https://img.shields.io/badge/Patreon-support!-fa6956.svg?style=flat-square&logo=patreon" />
 		</a>
-		<a href="https://trello.com/hydractify/">
-			<img src="https://img.shields.io/badge/Trello-hydractify-blue.svg?style=flat-square&logo=trello" />
-		</a>
 		<a href="https://twitter.com/hydractify">
 			<img src="https://img.shields.io/twitter/follow/hydractify.svg?style=social&logo=twitter">
 		</a>
