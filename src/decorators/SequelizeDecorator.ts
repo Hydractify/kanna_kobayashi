@@ -8,11 +8,11 @@ import { PostgreSQL } from '../structures/PostgreSQL';
  */
 export function Sequelize(defineStatic: boolean): ClassDecorator;
 export function Sequelize<T extends Function>(constructor: T): void;
-export function Sequelize<T extends Function>(firstParam: T | boolean): void | ClassDecorator 
+export function Sequelize<T extends Function>(firstParam: T | boolean): void | ClassDecorator
 {
-	if (typeof firstParam === 'boolean') 
+	if (typeof firstParam === 'boolean')
 	{
-		return function <R extends Function>(constructor: R): void 
+		return function <R extends Function>(constructor: R): void
 		{
 			Reflect.defineProperty(constructor, 'sequelize', { value: PostgreSQL.instance.db });
 		};

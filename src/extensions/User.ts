@@ -2,19 +2,19 @@ import { Message, User } from 'discord.js';
 
 import { User as UserModel } from '../models/User';
 
-class UserExtension 
+class UserExtension
 {
-	public fetchModel(this: User): Promise<UserModel> 
+	public fetchModel(this: User): Promise<UserModel>
 	{
 		return UserModel.fetch(this.id);
 	}
 
-	// tslint:disable:no-empty
-	set lastMessage(value: Message) 
+	/* eslint-disable @typescript-eslint/no-empty-function */
+	set lastMessage(value: Message)
 	{ }
-	set lastMessageID(value: string) 
+	set lastMessageID(value: string)
 	{ }
-	// tslint:enable:no-empty
+	/* eslint-enable @typescript-eslint/no-empty-function */
 }
 
 export { UserExtension as Extension };

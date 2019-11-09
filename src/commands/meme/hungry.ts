@@ -2,9 +2,9 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 import { Emojis } from '../../types/Emojis';
 
-class HungryCommand extends ImageEmbedCommand 
+class HungryCommand extends ImageEmbedCommand
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['food'],

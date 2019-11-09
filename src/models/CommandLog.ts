@@ -10,7 +10,7 @@ import { Model } from '../structures/Model';
 	underscored: true,
 	updatedAt: false,
 })
-export class CommandLog extends Model<CommandLog> 
+export class CommandLog extends Model<CommandLog>
 {
 	/**
 	 * Name of the command

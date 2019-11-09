@@ -3,10 +3,10 @@ import { Collection } from 'discord.js';
 /**
  * Title case the passed input string.
  */
-export const titleCase: (input: string) => string = (input: string): string => 
+export const titleCase: (input: string) => string = (input: string): string =>
 {
 	let titleCased: string = '';
-	for (const word of input.split(' ')) 
+	for (const word of input.split(' '))
 	{
 		titleCased += `${word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase()} `;
 	}
@@ -29,13 +29,13 @@ export const flagsText: symbol = Symbol.for('FlagsText');
  * Text before the first flag is keyed under the symbold `FlagsText` exported by this module.
  */
 export const parseFlags: (input: string, lowerCase?: boolean) => FlagCollection
-	= (input: string, lowerCase: boolean = false): FlagCollection => 
+	= (input: string, lowerCase: boolean = false): FlagCollection =>
 	{
 		const parsed: FlagCollection = new Collection<string | symbol, string | true>();
 		const flagsRegex: RegExp = /--(\w+)(.*?(?=--|$))/g;
 
 		const index: number = input.indexOf('--');
-		if (index !== 0) 
+		if (index !== 0)
 		{
 			if (index === -1) return parsed.set(flagsText, input);
 
@@ -48,7 +48,7 @@ export const parseFlags: (input: string, lowerCase?: boolean) => FlagCollection
 		let match: RegExpExecArray | null = null;
 
 		// tslint:disable-next-line:no-conditional-assignment
-		while ((match = flagsRegex.exec(input)) !== null) 
+		while ((match = flagsRegex.exec(input)) !== null)
 		{
 			const flag: string = (lowerCase
 				? match[1].toLowerCase()
@@ -67,13 +67,13 @@ export const parseFlags: (input: string, lowerCase?: boolean) => FlagCollection
  * Map an iterable to a string, values will be stringified.
  */
 export const mapIterable: <T extends { toString(): string }>(iterable: Iterable<T>, random?: boolean) => string
-	= <T extends { toString(): string }>(iterable: Iterable<T>, random: boolean = false): string => 
+	= <T extends { toString(): string }>(iterable: Iterable<T>, random: boolean = false): string =>
 	{
 		const values: T[] = Array.from(iterable);
 
-		if (random) 
+		if (random)
 		{
-			for (let i: number = values.length - 1; i > 0; --i) 
+			for (let i: number = values.length - 1; i > 0; --i)
 			{
 				const randomIndex: number = Math.floor(Math.random() * (i + 1));
 				const randomValue: T = values[randomIndex];
@@ -82,10 +82,10 @@ export const mapIterable: <T extends { toString(): string }>(iterable: Iterable<
 		}
 
 		let mapped: string = '';
-		for (const value of values) 
+		for (const value of values)
 		{
 			const stringified: string = String(value);
-			if (mapped.length + stringified.length >= 1021) 
+			if (mapped.length + stringified.length >= 1021)
 			{
 				mapped += '...';
 				break;
@@ -102,12 +102,12 @@ export const mapIterable: <T extends { toString(): string }>(iterable: Iterable<
  * The original array will _not_ be modified.
  */
 export const chunkArray: <T>(input: T[], chunkSize: number) => T[][]
-	= <T>(input: T[], chunkSize: number): T[][] => 
+	= <T>(input: T[], chunkSize: number): T[][] =>
 	{
 		const chunks: T[][] = [];
 		const length: number = Math.ceil(input.length / chunkSize);
 
-		for (let i: number = 0; i < length; undefined) 
+		for (let i: number = 0; i < length; undefined)
 		{
 			chunks.push(input.slice(i * chunkSize, ++i * chunkSize));
 		}
@@ -120,10 +120,10 @@ export const chunkArray: <T>(input: T[], chunkSize: number) => T[][]
  */
 const replaceRegex: RegExp = /[-[\]/{}()*+?.\\^$|]/g;
 export const replaceMap: (input: string, map: { [key: string]: string }) => string
-	= (input: string, map: { [key: string]: string }): string => 
+	= (input: string, map: { [key: string]: string }): string =>
 	{
 		const regexes: string[] = [];
-		for (const key of Object.keys(map)) 
+		for (const key of Object.keys(map))
 		{
 			regexes.push(key.replace(replaceRegex, '\\$&'));
 		}
@@ -139,9 +139,9 @@ export const replaceMap: (input: string, map: { [key: string]: string }) => stri
  * @returns Key or null if not found
  */
 export const enumKeyFromValue: <T>(_enum: any, value: string) => T
-	= <T>(_enum: T, value: string): T | null => 
+	= <T>(_enum: T, value: string): T | null =>
 	{
-		for (const [key, val] of Object.entries(_enum)) 
+		for (const [key, val] of Object.entries(_enum))
 		{
 			if (val === value) return key as any;
 		}
@@ -157,14 +157,14 @@ export const enumKeyFromValue: <T>(_enum: any, value: string) => T
  * @returns The resolved amount, or NaN if nothing was resolved.
  */
 const _resolve: (regex: RegExp, modifiers: { [key: string]: number }, input: string) => number =
-	(regex: RegExp, modifiers: { [key: string]: number }, input: string): number => 
+	(regex: RegExp, modifiers: { [key: string]: number }, input: string): number =>
 	{
 		let valid: boolean = false;
 		let out: number = 0;
 		let res: RegExpExecArray | null;
 
 		// tslint:disable-next-line:no-conditional-assignment
-		while ((res = regex.exec(input)) !== null) 
+		while ((res = regex.exec(input)) !== null)
 		{
 			valid = true;
 			out += parseInt(res[1]) * modifiers[res[2]];

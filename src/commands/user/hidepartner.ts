@@ -3,9 +3,9 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class HidePartnerCommand extends Command 
+class HidePartnerCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			description: 'Hides or unhides your partner in your profile.',
@@ -15,7 +15,7 @@ class HidePartnerCommand extends Command
 		});
 	}
 
-	public async run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo): Promise<any> 
+	public async run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo): Promise<any>
 	{
 		const response: string = authorModel.partnerHidden
 			? 'your partner is no longer hidden.'

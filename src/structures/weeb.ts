@@ -3,6 +3,7 @@ import { TagsResult } from '../types/weeb/TagsResult';
 import { TypesResult } from '../types/weeb/TypesResult';
 import { APIRouter, buildRouter } from './Api';
 
+/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { weebToken } = require('../../data');
 const api: () => APIRouter = buildRouter({
 	baseURL: 'https://api.weeb.sh',
@@ -37,7 +38,7 @@ export const fetchTypes: (showHidden?: boolean) => Promise<string[]> =
 			.then((res: TypesResult) => res.types);
 
 export const fetchRandom: (options: IFetchRandomOptions) => Promise<RandomImageResult>
-	= (options: IFetchRandomOptions): Promise<RandomImageResult> => 
+	= (options: IFetchRandomOptions): Promise<RandomImageResult> =>
 	{
 		if (!options.type && !options.tags) throw new Error('One of "type" or "tags" is required to fetch a random image!');
 

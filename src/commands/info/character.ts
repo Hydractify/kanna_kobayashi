@@ -7,9 +7,9 @@ import { MediaType } from '../../types/anilist/MediaType';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class CharacterCommand extends AniListCommand<ICharacter> 
+class CharacterCommand extends AniListCommand<ICharacter>
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['char'],
@@ -21,7 +21,7 @@ class CharacterCommand extends AniListCommand<ICharacter>
 		});
 	}
 
-	public parseArgs(message: GuildMessage, args: string[]): string | string[] 
+	public parseArgs(message: GuildMessage, args: string[]): string | string[]
 	{
 		if (!args.length) return 'you have to tell me what character you are looking for!';
 
@@ -32,7 +32,7 @@ class CharacterCommand extends AniListCommand<ICharacter>
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const entries: ICharacter[] | undefined = await this.search(args.join(' '));
 

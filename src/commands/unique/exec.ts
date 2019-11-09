@@ -10,9 +10,9 @@ import { PermLevels } from '../../types/PermLevels';
 
 const execAsync: (command: string) => Promise<IExecResult> = promisify(exec);
 
-class ExecCommand extends Command 
+class ExecCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			cooldown: 0,
@@ -25,7 +25,7 @@ class ExecCommand extends Command
 		});
 	}
 
-	public async run(message: GuildMessage, args: string[]): Promise<Message | Message[]> 
+	public async run(message: GuildMessage, args: string[]): Promise<Message | Message[]>
 	{
 		const statusMessage: Message = await message.channel.send('Executing...') as Message;
 		const { error, stdout, stderr }: IExecResult = await execAsync(args.join(' '))
@@ -36,7 +36,7 @@ class ExecCommand extends Command
 			+ (stdout ? `\`STDOUT\`\n\`\`\`xl\n${stdout}\`\`\`\n\n` : '')
 			+ (stderr ? `\`STDERR\`\n\`\`\`xl\n${stderr}\`\`\`\n\n` : '');
 
-		if (response.length <= 2000) 
+		if (response.length <= 2000)
 		{
 			return statusMessage.edit(response);
 		}

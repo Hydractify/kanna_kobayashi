@@ -8,9 +8,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { mapIterable, titleCase } from '../../util/Util';
 
-class UserInfoCommand extends Command 
+class UserInfoCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['whois', 'uu', 'uinfo'],
@@ -24,7 +24,7 @@ class UserInfoCommand extends Command
 	public async parseArgs(
 		message: GuildMessage,
 		[input]: string[],
-	): Promise<string | [User]> 
+	): Promise<string | [User]>
 	{
 		const user: User | undefined = input
 			? await this.resolver.resolveMember(input, message.guild)
@@ -39,7 +39,7 @@ class UserInfoCommand extends Command
 		message: GuildMessage,
 		[user]: [User],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const member: GuildMember | undefined = message.guild.members.get(user.id) ||
 			await message.guild.members.fetch(user.id).catch(() => undefined);
@@ -63,7 +63,7 @@ class UserInfoCommand extends Command
 			)
 			.addField('Registered account', this._formatTimespan(user.createdTimestamp));
 
-		if (member) 
+		if (member)
 		{
 			const roles: Collection<Snowflake, Role> = new Collection(member.roles.entries());
 			roles.delete(message.guild.id);
@@ -80,7 +80,7 @@ class UserInfoCommand extends Command
 		return message.channel.send(embed);
 	}
 
-	private _formatTimespan(from: number): string 
+	private _formatTimespan(from: number): string
 	{
 		return `${moment(from).format('MM/DD/YYYY (HH:mm)')} [${moment.duration(from - Date.now()).humanize()}]`;
 	}

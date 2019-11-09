@@ -12,9 +12,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { OsuMode } from '../../types/osu/OsuMode';
 
-class OsuUserCommand extends Command 
+class OsuUserCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['osu'],
@@ -25,12 +25,12 @@ class OsuUserCommand extends Command
 
 	}
 
-	public parseArgs(message: GuildMessage, [query, modeOrOption, option]: string[]): [string, OsuMode, string] | string 
+	public parseArgs(message: GuildMessage, [query, modeOrOption, option]: string[]): [string, OsuMode, string] | string
 	{
 		if (!query) return 'you have to tell me who you want to look up!';
 
 		let mode: OsuMode = OsuMode.OSU;
-		if (modeOrOption) 
+		if (modeOrOption)
 		{
 			modeOrOption = modeOrOption.toUpperCase();
 			const tempMode: OsuMode = OsuMode[modeOrOption as any] as any;
@@ -38,10 +38,10 @@ class OsuUserCommand extends Command
 			else option = modeOrOption;
 		}
 
-		if (option) 
+		if (option)
 		{
 			option = option.toLowerCase();
-			if (!['best', 'recent'].includes(option)) 
+			if (!['best', 'recent'].includes(option))
 			{
 				return `"${option}" is not a valid option! Valid options are "best" and "recent".`;
 			}
@@ -54,7 +54,7 @@ class OsuUserCommand extends Command
 		message: GuildMessage,
 		[query, mode, option]: [string, OsuMode, 'best' | 'recent' | undefined],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		if (option) return this.fetchScores(message, authorModel, query, mode, option);
 
@@ -81,7 +81,7 @@ class OsuUserCommand extends Command
 		return message.channel.send(embed);
 	}
 
-	private embed(message: GuildMessage, authorModel: UserModel, user: User): MessageEmbed 
+	private embed(message: GuildMessage, authorModel: UserModel, user: User): MessageEmbed
 	{
 		return MessageEmbed.common(message, authorModel)
 			.setAuthor(user.username, user.iconURL, user.profileURL)
@@ -94,7 +94,7 @@ class OsuUserCommand extends Command
 		query: string,
 		mode: OsuMode,
 		type: 'best' | 'recent',
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const user: User | undefined = await User.fetch(query);
 		if (!user) return message.reply('I could not find any user matching your query.');
@@ -106,7 +106,7 @@ class OsuUserCommand extends Command
 
 		const embed: MessageEmbed = this.embed(message, authorModel, user);
 
-		for (const score of scores) 
+		for (const score of scores)
 		{
 			const beatmap: Beatmap = await score.fetchBeatmap();
 			const mods: string = score.enabledMods;

@@ -18,11 +18,11 @@ import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedControll
 import { PermLevels } from '../../types/PermLevels';
 import { titleCase } from '../../util/Util';
 
-class HelpCommand extends Command implements IResponsiveEmbedController 
+class HelpCommand extends Command implements IResponsiveEmbedController
 {
 	public emojis: string[] = ['⬅', '➡'];
 
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['halp', 'commands'],
@@ -43,11 +43,11 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 		message: GuildMessage,
 		[name]: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[] | void> 
+	): Promise<Message | Message[] | void>
 	{
 		if (name) name = name.toLowerCase();
 
-		if (!name || name === 'all') 
+		if (!name || name === 'all')
 		{
 			const helpMessage: Message = await message.channel.send(this._mapCategories(message, authorModel)[0]) as Message;
 			for (const emoji of this.emojis) await helpMessage.react(emoji);
@@ -59,7 +59,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 			|| this._findCategory(message, name, authorModel);
 	}
 
-	public async onCollect({ emoji, users, message }: MessageReaction, user: User): Promise<Message | undefined> 
+	public async onCollect({ emoji, users, message }: MessageReaction, user: User): Promise<Message | undefined>
 	{
 		const [, rawPage]: RegExpExecArray = /.+? \u200b\| Page (\d+) \|/.exec(message.embeds[0].footer!.text!) || [] as any;
 		if (!rawPage) return;
@@ -74,13 +74,13 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 			member: message.guild!.member(user) || await message.guild!.members.fetch(user),
 		}, await user.fetchModel());
 
-		if (emoji.name === '➡') 
+		if (emoji.name === '➡')
 		{
 			++page;
 			if (page >= embeds.length) page = 0;
 
 		}
-		else if (emoji.name === '⬅') 
+		else if (emoji.name === '⬅')
 		{
 			if (page <= 0) page = embeds.length - 1;
 			else --page;
@@ -89,14 +89,14 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 		return message.edit(embeds[page]);
 	}
 
-	private _findCategory(message: GuildMessage, name: string, authorModel: UserModel): Promise<Message | Message[]> 
+	private _findCategory(message: GuildMessage, name: string, authorModel: UserModel): Promise<Message | Message[]>
 	{
 		let embed: MessageEmbed | undefined;
-		for (const command of this.handler._commands.values()) 
+		for (const command of this.handler._commands.values())
 		{
-			if (command.category.toLowerCase() === name) 
+			if (command.category.toLowerCase() === name)
 			{
-				if (!embed) 
+				if (!embed)
 				{
 					embed = MessageEmbed.common(message, authorModel)
 						.setAuthor(`${this.client.user!.username}'s ${titleCase(name)} Commands`)
@@ -121,11 +121,11 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 		message: GuildMessage,
 		name: string,
 		authorModel: UserModel,
-	): Promise<Message | Message[]> | undefined 
+	): Promise<Message | Message[]> | undefined
 	{
 		const command: Command | undefined = this.handler.resolveCommand(name);
 
-		if (!command) 
+		if (!command)
 		{
 			return undefined;
 		}
@@ -136,12 +136,12 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 			.setURL('https://thedragonproject.network/guild')
 			.setThumbnail(message.guild.iconURL());
 
-		if (message.guild.model.disabledCommands.includes(command.name)) 
+		if (message.guild.model.disabledCommands.includes(command.name))
 		{
 			embed.addField('Server-Wide Disabled', '\u200b');
 		}
 
-		if (command.aliases.length) 
+		if (command.aliases.length)
 		{
 			embed.addField('Aliases', `kanna ${command.aliases.join('\nkanna ')}`, true);
 		}
@@ -157,11 +157,11 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 	private _mapCategories(
 		{ author, member, guild }: { author: User; member: GuildMember; guild: Guild },
 		authorModel: UserModel,
-	): MessageEmbed[] 
+	): MessageEmbed[]
 	{
 		// Map all commands to their appropiate categories
 		const categories: Collection<string, Command[]> = new Collection();
-		for (const command of this.handler._commands.values()) 
+		for (const command of this.handler._commands.values())
 		{
 			const category: Command[] | undefined = categories.get(command.category);
 			if (!category) categories.set(command.category, [command]);
@@ -173,7 +173,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 
 		// Make embeds out of them
 		const embeds: MessageEmbed[] = [];
-		for (const [category, commands] of categories) 
+		for (const [category, commands] of categories)
 		{
 			const embed: MessageEmbed = MessageEmbed.common({ author }, authorModel)
 				.setThumbnail(guild.iconURL())
@@ -186,7 +186,7 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 
 			embed.footer!.text += ` \u200b| Page ${embeds.length + 1} | Help`;
 
-			for (const command of commands) 
+			for (const command of commands)
 			{
 				if (command.permLevel > permLevel) continue;
 				embed.addField(`kanna ${command.name}`, `k!${command.usage}`, true);

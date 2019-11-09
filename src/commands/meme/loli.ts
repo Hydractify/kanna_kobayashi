@@ -2,9 +2,9 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 import { Emojis } from '../../types/Emojis';
 
-class LoliCommand extends ImageEmbedCommand 
+class LoliCommand extends ImageEmbedCommand
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['kanna'],

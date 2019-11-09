@@ -2,9 +2,9 @@ import { Guild } from 'discord.js';
 
 import { Guild as GuildModel } from '../models/Guild';
 
-class GuildExtension 
+class GuildExtension
 {
-	public async fetchModel(this: Guild): Promise<GuildModel> 
+	public async fetchModel(this: Guild): Promise<GuildModel>
 	{
 		if (this.model) return this.model;
 

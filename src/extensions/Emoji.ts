@@ -1,15 +1,15 @@
 import { Emoji, SnowflakeUtil } from 'discord.js';
 
-class EmojiExtension 
+class EmojiExtension
 {
-	public get createdTimestamp(this: Emoji) 
+	public get createdTimestamp(this: Emoji): number | null
 	{
 		if (!this.id) return null;
 
 		return SnowflakeUtil.deconstruct(this.id).timestamp;
 	}
 
-	public get createdAt(this: Emoji) 
+	public get createdAt(this: Emoji): Date | null
 	{
 		if (!this.id) return null;
 

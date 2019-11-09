@@ -8,9 +8,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class HugCommand extends WeebCommand 
+class HugCommand extends WeebCommand
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			action: 'hugged',
@@ -27,7 +27,7 @@ class HugCommand extends WeebCommand
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: `You are so cute **${message.member.displayName}**!`,

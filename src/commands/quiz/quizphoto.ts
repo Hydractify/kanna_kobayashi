@@ -9,9 +9,9 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 import { titleCase } from '../../util/Util';
 
-class QuizPhotoCommand extends Command 
+class QuizPhotoCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['qphoto'],
@@ -27,9 +27,9 @@ class QuizPhotoCommand extends Command
 		});
 	}
 
-	public parseArgs(message: GuildMessage, [option, photo]: string[]): string | ['set', string] | ['view', undefined] 
+	public parseArgs(message: GuildMessage, [option, photo]: string[]): string | ['set', string] | ['view', undefined]
 	{
-		if (!option) 
+		if (!option)
 		{
 			return [
 				'you need to tell me whether you want to',
@@ -41,7 +41,7 @@ class QuizPhotoCommand extends Command
 
 		if (option === 'view') return ['view', undefined];
 
-		if (option === 'set') 
+		if (option === 'set')
 		{
 			if (!photo) return 'you need to give me the url to a picture of the character you want to set.';
 
@@ -56,11 +56,11 @@ class QuizPhotoCommand extends Command
 		message: GuildMessage,
 		[option, photo]: ['set', string] | ['view', undefined],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
 
-		if (option === 'view') 
+		if (option === 'view')
 		{
 			if (!quiz) return message.reply('there is no quiz set up.');
 
@@ -79,9 +79,9 @@ class QuizPhotoCommand extends Command
 		const confirmMessage: Message | DiscordAPIError = await (message.channel.send(embed) as Promise<Message>)
 			.catch((error: DiscordAPIError) => error);
 
-		if (confirmMessage instanceof DiscordAPIError) 
+		if (confirmMessage instanceof DiscordAPIError)
 		{
-			if (confirmMessage.code !== 50035) 
+			if (confirmMessage.code !== 50035)
 			{
 				// Some other error occured, abort here.
 				throw confirmMessage;
@@ -90,12 +90,12 @@ class QuizPhotoCommand extends Command
 			return message.reply('this does not look like a valid photo url.');
 		}
 
-		if (quiz) 
+		if (quiz)
 		{
 			quiz.photo = photo!;
 			await quiz.save();
 		}
-		else 
+		else
 		{
 			await message.guild.model.$create('quiz', {
 				guildId: message.guild.id,

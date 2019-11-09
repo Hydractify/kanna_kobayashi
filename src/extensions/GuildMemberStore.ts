@@ -2,22 +2,22 @@ import { Collection, Guild, GuildMemberStore } from 'discord.js';
 
 const { fetch } = GuildMemberStore.prototype;
 
-class GuildMemberStoreExtension 
+class GuildMemberStoreExtension
 {
-	public static get [Symbol.species](): typeof Collection 
+	public static get [Symbol.species](): typeof Collection
 	{
 		return Collection;
 	}
 
-	public async fetch(this: { guild: Guild } & GuildMemberStore, ...args: [any]): Promise<any> 
+	public async fetch(this: { guild: Guild } & GuildMemberStore, ...args: [any]): Promise<any>
 	{
-		try 
+		try
 		{
 			return await fetch.apply(this, args);
 		}
-		catch (error) 
+		catch (error)
 		{
-			if (error.code === 'GUILD_MEMBERS_TIMEOUT') 
+			if (error.code === 'GUILD_MEMBERS_TIMEOUT')
 			{
 				error.guild = this.guild.id;
 				error.memberCount = this.guild.memberCount;

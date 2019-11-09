@@ -10,9 +10,9 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { PermLevels } from '../../types/PermLevels';
 import { titleCase } from '../../util/Util';
 
-class QuizStartCommand extends Command 
+class QuizStartCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['qstart'],
@@ -29,10 +29,10 @@ class QuizStartCommand extends Command
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
-		if (!quiz || !quiz.name || !quiz.photo) 
+		if (!quiz || !quiz.name || !quiz.photo)
 		{
 			return message.reply([
 				'this guild does not have a quiz set up!',
@@ -51,7 +51,7 @@ class QuizStartCommand extends Command
 		const [firstName, ...lastNameArray]: string[] = quiz.name.split(/ +/);
 		const lastName: string = lastNameArray.join(' ');
 
-		const filter: CollectorFilter = (msg: Message): boolean => 
+		const filter: CollectorFilter = (msg: Message): boolean =>
 		{
 			const content: string = msg.content.toLowerCase();
 

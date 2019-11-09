@@ -9,9 +9,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class KissCommand extends WeebCommand 
+class KissCommand extends WeebCommand
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			action: 'kissed',
@@ -27,9 +27,9 @@ class KissCommand extends WeebCommand
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[] | undefined> 
+	): Promise<Message | Message[] | undefined>
 	{
-		if (members && members.size === 1) 
+		if (members && members.size === 1)
 		{
 			if (members.has(this.client.user!.id)) return message.reply(`h-hentai da! ${this.emoji}`);
 		}
@@ -55,13 +55,13 @@ class KissCommand extends WeebCommand
 		message: GuildMessage,
 		authorModel: UserModel,
 		members: Collection<Snowflake, IWeebResolvedMember>,
-	): Promise<boolean> 
+	): Promise<boolean>
 	{
 		// Has a partner?
-		if (authorModel.partnerId) 
+		if (authorModel.partnerId)
 		{
 			// Only allow one target
-			if (members.size > 1) 
+			if (members.size > 1)
 			{
 				await message.reply('you can only kiss your partner!');
 
@@ -69,7 +69,7 @@ class KissCommand extends WeebCommand
 			}
 
 			const target: IWeebResolvedMember = members.first()!;
-			if ([message.author.id, authorModel.partnerId].includes(target.member.id)) 
+			if ([message.author.id, authorModel.partnerId].includes(target.member.id))
 			{
 				return true;
 			}
@@ -80,10 +80,10 @@ class KissCommand extends WeebCommand
 		} // Has a partner
 
 		// Only one target?
-		if (members.size === 1) 
+		if (members.size === 1)
 		{
 			// Has it a partner?
-			if (members.first()!.partnerId) 
+			if (members.first()!.partnerId)
 			{
 				await message.reply(
 					`**${members.first()!.name}** has a partner! Canceling the command! ${this.emoji}`,
@@ -98,7 +98,7 @@ class KissCommand extends WeebCommand
 			members.filter((member: IWeebResolvedMember) => Boolean(member.partnerId));
 
 		// Do we have some?
-		if (filteredMembers.size) 
+		if (filteredMembers.size)
 		{
 			// Map their names
 			const names: string[] = filteredMembers.map((member: IWeebResolvedMember) => member.name);

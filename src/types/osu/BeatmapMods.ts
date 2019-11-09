@@ -51,11 +51,11 @@ export enum BeatmapModsFlags {
 
 import { BitField, BitFieldResolvable } from 'discord.js';
 
-export class BeatmapMods extends BitField<keyof typeof BeatmapModsFlags> 
+export class BeatmapMods extends BitField<keyof typeof BeatmapModsFlags>
 {
 	public static FLAGS = BeatmapModsFlags;
 
-	public static resolve(bit?: BitFieldResolvable<keyof typeof BeatmapModsFlags>): number 
+	public static resolve(bit?: BitFieldResolvable<keyof typeof BeatmapModsFlags>): number
 	{
 		return super.resolve(bit);
 	}

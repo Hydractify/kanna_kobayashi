@@ -9,9 +9,9 @@ import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
 const { APIErrors } = Constants;
 
-class BlockListCommand extends Command 
+class BlockListCommand extends Command
 {
-	constructor(handler: CommandHandler) 
+	constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			description: 'Block a user, disallowing them from using any interactive commands on you.',
@@ -25,17 +25,17 @@ class BlockListCommand extends Command
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const blocked: UserModel[] = await authorModel.$get('blocked') as UserModel[];
 
-		try 
+		try
 		{
-			if (!blocked.length) 
+			if (!blocked.length)
 			{
 				await message.author.send('You did not block anybody.');
 			}
-			else 
+			else
 			{
 				const tags: string[] = await Promise
 					.all(blocked.map(
@@ -45,9 +45,9 @@ class BlockListCommand extends Command
 					);
 
 				let out: string = '';
-				for (const tag of tags) 
+				for (const tag of tags)
 				{
-					if (tag.length + tags.length > 1900) 
+					if (tag.length + tags.length > 1900)
 					{
 						out += '...';
 						break;
@@ -62,9 +62,9 @@ class BlockListCommand extends Command
 
 			return message.reply('sent you the requested info.');
 		}
-		catch (e) 
+		catch (e)
 		{
-			if ((e as DiscordAPIError).code === APIErrors.CANNOT_MESSAGE_USER) 
+			if ((e as DiscordAPIError).code === APIErrors.CANNOT_MESSAGE_USER)
 			{
 				return message.reply([
 					'I have failed to send a DM to you!',

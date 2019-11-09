@@ -1,9 +1,9 @@
 import { CommandHandler } from '../../structures/CommandHandler';
 import { ImageEmbedCommand } from '../../structures/ImageEmbedCommand';
 
-class PopcornCommand extends ImageEmbedCommand 
+class PopcornCommand extends ImageEmbedCommand
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['dreck'],

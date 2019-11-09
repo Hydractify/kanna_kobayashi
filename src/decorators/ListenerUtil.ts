@@ -1,4 +1,4 @@
-// tslint:disable
+/* eslint-disable */
 
 /**
  * MIT License
@@ -7,18 +7,17 @@
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation
  * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
  * to permit persons to whom the Software is furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
  * Software.
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
  * OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- * 
+ *
  * Repo: https://github.com/zajrik/yamdbf
  * File: https://github.com/zajrik/yamdbf/blob/bb0939603e3cc3874262749c92486032d4339b83/src/util/ListenerUtil.ts
  */
-
 
 import 'reflect-metadata';
 import { EventEmitter } from 'events';
@@ -43,7 +42,7 @@ interface ListenerMetadata {
  * the old fashioned `<EventEmitter>on/once(...)` way
  * @module ListenerUtil
  */
-export class ListenerUtil 
+export class ListenerUtil
 {
 	/**
 	 * Attaches any listeners registered via the `on` or `once` decorators.
@@ -58,7 +57,7 @@ export class ListenerUtil
 	 * @param {object} [listenerSource] Object with registered methods to link events to
 	 * @returns {void}
 	 */
-	public static registerListeners(emitter: EventEmitter, listenerSource?: object): void 
+	public static registerListeners(emitter: EventEmitter, listenerSource?: object): void
 	{
 		if (!(emitter instanceof EventEmitter))
 		{
@@ -69,7 +68,7 @@ export class ListenerUtil
 		if (typeof Reflect.getMetadata('listeners', listenerTarget.constructor.prototype) === 'undefined') return;
 
 		const metaDataTarget: any = listenerTarget.constructor.prototype;
-		for (const listener of <ListenerMetadata[]>Reflect.getMetadata('listeners', metaDataTarget)) 
+		for (const listener of <ListenerMetadata[]>Reflect.getMetadata('listeners', metaDataTarget))
 		{
 			if (!(<any>listenerTarget)[listener.method]) continue;
 			if (listener.attached) continue;
@@ -96,7 +95,7 @@ export class ListenerUtil
 	 * 						  Will be passed after any args passed by the event
 	 * @returns {MethodDecorator}
 	 */
-	public static on(event: string, ...args: any[]): MethodDecorator 
+	public static on(event: string, ...args: any[]): MethodDecorator
 	{
 		return ListenerUtil._setListenerMetadata(event, false, ...args);
 	}
@@ -116,7 +115,7 @@ export class ListenerUtil
 	 * 						  Will be passed after any args passed by the event
 	 * @returns {MethodDecorator}
 	 */
-	public static once(event: string, ...args: any[]): MethodDecorator 
+	public static once(event: string, ...args: any[]): MethodDecorator
 	{
 		return ListenerUtil._setListenerMetadata(event, true, ...args);
 	}
@@ -126,9 +125,9 @@ export class ListenerUtil
 	 * metadata for a class method
 	 * @private
 	 */
-	private static _setListenerMetadata(event: string, once: boolean, ...args: any[]): MethodDecorator 
+	private static _setListenerMetadata(event: string, once: boolean, ...args: any[]): MethodDecorator
 	{
-		return function <T>(target: Record<string, any>, key: PropertyKey, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> 
+		return function <T>(target: Record<string, any>, key: PropertyKey, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>
 		{
 			const listeners: ListenerMetadata[] = Reflect.getMetadata('listeners', target) || [];
 			listeners.push({ event, method: key, once, args });

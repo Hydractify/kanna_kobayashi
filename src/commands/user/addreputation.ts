@@ -6,9 +6,9 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { UserReputationTypes } from '../../types/UserReputationTypes';
 
-class AddReputationCommand extends Command 
+class AddReputationCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['rep', 'addrep', '++'],
@@ -22,7 +22,7 @@ class AddReputationCommand extends Command
 	public async parseArgs(
 		message: GuildMessage,
 		[target]: string[],
-	): Promise<string | [GuildMember, UserReputation | null]> 
+	): Promise<string | [GuildMember, UserReputation | null]>
 	{
 		if (!target) return 'you need to tell me who you want to add a positive reputation to.';
 
@@ -36,7 +36,7 @@ class AddReputationCommand extends Command
 			},
 		});
 
-		if (already && already.type === UserReputationTypes.POSITIVE) 
+		if (already && already.type === UserReputationTypes.POSITIVE)
 		{
 			return `you already added a postive reputation to **${member.user.tag}**.`;
 		}
@@ -47,9 +47,9 @@ class AddReputationCommand extends Command
 	public async run(
 		message: GuildMessage,
 		[member, already]: [GuildMember, UserReputation | null],
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
-		if (already) 
+		if (already)
 		{
 			already.type = UserReputationTypes.POSITIVE;
 			await already.save();
@@ -59,7 +59,7 @@ class AddReputationCommand extends Command
 				`**${member.user.tag}** to be positive.`,
 			].join(' '));
 		}
-		else 
+		else
 		{
 			// To ensure the user exists in the database
 			await member.user.fetchModel();

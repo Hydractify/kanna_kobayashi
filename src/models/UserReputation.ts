@@ -9,7 +9,7 @@ import { UserReputationTypes } from '../types/UserReputationTypes';
 	underscored: true,
 	updatedAt: false,
 })
-export class UserReputation extends Model<UserReputation> 
+export class UserReputation extends Model<UserReputation>
 {
 	/**
 	 * Target id

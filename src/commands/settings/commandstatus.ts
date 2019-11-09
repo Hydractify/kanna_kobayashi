@@ -5,9 +5,9 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 
-class CommandStatusCommand extends Command 
+class CommandStatusCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			description: 'See whether a command is enabled or disabled',
@@ -18,7 +18,7 @@ class CommandStatusCommand extends Command
 		});
 	}
 
-	public parseArgs(message: GuildMessage, args: string[]): Command[] | string[] | string 
+	public parseArgs(message: GuildMessage, args: string[]): Command[] | string[] | string
 	{
 		if (!args.length) return args;
 
@@ -32,13 +32,13 @@ class CommandStatusCommand extends Command
 	public async run(
 		message: GuildMessage,
 		[command]: [Command | undefined],
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const guildModel: Guild = message.guild.model;
 
-		if (!command) 
+		if (!command)
 		{
-			if (!guildModel.disabledCommands.length) 
+			if (!guildModel.disabledCommands.length)
 			{
 				return message.reply([
 					'there are currently no commands server wide disabled.',

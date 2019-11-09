@@ -7,9 +7,9 @@ import { MediaType } from '../../types/anilist/MediaType';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class MangaCommand extends AniListCommand<IMedia> 
+class MangaCommand extends AniListCommand<IMedia>
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
@@ -24,7 +24,7 @@ class MangaCommand extends AniListCommand<IMedia>
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		if (!args.length) return message.reply('you have to tell me what manga you are looking for!');
 

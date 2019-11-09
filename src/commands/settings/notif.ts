@@ -5,9 +5,9 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
-class NotifChannelCommand extends Command 
+class NotifChannelCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['notif-channel', 'notif', 'notif_channel'],
@@ -24,18 +24,18 @@ class NotifChannelCommand extends Command
 		});
 	}
 
-	public async run(message: GuildMessage, [target]: string[]): Promise<Message | Message[]> 
+	public async run(message: GuildMessage, [target]: string[]): Promise<Message | Message[]>
 	{
 		// Nothing passed, show current
-		if (!target) 
+		if (!target)
 		{
 			const alreadyChannel: GuildChannel | undefined = message.guild.channels
 				.get(message.guild.model.notificationChannelId!);
-			if (alreadyChannel) 
+			if (alreadyChannel)
 			{
 				return message.reply(`the current channel for welcome and farewell messages is ${alreadyChannel}.`);
 			}
-			if (message.guild.model.notificationChannelId) 
+			if (message.guild.model.notificationChannelId)
 			{
 				message.guild.model.notificationChannelId = null;
 				await message.guild.model.save();
@@ -45,9 +45,9 @@ class NotifChannelCommand extends Command
 		}
 
 		// "remove" passed, remove
-		if (target.toLowerCase() === 'remove') 
+		if (target.toLowerCase() === 'remove')
 		{
-			if (message.guild.model.notificationChannelId) 
+			if (message.guild.model.notificationChannelId)
 			{
 				message.guild.model.notificationChannelId = null;
 				await message.guild.model.save();
@@ -62,7 +62,7 @@ class NotifChannelCommand extends Command
 		let channel: GuildChannel | undefined;
 		// This will go to resolve channel for CommandHandler if somewhere else required
 		const match: RegExpExecArray | null = /^<#(\d{17,19})>$|^(\d{17,19})$/.exec(target);
-		if (match) 
+		if (match)
 		{
 			const which: string = match[1] || match[2];
 			channel = message.guild.channels.get(which);
@@ -71,7 +71,7 @@ class NotifChannelCommand extends Command
 		target = target.toLowerCase();
 		// You never know
 		if (target[0] === '#') target = target.slice(1);
-		if (!channel) 
+		if (!channel)
 		{
 			channel = message.guild.channels.find(
 				(c: GuildChannel) => c.type === 'text' && c.name.toLowerCase() === target,
@@ -81,7 +81,7 @@ class NotifChannelCommand extends Command
 		if (!channel) return message.reply(`I could not find a channel with **${target}**.`);
 
 		// Be sure that we can send messages to the specified channel
-		if (!channel.permissionsFor(this.client.user!)!.has('SEND_MESSAGES')) 
+		if (!channel.permissionsFor(this.client.user!)!.has('SEND_MESSAGES'))
 		{
 			return message.reply(`I do not have permissions to send messages in ${channel}.`);
 		}

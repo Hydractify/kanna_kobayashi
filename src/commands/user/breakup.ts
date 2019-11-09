@@ -8,9 +8,9 @@ import { Emojis } from '../../types/Emojis';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class BreakUpCommand extends Command 
+class BreakUpCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['divorce'],
@@ -26,7 +26,7 @@ class BreakUpCommand extends Command
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		if (!authorModel.partnerId) return message.reply(`you do not have a partner! ${Emojis.KannaShy}`);
 		const partnerModel: UserModel = await authorModel.$get<UserModel>('partner') as UserModel;

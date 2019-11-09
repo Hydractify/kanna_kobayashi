@@ -2,13 +2,13 @@ import { MessageEmbed as DJSMessageEmbed, MessageEmbedOptions, User } from 'disc
 
 import { User as UserModel } from '../models/User';
 
-export class MessageEmbed extends DJSMessageEmbed 
+export class MessageEmbed extends DJSMessageEmbed
 {
 	/**
 	 * Build a common MessageEmbed instance from a message.
 	 * This will set the color and footer.
 	 */
-	public static common({ author }: { author: User }, model: UserModel): MessageEmbed 
+	public static common({ author }: { author: User }, model: UserModel): MessageEmbed
 	{
 		return new this()
 			.setColor(model.color)
@@ -18,7 +18,7 @@ export class MessageEmbed extends DJSMessageEmbed
 	/**
 	 * Build an image MessageEmbed instance, inherited properties from a common one, adds an image.
 	 */
-	public static image(message: { author: User }, model: UserModel, url: string): MessageEmbed 
+	public static image(message: { author: User }, model: UserModel, url: string): MessageEmbed
 	{
 		return this.common(message, model)
 			.setImage(url);
@@ -27,11 +27,11 @@ export class MessageEmbed extends DJSMessageEmbed
 	/**
 	 * Split up a long string into multiple fields for the embed.
 	 */
-	public splitToFields(title: string = '\u200b', text: string, inline: boolean = false): this 
+	public splitToFields(title: string = '\u200b', text: string, inline: boolean = false): this
 	{
 		const chunks: RegExpMatchArray = text.match(/(.|[\r\n]){1,1024}/g)!;
 
-		for (const [i, chunk] of chunks.entries()) 
+		for (const [i, chunk] of chunks.entries())
 		{
 			this.addField(i ? '\u200b' : title, chunk, inline);
 		}
@@ -42,17 +42,17 @@ export class MessageEmbed extends DJSMessageEmbed
 	/**
 	 * Hack to change the accessibility level of _apiTransform.
 	 */
-	public apiTransform(): MessageEmbedOptions 
+	public apiTransform(): MessageEmbedOptions
 	{
 		return (this as any)._apiTransform();
 	}
 
-	public setThumbnail(thumbnail: string | null): this 
+	public setThumbnail(thumbnail: string | null): this
 	{
 		return super.setThumbnail(thumbnail!);
 	}
 
-	public setAuthor(name: any, iconURL?: string | null, url?: string): this 
+	public setAuthor(name: any, iconURL?: string | null, url?: string): this
 	{
 		return super.setAuthor(name, iconURL!, url);
 	}
@@ -61,10 +61,10 @@ export class MessageEmbed extends DJSMessageEmbed
 // Messing with original prototype instead of the extended one because d.js internally uses their own embed class
 const { _apiTransform }: { _apiTransform: () => object } = DJSMessageEmbed.prototype as any;
 Object.defineProperty(DJSMessageEmbed.prototype, '_apiTransform', {
-	value(this: MessageEmbed) 
+	value(this: MessageEmbed)
 	{
 		// It's not possible to exceed the limit without fields
-		if (this.fields && this.fields.length) 
+		if (this.fields && this.fields.length)
 		{
 			let count: number = 0;
 			// Max 256 chars
@@ -76,12 +76,12 @@ Object.defineProperty(DJSMessageEmbed.prototype, '_apiTransform', {
 			// Max 2048 chars, yes you read correctly
 			if (this.footer && this.footer.text) count += this.footer.text.length;
 
-			for (let i: number = 0; i < this.fields.length; ++i) 
+			for (let i: number = 0; i < this.fields.length; ++i)
 			{
 				const field: { name: string; value: string } = this.fields[i];
 
 				count += field.name.length;
-				if (count >= 6000) 
+				if (count >= 6000)
 				{
 					this.fields = this.fields.slice(0, i);
 					this.fields[i - 1].value = `${this.fields[i - 1].value.slice(0, -3)}...`;
@@ -89,7 +89,7 @@ Object.defineProperty(DJSMessageEmbed.prototype, '_apiTransform', {
 				}
 
 				count += field.value.length;
-				if (count >= 6000) 
+				if (count >= 6000)
 				{
 					this.fields = this.fields.slice(0, i + 1);
 					field.value = `${field.value.slice(0, 6000 - count - 3)}...`;

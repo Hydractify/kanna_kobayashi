@@ -5,9 +5,9 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
-class RemovePrefixCommand extends Command 
+class RemovePrefixCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			description: 'Removes the custom prefix.',
@@ -19,7 +19,7 @@ class RemovePrefixCommand extends Command
 		});
 	}
 
-	public async run(message: GuildMessage): Promise<Message | Message[]> 
+	public async run(message: GuildMessage): Promise<Message | Message[]>
 	{
 		if (!message.guild.model.prefix) return message.reply('there is no custom prefix set up.');
 

@@ -8,9 +8,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class LickCommand extends WeebCommand 
+class LickCommand extends WeebCommand
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			action: 'licked',
@@ -26,9 +26,9 @@ class LickCommand extends WeebCommand
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
-		if (members && members.size === 1) 
+		if (members && members.size === 1)
 		{
 			if (members.has(this.client.user!.id)) return message.reply('do not dare to touch that tongue on me! Hentai! ');
 		}

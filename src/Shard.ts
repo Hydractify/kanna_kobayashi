@@ -12,20 +12,18 @@ import { WebhookLogger } from './structures/WebhookLogger';
 const webhook: WebhookLogger = WebhookLogger.instance;
 webhook.info('Manager Spawn', 'Manager', 'Manager spawned.');
 
-process.on('unhandledRejection', (error: {} | null | undefined, promise: Promise<any>) => 
-{
-	webhook.error('REJECTION', 'Manager', error);
-});
+process.on('unhandledRejection', (error: {} | null | undefined) => webhook.error('REJECTION', 'Manager', error));
 
+/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { clientToken: token, httpPort }: { clientToken: string; httpPort: number } = require('../data');
 
 const manager: ShardingManager = new ShardingManager(join(__dirname, 'index.js'), {
 	token,
 });
 
-manager.spawn(manager.totalShards, 5500, Infinity);
+manager.spawn(manager.totalShards, 5500, false);
 
-manager.on('shardCreate', (shard: Shard) => 
+manager.on('shardCreate', (shard: Shard) =>
 {
 	webhook.info('Shard Create', shard.id, 'Shard created.');
 	shard
@@ -34,23 +32,23 @@ manager.on('shardCreate', (shard: Shard) =>
 		.on('spawn', () => webhook.warn('Shard Spawn', shard.id, 'Shard spawned.'));
 });
 
-createServer(async (req: IncomingMessage, res: ServerResponse): Promise<void> => 
+createServer(async (req: IncomingMessage, res: ServerResponse): Promise<void> =>
 {
-	try 
+	try
 	{
-		if (parse(req.url!).pathname === '/metrics') 
+		if (parse(req.url!).pathname === '/metrics')
 		{
 			const metrics: object[][] = await manager.broadcastEval('this.getMetrics()');
 			res.writeHead(200, { 'content-type': register.contentType });
 			res.write(AggregatorRegistry.aggregate(metrics).metrics());
 		}
-		else 
+		else
 		{
 			res.writeHead(404, { 'content-type': register.contentType });
 			res.write('Route not found');
 		}
 	}
-	catch (e) 
+	catch (e)
 	{
 		webhook.error('Prometheus', 'Manager', e);
 

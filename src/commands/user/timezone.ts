@@ -5,9 +5,9 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class TimezoneCommand extends Command 
+class TimezoneCommand extends Command
 {
-	constructor(handler: CommandHandler) 
+	constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['tz'],
@@ -22,9 +22,9 @@ class TimezoneCommand extends Command
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): (number | string)[] | string 
+	): (number | string)[] | string
 	{
-		if (authorModel.timezone !== null && !args.length) 
+		if (authorModel.timezone !== null && !args.length)
 		{
 			const timezone = authorModel.timezone as number > 0 ? `+${authorModel.timezone}` : authorModel.timezone;
 			return `your timezone set is **${timezone}**.`;
@@ -33,7 +33,7 @@ class TimezoneCommand extends Command
 		if (args[0] === 'remove') return args;
 
 		const offset: number = parseInt(args[0]);
-		if ((!offset && offset !== 0) || offset > 12 || Math.abs(offset) > 12) 
+		if ((!offset && offset !== 0) || offset > 12 || Math.abs(offset) > 12)
 		{
 			return `**${args[0]}** is not a valid timezone!`;
 		}
@@ -45,9 +45,9 @@ class TimezoneCommand extends Command
 		message: GuildMessage,
 		[offset]: number[] | string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
-		if (typeof offset === 'string') 
+		if (typeof offset === 'string')
 		{
 			authorModel.timezone = null;
 			authorModel.save();

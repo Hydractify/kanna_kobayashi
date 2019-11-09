@@ -35,7 +35,7 @@ const readdirAsync = promisify(readdir);
  * Handles incoming messages and executes commands if applicable.
  */
 @Loggable('HANDLER')
-export class CommandHandler 
+export class CommandHandler
 {
 	/**
 	 * Collection of all registered commands
@@ -75,7 +75,7 @@ export class CommandHandler
 	/**
 	 * Instantiate a new command handler
 	 */
-	public constructor(client: Client) 
+	public constructor(client: Client)
 	{
 		this.client = client;
 
@@ -89,13 +89,13 @@ export class CommandHandler
 		registerListeners(client, this);
 	}
 
-	public async loadCategoriesIn(path: string): Promise<void> 
+	public async loadCategoriesIn(path: string): Promise<void>
 	{
 		const folders: string[] = await readdirAsync(path);
 		for (const folder of folders) this.loadCommandsIn(path, folder);
 	}
 
-	public loadCommand(path: string, folder: string, file?: string): void 
+	public loadCommand(path: string, folder: string, file?: string): void
 	{
 		const location: string = file
 			? join(path, folder, file)
@@ -108,7 +108,7 @@ export class CommandHandler
 		command.category = folder;
 
 		const existing: Command | undefined = this._commands.get(command.name);
-		if (existing) 
+		if (existing)
 		{
 			throw new Error(
 				`${commandConstructor.name}: Command name "${command.name}" already in use by ${existing.constructor.name}!`,
@@ -116,10 +116,10 @@ export class CommandHandler
 		}
 
 		this._commands.set(command.name, command);
-		for (const alias of command.aliases) 
+		for (const alias of command.aliases)
 		{
 			const existingAlias: string | undefined = this._aliases.get(alias);
-			if (existingAlias) 
+			if (existingAlias)
 			{
 				const name: string = this._commands.get(existingAlias)!.constructor.name;
 				throw new Error(
@@ -130,24 +130,24 @@ export class CommandHandler
 		}
 	}
 
-	public async loadCommandsIn(path: string, folder: string): Promise<void> 
+	public async loadCommandsIn(path: string, folder: string): Promise<void>
 	{
 		const files: string[] = await readdirAsync(join(path, folder));
 		let failed: number = 0;
-		for (const file of files) 
+		for (const file of files)
 		{
-			if (extname(file) !== '.js') 
+			if (extname(file) !== '.js')
 			{
 				++failed;
 
 				continue;
 			}
 
-			try 
+			try
 			{
 				this.loadCommand(path, folder, file);
 			}
-			catch (error) 
+			catch (error)
 			{
 				++failed;
 
@@ -166,7 +166,7 @@ export class CommandHandler
 		this.logger.info(`Loaded ${files.length - failed} ${folder} commands.`);
 	}
 
-	public async reloadCommand(command: string | Command): Promise<void> 
+	public async reloadCommand(command: string | Command): Promise<void>
 	{
 		if (!(command instanceof Command)) command = this.resolveCommand(command)!;
 		if (!command) throw new Error('Could not find the specified command!');
@@ -176,20 +176,20 @@ export class CommandHandler
 		await command.free();
 
 		this._commands.delete(command.name);
-		for (const alias of command.aliases) 
+		for (const alias of command.aliases)
 		{
 			this._aliases.delete(alias);
 		}
 
-		try 
+		try
 		{
 			this.loadCommand(command.location, command.category);
 		}
-		catch (error) 
+		catch (error)
 		{
 			// Re-register old command on error
 			this._commands.set(command.name, command);
-			for (const alias of command.aliases) 
+			for (const alias of command.aliases)
 			{
 				this._aliases.set(alias, command.name);
 			}
@@ -201,7 +201,7 @@ export class CommandHandler
 	/**
 	 * Resolves a command by command name or alias
 	 */
-	public resolveCommand(commandName: string): Command | undefined 
+	public resolveCommand(commandName: string): Command | undefined
 	{
 		return this._commands.get(commandName)
 			|| this._commands.get(this._aliases.get(commandName)!);
@@ -209,10 +209,10 @@ export class CommandHandler
 
 	@on('message')
 	@RavenContext
-	protected async handle(message: Message): Promise<void> 
+	protected async handle(message: Message): Promise<void>
 	{
 		// Ignore dms
-		if (message.channel instanceof DMChannel) 
+		if (message.channel instanceof DMChannel)
 		{
 			this.client.channels.remove(message.channel.id);
 			await message.channel.delete().catch(() => null);
@@ -222,7 +222,7 @@ export class CommandHandler
 		}
 
 		// Ignore system messages
-		if (message.system) 
+		if (message.system)
 		{
 			message.channel.messages.delete(message.id);
 
@@ -235,18 +235,18 @@ export class CommandHandler
 			&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text!)
 		) return;
 
-		try 
+		try
 		{
 			if (!isGuildMessage(message) || message.author.bot) return;
 
-			if (!message.member) 
+			if (!message.member)
 			{
 				captureMessage('Uncached member',
 					{
 						extra: {
 							author: message.author.toJSON(),
-							member_api_count: message.guild.memberCount,
-							member_cache_count: message.guild.members.size,
+							memberApiCount: message.guild.memberCount,
+							memberCacheCount: message.guild.members.size,
 							message: message.toJSON(),
 						},
 						level: 'warn',
@@ -263,12 +263,12 @@ export class CommandHandler
 					content: message.content,
 					guild: `${message.guild.name} (${message.guild.id})`,
 					permissions: {
-						member_channel: message.channel.permissionsFor(message.member),
-						member_guild: message.member.permissions,
-						self_channel: message.channel.permissionsFor(this.client.user!),
-						self_guild: message.guild.me!.permissions,
+						memberChannel: message.channel.permissionsFor(message.member),
+						memberGuild: message.member.permissions,
+						selfChannel: message.channel.permissionsFor(this.client.user!),
+						selfGuild: message.guild.me!.permissions,
 					},
-					shard_ids: this.client.shard!.ids.map((id: number) => id.toLocaleString()).join(', '),
+					shardIds: this.client.shard!.ids.map((id: number) => id.toLocaleString()).join(', '),
 				},
 				level: 'debug',
 			});
@@ -291,7 +291,7 @@ export class CommandHandler
 			if (authorModel.type === UserTypes.BLACKLISTED) return;
 			if (ownerModel.type === UserTypes.BLACKLISTED) return;
 
-			if (!message.channel.permissionsFor(message.guild.me!)!.has('SEND_MESSAGES')) 
+			if (!message.channel.permissionsFor(message.guild.me!)!.has('SEND_MESSAGES'))
 			{
 				message.author.send('I do not have permission to send in the channel of your command!')
 					.catch(() => undefined);
@@ -301,19 +301,19 @@ export class CommandHandler
 
 			const canCallRes: true | string = await command.canCall(message, authorModel);
 
-			if (typeof canCallRes === 'string') 
+			if (typeof canCallRes === 'string')
 			{
 				await message.reply(canCallRes);
 
 				return;
 			}
 
-			try 
+			try
 			{
 				const parsedArgs: any[] | string | MessageOptions | MessageEmbed | MessageAttachment
 					= await command.parseArgs(message, args, { authorModel, commandName, args });
 
-				if (!(parsedArgs instanceof Array)) 
+				if (!(parsedArgs instanceof Array))
 				{
 					await message.reply(parsedArgs);
 
@@ -329,24 +329,24 @@ export class CommandHandler
 				await command.run(message, parsedArgs, { authorModel, commandName, args });
 
 				const newLevel: number | void = await command.grantRewards(message.author, authorModel);
-				if (newLevel && guildModel.levelUpEnabled) 
+				if (newLevel && guildModel.levelUpEnabled)
 				{
 					await message.reply(`you advanced to level **${newLevel}**! ${Emojis.KannaHug}`);
 				}
 			}
-			catch (error) 
+			catch (error)
 			{
 				this.client.errorCount.inc({ type: 'Command' });
 				captureException(error, {
 					extra: {
-						channel_deleted: message.channel.deleted,
-						guild_deleted: message.guild.deleted,
-						message_deleted: message.deleted,
+						channelDeleted: message.channel.deleted,
+						guildDeleted: message.guild.deleted,
+						messageDeleted: message.deleted,
 						permissions: {
-							member_channel: message.channel.permissionsFor(message.member),
-							member_guild: message.member.permissions,
-							self_channel: message.channel.permissionsFor(this.client.user!),
-							self_guild: message.guild.me!.permissions,
+							memberChannel: message.channel.permissionsFor(message.member),
+							memberGuild: message.member.permissions,
+							selfChannel: message.channel.permissionsFor(this.client.user!),
+							selfGuild: message.guild.me!.permissions,
 						},
 					},
 					// Sentry does not allow to filter based on breadcrumbs, but via tags
@@ -361,14 +361,14 @@ export class CommandHandler
 				).catch(() => null);
 			}
 		}
-		finally 
+		finally
 		{
 			message.channel.messages.delete(message.id);
 		}
 	}
 
 	private _matchCommand(message: Message, guildModel: GuildModel):
-	[Command, string, string[]] | [undefined, undefined, undefined] 
+	[Command, string, string[]] | [undefined, undefined, undefined]
 	{
 		const prefixes: string[] = guildModel.prefix ? this._prefixes.concat(guildModel.prefix) : this._prefixes;
 		const match: RegExpExecArray | null = new RegExp(`^(${prefixes.join(' *|')})`, 'i').exec(message.content);

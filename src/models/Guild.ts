@@ -9,7 +9,7 @@ import { Quiz } from './Quiz';
 	underscored: true,
 	updatedAt: false,
 })
-export class Guild extends Model<Guild> 
+export class Guild extends Model<Guild>
 {
 	@Column({
 		field: 'farewell_message',
@@ -41,7 +41,7 @@ export class Guild extends Model<Guild>
 	public notificationChannelId!: string | null;
 
 	@Column({
-		set(this: Model<Guild>, value: string): void 
+		set(this: Model<Guild>, value: string): void
 		{
 			this.setDataValue('prefix', value ? value.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') : null);
 		},

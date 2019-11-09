@@ -4,9 +4,9 @@ import { APIRouter, buildRouter } from '../structures/Api';
 import { Client } from '../structures/Client';
 import { Logger } from '../structures/Logger';
 
+/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { dbotsorg }: { [key: string]: string } = require('../../data.json');
 
-// tslint:disable-next-line:variable-name
 const DBotsOrg: () => APIRouter = buildRouter({
 	baseURL: 'https://discordbots.org',
 	defaultHeaders: {
@@ -16,7 +16,7 @@ const DBotsOrg: () => APIRouter = buildRouter({
 	},
 });
 
-export async function updateBotLists(this: Client): Promise<void> 
+export async function updateBotLists(this: Client): Promise<void>
 {
 	const count: number = await this.shard!.fetchClientValues('guilds.size')
 		.then((res: number[]) => res.reduce((p: number, c: number) => p + c));
@@ -24,15 +24,17 @@ export async function updateBotLists(this: Client): Promise<void>
 	// No webhook, that would just spam
 	Logger.instance.debug('BotLists', `Updating guild count for bot lists to ${count} guilds.`);
 
+	/* eslint-disable-next-line @typescript-eslint/camelcase */
 	const data: { server_count: number } = { server_count: count };
 
-	try 
+	try
 	{
 		await DBotsOrg().api.bots(this.user!.id).stats.post({ data });
 	}
-	catch (error) 
+	catch (error)
 	{
 		captureException(error, {
+			/* eslint-disable-next-line @typescript-eslint/camelcase */
 			extra: { guild_count: count },
 			tags: { service: 'dbotsorg' },
 		});

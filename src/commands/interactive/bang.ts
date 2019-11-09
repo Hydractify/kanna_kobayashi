@@ -8,9 +8,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class BangCommand extends WeebCommand 
+class BangCommand extends WeebCommand
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			action: 'shot',
@@ -27,11 +27,11 @@ class BangCommand extends WeebCommand
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
-		if (members) 
+		if (members)
 		{
-			if (members.has(this.client.user!.id)) 
+			if (members.has(this.client.user!.id))
 			{
 				return message.reply(
 					`get away from me with that pistol or I will destroy you, human! ${this.emoji}`,

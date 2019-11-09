@@ -5,9 +5,9 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 
-class RestartCommand extends Command 
+class RestartCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			description: 'Restarts Kanna!',
@@ -19,9 +19,9 @@ class RestartCommand extends Command
 		});
 	}
 
-	public async run(message: GuildMessage, [shardNumber]: string[]): Promise<Message | Message[]> 
+	public async run(message: GuildMessage, [shardNumber]: string[]): Promise<Message | Message[]>
 	{
-		if (!shardNumber) 
+		if (!shardNumber)
 		{
 			await message.reply('Restarting!');
 			return this.client.shard!.broadcastEval('process.exit(0)');

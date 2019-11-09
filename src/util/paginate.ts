@@ -19,15 +19,15 @@
  * File in question: https://github.com/Gawdl3y/discord.js-commando/blob/ea63abfb1cc31c12e5904d9a4919401ccd24e43c/src/util.js#L6
  */
 
-export interface PaginatedPage<T> {
+export interface IPaginatedPage<T> {
 	items: T[];
 	maxPage: number;
 	page: number;
 	pageLength: number;
 }
 
-export const paginate: <T>(items: T[], page: number, pageLength: number) => PaginatedPage<T>
-	= <T>(items: T[], page: number, pageLength: number): PaginatedPage<T> => 
+export const paginate: <T>(items: T[], page: number, pageLength: number) => IPaginatedPage<T>
+	= <T>(items: T[], page: number, pageLength: number): IPaginatedPage<T> =>
 	{
 		const maxPage: number = Math.ceil(items.length / pageLength);
 		if (page < 1) page = 1;

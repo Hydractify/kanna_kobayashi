@@ -7,9 +7,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
 import { UserTypes } from '../../types/UserTypes';
 
-class WhitelistCommand extends Command 
+class WhitelistCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			cooldown: 0,
@@ -22,7 +22,7 @@ class WhitelistCommand extends Command
 		});
 	}
 
-	public async run(message: GuildMessage, [target, remove]: [string, string]): Promise<Message | Message[]> 
+	public async run(message: GuildMessage, [target, remove]: [string, string]): Promise<Message | Message[]>
 	{
 		// To allow nicknames, I am so sure they will be used.
 		const user: User | undefined = await this.resolver.resolveMember(target, message.guild, false)
@@ -30,14 +30,14 @@ class WhitelistCommand extends Command
 		if (!user) return message.reply(`I could not find a non-bot user by ${target}!`);
 
 		const targetModel: UserModel = await user.fetchModel();
-		if (['DEV', 'TRUSTED'].includes(targetModel.type!)) 
+		if (['DEV', 'TRUSTED'].includes(targetModel.type!))
 		{
 			return message.reply('devs or trusted users can not be whitelisted. Maybe entered the wrong user?');
 		}
 
-		if (targetModel.type === UserTypes.WHITELISTED) 
+		if (targetModel.type === UserTypes.WHITELISTED)
 		{
-			if (remove === 'remove') 
+			if (remove === 'remove')
 			{
 				targetModel.type = null;
 				await targetModel.save();
@@ -47,7 +47,7 @@ class WhitelistCommand extends Command
 
 			return message.reply(`**${user.tag}** is already whitelisted.`);
 		}
-		else if (remove === 'remove') 
+		else if (remove === 'remove')
 		{
 			return message.reply(`**${user.tag}** is not whitelisted.`);
 		}

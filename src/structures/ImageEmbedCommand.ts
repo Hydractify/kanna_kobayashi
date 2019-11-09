@@ -6,7 +6,7 @@ import { Command } from './Command';
 import { CommandHandler } from './CommandHandler';
 import { MessageEmbed } from './MessageEmbed';
 
-export abstract class ImageEmbedCommand extends Command 
+export abstract class ImageEmbedCommand extends Command
 {
 	/**
 	 * Base URL to fetch images from
@@ -28,16 +28,16 @@ export abstract class ImageEmbedCommand extends Command
 	/**
 	 * Instantiate a new ImageEmedCommand
 	 */
-	protected constructor(handler: CommandHandler, options: IImageEmbedCommandInfo) 
+	protected constructor(handler: CommandHandler, options: IImageEmbedCommandInfo)
 	{
 		super(handler, options);
 
 		if (options.clientPermissions) options.clientPermissions.push('EMBED_LINKS');
 		else options.clientPermissions = ['EMBED_LINKS'];
 
-		if (options.messageContent) 
+		if (options.messageContent)
 		{
-			if (typeof options.messageContent !== 'string') 
+			if (typeof options.messageContent !== 'string')
 			{
 				throw new TypeError(`${this.name}'s messageContent is not a string!`);
 			}
@@ -45,9 +45,9 @@ export abstract class ImageEmbedCommand extends Command
 			this.messageContent = options.messageContent;
 		}
 
-		if (options.baseURL) 
+		if (options.baseURL)
 		{
-			if (typeof options.maxNumber !== 'number') 
+			if (typeof options.maxNumber !== 'number')
 			{
 				throw new TypeError(`${this.name}'s max number is not a number!`);
 			}
@@ -55,16 +55,16 @@ export abstract class ImageEmbedCommand extends Command
 			this.baseURL = options.baseURL;
 			this.maxNumber = options.maxNumber;
 		}
-		else if (options.images) 
+		else if (options.images)
 		{
-			if (!(options.images instanceof Array) || !options.images.length) 
+			if (!(options.images instanceof Array) || !options.images.length)
 			{
 				throw new TypeError(`${this.name}'s images is not a non emtpy Array!`);
 			}
 
 			this.images = options.images;
 		}
-		else 
+		else
 		{
 			throw new Error(`${this.name} does not supply a baseURL or an images array!`);
 		}
@@ -74,7 +74,7 @@ export abstract class ImageEmbedCommand extends Command
 	 * Default basic implementation for an image embed command.
 	 * @virtual
 	 */
-	public run(message: GuildMessage, _: any[], { authorModel }: ICommandRunInfo): any 
+	public run(message: GuildMessage, _: any[], { authorModel }: ICommandRunInfo): any
 	{
 		const embed: MessageEmbed = this.imageEmbed(message, authorModel);
 
@@ -84,7 +84,7 @@ export abstract class ImageEmbedCommand extends Command
 	/**
 	 * Build an embed for this ImageEmbedCommand, will pick a random image from the pool.
 	 */
-	protected imageEmbed(message: GuildMessage, userModel: UserModel): MessageEmbed 
+	protected imageEmbed(message: GuildMessage, userModel: UserModel): MessageEmbed
 	{
 		const image: string = this.baseURL
 			? `${this.baseURL}${Math.floor(Math.random() * this.maxNumber!) + 1}.gif`

@@ -9,7 +9,7 @@ import { User } from './User';
 /**
  * Represents a score achieved in an osu! beatmap.
  */
-export class Score 
+export class Score
 {
 	/* tslint:disable:variable-name object-literal-sort-keys */
 	private static readonly RankEmojis: { [rank: string]: string } = Emojis as any;
@@ -100,7 +100,7 @@ export class Score
 		beatmap?: Beatmap;
 		mode?: OsuMode;
 		user?: User;
-	}) 
+	})
 	{
 		if (typeof mode !== 'number') throw new Error('"mode" must be a number!');
 		this.mode = mode;
@@ -129,7 +129,7 @@ export class Score
 	/**
 	 * Enabled mods
 	 */
-	public get enabledMods(): string 
+	public get enabledMods(): string
 	{
 		if (!this._enabledMods) return '';
 		const mods = new BeatmapMods(this._enabledMods);
@@ -139,7 +139,7 @@ export class Score
 		return mods.toArray().join(', ');
 	}
 
-	public get rankEmoji(): string 
+	public get rankEmoji(): string
 	{
 		return Score.RankEmojis[this.rank] || this.rank;
 	}
@@ -147,12 +147,12 @@ export class Score
 	/**
 	 * Accuracy of the score
 	 */
-	public accuracy(mode: OsuMode = this.mode): number 
+	public accuracy(mode: OsuMode = this.mode): number
 	{
 		let hits: number;
 		let total: number;
 
-		switch (mode) 
+		switch (mode)
 		{
 			case OsuMode.OSU: {
 				hits = (this.count50 * 50) + (this.count100 * 100) + (this.count300 * 300);
@@ -190,7 +190,7 @@ export class Score
 	/**
 	 * Fetch the beatmap the score was played in.
 	 */
-	public async fetchBeatmap(mode: OsuMode = this.mode): Promise<Beatmap> 
+	public async fetchBeatmap(mode: OsuMode = this.mode): Promise<Beatmap>
 	{
 		if (this._beatmap) return this._beatmap;
 
@@ -202,7 +202,7 @@ export class Score
 	/**
 	 * Fetch the user that achieved the score.
 	 */
-	public async fetchUser(): Promise<User> 
+	public async fetchUser(): Promise<User>
 	{
 		if (this._user) return this._user;
 

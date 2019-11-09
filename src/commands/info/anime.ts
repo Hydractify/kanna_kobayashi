@@ -7,9 +7,9 @@ import { MediaType } from '../../types/anilist/MediaType';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class AnimeCommand extends AniListCommand<IMedia> 
+class AnimeCommand extends AniListCommand<IMedia>
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			clientPermissions: ['EMBED_LINKS'],
@@ -20,7 +20,7 @@ class AnimeCommand extends AniListCommand<IMedia>
 		});
 	}
 
-	public parseArgs(message: GuildMessage, args: string[]): string | string[] 
+	public parseArgs(message: GuildMessage, args: string[]): string | string[]
 	{
 		if (!args.length) return 'you have to tell me what anime you are looking for!';
 
@@ -31,7 +31,7 @@ class AnimeCommand extends AniListCommand<IMedia>
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const entries: IMedia[] | undefined = await this.search(args.join(' '));
 

@@ -5,21 +5,21 @@ import { Loggable, Logger } from '../structures/Logger';
 const broadcastEval: (script: string) => Promise<any[]> = ShardClientUtil.prototype.broadcastEval;
 
 @Loggable('BROADCASTEVAL')
-class ShardClientUtilExtension 
+class ShardClientUtilExtension
 {
 	private logger!: Logger;
 
 	public async _handleMessage(
 		this: { _respond: (type: string, val: object) => void; client: any },
 		message: { [key: string]: string },
-	): Promise<void> 
+	): Promise<void>
 	{
 		if (!message) return;
-		if (message._fetchProp) 
+		if (message._fetchProp)
 		{
 			const props: string[] = message._fetchProp.split('.');
 			let value: any = this.client;
-			try 
+			try
 			{
 				for (const prop of props) value = value[prop];
 
@@ -28,14 +28,14 @@ class ShardClientUtilExtension
 
 				this._respond('fetchProp', { _fetchProp: message._fetchProp, _result: value });
 			}
-			catch (err) 
+			catch (err)
 			{
 				this._respond('fetchProp', { _fetchProp: message._fetchProp, _error: Util.makePlainError(err) });
 			}
 		}
-		else if (message._eval) 
+		else if (message._eval)
 		{
-			try 
+			try
 			{
 				const _result: any = await this.client._eval(message._eval);
 
@@ -44,7 +44,7 @@ class ShardClientUtilExtension
 
 				this._respond('eval', { _eval: message._eval, _result });
 			}
-			catch (err) 
+			catch (err)
 			{
 				this._respond('eval', { _eval: message._eval, _error: Util.makePlainError(err) });
 			}
@@ -54,18 +54,18 @@ class ShardClientUtilExtension
 	public async broadcastEval<T, V = any>(
 		fn: (client: Client, args?: V[]) => T,
 		args: V[] = [],
-	): Promise<T[]> 
+	): Promise<T[]>
 	{
 		let stringified: any = fn;
-		if (typeof fn !== 'string') 
+		if (typeof fn !== 'string')
 		{
 			stringified = String(fn);
 
-			if (/^async .* \{/.test(stringified)) 
+			if (/^async .* \{/.test(stringified))
 			{
 				stringified = `async function ${stringified.slice(5)}`;
 			}
-			else if (!/(^function|^\(.*\) =>)/.test(stringified)) 
+			else if (!/(^function|^\(.*\) =>)/.test(stringified))
 			{
 				stringified = `function ${stringified}`;
 			}

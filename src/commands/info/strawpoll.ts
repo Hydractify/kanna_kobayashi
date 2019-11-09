@@ -18,11 +18,11 @@ const Api: () => APIRouter = buildRouter({
 	},
 });
 
-class StrawPollCommand extends Command 
+class StrawPollCommand extends Command
 {
 	private baseURL: string;
 
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['poll'],
@@ -39,19 +39,19 @@ class StrawPollCommand extends Command
 		message: GuildMessage,
 		[id]: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
-		if (id) 
+		if (id)
 		{
 			const res: string = await Api()[id].get({ type: 'text' }).catch(() => null);
 
 			let fetchedPoll: IStrawPollPoll | undefined;
-			try 
+			try
 			{
-				fetchedPoll = JSON.parse(res); 
+				fetchedPoll = JSON.parse(res);
 			}
-			catch 
-			{ } // tslint:disable-line:no-empty
+			catch
+			{ } // eslint-disable-line no-empty
 
 			if (!fetchedPoll) return message.reply('I could not find a strawpoll with that ID.');
 
@@ -60,7 +60,7 @@ class StrawPollCommand extends Command
 
 		const messages: Message[] = [message as Message];
 		const data: string[] = [];
-		for (const question of this.questions()) 
+		for (const question of this.questions())
 		{
 
 			const [prompt, response] = await Promise.all([
@@ -71,7 +71,7 @@ class StrawPollCommand extends Command
 			]);
 			messages.push(prompt);
 
-			if (!response) 
+			if (!response)
 			{
 				// No answer, aborting
 				await this.cleanup(message, messages);
@@ -79,7 +79,7 @@ class StrawPollCommand extends Command
 			}
 			messages.push(response);
 
-			if (response.content.toLowerCase() === 'end') 
+			if (response.content.toLowerCase() === 'end')
 			{
 				// We already have 4 elements, continuing just fine
 				if (data.length > 3) break;
@@ -106,15 +106,15 @@ class StrawPollCommand extends Command
 		return this.showPoll(message, poll, authorModel);
 	}
 
-	private cleanup(message: GuildMessage, messages: Message[]): undefined | Promise<Collection<Snowflake, Message>> 
+	private cleanup(message: GuildMessage, messages: Message[]): undefined | Promise<Collection<Snowflake, Message>>
 	{
-		if (message.guild.me!.permissionsIn(message.channel).has('MANAGE_MESSAGES')) 
+		if (message.guild.me!.permissionsIn(message.channel).has('MANAGE_MESSAGES'))
 		{
 			return message.channel.bulkDelete(messages);
 		}
 	}
 
-	private * questions(): IterableIterator<string> 
+	private * questions(): IterableIterator<string>
 	{
 		yield 'what should the name of the poll be?';
 		yield 'should voters be allowed to vote for more than one option? (`y`/anything)';
@@ -124,7 +124,7 @@ class StrawPollCommand extends Command
 		yield 'what options do you want the voters to have? (Enter one at a time, you need at least one more)';
 
 		// 3 - 29
-		for (let i: number = 0; i < 27; ++i) 
+		for (let i: number = 0; i < 27; ++i)
 		{
 			yield 'what options do you want the voters to have? (Enter one at a time, or `end` to tell me you are done)';
 		}
@@ -137,7 +137,7 @@ class StrawPollCommand extends Command
 		message: GuildMessage,
 		{ id, multi, options, title, votes }: IStrawPollPoll,
 		authorModel: UserModel,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(title, 'https://a.safe.moe/WSpgs.png', `${this.baseURL}/${id}`)
@@ -149,7 +149,7 @@ class StrawPollCommand extends Command
 			.setThumbnail(message.guild.iconURL());
 
 		const voteIterator: IterableIterator<number> | undefined = votes ? votes[Symbol.iterator]() : undefined;
-		for (const option of options) 
+		for (const option of options)
 		{
 			const voteCount: string | undefined = voteIterator ? voteIterator.next().value.toLocaleString() : undefined;
 			embed.addField(option, voteCount || 'No vote count available', true);

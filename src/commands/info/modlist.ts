@@ -9,7 +9,7 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { mapIterable, titleCase } from '../../util/Util';
 
-class ModListCommand extends Command 
+class ModListCommand extends Command
 {
 	private statuses: Map<string, string> = new Map<string, string>([
 		['online', Emojis.Online],
@@ -18,7 +18,7 @@ class ModListCommand extends Command
 		['offline', Emojis.Offline],
 	]);
 
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['mods'],
@@ -33,7 +33,7 @@ class ModListCommand extends Command
 		message: GuildMessage,
 		members: GuildMemberStore,
 		authorModel: UserModel,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		const mods: { [key: string]: Set<string> } = {
 			dnd: new Set<string>(),
@@ -42,7 +42,7 @@ class ModListCommand extends Command
 			online: new Set<string>(),
 		};
 
-		for (const member of members.values()) 
+		for (const member of members.values())
 		{
 			if (member.user.bot) continue;
 			if (!member.permissions.has(['KICK_MEMBERS', 'BAN_MEMBERS'])) continue;
@@ -54,9 +54,9 @@ class ModListCommand extends Command
 			.setThumbnail(message.guild.iconURL())
 			.setDescription('This list is populated with all members that can ban and kick members.');
 
-		for (const [status, emoji] of this.statuses) 
+		for (const [status, emoji] of this.statuses)
 		{
-			if (mods[status].size) 
+			if (mods[status].size)
 			{
 				embed.addField(`${titleCase(status)} ${emoji}`, mapIterable(mods[status]), true);
 			}
@@ -65,7 +65,7 @@ class ModListCommand extends Command
 		return message.channel.send(embed);
 	}
 
-	public parseArgs(message: GuildMessage, [input]: string[]): [string | undefined] | string 
+	public parseArgs(message: GuildMessage, [input]: string[]): [string | undefined] | string
 	{
 		if (!input) return [undefined];
 
@@ -75,14 +75,14 @@ class ModListCommand extends Command
 		return `"${input}" is not a valid status! Valid statuses are ${Array.from(this.statuses.keys()).join(', ')}`;
 	}
 
-	public async run(message: GuildMessage, [status]: [string | undefined], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> 
+	public async run(message: GuildMessage, [status]: [string | undefined], { authorModel }: ICommandRunInfo): Promise<Message | Message[]>
 	{
 		if (message.guild.memberCount !== message.guild.members.size) await message.guild.members.fetch();
 
 		if (!status) return this.modList(message, message.guild.members, authorModel);
 
 		const mods: Set<string> = new Set();
-		for (const member of message.guild.members.values()) 
+		for (const member of message.guild.members.values())
 		{
 			if (member.presence.status !== status) continue;
 			if (member.user.bot) continue;

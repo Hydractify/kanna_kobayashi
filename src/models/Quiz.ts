@@ -11,7 +11,7 @@ import { Model } from '../structures/Model';
 	tableName: 'quizzes',
 	updatedAt: false,
 })
-export class Quiz extends Model<Quiz> 
+export class Quiz extends Model<Quiz>
 {
 	/**
 	 * Pre made quizzes
@@ -85,7 +85,7 @@ export class Quiz extends Model<Quiz>
 
 	@Column({
 		type: DataType.TEXT,
-		set(this: Model<Quiz>, value: string): void 
+		set(this: Model<Quiz>, value: string): void
 		{
 			this.setDataValue('name', value.toLowerCase());
 		},

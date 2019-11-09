@@ -8,9 +8,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { mapIterable, titleCase } from '../../util/Util';
 
-class GuildInfoCommand extends Command 
+class GuildInfoCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['ginfo', 'gg'],
@@ -21,7 +21,7 @@ class GuildInfoCommand extends Command
 		});
 	}
 
-	public async run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> 
+	public async run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]>
 	{
 		const { guild }: GuildMessage = message;
 		if (guild.memberCount > guild.members.size) await guild.members.fetch();
@@ -45,11 +45,11 @@ class GuildInfoCommand extends Command
 			users: number;
 			voice: number;
 		} = { bots: 0, category: 0, dm: 0, group: 0, text: 0, news: 0, store: 0, unknown: 0, users: 0, voice: 0 };
-		for (const { user: { bot } } of guild.members.values()) 
+		for (const { user: { bot } } of guild.members.values())
 		{
 			++counts[bot ? 'bots' : 'users'];
 		}
-		for (const { type } of guild.channels.values()) 
+		for (const { type } of guild.channels.values())
 		{
 			++counts[type];
 		}

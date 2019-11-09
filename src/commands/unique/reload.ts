@@ -7,9 +7,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { IPlainError } from '../../types/IPlainError';
 import { PermLevels } from '../../types/PermLevels';
 
-class ReloadCommand extends Command 
+class ReloadCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['r'],
@@ -22,11 +22,11 @@ class ReloadCommand extends Command
 			usage: 'reload <...Command>',
 		});
 	}
-	public parseArgs(message: GuildMessage, args: string[]): string | string[] 
+	public parseArgs(message: GuildMessage, args: string[]): string | string[]
 	{
 		if (!args.length) return 'you should supply at least one command to reload.';
 
-		for (const name of args) 
+		for (const name of args)
 		{
 			const command: Command | undefined = this.handler.resolveCommand(name.toLowerCase());
 			if (!command) return `could not resolve \`${name}\` to a command.`;
@@ -35,16 +35,16 @@ class ReloadCommand extends Command
 		return args;
 	}
 
-	public async run(message: GuildMessage, commands: string[]): Promise<Message | Message[]> 
+	public async run(message: GuildMessage, commands: string[]): Promise<Message | Message[]>
 	{
 		const results: [number[], [string, IPlainError][]][] = await this.client.shard!
 			.broadcastEval(this.reloadCommands, commands);
 
 		const errorMap = new Map<string, string[]>();
 
-		for (const [ids, errors] of results) 
+		for (const [ids, errors] of results)
 		{
-			for (const [command, { message: error }] of errors) 
+			for (const [command, { message: error }] of errors)
 			{
 				const alr = errorMap.get(command);
 				if (alr) alr.push(`${ids.join(', ')} - ${error}`);
@@ -54,7 +54,7 @@ class ReloadCommand extends Command
 
 		let out: string = 'something went wrong.\n';
 
-		for (const [command, errors] of errorMap) 
+		for (const [command, errors] of errorMap)
 		{
 			out += `**${command[0].toUpperCase() + command.slice(1)}**:\n    ${errors.join('    \n')}\n`;
 		}
@@ -62,16 +62,16 @@ class ReloadCommand extends Command
 		return message.reply(errorMap.size ? out : 'everything reloaded successfully.');
 	}
 
-	private async reloadCommands(client: Client, commands: string[]): Promise<[number[], [string, IPlainError][]]> 
+	private async reloadCommands(client: Client, commands: string[]): Promise<[number[], [string, IPlainError][]]>
 	{
 		const failures: [string, IPlainError][] = [];
-		for (const command of commands) 
+		for (const command of commands)
 		{
-			try 
+			try
 			{
 				await client.commandHandler.reloadCommand(command);
 			}
-			catch (e) 
+			catch (e)
 			{
 				failures.push([command, require('discord.js').Util.makePlainError(e) as IPlainError]);
 			}

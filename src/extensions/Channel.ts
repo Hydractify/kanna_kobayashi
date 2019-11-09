@@ -1,13 +1,13 @@
 import { Channel, Message } from 'discord.js';
 
-export class ChannelExtension 
+export class ChannelExtension
 {
-	// tslint:disable:no-empty
-	set lastMessage(value: Message) 
+	/* eslint-disable @typescript-eslint/no-empty-function */
+	set lastMessage(value: Message)
 	{ }
-	set lastMessageID(value: string) 
+	set lastMessageID(value: string)
 	{ }
-	// tslint:enable:no-empty
+	/* eslint-enable @typescript-eslint/no-empty-function */
 }
 
 export { ChannelExtension as Extension };

@@ -8,7 +8,7 @@ type NonNullProperties<T, NonNull extends keyof T> = {
 export type GuildMessage = Omit<NonNullProperties<Message, 'guild' | 'author' | 'member'>, 'channel'>
 & { channel: TextChannel };
 
-export const isGuildMessage = (message: any): message is GuildMessage => 
+export const isGuildMessage = (message: any): message is GuildMessage =>
 {
 	return message.guild && message.channel instanceof TextChannel;
 };

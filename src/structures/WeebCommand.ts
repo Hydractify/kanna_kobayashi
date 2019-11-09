@@ -18,7 +18,7 @@ import { fetchRandom } from './weeb';
 /**
  * Abstract WeebCommand class to provide Weeb.sh functionality for commands in an easy manner.
  */
-export abstract class WeebCommand extends Command 
+export abstract class WeebCommand extends Command
 {
 	/**
 	 * Regex to validate whether a member was mentioned
@@ -46,7 +46,7 @@ export abstract class WeebCommand extends Command
 		action: string;
 		emoji: string;
 		type: string;
-	}) 
+	})
 	{
 		if (options.clientPermissions) options.clientPermissions.push('EMBED_LINKS');
 		else options.clientPermissions = ['EMBED_LINKS'];
@@ -67,7 +67,7 @@ export abstract class WeebCommand extends Command
 		message: GuildMessage,
 		args: string[],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> 
+	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]>
 	{
 		if (!args.length) return `you must mention someone ${Emojis.KannaShy}.`;
 
@@ -78,13 +78,13 @@ export abstract class WeebCommand extends Command
 			.$get<UserModel>('blocks', { where: { id: { [Op.or]: members.keyArray() } } })
 			.then((users: UserModel | UserModel[]) => (users as UserModel[]).map((user: UserModel) => user.id));
 
-		if (ids.length === members.size) 
+		if (ids.length === members.size)
 		{
-			if (members.size === 1) 
+			if (members.size === 1)
 			{
 				return `${members.first()!.member.user.tag} blocked you from using interactive commands on them.`;
 			}
-			else 
+			else
 			{
 				return `you were blocked by all mentioned users. ${Emojis.KannaSad}.`;
 			}
@@ -100,7 +100,7 @@ export abstract class WeebCommand extends Command
 		message: GuildMessage,
 		members: Collection<string, IWeebResolvedMember>,
 		action: string = this.action,
-	): string 
+	): string
 	{
 		let base: string = `${this.emoji} | `;
 
@@ -123,7 +123,7 @@ export abstract class WeebCommand extends Command
 		model: UserModel,
 		members: Collection<string, IWeebResolvedMember> | undefined,
 		{ dev, trusted, bot }: IWeebResponseTemplates,
-	): Promise<MessageEmbed> 
+	): Promise<MessageEmbed>
 	{
 		const { url }: RandomImageResult = await fetchRandom({
 			filetype: 'gif',
@@ -137,19 +137,19 @@ export abstract class WeebCommand extends Command
 			url,
 		);
 
-		if (members && members.size === 1) 
+		if (members && members.size === 1)
 		{
 			const { member, perm }: IWeebResolvedMember = members.first()!;
 
-			if (dev && perm === PermLevels.DEV) 
+			if (dev && perm === PermLevels.DEV)
 			{
 				embed.setDescription(dev);
 			}
-			else if (trusted && perm === PermLevels.TRUSTED) 
+			else if (trusted && perm === PermLevels.TRUSTED)
 			{
 				embed.setDescription(trusted);
 			}
-			else if (bot && this.client.user!.id === member.id) 
+			else if (bot && this.client.user!.id === member.id)
 			{
 				embed.setDescription(bot);
 			}
@@ -163,11 +163,11 @@ export abstract class WeebCommand extends Command
 	/**
 	 * Resolves mentioned members in a specific way.
 	 */
-	protected async resolveMembers(input: string[], { author, guild }: GuildMessage): Promise<Collection<Snowflake, IWeebResolvedMember>> 
+	protected async resolveMembers(input: string[], { author, guild }: GuildMessage): Promise<Collection<Snowflake, IWeebResolvedMember>>
 	{
 		const resolved: Collection<Snowflake, IWeebResolvedMember> = new Collection<Snowflake, IWeebResolvedMember>();
 
-		for (const word of input) 
+		for (const word of input)
 		{
 			// Ignore 2 or 1 char long "names"
 			if (word.length < 3) continue;

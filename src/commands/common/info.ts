@@ -5,9 +5,9 @@ import { MessageEmbed } from '../../structures/MessageEmbed';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class InfoCommand extends Command 
+class InfoCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['invite', 'patreon', 'guild', 'ghearts'],
@@ -20,7 +20,7 @@ class InfoCommand extends Command
 		});
 	}
 
-	public run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]> 
+	public run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]>
 	{
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setAuthor(`${this.client.user!.username} Information`, this.client.user!.displayAvatarURL())

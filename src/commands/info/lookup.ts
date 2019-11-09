@@ -8,9 +8,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { Command as GuildInfoCommand } from './guild';
 
-class LookupCommand extends Command 
+class LookupCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['ii', 'lookup'],
@@ -24,7 +24,7 @@ class LookupCommand extends Command
 		});
 	}
 
-	public parseArgs(message: GuildMessage, [code]: string[]): string | Promise<string | Invite[]> 
+	public parseArgs(message: GuildMessage, [code]: string[]): string | Promise<string | Invite[]>
 	{
 		if (!code) return 'you have to give me an invite link or code!';
 
@@ -37,10 +37,10 @@ class LookupCommand extends Command
 		message: GuildMessage,
 		[{ channel, guild, presenceCount, memberCount }]: [Invite],
 		{ authorModel }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		// This shard is part of that guild, give full info
-		if (this.client.guilds.has(guild!.id)) 
+		if (this.client.guilds.has(guild!.id))
 		{
 			return (this.handler.resolveCommand('guildinfo') as GuildInfoCommand).run(
 				message,

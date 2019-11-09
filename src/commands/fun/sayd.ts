@@ -5,9 +5,9 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 
-class SayDeleteCommand extends Command 
+class SayDeleteCommand extends Command
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			aliases: ['sayd'],
@@ -18,14 +18,14 @@ class SayDeleteCommand extends Command
 		});
 	}
 
-	public parseArgs(message: GuildMessage, args: string[], { commandName }: ICommandRunInfo): string | string[] 
+	public parseArgs(message: GuildMessage, args: string[], { commandName }: ICommandRunInfo): string | string[]
 	{
 		if (!args.length) return 'you need to give me something to say!';
 
 		return [message.cleanContent.slice(message.cleanContent.indexOf(commandName) + commandName.length)];
 	}
 
-	public run(message: GuildMessage, [content]: string[]): Promise<[Message, Message | Message[]]> 
+	public run(message: GuildMessage, [content]: string[]): Promise<[Message, Message | Message[]]>
 	{
 		return Promise.all([
 			message.delete(),

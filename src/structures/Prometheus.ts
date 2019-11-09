@@ -9,12 +9,12 @@ const TIMEOUT = 10000;
  * Prometheus Singleton
  */
 @Loggable('PROMETHEUS')
-export class Prometheus 
+export class Prometheus
 {
 	/**
 	 * Singleton Prometheus instance
 	 */
-	public static get instance(): Prometheus 
+	public static get instance(): Prometheus
 	{
 		return this._instance || new this();
 	}
@@ -52,9 +52,9 @@ export class Prometheus
 	/**
 	 * Instantiate the Prometheus singleton.
 	 */
-	private constructor() 
+	private constructor()
 	{
-		if (Prometheus._instance) 
+		if (Prometheus._instance)
 		{
 			throw new Error('Can not create multiple instances from Prometheus singleton.');
 		}
@@ -87,7 +87,7 @@ export class Prometheus
 	/**
 	 * Start Prometheus timers
 	 */
-	public start(): void 
+	public start(): void
 	{
 		if (this.started) return;
 		this.started = true;
@@ -98,7 +98,7 @@ export class Prometheus
 				TIMEOUT,
 			),
 			setInterval(
-				() => 
+				() =>
 				{
 					const oldUsage: number = this._lastCpuUsage.system + this._lastCpuUsage.user;
 					const { user, system } = this._lastCpuUsage = process.cpuUsage();
@@ -111,6 +111,7 @@ export class Prometheus
 
 		this._nodeVersion.set({ version: process.versions.node }, 1);
 
+		/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 		const { version } = require('../../package.json');
 		const commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8', cwd: __dirname });
 
@@ -122,12 +123,12 @@ export class Prometheus
 	/**
 	 * Stop Prometheus timers
 	 */
-	public stop(): void 
+	public stop(): void
 	{
 		if (!this.started) return;
 		this.started = false;
 
-		for (const timer of this.timers) 
+		for (const timer of this.timers)
 		{
 			clearInterval(timer);
 		}

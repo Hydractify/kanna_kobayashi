@@ -8,9 +8,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class DanceCommand extends WeebCommand 
+class DanceCommand extends WeebCommand
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			action: 'is dancing with',
@@ -25,7 +25,7 @@ class DanceCommand extends WeebCommand
 	public async parseArgs(
 		message: GuildMessage,
 		args: string[],
-	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> 
+	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]>
 	{
 		if (!args.length) return [undefined];
 
@@ -38,8 +38,8 @@ class DanceCommand extends WeebCommand
 	public async run(
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember> | undefined],
-		{ authorModel, commandName }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]>
 	{
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'Let\'s dance!',
@@ -47,7 +47,7 @@ class DanceCommand extends WeebCommand
 			trusted: `Dance with us **${members ? members.first()!.name : undefined}!`,
 		});
 
-		if (!members) 
+		if (!members)
 		{
 			const action: string = this.action.replace(' with', '');
 			return message.channel.send(

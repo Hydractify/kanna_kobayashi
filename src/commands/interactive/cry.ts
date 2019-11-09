@@ -8,9 +8,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class CryCommand extends WeebCommand 
+class CryCommand extends WeebCommand
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			action: 'is upset with',
@@ -26,7 +26,7 @@ class CryCommand extends WeebCommand
 	public async parseArgs(
 		message: GuildMessage,
 		args: string[],
-	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> 
+	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]>
 	{
 		if (!args.length) return [undefined];
 
@@ -39,8 +39,8 @@ class CryCommand extends WeebCommand
 	public async run(
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
-		{ authorModel, commandName }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+		{ authorModel }: ICommandRunInfo,
+	): Promise<Message | Message[]>
 	{
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'W-what did I do?!',
@@ -48,7 +48,7 @@ class CryCommand extends WeebCommand
 			trusted: `Why **${members ? members.first()!.name : undefined}?`,
 		});
 
-		if (!members) 
+		if (!members)
 		{
 			const action: string = this.action.replace(' with', '');
 			return message.channel.send(

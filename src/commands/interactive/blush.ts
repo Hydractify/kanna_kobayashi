@@ -8,9 +8,9 @@ import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IWeebResolvedMember } from '../../types/weeb/IWeebResolvedMember';
 
-class BlushCommand extends WeebCommand 
+class BlushCommand extends WeebCommand
 {
-	public constructor(handler: CommandHandler) 
+	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
 			action: 'is blushing because of',
@@ -26,7 +26,7 @@ class BlushCommand extends WeebCommand
 	public async parseArgs(
 		message: GuildMessage,
 		args: string[],
-	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]> 
+	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]>
 	{
 		if (!args.length) return [undefined];
 
@@ -40,7 +40,7 @@ class BlushCommand extends WeebCommand
 		message: GuildMessage,
 		[members]: [Collection<Snowflake, IWeebResolvedMember>],
 		{ authorModel, commandName }: ICommandRunInfo,
-	): Promise<Message | Message[]> 
+	): Promise<Message | Message[]>
 	{
 		let action: string = commandName === 'embarassed'
 			? this.action.replace('blushing', 'embarassed')
@@ -52,7 +52,7 @@ class BlushCommand extends WeebCommand
 			trusted: `${message.author}... Y-you b-baka!`,
 		});
 
-		if (!members) 
+		if (!members)
 		{
 			action = action.replace(' because of', '');
 			return message.channel.send(

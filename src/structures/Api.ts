@@ -5,6 +5,7 @@
 import * as fetch from 'node-fetch';
 import { stringify } from 'querystring';
 
+/* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { version } = require('../../package');
 
 const noop: any = (): void => undefined;
@@ -18,35 +19,25 @@ const ua: { [key: string]: string } = {
 	'User-Agent': `Kanna-Kobayashi, a discord bot. v${version} (https://github.com/hydractify/kanna-kobayashi)`,
 };
 
-export const buildRouter: (options: IAPIRouterOptions) => () => APIRouter
-	= (options: IAPIRouterOptions): () => APIRouter => 
-	{
-		options.defaultHeaders = options.defaultHeaders
-			? { ...options.defaultHeaders, ...ua }
-			: { ...ua };
-
-		return (): APIRouter => router(options);
-	};
-
 const router: (options: IAPIRouterOptions) => APIRouter = ({
 	baseURL,
 	catchNotFound = true,
 	defaultHeaders = {},
 	defaultQueryParams = {},
-}: IAPIRouterOptions): APIRouter => 
+}: IAPIRouterOptions): APIRouter =>
 {
 	const route: string[] = [''];
 
 	const handler: ProxyHandler<any> = {
-		get(target: () => void, name: string): any 
+		get(target: () => void, name: string): any
 		{
 			if (reflectors.includes(name)) return (): string => route.join('/');
-			if (methods.includes(name)) 
+			if (methods.includes(name))
 			{
-				return async <T = any>(options: IAPIOptions = {}): Promise<T> => 
+				return async <T = any>(options: IAPIOptions = {}): Promise<T> =>
 				{
 					let url: string = `${baseURL}${route.join('/')}`;
-					if (options.query) 
+					if (options.query)
 					{
 						const queryString: string = (stringify({
 							...defaultQueryParams,
@@ -86,7 +77,7 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 
 			return new Proxy<APIRouter>(noop, handler);
 		},
-		apply(target: () => void, _: any, args: any[]): any 
+		apply(target: () => void, _: any, args: any[]): any
 		{
 			// tslint:disable-next-line:triple-equals
 			route.push(...args.filter((x: any) => x != null));
@@ -97,6 +88,15 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 
 	return new Proxy<APIRouter>(noop, handler);
 };
+export const buildRouter: (options: IAPIRouterOptions) => () => APIRouter
+	= (options: IAPIRouterOptions): () => APIRouter =>
+	{
+		options.defaultHeaders = options.defaultHeaders
+			? { ...options.defaultHeaders, ...ua }
+			: { ...ua };
+
+		return (): APIRouter => router(options);
+	};
 
 export type APIRouter = IAPIRouteBuilder & IAPIRouteOptions;
 

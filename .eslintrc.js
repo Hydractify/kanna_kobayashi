@@ -40,7 +40,6 @@ module.exports =
 			'error',
 			'multi-line',
 		],
-		'indent': 'off',
 		'quotes':
 		[
 			'error',
@@ -56,8 +55,11 @@ module.exports =
 			'error',
 			'always',
 		],
+		'no-trailing-spaces': 'error',
+		'indent': 'off',
 		'no-unexpected-multiline': 'off',
 		'radix': 'off',
+		'require-atomic-updates': 'off',
 		/*
 		 * TSLint rules
 		 */
@@ -71,8 +73,9 @@ module.exports =
 			'error',
 			'always',
 		],
-		'@typescript-eslint/no-inferrable-types': 'off',
 		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/no-inferrable-types': 'off',
+		'@typescript-eslint/no-non-null-assertion': 'off',
 		'@typescript-eslint/no-var-requires': 'warn',
 	}
 };
