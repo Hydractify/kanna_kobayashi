@@ -61,11 +61,6 @@ module.exports =
 		/*
 		 * TSLint rules
 		 */
-		'@typescript-eslint/array-type':
-		[
-			'error',
-			'array',
-		],
 		'@typescript-eslint/indent':
 		[
 			'error',
