@@ -14,7 +14,7 @@ import { Command as ProfileCommand } from './profile';
 class LeaderboardCommand extends Command implements IResponsiveEmbedController
 {
 	public emojis: string[] = ['⬅', '1⃣', '2⃣', '3⃣', '4⃣', '➡'];
-	public types: string[] = ['exp', 'reputation'];
+	public types: string[] = ['exp', 'level', 'reputation'];
 
 	public constructor(handler: CommandHandler)
 	{
@@ -37,7 +37,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController
 	public parseArgs(message: GuildMessage, [input, offset]: string[]): string | [string, number]
 	{
 		if (!input) return ['exp', 0];
-		if (this.types.includes(input.toLowerCase()))
+		input = input.toLowerCase();
+		if (this.types.includes(input))
 		{
 			if (!offset) return [input, 0];
 
@@ -173,6 +174,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController
 		limit: number = 4,
 	): Promise<ILeaderBoardUser[]>
 	{
+		if (type === 'level') type = 'exp';
+
 		const users: ILeaderBoardUser[] = await this.sequelize.query(
 			// Not worth figuring out how to tell sequelize to build this query
 			`SELECT
