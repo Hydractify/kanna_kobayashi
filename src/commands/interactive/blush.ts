@@ -26,14 +26,12 @@ class BlushCommand extends WeebCommand
 	public async parseArgs(
 		message: GuildMessage,
 		args: string[],
+		commandInfo: ICommandRunInfo,
 	): Promise<string | [Collection<Snowflake, IWeebResolvedMember> | undefined]>
 	{
 		if (!args.length) return [undefined];
 
-		const members: Collection<Snowflake, IWeebResolvedMember> = await this.resolveMembers(args, message);
-		if (!members.size) return `I could not find anyone with ${args.join(' ')}`;
-
-		return [members];
+		return super.parseArgs(message, args, commandInfo);
 	}
 
 	public async run(
