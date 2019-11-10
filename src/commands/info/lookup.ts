@@ -39,7 +39,7 @@ class LookupCommand extends Command
 		}
 		catch
 		{
-			return 'I could\'t find a valid invite for this link or code.';
+			return 'I couldn\'t find a valid invite for this link or code.';
 		}
 	}
 
