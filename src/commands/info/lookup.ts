@@ -1,6 +1,7 @@
-import { Invite, Message } from 'discord.js';
+import { Guild, Invite, Message } from 'discord.js';
 import * as moment from 'moment';
 
+import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
@@ -24,36 +25,53 @@ class LookupCommand extends Command
 		});
 	}
 
-	public parseArgs(message: GuildMessage, [code]: string[]): string | Promise<string | Invite[]>
+	public async parseArgs(message: GuildMessage, [code]: string[]): Promise<string | [Invite]>
 	{
 		if (!code) return 'you have to give me an invite link or code!';
 
-		return this.client.fetchInvite(code)
-			.then((invite: Invite) => ([invite]))
-			.catch(() => 'I couldn\'t find a valid invite for this link or code.');
+		try
+		{
+			const invite: Invite = await this.client.fetchInvite(code);
+
+			if (!invite.guild) return 'this invite is not for a guild.';
+
+			return [invite];
+		}
+		catch
+		{
+			return 'I could\'t find a valid invite for this link or code.';
+		}
 	}
 
 	public async run(
 		message: GuildMessage,
-		[{ channel, guild, presenceCount, memberCount }]: [Invite],
+		[invite]: [Invite],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]>
 	{
-		// This shard is part of that guild, give full info
-		if (this.client.guilds.has(guild!.id))
-		{
-			return (this.handler.resolveCommand('guildinfo') as GuildInfoCommand).run(
-				message,
-				[],
-				{ args: [], commandName: 'guildinfo', authorModel },
-			);
-		}
+		const embed: MessageEmbed = this.client.guilds.has(invite.guild!.id)
+			? await this._getLocalGuildEmbed(message, invite.guild!, authorModel)
+			: this._getRemoteGuildEmbed(message, invite, authorModel);
 
+		return message.channel.send(embed);
+	}
+
+	private _getLocalGuildEmbed(message: GuildMessage, guild: Guild, authorModel: UserModel): Promise<MessageEmbed>
+	{
+		return (this.handler.resolveCommand('guildinfo') as GuildInfoCommand).getEmbed(
+			message,
+			this.client.guilds.get(guild!.id)!,
+			authorModel
+		);
+	}
+
+	private _getRemoteGuildEmbed(message: GuildMessage, { channel, guild, presenceCount, memberCount }: Invite, authorModel: UserModel): MessageEmbed
+	{
 		const iconURL: string | null = guild!.iconURL();
 
 		const createdAt: moment.Moment = moment(guild!.createdAt);
 
-		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
+		return MessageEmbed.common(message, authorModel)
 			.setTitle(`Info about ${guild!.name}`)
 			.setThumbnail(iconURL)
 
@@ -85,8 +103,6 @@ class LookupCommand extends Command
 				],
 				true,
 			);
-
-		return message.channel.send(embed);
 	}
 }
 

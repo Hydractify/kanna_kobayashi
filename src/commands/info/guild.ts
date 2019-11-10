@@ -1,6 +1,7 @@
-import { Collection, Message, Role, Snowflake } from 'discord.js';
+import { Collection, Guild, Message, Role, Snowflake } from 'discord.js';
 import * as moment from 'moment';
 
+import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
@@ -23,7 +24,14 @@ class GuildInfoCommand extends Command
 
 	public async run(message: GuildMessage, _: string[], { authorModel }: ICommandRunInfo): Promise<Message | Message[]>
 	{
-		const { guild }: GuildMessage = message;
+		const embed: MessageEmbed = await this.getEmbed(message, message.guild, authorModel);
+
+		return message.channel.send(embed);
+	}
+
+
+	public async getEmbed(message: GuildMessage, guild: Guild, authorModel: UserModel): Promise<MessageEmbed>
+	{
 		if (guild.memberCount > guild.members.size) await guild.members.fetch();
 
 		const roles: Collection<Snowflake, Role> = new Collection(guild.roles.entries());
@@ -100,7 +108,7 @@ class GuildInfoCommand extends Command
 			.addField('Roles', rolesString || 'None', true)
 			.addField('Emojis', emojis || 'None', true);
 
-		return message.channel.send(embed);
+		return embed;
 	}
 }
 
