@@ -25,8 +25,10 @@ class ChooseCommand extends Command
 		if (!args.length) return `you have to give me something to choose from! (\`${this.usage}\`)`;
 
 		const joined: string = args.join(' ');
-		const options: string[] = /\||or|,/ig.test(joined)
-			? joined.replace(/\s*(\||or|,)\s*/ig, ' ').split(' ')
+		// Match separated pipes, `or` as a word, or a comma after a word followed by space (surrouned by whitespace)
+		const regex: RegExp = /\s*(?: \| |\bor\b|\b,)\s*/ig;
+		const options: string[] = regex.test(joined)
+			? joined.split(regex).filter(e => e)
 			: args;
 
 		if (!options.length) return `you have to give me something to choose from! (\`${this.usage}\`)`;
