@@ -1,4 +1,4 @@
-import { Collection } from 'discord.js';
+import { Collection, Constants, DiscordAPIError } from 'discord.js';
 
 /**
  * Title case the passed input string.
@@ -218,3 +218,24 @@ const durationModifiers: { [key: string]: number } = {
  * @returns A duration in seconds
  */
 export const resolveDuration: (value: string) => number = _resolve.bind(null, durationRegex, durationModifiers);
+
+// Is there no builtin type for this?
+type ObjectValueType<T> = T extends { [key: string]: infer P } ? P : never
+
+/**
+ * High-order function catching certain DiscordAPIErrors and return them, rather than rethrowing them.
+ * @param errors Error codes to catch
+ * @returns "catch" function to be used within a `Promise#catch`.
+ */
+export function catchErrors(...errors: ObjectValueType<Constants['APIErrors']>[]): (reason: any) => DiscordAPIError
+{
+	return (reason: any): DiscordAPIError =>
+	{
+		if (reason instanceof DiscordAPIError && (errors as number[]).includes(reason.code))
+		{
+			return reason;
+		}
+
+		throw reason;
+	};
+}

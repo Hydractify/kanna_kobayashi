@@ -1,9 +1,10 @@
-import { Message } from 'discord.js';
+import { Constants, Message } from 'discord.js';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { catchErrors } from '../../util/Util';
 
 class SayDeleteCommand extends Command
 {
@@ -25,12 +26,14 @@ class SayDeleteCommand extends Command
 		return [message.cleanContent.slice(message.cleanContent.indexOf(commandName) + commandName.length)];
 	}
 
-	public run(message: GuildMessage, [content]: string[]): Promise<[Message, Message | Message[]]>
+	public async run(message: GuildMessage, [content]: string[]): Promise<Message | Message[]>
 	{
-		return Promise.all([
-			message.delete(),
-			message.channel.send(content),
-		]);
+		if (!message.deleted)
+		{
+			await message.delete().catch(catchErrors(Constants.APIErrors.UNKNOWN_MESSAGE));
+		}
+
+		return message.channel.send(content);
 	}
 }
 
