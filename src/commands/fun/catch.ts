@@ -48,7 +48,21 @@ class CatchCommand extends Command
 			bugAmount = 1;
 		}
 
-		return message.channel.send(`You ${bugAmount ? `got **${bugAmount}** bugs! 🐛` : 'did not get any bugs...'}`);
+		let response: string;
+		if (bugAmount === 0)
+		{
+			response = 'You did not get any bugs...';
+		}
+		else if (bugAmount === 1)
+		{
+			response = 'You got 1 bug! 🐛';
+		}
+		else
+		{
+			response = `You got ${bugAmount} bugs! 🐛`;
+		}
+
+		return message.channel.send(response);
 	}
 }
 
