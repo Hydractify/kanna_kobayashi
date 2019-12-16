@@ -14,7 +14,8 @@
 		"reflect-metadata": "^0.1.13",
 		"sequelize": "4.38.0",
 		"sequelize-typescript": "v0.6.6",
-		"source-map-support": "^0.5.16"
+		"source-map-support": "^0.5.16",
+		"zlib-sync": "^0.1.6"
 	},
 	"devDependencies": {
 		"@types/moment-duration-format": "^2.2.2",
