@@ -1,4 +1,3 @@
-// tslint:disable-next-line:no-import-side-effect no-submodule-imports
 import 'source-map-support/register';
 
 // Hack to ensure that the WebhookLogger is instantiated first

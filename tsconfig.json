@@ -10,7 +10,6 @@
 		"outDir": "bin",
 		"rootDir": "src",
 		"sourceMap": true,
-		"sourceRoot": "/",
 		"strict": true,
 		"target": "es2019"
 	},

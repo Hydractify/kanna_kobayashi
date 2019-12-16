@@ -234,7 +234,7 @@ export class CommandHandler
 
 		// Keep "Requested by" embeds
 		if (message.author.id === this.client.user!.id &&
-			message.embeds?.[0].footer?.text?.match(/^Requested by (.+?) \|.* (.+)$/)
+			message.embeds[0]?.footer?.text?.match(/^Requested by (.+?) \|.* (.+)$/)
 		) return;
 
 		try
