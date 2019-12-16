@@ -37,7 +37,7 @@ class RemoveReputationCommand extends Command
 			},
 		});
 
-		if (already && already.type === UserReputationTypes.NEGATIVE)
+		if (already?.type === UserReputationTypes.NEGATIVE)
 		{
 			return `you already added a negative reputation to **${member.user.tag}**.`;
 		}

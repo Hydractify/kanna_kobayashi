@@ -1,4 +1,4 @@
-import { Collection, Message, Snowflake } from 'discord.js';
+import { Message } from 'discord.js';
 import { Transaction } from 'sequelize';
 
 import { User as UserModel } from '../../models/User';
@@ -34,13 +34,14 @@ class BreakUpCommand extends Command
 
 		await message.reply(`are you sure you want to break up with <@${partnerModel.id}>? (**Y**es or **N**o)`);
 
-		const collected: Collection<Snowflake, Message> = await message.channel.awaitMessages(
+		const collected: Message | undefined = await message.channel.awaitMessages(
 			(msg: GuildMessage) => message.author.id === msg.author.id && /^(y|n|yes|no)/i.test(msg.content),
-			{ time: 5e4, max: 1 });
+			{ time: 5e4, max: 1 },
+		).then(collected => collected.first());
 
-		if (!collected.size) return message.reply('aborting the command, due to lacking response.');
+		if (!collected) return message.reply('aborting the command, due to lacking response.');
 
-		if (collected.first()!.content[0].toLowerCase() !== 'y') return message.reply('aborting the command.');
+		if (collected.content[0].toLowerCase() !== 'y') return message.reply('aborting the command.');
 
 		authorModel.partnerId = null;
 		authorModel.partnerMarried = null;

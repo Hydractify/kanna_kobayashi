@@ -12,7 +12,7 @@
 		"sourceMap": true,
 		"sourceRoot": "/",
 		"strict": true,
-		"target": "esnext"
+		"target": "es2019"
 	},
 	"exclude": ["bin", "node_modules"]
 }

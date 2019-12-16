@@ -56,8 +56,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController
 	): Promise<Message | undefined>
 	{
 		const [embed]: MessageEmbed[] = message.embeds as MessageEmbed[];
-		const [, type, match]: RegExpExecArray = /.+? \u200b\| (.+):(\d+) \|/
-			.exec(message.embeds[0].footer!.text!) || [] as any;
+		const [, type, match]: string[] = /.+? \u200b\| (.+):(\d+) \|/
+			.exec(message.embeds[0].footer!.text!)?? [];
 		let offset: number = parseInt(match);
 
 		if (!isGuildMessage(message)) return;
@@ -173,6 +173,8 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController
 		limit: number = 4,
 	): Promise<ILeaderBoardUser[]>
 	{
+		if (type === 'level') type = 'exp';
+
 		const users: ILeaderBoardUser[] = await this.sequelize.query(
 			// Not worth figuring out how to tell sequelize to build this query
 			`SELECT

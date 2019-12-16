@@ -137,7 +137,7 @@ export abstract class WeebCommand extends Command
 			url,
 		);
 
-		if (members && members.size === 1)
+		if (members?.size === 1)
 		{
 			const { member, perm }: IWeebResolvedMember = members.first()!;
 

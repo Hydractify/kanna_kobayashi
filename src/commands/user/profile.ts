@@ -108,14 +108,14 @@ class ProfileCommand extends Command
 			.setDescription('\u200b')
 			.addField('Level', `${userModel.level} (${(userModel.exp || 0).toLocaleString()} exp)`, true)
 			.addField('Reputation', (reputation || 0).toLocaleString(), true)
-			.addField('Badges', this.mapItems(userModel.badges!), true)
+			.addField('Badges', this.mapItems(userModel.badges), true)
 			.addField('Time', userTime, true)
 			.addField('Relationship', partnerString, true);
 
 		if (!userModel.partnerHidden && user === author && userModel.partnerId)
 		{
 			const offset: number = authorModel.timezone || 0;
-			const anniversary: string = moment(userModel.partnerSince!)
+			const anniversary: string = moment(userModel.partnerSince ?? 0)
 				// .utc() because we .add() the utc offset to display the correct date
 				.utc()
 				.add(offset, 'hours')
@@ -131,7 +131,7 @@ class ProfileCommand extends Command
 	 * Maps an array of items (or badges) to a readable string.
 	 * @param items Array of items to map
 	 */
-	private mapItems(items: Badge[]): string
+	private mapItems(items: Badge[] | undefined): string
 	{
 		if (!items || !items.length) return 'None';
 

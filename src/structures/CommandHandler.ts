@@ -1,4 +1,5 @@
-import {
+import
+{
 	Collection,
 	DMChannel,
 	GuildMember,
@@ -166,9 +167,11 @@ export class CommandHandler
 		this.logger.info(`Loaded ${files.length - failed} ${folder} commands.`);
 	}
 
-	public async reloadCommand(command: string | Command): Promise<void>
+	public async reloadCommand(input: string | Command): Promise<void>
 	{
-		if (!(command instanceof Command)) command = this.resolveCommand(command)!;
+		// Small helper to make TS happy
+		let command: string | Command | undefined = input;
+		if (!(command instanceof Command)) command = this.resolveCommand(command);
 		if (!command) throw new Error('Could not find the specified command!');
 
 		// On error this will have been run regardless, may lead to unexpected consequences.
@@ -230,9 +233,8 @@ export class CommandHandler
 		}
 
 		// Keep "Requested by" embeds
-		if (message.author!.id === this.client.user!.id
-			&& message.embeds.length && message.embeds[0].footer
-			&& /^Requested by (.+?) \|.* (.+)$/.test(message.embeds[0].footer.text!)
+		if (message.author.id === this.client.user!.id &&
+			message.embeds?.[0].footer?.text?.match(/^Requested by (.+?) \|.* (.+)$/)
 		) return;
 
 		try
@@ -265,8 +267,8 @@ export class CommandHandler
 					permissions: {
 						memberChannel: message.channel.permissionsFor(message.member),
 						memberGuild: message.member.permissions,
-						selfChannel: message.channel.permissionsFor(this.client.user!),
-						selfGuild: message.guild.me!.permissions,
+						selfChannel: message.channel.permissionsFor(this.client.user ?? ''),
+						selfGuild: message.guild.me?.permissions ?? 'Uncached',
 					},
 					shardIds: this.client.shard!.ids.map((id: number) => id.toLocaleString()).join(', '),
 				},
@@ -274,8 +276,8 @@ export class CommandHandler
 			});
 
 			const guildModel: GuildModel = message.guild.model || await message.guild.fetchModel();
-			const [command, commandName, args]: [Command, string, string[]]
-			| [undefined, undefined, undefined] = this._matchCommand(message, guildModel);
+			const [command, commandName, args]: [Command, string, string[]] | [undefined, undefined, undefined]
+				= this._matchCommand(message, guildModel);
 			if (!command || !commandName || !args) return;
 
 			this._commandCounter.inc();
@@ -291,7 +293,7 @@ export class CommandHandler
 			if (authorModel.type === UserTypes.BLACKLISTED) return;
 			if (ownerModel.type === UserTypes.BLACKLISTED) return;
 
-			if (!message.channel.permissionsFor(message.guild.me!)!.has('SEND_MESSAGES'))
+			if (!(message.guild.me?.permissionsIn(message.channel)?.has('SEND_MESSAGES') ?? false))
 			{
 				message.author.send('I do not have permission to send in the channel of your command!')
 					.catch(() => undefined);
@@ -345,8 +347,8 @@ export class CommandHandler
 						permissions: {
 							memberChannel: message.channel.permissionsFor(message.member),
 							memberGuild: message.member.permissions,
-							selfChannel: message.channel.permissionsFor(this.client.user!),
-							selfGuild: message.guild.me!.permissions,
+							selfChannel: message.channel.permissionsFor(this.client.user ?? ''),
+							selfGuild: message.guild.me?.permissions ?? 'Uncached',
 						},
 					},
 					// Sentry does not allow to filter based on breadcrumbs, but via tags
@@ -367,8 +369,10 @@ export class CommandHandler
 		}
 	}
 
-	private _matchCommand(message: Message, guildModel: GuildModel):
-	[Command, string, string[]] | [undefined, undefined, undefined]
+	private _matchCommand(
+		message: Message,
+		guildModel: GuildModel
+	): [Command, string, string[]] | [undefined, undefined, undefined]
 	{
 		const prefixes: string[] = guildModel.prefix ? this._prefixes.concat(guildModel.prefix) : this._prefixes;
 		const match: RegExpExecArray | null = new RegExp(`^(${prefixes.join(' *|')})`, 'i').exec(message.content);

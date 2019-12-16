@@ -29,7 +29,7 @@ export class MessageEmbed extends DJSMessageEmbed
 	 */
 	public splitToFields(title: string = '\u200b', text: string, inline: boolean = false): this
 	{
-		const chunks: RegExpMatchArray = text.match(/(.|[\r\n]){1,1024}/g)!;
+		const chunks: RegExpMatchArray = text.match(/(.|[\r\n]){1,1024}/g) ?? [];
 
 		for (const [i, chunk] of chunks.entries())
 		{
@@ -64,7 +64,7 @@ Object.defineProperty(DJSMessageEmbed.prototype, '_apiTransform', {
 	value(this: MessageEmbed)
 	{
 		// It's not possible to exceed the limit without fields
-		if (this.fields && this.fields.length)
+		if (this.fields?.length)
 		{
 			let count: number = 0;
 			// Max 256 chars
@@ -72,9 +72,9 @@ Object.defineProperty(DJSMessageEmbed.prototype, '_apiTransform', {
 			// Max 2048 chars
 			if (this.description) count += this.description.length;
 			// Max 2048 chars
-			if (this.author && this.author.name) count += this.author.name.length;
+			if (this.author?.name) count += this.author.name.length;
 			// Max 2048 chars, yes you read correctly
-			if (this.footer && this.footer.text) count += this.footer.text.length;
+			if (this.footer?.text) count += this.footer.text.length;
 
 			for (let i: number = 0; i < this.fields.length; ++i)
 			{

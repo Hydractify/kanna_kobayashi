@@ -37,11 +37,6 @@ declare module 'discord.js' {
 		fetchModel(): Promise<GuildModel>;
 	}
 
-	interface Emoji {
-		readonly CreatedAt: Date;
-		readonly createdTimestamp: number;
-	}
-
 	interface User {
 		fetchModel(): Promise<UserModel>;
 	}

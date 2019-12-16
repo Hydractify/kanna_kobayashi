@@ -59,12 +59,12 @@ class QuizDurationCommand extends Command
 
 	public async run(
 		message: GuildMessage,
-		[option, time]: ['set', number] | ['view', undefined],
+		args: ['set', number] | ['view', undefined],
 	): Promise<Message | Message[]>
 	{
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
 
-		if (option === 'view')
+		if (args[0] === 'view')
 		{
 			if (!quiz) return message.reply('there is no quiz set up.');
 
@@ -75,19 +75,19 @@ class QuizDurationCommand extends Command
 
 		if (quiz)
 		{
-			quiz.duration = time!;
+			quiz.duration = args[1];
 			await quiz.save();
 		}
 		else
 		{
 			await message.guild.model.$create('quiz', {
-				duration: time,
+				duration: args[1],
 				guildId: message.guild.id,
 			});
 		}
 
 		return message.reply(
-			`you successfully ${quiz ? 'updated' : 'set'} the time of quizzes to ${time} minutes!`,
+			`you successfully ${quiz ? 'updated' : 'set'} the time of quizzes to ${args[1]} minutes!`,
 		);
 	}
 }

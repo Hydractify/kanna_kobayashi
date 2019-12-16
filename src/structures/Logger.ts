@@ -164,7 +164,7 @@ export class Logger
 		this._capture(level, tag, cleaned);
 
 		if (this._logLevel < level) return;
-		const out: NodeJS.Socket = level > LogLevel.WARN
+		const out: NodeJS.WritableStream = level > LogLevel.WARN
 			? process.stdout
 			: process.stderr;
 

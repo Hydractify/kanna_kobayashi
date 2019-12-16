@@ -23,7 +23,7 @@ export interface IMedia {
 	startDate: IFuzzyDate;
 	status: MediaStatus;
 	endDate: IFuzzyDate;
-	description: string;
+	description: string | null;
 	source: MediaSource;
 	image: IImage;
 	siteUrl: string;

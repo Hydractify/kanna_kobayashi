@@ -55,7 +55,7 @@ export class Resolver
 			if (!allowBots && member.user.bot) continue;
 
 			// Check for an "exact" lowercased match
-			if ((member.nickname && member.nickname.toLowerCase() === input)
+			if ((member.nickname?.toLowerCase() === input)
 				|| member.user.username.toLowerCase() === input
 				|| member.user.tag.toLowerCase() === input
 			)
@@ -66,7 +66,7 @@ export class Resolver
 			// Check for a partial match
 			if (!matchedMember
 				&& (member.user.username.toLowerCase().includes(input)
-					|| (member.nickname && member.nickname.toLowerCase().includes(input))
+					|| (member.nickname?.toLowerCase().includes(input))
 				)
 			)
 			{
@@ -94,7 +94,7 @@ export class Resolver
 		if (match)
 		{
 			const which: string = match[1] || match[2];
-			if (!allowEveryone && which === roles.first()!.guild.id) return undefined;
+			if (!allowEveryone && which === (roles.first()?.guild.id ?? which)) return undefined;
 
 			return roles.get(which) || undefined;
 		}

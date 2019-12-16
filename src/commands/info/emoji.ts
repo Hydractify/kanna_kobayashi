@@ -64,8 +64,8 @@ class EmojiInfoCommand extends Command
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]>
 	{
-		const createdAtString: string = moment(emoji.createdTimestamp).format('MM/DD/YYYY (HH:mm)');
-		const createdBeforeString: string = moment(emoji.createdTimestamp).fromNow();
+		const createdAtString: string = moment(emoji.createdTimestamp ?? 0).format('MM/DD/YYYY (HH:mm)');
+		const createdBeforeString: string = moment(emoji.createdTimestamp ?? 0).fromNow();
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.addField('Name', emoji.name, true)
 			.addField('ID', emoji.id, true)

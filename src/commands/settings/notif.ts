@@ -29,8 +29,9 @@ class NotifChannelCommand extends Command
 		// Nothing passed, show current
 		if (!target)
 		{
-			const alreadyChannel: GuildChannel | undefined = message.guild.channels
-				.get(message.guild.model.notificationChannelId!);
+			const alreadyChannel: GuildChannel | undefined = message.guild.model.notificationChannelId
+				? message.guild.channels.get(message.guild.model.notificationChannelId)
+				: undefined;
 			if (alreadyChannel)
 			{
 				return message.reply(`the current channel for welcome and farewell messages is ${alreadyChannel}.`);
@@ -81,7 +82,7 @@ class NotifChannelCommand extends Command
 		if (!channel) return message.reply(`I could not find a channel with **${target}**.`);
 
 		// Be sure that we can send messages to the specified channel
-		if (!channel.permissionsFor(this.client.user!)!.has('SEND_MESSAGES'))
+		if (!(channel.permissionsFor(this.client.user!)?.has('SEND_MESSAGES') ?? false))
 		{
 			return message.reply(`I do not have permissions to send messages in ${channel}.`);
 		}

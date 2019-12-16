@@ -63,7 +63,7 @@ class StrawPollCommand extends Command
 		for (const question of this.questions())
 		{
 
-			const [prompt, response] = await Promise.all([
+			const [prompt, response] = await Promise.all<Message, Message | undefined>([
 				message.reply(question) as Promise<Message>,
 				message.channel
 					.awaitMessages((msg: GuildMessage) => msg.author.id === message.author.id, { max: 1, time: 30 * 1000 })
@@ -108,7 +108,7 @@ class StrawPollCommand extends Command
 
 	private cleanup(message: GuildMessage, messages: Message[]): undefined | Promise<Collection<Snowflake, Message>>
 	{
-		if (message.guild.me!.permissionsIn(message.channel).has('MANAGE_MESSAGES'))
+		if (message.guild.me?.permissionsIn(message.channel).has('MANAGE_MESSAGES') ?? false)
 		{
 			return message.channel.bulkDelete(messages);
 		}

@@ -194,9 +194,9 @@ export class Score
 	{
 		if (this._beatmap) return this._beatmap;
 
-		this._beatmap = await (require('./Beatmap').Beatmap as typeof Beatmap).fetch(this.beatmapId, mode);
+		this._beatmap = await (require('./Beatmap').Beatmap as typeof Beatmap).fetch(this.beatmapId, mode) as Beatmap;
 
-		return this._beatmap!;
+		return this._beatmap;
 	}
 
 	/**
@@ -206,8 +206,8 @@ export class Score
 	{
 		if (this._user) return this._user;
 
-		this._user = await (require('./User').User as typeof User).fetch(this.userId);
+		this._user = await (require('./User').User as typeof User).fetch(this.userId) as User;
 
-		return this._user!;
+		return this._user;
 	}
 }

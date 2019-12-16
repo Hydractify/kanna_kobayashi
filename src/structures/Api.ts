@@ -42,7 +42,7 @@ const router: (options: IAPIRouterOptions) => APIRouter = ({
 						const queryString: string = (stringify({
 							...defaultQueryParams,
 							...options.query,
-						}).match(/[^=&?]+=[^=&?]+/g) || []).join('&');
+						}).match(/[^=&?]+=[^=&?]+/g) ?? []).join('&');
 						url += `?${queryString}`;
 					}
 

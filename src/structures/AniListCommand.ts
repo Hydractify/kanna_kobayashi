@@ -128,7 +128,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 				.setDescription(entry.name.native || '');
 
 			const { alternative }: ICharacterName = entry.name;
-			if (alternative && alternative[0]) embed.addField('Aliases:', alternative.join(', '), true);
+			if (alternative?.[0]) embed.addField('Aliases:', alternative.join(', '), true);
 
 			return embed.splitToFields('Description', entry.description
 				? replaceMap(entry.description, AniListCommand.replaceChars)
@@ -139,7 +139,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		}
 
 		const description: string[] = [...new Set(Object.values(entry.title)
-			.filter((value: string) => value && value.trim())
+			.filter((value: string) => value?.trim())
 			.map((value: string) => value.trim()),
 		)];
 
@@ -190,7 +190,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		embed
 			.splitToFields(
 				'Description',
-				entry.description && entry.description.trim()
+				entry.description?.trim()
 					? replaceMap(entry.description, AniListCommand.replaceChars)
 					: 'Not specified',
 			)
@@ -264,7 +264,7 @@ export abstract class AniListCommand<T extends (ICharacter | IMedia)> extends Co
 		// We don't care about rejections here, those are most likely 404 anyway
 		prompt.delete().catch(() => undefined);
 		// Only try to delete if one is present and we have manage messages in the current channel
-		if (response && response.deletable) response.delete().catch(() => undefined);
+		if (response?.deletable) response.delete().catch(() => undefined);
 
 		if (!response || response.content.toLowerCase() === 'cancel')
 		{

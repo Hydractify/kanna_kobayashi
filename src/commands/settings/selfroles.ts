@@ -111,7 +111,7 @@ class SelfRolesCommand extends Command
 			message.guild.model.selfRoleIds = roles.concat(role.id);
 			await message.guild.model.save();
 
-			if (message.guild.me!.roles.highest.position <= role.position)
+			if ((message.guild.me?.roles.highest.position ?? -1) <= role.position)
 			{
 				return message.reply([
 					`added the \`@${role.name}\` role to the self assignable roles!`,
@@ -147,7 +147,7 @@ class SelfRolesCommand extends Command
 				return message.reply(`the \`@${role.name}\` role is not self assignable!`);
 			}
 
-			if (message.guild.me!.roles.highest.position <= role.position)
+			if ((message.guild.me?.roles.highest.position ?? -1) <= role.position)
 			{
 				return message.reply(`the \`@${role.name}\` role is self assigneable, but it is not lower than my highest role!`);
 			}
