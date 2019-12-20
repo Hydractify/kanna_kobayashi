@@ -1,4 +1,4 @@
-import { Collection, Guild, Message, Role, Snowflake } from 'discord.js';
+import { User, Guild, Message, Role, Snowflake } from 'discord.js';
 import * as moment from 'moment';
 
 import { User as UserModel } from '../../models/User';
@@ -34,7 +34,9 @@ class GuildInfoCommand extends Command
 	{
 		if (guild.memberCount > guild.members.size) await guild.members.fetch();
 
-		const roles: Collection<Snowflake, Role> = new Collection(guild.roles.entries());
+		const ownerUser: User = this.client.users.get(guild.ownerID) || await this.client.users.fetch(guild.ownerID);
+
+		const roles: Map<Snowflake, Role> = new Map(guild.roles.entries());
 		// Get rid of @everyone
 		roles.delete(guild.id);
 		const rolesString: string = mapIterable(roles.values());
@@ -80,7 +82,7 @@ class GuildInfoCommand extends Command
 				moment(guild.createdTimestamp).format('MM/DD/YYYY [(]HH:mm[)]'),
 				true,
 			)
-			.addField('Owner', `Tag: ${guild.owner!.user.tag}\nID: ${guild.owner!.id}`, true)
+			.addField('Owner', `Tag: ${ownerUser.tag}\nID: ${ownerUser.id}`, true)
 
 			.addField(
 				'Members',

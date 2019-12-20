@@ -36,7 +36,7 @@ createServer(async (req: IncomingMessage, res: ServerResponse): Promise<void> =>
 {
 	try
 	{
-		if (parse(req.url!).pathname === '/metrics')
+		if (parse(req.url ?? '').pathname === '/metrics')
 		{
 			const metrics: object[][] = await manager.broadcastEval('this.getMetrics()');
 			res.writeHead(200, { 'content-type': register.contentType });

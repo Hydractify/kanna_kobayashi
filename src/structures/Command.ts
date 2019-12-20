@@ -1,9 +1,9 @@
-import {
+import
+{
 	MessageAdditions,
 	MessageOptions,
 	Permissions,
 	PermissionString,
-	TextChannel,
 	User,
 } from 'discord.js';
 import { duration } from 'moment';
@@ -175,8 +175,7 @@ export abstract class Command
 	{
 		if (this.clientPermissions.length)
 		{
-			const missing: PermissionString[] = (message.channel as TextChannel)
-				.permissionsFor(message.guild.me!)!
+			const missing: PermissionString[] = (message.guild.me?.permissionsIn(message.channel) ?? new Permissions(0))
 				.missing(this.clientPermissions);
 
 			if (missing.length)

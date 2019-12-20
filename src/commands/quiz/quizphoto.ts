@@ -54,13 +54,13 @@ class QuizPhotoCommand extends Command
 
 	public async run(
 		message: GuildMessage,
-		[option, photo]: ['set', string] | ['view', undefined],
+		args: ['set', string] | ['view', undefined],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]>
 	{
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
 
-		if (option === 'view')
+		if (args[0] === 'view')
 		{
 			if (!quiz) return message.reply('there is no quiz set up.');
 
@@ -74,7 +74,7 @@ class QuizPhotoCommand extends Command
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.setTitle('Setting up photo...')
-			.setImage(photo!);
+			.setImage(args[1]);
 
 		const confirmMessage: Message | DiscordAPIError = await (message.channel.send(embed) as Promise<Message>)
 			.catch((error: DiscordAPIError) => error);
@@ -92,18 +92,18 @@ class QuizPhotoCommand extends Command
 
 		if (quiz)
 		{
-			quiz.photo = photo!;
+			quiz.photo = args[1];
 			await quiz.save();
 		}
 		else
 		{
 			await message.guild.model.$create('quiz', {
 				guildId: message.guild.id,
-				photo,
+				photo: args[1],
 			});
 		}
 
-		embed.setTitle(`Set picture of ${(quiz && quiz.name) ? titleCase(quiz.name) : '\'No name set up yet\''}`);
+		embed.setTitle(`Set picture of ${quiz?.name ? titleCase(quiz.name) : '\'No name set up yet\''}`);
 
 		return confirmMessage.edit(embed);
 	}

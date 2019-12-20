@@ -1,4 +1,4 @@
-import { Collection, CollectorFilter, Message, MessageReaction, Snowflake, User } from 'discord.js';
+import { CollectorFilter, Message, MessageReaction, User } from 'discord.js';
 
 import { Quiz } from '../../models/Quiz';
 import { Command } from '../../structures/Command';
@@ -81,16 +81,17 @@ class QuizPremadeCommand extends Command
 		const filter: CollectorFilter = ({ emoji: { identifier } }: MessageReaction, user: User): boolean =>
 			user.id === message.author.id && this.emojis.includes(identifier);
 
-		const reactions: Collection<Snowflake, MessageReaction> =
-			await pickMessage.awaitReactions(filter, { max: 1, time: 6e4 });
+		const reaction: MessageReaction | undefined =
+			await pickMessage.awaitReactions(filter, { max: 1, time: 6e4 })
+				.then(reactions => reactions.first());
 		pickMessage.delete().catch(() => undefined);
-		if (!reactions.size) return undefined;
+		if (!reaction) return undefined;
 
 		const already: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
 		const quiz: {
 			name: string;
 			photo: string;
-		} = Quiz.preMade[this.emojis.indexOf(reactions.first()!.emoji.identifier)];
+		} = Quiz.preMade[this.emojis.indexOf(reaction.emoji.identifier)];
 		if (already)
 		{
 			already.set(quiz);

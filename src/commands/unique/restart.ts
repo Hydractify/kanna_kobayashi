@@ -32,7 +32,7 @@ class RestartCommand extends Command
 		else if (shard > (this.client.shard!.count - 1)) return message.reply('that is not a valid shard!');
 
 		await message.reply(`restarting shard ${shardNumber}!`);
-		return this.client.shard!.broadcastEval(`if (this.shard.id === ${shardNumber} process.exit(0)`);
+		return this.client.shard!.broadcastEval(`if (this.shard.ids.includes[${shardNumber}]) process.exit(0)`);
 	}
 }
 

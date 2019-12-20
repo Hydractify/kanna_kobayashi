@@ -1,4 +1,3 @@
-// tslint:disable-next-line:no-import-side-effect no-submodule-imports
 import 'source-map-support/register';
 
 // Hack to ensure that the WebhookLogger is instantiated first
@@ -23,7 +22,7 @@ const { TimeoutError } = require('generic-pool/lib/errors');
 import { Logger } from './structures/Logger';
 
 /* eslint-disable-next-line prefer-const */
-let client: Client | undefined;
+let client: Client;
 
 process.on('unhandledRejection', (error: {} | null | undefined) =>
 {
@@ -51,4 +50,4 @@ client = new Client({
 
 client
 	.login(clientToken)
-	.catch((error: Error) => client!.webhook.error('LOGIN', error).finally(() => process.exit(1)));
+	.catch((error: Error) => client.webhook.error('LOGIN', error).finally(() => process.exit(1)));

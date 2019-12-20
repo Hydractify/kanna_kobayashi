@@ -1,4 +1,4 @@
-import { Collection, Guild, GuildMember, Message, Role, Snowflake, User } from 'discord.js';
+import { Guild, GuildMember, Message, Role, Snowflake, User } from 'discord.js';
 import * as moment from 'moment';
 
 import { Command } from '../../structures/Command';
@@ -55,7 +55,7 @@ class UserInfoCommand extends Command
 		embed
 			.addField('Discriminator', user.discriminator, true)
 			.addField('Status', titleCase((member || user).presence.status), true)
-			.addField('Game', (member || user).presence.activity ? (member || user).presence.activity!.name : 'Nothing', true)
+			.addField('Game', (member || user).presence.activity?.name ?? 'Nothing', true)
 			.addField(
 				'Shared guilds on this shard',
 				this.client.guilds.filter((guild: Guild) => guild.members.has(user.id)).size,
@@ -65,12 +65,12 @@ class UserInfoCommand extends Command
 
 		if (member)
 		{
-			const roles: Collection<Snowflake, Role> = new Collection(member.roles.entries());
+			const roles: Map<Snowflake, Role> = new Map(member.roles.entries());
 			roles.delete(message.guild.id);
 			const rolesString: string = mapIterable(roles.values());
 
 			embed
-				.addField('Joined this guild', this._formatTimespan(member.joinedTimestamp!), true)
+				.addField('Joined this guild', this._formatTimespan(member.joinedTimestamp ?? 0), true)
 				.addField('Roles', rolesString || 'None');
 		}
 

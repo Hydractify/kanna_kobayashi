@@ -12,7 +12,7 @@ class EvalCommand extends Command
 	/**
 	 * Options used to inspect eval output with
 	 */
-	private _inspect: InspectOptions = { depth: 0 };
+	private _inspect: Exclude<InspectOptions, 'depth'> & { depth: number } = { depth: 0 };
 
 	public constructor(handler: CommandHandler)
 	{
@@ -66,7 +66,7 @@ class EvalCommand extends Command
 
 	protected get depth(): number
 	{
-		return this._inspect.depth!;
+		return this._inspect.depth;
 	}
 	protected set depth(value: number)
 	{

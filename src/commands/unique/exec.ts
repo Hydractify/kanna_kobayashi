@@ -32,7 +32,7 @@ class ExecCommand extends Command
 			.catch((err: Error & { stderr: string; stdout: string }) =>
 				({ err, stdout: err.stdout, stderr: err.stderr }));
 
-		const response: string = (error && error.code ? `\`Error Code: ${error.code}\`\n\n` : '')
+		const response: string = (error?.code ? `\`Error Code: ${error.code}\`\n\n` : '')
 			+ (stdout ? `\`STDOUT\`\n\`\`\`xl\n${stdout}\`\`\`\n\n` : '')
 			+ (stderr ? `\`STDERR\`\n\`\`\`xl\n${stderr}\`\`\`\n\n` : '');
 

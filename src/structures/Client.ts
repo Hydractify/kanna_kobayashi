@@ -1,4 +1,5 @@
-import {
+import
+{
 	Client as DJSClient,
 	ClientOptions,
 	Guild,
@@ -81,7 +82,7 @@ export class Client extends DJSClient
 		// Pad the number with zeros at the beginning for sorting
 		const shardId: string = (this.options.shards as [number])[0]
 			.toString()
-			.padStart(this.options.totalShardCount!.toString().length, '0');
+			.padStart(this.options.shardCount!.toString().length, '0');
 
 		/* eslint-disable-next-line @typescript-eslint/camelcase */
 		register.setDefaultLabels({ shard_id: shardId });
@@ -192,8 +193,8 @@ export class Client extends DJSClient
 				member: `${member.user.tag} (${member.id})`,
 
 				mePresent: {
-					guild: this.guilds.get(member.guild.id)!.members.has(this.user!.id),
-					member: member.guild.members.has(this.user!.id),
+					guild: this.guilds.get(member.guild.id)?.members.has(this.user!.id) ?? 'Error',
+					member: Boolean(member.guild.me),
 				},
 				referenceEqual: member.guild === this.guilds.get(member.guild.id),
 			},
@@ -213,8 +214,8 @@ export class Client extends DJSClient
 			return;
 		}
 
-		if (!member.guild.me) await member.guild.members.fetch(this.user!);
-		if (!channel.permissionsFor(member.guild.me!)!.has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
+		const meMember: GuildMember = member.guild.me || await member.guild.members.fetch(this.user!);
+		if (!(channel.permissionsFor(meMember)?.has(['VIEW_CHANNEL', 'SEND_MESSAGES'] ?? false))) return;
 
 		let message: string | null = guildModel[left ? 'farewellMessage' : 'welcomeMessage'];
 		if (!message) return;
@@ -240,7 +241,7 @@ export class Client extends DJSClient
 		if (reaction.message.partial)
 		{
 			// Only attempt to fetch if we can actually fetch
-			if (!reaction.message.channel.permissionsFor(this.user)!.has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'])) return;
+			if (!(reaction.message.channel.permissionsFor(this.user)?.has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']) ?? false)) return;
 
 			try
 			{
@@ -257,7 +258,7 @@ export class Client extends DJSClient
 				return;
 			}
 		}
-		if (reaction.message.author!.id !== this.user.id
+		if (reaction.message.author.id !== this.user.id
 			|| !reaction.message.embeds.length
 			|| !reaction.message.embeds[0].footer
 		)
@@ -273,9 +274,8 @@ export class Client extends DJSClient
 			message: 'Info about the embed',
 		});
 
-		const [, tag, name]: RegExpExecArray = /^Requested by (.+?) \u200b\|.* (.+)$/
-			.exec(reaction.message.embeds[0].footer.text!)
-			|| [] as any;
+		const [, tag, name]: string[] = /^Requested by (.+?) \u200b\|.* (.+)$/
+			.exec(reaction.message.embeds[0].footer.text!) ?? [];
 		if (!tag || !name)
 		{
 			reaction.message.channel.messages.delete(reaction.message.id);

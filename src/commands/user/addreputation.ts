@@ -36,7 +36,7 @@ class AddReputationCommand extends Command
 			},
 		});
 
-		if (already && already.type === UserReputationTypes.POSITIVE)
+		if (already?.type === UserReputationTypes.POSITIVE)
 		{
 			return `you already added a postive reputation to **${member.user.tag}**.`;
 		}

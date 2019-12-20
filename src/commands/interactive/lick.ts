@@ -28,7 +28,7 @@ class LickCommand extends WeebCommand
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]>
 	{
-		if (members && members.size === 1)
+		if (members.size === 1)
 		{
 			if (members.has(this.client.user!.id)) return message.reply('do not dare to touch that tongue on me! Hentai! ');
 		}

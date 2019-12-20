@@ -12,7 +12,7 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { Emojis } from '../../types/Emojis';
-import { GuildMessage } from '../../types/GuildMessage';
+import { GuildMessage, isGuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { IResponsiveEmbedController } from '../../types/IResponsiveEmbedController';
 import { PermLevels } from '../../types/PermLevels';
@@ -61,7 +61,9 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 
 	public async onCollect({ emoji, users, message }: MessageReaction, user: User): Promise<Message | undefined>
 	{
-		const [, rawPage]: RegExpExecArray = /.+? \u200b\| Page (\d+) \|/.exec(message.embeds[0].footer!.text!) || [] as any;
+		if (!isGuildMessage(message)) return;
+
+		const [, rawPage]: string[] = /.+? \u200b\| Page (\d+) \|/.exec(message.embeds[0].footer?.text ?? '') ?? [];
 		if (!rawPage) return;
 
 		let page: number = parseInt(rawPage) - 1;
@@ -70,8 +72,8 @@ class HelpCommand extends Command implements IResponsiveEmbedController
 
 		const embeds: MessageEmbed[] = this._mapCategories({
 			author: user,
-			guild: message.guild!,
-			member: message.guild!.member(user) || await message.guild!.members.fetch(user),
+			guild: message.guild,
+			member: message.guild.member(user) || await message.guild.members.fetch(user),
 		}, await user.fetchModel());
 
 		if (emoji.name === '➡')

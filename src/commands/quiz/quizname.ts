@@ -53,12 +53,12 @@ class QuizNameCommand extends Command
 
 	public async run(
 		message: GuildMessage,
-		[option, name]: ['set', string] | ['view', undefined],
+		args: ['set', string] | ['view', undefined],
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]>
 	{
 		const quiz: Quiz = await message.guild.model.$get<Quiz>('quiz') as Quiz;
-		if (option === 'view')
+		if (args[0] === 'view')
 		{
 			if (!quiz) return message.reply('there is no quiz set up.');
 			if (!quiz.name)
@@ -85,7 +85,7 @@ class QuizNameCommand extends Command
 		let toSend: string[] | MessageEmbed | undefined;
 		if (quiz)
 		{
-			quiz.name = name!;
+			quiz.name = args[1];
 			await quiz.save();
 			if (quiz.photo)
 			{
@@ -99,14 +99,14 @@ class QuizNameCommand extends Command
 		{
 			await message.guild.model.$create('quiz', {
 				guildId: message.guild.id,
-				name,
+				name: args[1],
 			});
 		}
 
 		if (!toSend)
 		{
 			toSend = [
-				`Set the answer to \`${titleCase(name!)}\`.`,
+				`Set the answer to \`${titleCase(args[1])}\`.`,
 				'_There is no photo associated with this quiz!_',
 			];
 		}

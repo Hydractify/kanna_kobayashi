@@ -49,8 +49,9 @@ class LookupCommand extends Command
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]>
 	{
-		const embed: MessageEmbed = this.client.guilds.has(invite.guild!.id)
-			? await this._getLocalGuildEmbed(message, invite.guild!, authorModel)
+		const guild: Guild | undefined = this.client.guilds.get(invite.guild!.id);
+		const embed: MessageEmbed = guild
+			? await this._getLocalGuildEmbed(message, guild, authorModel)
 			: this._getRemoteGuildEmbed(message, invite, authorModel);
 
 		return message.channel.send(embed);
@@ -60,7 +61,7 @@ class LookupCommand extends Command
 	{
 		return (this.handler.resolveCommand('guildinfo') as GuildInfoCommand).getEmbed(
 			message,
-			this.client.guilds.get(guild!.id)!,
+			guild,
 			authorModel
 		);
 	}
