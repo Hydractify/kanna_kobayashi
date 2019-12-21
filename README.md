@@ -6,7 +6,7 @@
 	</p>
 	<p align="center">
 		<a href="https://github.com/Hydractify/kanna_kobayashi/blob/stable/package.json#L3">
-			<img src="https://img.shields.io/badge/kanna_kobayashi-v4.6.0-fcbbd5.svg?style=flat-square" />
+			<img src="https://img.shields.io/badge/kanna_kobayashi-v4.6.1-fcbbd5.svg?style=flat-square" />
 		</a>
 		<a href="https://www.hydractify.org/discord">
 			<img src="https://img.shields.io/discord/298969150133370880.svg?style=flat-square&logo=discord">
