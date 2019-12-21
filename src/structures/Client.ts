@@ -124,7 +124,7 @@ export class Client extends DJSClient
 	@RavenContext
 	protected _onceReady(): void
 	{
-		if (this.user!.id === '297459926505095180')
+		if (this.user!.id === '297459926505095180' && this.shard!.ids.includes(0))
 		{
 			this.setInterval(updateBotLists.bind(this), 30 * 60 * 1000);
 		}

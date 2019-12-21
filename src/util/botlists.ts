@@ -22,7 +22,7 @@ export async function updateBotLists(this: Client): Promise<void>
 		.then((res: number[]) => res.reduce((p: number, c: number) => p + c));
 
 	// No webhook, that would just spam
-	Logger.instance.debug('BotLists', `Updating guild count for bot lists to ${count} guilds.`);
+	Logger.instance.debug('BotLists', this.shard!.ids[0], `Updating guild count for bot lists to ${count} guilds.`);
 
 	/* eslint-disable-next-line @typescript-eslint/camelcase */
 	const data: { server_count: number } = { server_count: count };
