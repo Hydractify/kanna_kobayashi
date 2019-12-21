@@ -86,18 +86,24 @@ export abstract class ImageEmbedCommand extends Command
 	 */
 	protected imageEmbed(message: GuildMessage, userModel: UserModel): MessageEmbed
 	{
-		if (!this.maxNumber) throw new Error('No maxNumber set!');
-		if (!this.images) throw new Error('No images set!');
-
-		const image: string = this.baseURL
-			? `${this.baseURL}${Math.floor(Math.random() * this.maxNumber) + 1}.gif`
-			: this.images[Math.floor(Math.random() * this.images.length)];
+		let image: string;
+		if (this.baseURL)
+		{
+			if (!this.maxNumber) throw new Error('No maxNumber set!');
+			image = `${this.baseURL}${Math.floor(Math.random() * this.maxNumber) + 1}.gif`;
+		}
+		else
+		{
+			if (!this.images) throw new Error('No images set!');
+			image = this.images[Math.floor(Math.random() * this.images.length)];
+		}
 
 		return MessageEmbed.image(message, userModel, image);
 	}
 }
 
-export interface IImageEmbedCommandInfo extends ICommandInfo {
+export interface IImageEmbedCommandInfo extends ICommandInfo
+{
 	baseURL?: string;
 	images?: string[];
 	maxNumber?: number;
