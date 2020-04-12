@@ -1,4 +1,4 @@
-import { MessageEmbed as DJSMessageEmbed, MessageEmbedOptions, User } from 'discord.js';
+import { MessageEmbed as DJSMessageEmbed, User } from 'discord.js';
 
 import { User as UserModel } from '../models/User';
 
