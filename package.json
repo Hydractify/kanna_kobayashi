@@ -4,7 +4,7 @@
 	"description": "A robot made for Discord.",
 	"main": "bin/shard.js",
 	"dependencies": {
-		"discord.js": "discordjs/discord.js",
+		"discord.js": "12.1.1",
 		"moment": "^2.24.0",
 		"moment-duration-format": "^2.3.2",
 		"node-fetch": "^2.6.0",
@@ -19,14 +19,15 @@
 	},
 	"devDependencies": {
 		"@types/moment-duration-format": "^2.2.2",
-		"@types/node": "^12.12.18",
+		"@types/node": "^13.11.1",
 		"@types/node-fetch": "^2.5.4",
 		"@types/raven": "^2.5.3",
+		"@types/validator": "10.11.3",
 		"@types/ws": "^6.0.4",
 		"@typescript-eslint/eslint-plugin": "^2.12.0",
 		"@typescript-eslint/parser": "^2.12.0",
-		"eslint": "^6.7.2",
-		"typescript": "^3.7.3"
+		"eslint": "^6.8.0",
+		"typescript": "^3.8.3"
 	},
 	"scripts": {
 		"build": "tsc -p ./",
