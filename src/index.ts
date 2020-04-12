@@ -43,7 +43,7 @@ PostgreSQL.instance.start();
 Prometheus.instance.start();
 
 client = new Client({
-	disableEveryone: true,
+	disableMentions: 'everyone',
 	messageCacheMaxSize: 5,
 	partials: ['MESSAGE'],
 });

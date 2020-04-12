@@ -30,7 +30,7 @@ class NotifChannelCommand extends Command
 		if (!target)
 		{
 			const alreadyChannel: GuildChannel | undefined = message.guild.model.notificationChannelId
-				? message.guild.channels.get(message.guild.model.notificationChannelId)
+				? message.guild.channels.cache.get(message.guild.model.notificationChannelId)
 				: undefined;
 			if (alreadyChannel)
 			{
@@ -66,7 +66,7 @@ class NotifChannelCommand extends Command
 		if (match)
 		{
 			const which: string = match[1] || match[2];
-			channel = message.guild.channels.get(which);
+			channel = message.guild.channels.cache.get(which);
 		}
 
 		target = target.toLowerCase();
@@ -74,7 +74,7 @@ class NotifChannelCommand extends Command
 		if (target[0] === '#') target = target.slice(1);
 		if (!channel)
 		{
-			channel = message.guild.channels.find(
+			channel = message.guild.channels.cache.find(
 				(c: GuildChannel) => c.type === 'text' && c.name.toLowerCase() === target,
 			);
 		}

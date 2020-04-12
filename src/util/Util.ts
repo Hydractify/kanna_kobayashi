@@ -227,7 +227,7 @@ type ObjectValueType<T> = T extends { [key: string]: infer P } ? P : never
  * @param errors Error codes to catch
  * @returns "catch" function to be used within a `Promise#catch`.
  */
-export function catchErrors(...errors: ObjectValueType<Constants['APIErrors']>[]): (reason: any) => DiscordAPIError
+export function catchErrors(...errors: ObjectValueType<typeof Constants['APIErrors']>[]): (reason: any) => DiscordAPIError
 {
 	return (reason: any): DiscordAPIError =>
 	{

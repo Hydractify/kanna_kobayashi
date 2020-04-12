@@ -1,4 +1,4 @@
-import { Guild, GuildMember, Message, Role, Snowflake, User } from 'discord.js';
+import { Activity, Guild, GuildMember, Message, Role, Snowflake, User } from 'discord.js';
 import * as moment from 'moment';
 
 import { Command } from '../../structures/Command';
@@ -41,7 +41,7 @@ class UserInfoCommand extends Command
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]>
 	{
-		const member: GuildMember | undefined = message.guild.members.get(user.id) ||
+		const member: GuildMember | undefined = message.guild.members.cache.get(user.id) ||
 			await message.guild.members.fetch(user.id).catch(() => undefined);
 
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
@@ -55,17 +55,17 @@ class UserInfoCommand extends Command
 		embed
 			.addField('Discriminator', user.discriminator, true)
 			.addField('Status', titleCase((member || user).presence.status), true)
-			.addField('Game', (member || user).presence.activity?.name ?? 'Nothing', true)
+			.addField('Game', this._findGame((member || user).presence.activities) ?? 'Nothing', true)
 			.addField(
 				'Shared guilds on this shard',
-				this.client.guilds.filter((guild: Guild) => guild.members.has(user.id)).size,
+				this.client.guilds.cache.filter((guild: Guild) => guild.members.cache.has(user.id)).size,
 				true,
 			)
 			.addField('Registered account', this._formatTimespan(user.createdTimestamp));
 
 		if (member)
 		{
-			const roles: Map<Snowflake, Role> = new Map(member.roles.entries());
+			const roles: Map<Snowflake, Role> = new Map(member.roles.cache.entries());
 			roles.delete(message.guild.id);
 			const rolesString: string = mapIterable(roles.values());
 
@@ -78,6 +78,11 @@ class UserInfoCommand extends Command
 			.setImage(user.displayAvatarURL());
 
 		return message.channel.send(embed);
+	}
+
+	private _findGame(activities: Activity[]): string | null
+	{
+		return activities.find(activity => ['PLAYING', 'STREAMING'].includes(activity.type))?.name || null;
 	}
 
 	private _formatTimespan(from: number): string

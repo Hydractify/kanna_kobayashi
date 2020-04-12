@@ -69,6 +69,7 @@ class QuizStartCommand extends Command
 		eventEmbed.fields[0] = {
 			name: 'Character name',
 			value: titleCase(quiz.name),
+			inline: false,
 		};
 
 		delete eventEmbed.author;

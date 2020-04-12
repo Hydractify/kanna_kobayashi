@@ -115,7 +115,7 @@ export class Client extends DJSClient
 	@RavenContext
 	protected _onReady(): void
 	{
-		this._guildCount.set(this.guilds.size);
+		this._guildCount.set(this.guilds.cache.size);
 
 		this.webhook.info('Ready', 'Manager', 'Logged in and processing events!');
 	}
@@ -151,17 +151,17 @@ export class Client extends DJSClient
 	@RavenContext
 	protected async _onGuild(guild: Guild, left: boolean): Promise<void>
 	{
-		this._guildCount.set(this.guilds.size);
+		this._guildCount.set(this.guilds.cache.size);
 		captureBreadcrumb({ category: left ? 'guildDelete' : 'guildCreate', level: 'debug' });
 
-		if (!left && guild.memberCount !== guild.members.size) await guild.members.fetch();
+		if (!left && guild.memberCount !== guild.members.cache.size) await guild.members.fetch();
 
 		const totalGuilds: number = await this.shard!.fetchClientValues('guilds.size')
 			.then((result: number[]) => result.reduce((acc: number, current: number) => acc + current));
 		const blacklisted: string = await UserModel.fetch(guild.ownerID)
 			.then((user: UserModel) => user.type === UserTypes.BLACKLISTED ? 'Yes' : 'No');
-		const botCount: number = guild.members.filter((member: GuildMember) => member.user.bot).size;
-		const owner: User = this.users.get(guild.ownerID) || await this.users.fetch(guild.ownerID);
+		const botCount: number = guild.members.cache.filter((member: GuildMember) => member.user.bot).size;
+		const owner: User = this.users.cache.get(guild.ownerID) || await this.users.fetch(guild.ownerID);
 
 		const embed: MessageEmbedOptions = new MessageEmbed()
 			.setThumbnail(guild.iconURL())
@@ -176,7 +176,7 @@ export class Client extends DJSClient
 			.addField('Total Members', guild.memberCount, true)
 			.addField('Humans', guild.memberCount - botCount, true)
 			.addField('Bots', botCount, true)
-			.apiTransform();
+			.toJSON();
 
 		(this as any).api.channels('303180857030606849').messages.post({ data: { embed } });
 	}
@@ -193,10 +193,10 @@ export class Client extends DJSClient
 				member: `${member.user.tag} (${member.id})`,
 
 				mePresent: {
-					guild: this.guilds.get(member.guild.id)?.members.has(this.user!.id) ?? 'Error',
+					guild: this.guilds.cache.get(member.guild.id)?.members.cache.has(this.user!.id) ?? 'Error',
 					member: Boolean(member.guild.me),
 				},
-				referenceEqual: member.guild === this.guilds.get(member.guild.id),
+				referenceEqual: member.guild === this.guilds.cache.get(member.guild.id),
 			},
 			message: 'Info about the guild member event',
 		});
@@ -204,7 +204,7 @@ export class Client extends DJSClient
 		const guildModel: GuildModel = await member.guild.fetchModel();
 
 		if (!guildModel.notificationChannelId) return;
-		const channel: GuildChannel | undefined = member.guild.channels.get(guildModel.notificationChannelId);
+		const channel: GuildChannel | undefined = member.guild.channels.cache.get(guildModel.notificationChannelId);
 
 		if (!(channel instanceof TextChannel))
 		{

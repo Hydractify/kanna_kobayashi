@@ -49,7 +49,7 @@ class LookupCommand extends Command
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]>
 	{
-		const guild: Guild | undefined = this.client.guilds.get(invite.guild!.id);
+		const guild: Guild | undefined = this.client.guilds.cache.get(invite.guild!.id);
 		const embed: MessageEmbed = guild
 			? await this._getLocalGuildEmbed(message, guild, authorModel)
 			: this._getRemoteGuildEmbed(message, invite, authorModel);

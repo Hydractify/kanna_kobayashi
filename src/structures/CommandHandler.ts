@@ -248,7 +248,7 @@ export class CommandHandler
 						extra: {
 							author: message.author.toJSON(),
 							memberApiCount: message.guild.memberCount,
-							memberCacheCount: message.guild.members.size,
+							memberCacheCount: message.guild.members.cache.size,
 							message: message.toJSON(),
 						},
 						level: 'warn',

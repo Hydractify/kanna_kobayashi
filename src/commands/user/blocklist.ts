@@ -39,7 +39,7 @@ class BlockListCommand extends Command
 			{
 				const tags: string[] = await Promise
 					.all(blocked.map(
-						(block: UserModel) => this.client.users.get(block.id) || this.client.users.fetch(block.id)),
+						(block: UserModel) => this.client.users.cache.get(block.id) || this.client.users.fetch(block.id)),
 					).then(
 						(users: User[]) => users.map((user: User) => user.tag),
 					);
