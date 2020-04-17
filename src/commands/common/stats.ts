@@ -34,10 +34,10 @@ class StatsCommand extends Command
 	{
 		const data: IShardData[] = await this.client.shard!.broadcastEval<IShardData>(
 			(client: Client) => ({
-				guilds: client.guilds.size,
+				guilds: client.guilds.cache.size,
 				ids: client.shard!.ids,
 				ram: process.memoryUsage().heapUsed / 1024 / 1024,
-				users: client.users.size,
+				users: client.users.cache.size,
 			}),
 		);
 

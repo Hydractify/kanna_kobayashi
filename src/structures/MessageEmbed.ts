@@ -1,4 +1,4 @@
-import { MessageEmbed as DJSMessageEmbed, MessageEmbedOptions, User } from 'discord.js';
+import { MessageEmbed as DJSMessageEmbed, User } from 'discord.js';
 
 import { User as UserModel } from '../models/User';
 
@@ -39,12 +39,9 @@ export class MessageEmbed extends DJSMessageEmbed
 		return this;
 	}
 
-	/**
-	 * Hack to change the accessibility level of _apiTransform.
-	 */
-	public apiTransform(): MessageEmbedOptions
+	public addBlankField(inline: boolean = false): this
 	{
-		return (this as any)._apiTransform();
+		return this.addField('\u200b', '\u200b', inline);
 	}
 
 	public setThumbnail(thumbnail: string | null): this

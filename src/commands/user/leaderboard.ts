@@ -102,10 +102,10 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController
 		// If we are on the last page we maybe have no user
 		if (!picked) return;
 
-		const pickedUser: User = this.client.users.get(picked.id)
+		const pickedUser: User = this.client.users.cache.get(picked.id)
 			|| await this.client.users.fetch(picked.id);
 
-		for (const reaction of message.reactions.values())
+		for (const reaction of message.reactions.cache.values())
 		{
 			if (reaction.me) reaction.users.remove().catch(() => undefined);
 		}
@@ -152,7 +152,7 @@ class LeaderboardCommand extends Command implements IResponsiveEmbedController
 		for (let i: number = 0; i < users.length; ++i)
 		{
 			const user: ILeaderBoardUser = users[i];
-			const { tag }: User = this.client.users.get(user.id)
+			const { tag }: User = this.client.users.cache.get(user.id)
 				|| await this.client.users.fetch(user.id);
 
 			embed.addField(

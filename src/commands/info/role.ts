@@ -26,7 +26,7 @@ class RoleInfoCommand extends Command
 	{
 		if (!roleName) return 'you need to give me a role name to search for.';
 
-		const role: Role | undefined = this.resolver.resolveRole(roleName, message.guild.roles, false);
+		const role: Role | undefined = this.resolver.resolveRole(roleName, message.guild.roles.cache, false);
 
 		if (!role) return `I could not find a role by that name or id ${roleName}.`;
 

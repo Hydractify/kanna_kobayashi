@@ -1,6 +1,6 @@
 import { Collection, Guild, GuildMember, Role, User } from 'discord.js';
 
-import { IFetchableStore } from '../types/IFetchableStore';
+import { IFetchableManager } from '../types/IFetchableManager';
 import { Client } from './Client';
 import { CommandHandler } from './CommandHandler';
 
@@ -50,7 +50,7 @@ export class Resolver
 
 		input = input.toLowerCase();
 		let matchedMember: GuildMember | undefined;
-		for (const member of guild.members.values())
+		for (const member of guild.members.cache.values())
 		{
 			if (!allowBots && member.user.bot) continue;
 
@@ -74,7 +74,7 @@ export class Resolver
 			}
 		}
 
-		if (matchedMember || guild.members.size >= guild.memberCount)
+		if (matchedMember || guild.members.cache.size >= guild.memberCount)
 		{
 			return matchedMember;
 		}
@@ -130,7 +130,7 @@ export class Resolver
 		}
 
 		input = input.toLowerCase();
-		for (const user of this.client.users.values())
+		for (const user of this.client.users.cache.values())
 		{
 			if (!allowBots && user.bot) continue;
 
@@ -154,7 +154,7 @@ export class Resolver
 	private async _matchAndFetch<V>(
 		input: string,
 		regex: RegExp,
-		store: IFetchableStore<V>,
+		store: IFetchableManager<V>,
 	): Promise<V | undefined>
 	{
 
@@ -163,6 +163,6 @@ export class Resolver
 
 		const which: string = match[1] || match[2];
 
-		return store.get(which) || store.fetch(which).catch(() => undefined);
+		return store.cache.get(which) || store.fetch(which).catch(() => undefined);
 	}
 }

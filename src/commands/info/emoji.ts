@@ -79,10 +79,11 @@ class EmojiInfoCommand extends Command
 
 	public searchEmoji(emojiName: string): [EmojiMatchType | undefined, Emoji | undefined]
 	{
-		if (this.client.emojis.has(emojiName)) return [EmojiMatchType.EXACT, this.client.emojis.get(emojiName)];
+		const emojis = this.client.emojis.cache;
+		if (emojis.has(emojiName)) return [EmojiMatchType.EXACT, emojis.get(emojiName)];
 		const lowerCasedName: string = emojiName.toLowerCase();
 		let inExactMatch: Emoji | undefined;
-		for (const emoji of this.client.emojis.values())
+		for (const emoji of emojis.values())
 		{
 			if (emoji.name === emojiName) return [EmojiMatchType.EXACT, emoji];
 			if (emoji.name.toLowerCase() === lowerCasedName) inExactMatch = emoji;

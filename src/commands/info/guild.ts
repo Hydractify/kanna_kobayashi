@@ -32,16 +32,16 @@ class GuildInfoCommand extends Command
 
 	public async getEmbed(message: GuildMessage, guild: Guild, authorModel: UserModel): Promise<MessageEmbed>
 	{
-		if (guild.memberCount > guild.members.size) await guild.members.fetch();
+		if (guild.memberCount > guild.members.cache.size) await guild.members.fetch();
 
-		const ownerUser: User = this.client.users.get(guild.ownerID) || await this.client.users.fetch(guild.ownerID);
+		const ownerUser: User = this.client.users.cache.get(guild.ownerID) || await this.client.users.fetch(guild.ownerID);
 
-		const roles: Map<Snowflake, Role> = new Map(guild.roles.entries());
+		const roles: Map<Snowflake, Role> = new Map(guild.roles.cache.entries());
 		// Get rid of @everyone
 		roles.delete(guild.id);
 		const rolesString: string = mapIterable(roles.values());
 
-		const emojis: string = mapIterable(guild.emojis.values());
+		const emojis: string = mapIterable(guild.emojis.cache.values());
 
 		const counts: {
 			bots: number;
@@ -55,11 +55,11 @@ class GuildInfoCommand extends Command
 			users: number;
 			voice: number;
 		} = { bots: 0, category: 0, dm: 0, group: 0, text: 0, news: 0, store: 0, unknown: 0, users: 0, voice: 0 };
-		for (const { user: { bot } } of guild.members.values())
+		for (const { user: { bot } } of guild.members.cache.values())
 		{
 			++counts[bot ? 'bots' : 'users'];
 		}
-		for (const { type } of guild.channels.values())
+		for (const { type } of guild.channels.cache.values())
 		{
 			++counts[type];
 		}
@@ -97,7 +97,7 @@ class GuildInfoCommand extends Command
 			.addField(
 				'Channels',
 				[
-					`Total: ${guild.channels.size}`,
+					`Total: ${guild.channels.cache.size}`,
 					`Category: ${counts.category}`,
 					`Text: ${counts.text}`,
 					`Voice: ${counts.voice}`,
@@ -105,8 +105,8 @@ class GuildInfoCommand extends Command
 				true,
 			)
 
-			.addField('Role count', guild.roles.size, true)
-			.addField('Emoji count', guild.emojis.size, true)
+			.addField('Role count', guild.roles.cache.size, true)
+			.addField('Emoji count', guild.emojis.cache.size, true)
 			.addField('Roles', rolesString || 'None', true)
 			.addField('Emojis', emojis || 'None', true);
 

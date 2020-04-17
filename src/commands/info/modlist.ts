@@ -1,4 +1,4 @@
-import { GuildMemberStore, Message } from 'discord.js';
+import { GuildMember, Message, Collection } from 'discord.js';
 
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
@@ -8,6 +8,7 @@ import { Emojis } from '../../types/Emojis';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { mapIterable, titleCase } from '../../util/Util';
+import { Snowflake } from 'discord.js';
 
 class ModListCommand extends Command
 {
@@ -31,7 +32,7 @@ class ModListCommand extends Command
 
 	public modList(
 		message: GuildMessage,
-		members: GuildMemberStore,
+		members: Collection<Snowflake, GuildMember>,
 		authorModel: UserModel,
 	): Promise<Message | Message[]>
 	{
@@ -77,12 +78,12 @@ class ModListCommand extends Command
 
 	public async run(message: GuildMessage, [status]: [string | undefined], { authorModel }: ICommandRunInfo): Promise<Message | Message[]>
 	{
-		if (message.guild.memberCount !== message.guild.members.size) await message.guild.members.fetch();
+		if (message.guild.memberCount !== message.guild.members.cache.size) await message.guild.members.fetch();
 
-		if (!status) return this.modList(message, message.guild.members, authorModel);
+		if (!status) return this.modList(message, message.guild.members.cache, authorModel);
 
 		const mods: Set<string> = new Set();
-		for (const member of message.guild.members.values())
+		for (const member of message.guild.members.cache.values())
 		{
 			if (member.presence.status !== status) continue;
 			if (member.user.bot) continue;

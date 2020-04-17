@@ -54,7 +54,7 @@ class SelfRolesCommand extends Command
 				return 'you should also tell me a role!';
 			}
 
-			const resolved: Role | undefined = this.resolver.resolveRole(role, message.guild.roles, false);
+			const resolved: Role | undefined = this.resolver.resolveRole(role, message.guild.roles.cache, false);
 
 			if (!resolved)
 			{
@@ -77,7 +77,7 @@ class SelfRolesCommand extends Command
 			const roles: string[] = [];
 			for (const roleId of message.guild.model.selfRoleIds)
 			{
-				const selfRole: Role | undefined = message.guild.roles.get(roleId);
+				const selfRole: Role | undefined = message.guild.roles.cache.get(roleId);
 				// TODO: Remove from database.
 				if (!selfRole) continue;
 				roles.push(`\`@${selfRole.name}\``);
@@ -152,7 +152,7 @@ class SelfRolesCommand extends Command
 				return message.reply(`the \`@${role.name}\` role is self assigneable, but it is not lower than my highest role!`);
 			}
 
-			if (message.member.roles.has(role.id))
+			if (message.member.roles.cache.has(role.id))
 			{
 				await message.member.roles.remove(role, 'Requested removal of selfrole');
 

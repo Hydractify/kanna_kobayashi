@@ -217,7 +217,7 @@ export class CommandHandler
 		// Ignore dms
 		if (message.channel instanceof DMChannel)
 		{
-			this.client.channels.remove(message.channel.id);
+			this.client.channels.cache.delete(message.channel.id);
 			await message.channel.delete().catch(() => null);
 			message.channel.messages.delete(message.id);
 
@@ -248,7 +248,7 @@ export class CommandHandler
 						extra: {
 							author: message.author.toJSON(),
 							memberApiCount: message.guild.memberCount,
-							memberCacheCount: message.guild.members.size,
+							memberCacheCount: message.guild.members.cache.size,
 							message: message.toJSON(),
 						},
 						level: 'warn',

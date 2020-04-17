@@ -84,7 +84,7 @@ class ProfileCommand extends Command
 		if (!userModel.partnerHidden)
 		{
 			const partner: User | undefined = userModel.partnerId
-				? this.client.users.get(userModel.partnerId)
+				? this.client.users.cache.get(userModel.partnerId)
 				|| await this.client.users.fetch(userModel.partnerId).catch(() => undefined)
 				: undefined;
 
