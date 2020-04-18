@@ -7,6 +7,7 @@ import
 	GuildMember,
 	MessageEmbedOptions,
 	MessageReaction,
+	Snowflake,
 	TextChannel,
 	User,
 } from 'discord.js';
@@ -106,18 +107,26 @@ export class Client extends DJSClient
 
 	@on('shardReady')
 	@RavenContext
-	protected _onShardReady(id: number): void
+	protected _onShardReady(id: number, unavailableGuilds?: Set<Snowflake>): void
 	{
-		this.webhook.info('Ready', id, 'Up and running!');
+		let logMessage = 'Up and running!';
+		if (unavailableGuilds)
+		{
+			logMessage += `\nThere were ${unavailableGuilds.size} unavailable guilds.`;
+		}
+
+		this.webhook.info(`ShardReady [${id}]`, id, logMessage);
 	}
 
 	@on('ready')
 	@RavenContext
 	protected _onReady(): void
 	{
+		const id = this.shard!.ids[0]!;
+
 		this._guildCount.set(this.guilds.cache.size);
 
-		this.webhook.info('Ready', 'Manager', 'Logged in and processing events!');
+		this.webhook.info(`ClientReady [${id}]`, id, 'Logged in and processing events!');
 	}
 
 	@once('ready')
@@ -134,7 +143,8 @@ export class Client extends DJSClient
 	@RavenContext
 	protected _onDisconnect({ code, reason }: { code: number; reason: string }, id: number): void
 	{
-		this.webhook.warn('shardDisconnect', id, `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
+		// Only for fatal disconnects, should never happen.
+		this.webhook.error(`shardDisconnect [${id}]`, id, `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
 	}
 
 	@on('shardError')
@@ -143,7 +153,7 @@ export class Client extends DJSClient
 	{
 		this.errorCount.inc({ type: 'WebSocket' });
 
-		this.webhook.error('ShardError', id, error);
+		this.webhook.error(`ShardError [${id}]`, id, error);
 	}
 
 	@on('guildCreate', false)
@@ -253,7 +263,8 @@ export class Client extends DJSClient
 				// Ignore Unknown Message errors
 				if (e.code === 10008) return;
 				this.errorCount.inc({ type: 'Reaction' });
-				this.webhook.error('ReactionError', reaction.message.guild!.shardID, e);
+				const shardID = reaction.message.guild!.shardID;
+				this.webhook.error(`ReactionError [${shardID}]`, shardID, e);
 
 				return;
 			}
@@ -306,14 +317,15 @@ export class Client extends DJSClient
 	@RavenContext
 	protected _onReconnecting(id: number): void
 	{
-		this.webhook.info('Reconnecting', id, 'Shard is reconnecting...');
+		this.webhook.info(`Reconnecting [${id}]`, id, 'Shard is reconnecting...');
 	}
 
 	@on('warn')
 	@RavenContext
 	protected _onWarn(warning: string): void
 	{
-		this.webhook.warn('Client Warn', warning);
+		const id = this.shard!.ids[0]!;
+		this.webhook.warn(`Client Warn [${id}]`, id, warning);
 	}
 
 	@on('debug')
@@ -325,21 +337,47 @@ export class Client extends DJSClient
 		const [, rawId, info2]: [string, string, string] = exec as any;
 		const id: number | 'Manager' = rawId === 'Manager' ? rawId : parseInt(rawId);
 
-		/* eslint-disable-next-line no-cond-assign */
+		/* eslint-disable no-cond-assign */
+		// Discord requested a reconnect
+		if (exec = / *\[RECONNECT\] *(.+) */.exec(info2))
+		{
+			this.webhook.info(`Reconnect [${id}]`, id, exec[1]);
+		}
+
+		// Discord invalidated our session somehow
+		if (exec = / *\[INVALID SESSION\] *(.+) */.exec(info2))
+		{
+			this.webhook.warn(`Invalid Session [${id}]`, id, exec[1]);
+		}
+
+		// Identifying as a new session
+		if (exec = / *\[IDENTIFY\] *(.+) */.exec(info2))
+		{
+			this.webhook.warn(`Identify [${id}]`, id, exec[1]);
+		}
+
+		// Resuming an existing session after reconnecting
+		if (exec = / *\[RESUME\] *(.+) */.exec(info2))
+		{
+			this.webhook.warn(`Resume [${id}]`, id, exec[1]);
+		}
+
+		// discord.js fetched new session limit informations
 		if (exec = /^Session Limit Information *\n *Total: *(.+) *\n *Remaining: *(.+)/.exec(info2))
 		{
-			this.webhook.info('Session Limit Information', id, 'Identifies:', exec[2], '/', exec[1]);
+			this.webhook.info(`Session Limit Information [${id}]`, id, 'Identifies:', exec[2], '/', exec[1]);
 
 			return;
 		}
 
-		/* eslint-disable-next-line no-cond-assign */
-		if (exec = /^WebSocket was closed. *\n *Event Code: *(.+) *\n *Clean: (.+) *\n *Reason: *(.+)/.exec(info2))
+		// The websocket closed for some reason
+		if (exec = /^\[CLOSE\] *\n *Event Code *: *(.+) *\n *Clean *: (.+) *\n *Reason *: *(.+)/.exec(info2))
 		{
-			this.webhook.info('WebSocket was closed', id, 'Code:', exec[1], ' Clean:', exec[2], ' Reason:', exec[2]);
+			this.webhook.info(`WebSocket was closed [${id}]`, id, 'Code:', exec[1], ' Clean:', exec[2], ' Reason:', exec[2]);
 
 			return;
 		}
+		/* eslint-enable no-cond-assign */
 	}
 
 	@on('raw')
