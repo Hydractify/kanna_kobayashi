@@ -339,31 +339,31 @@ export class Client extends DJSClient
 
 		/* eslint-disable no-cond-assign */
 		// Discord requested a reconnect
-		if (exec = / *\[RECONNECT\] *(.+) */.exec(info2))
+		if (exec = /\s*\[RECONNECT\]\s*(.+)\s*/.exec(info2))
 		{
 			this.webhook.info(`Reconnect [${id}]`, id, exec[1]);
 		}
 
 		// Discord invalidated our session somehow
-		if (exec = / *\[INVALID SESSION\] *(.+) */.exec(info2))
+		if (exec = /\s*\[INVALID SESSION\]\s*(.+)\s*/.exec(info2))
 		{
 			this.webhook.warn(`Invalid Session [${id}]`, id, exec[1]);
 		}
 
 		// Identifying as a new session
-		if (exec = / *\[IDENTIFY\] *(.+) */.exec(info2))
+		if (exec = /\s*\[IDENTIFY\]\s*(.+)\s*/.exec(info2))
 		{
 			this.webhook.warn(`Identify [${id}]`, id, exec[1]);
 		}
 
 		// Resuming an existing session after reconnecting
-		if (exec = / *\[RESUME\] *(.+) */.exec(info2))
+		if (exec = /\s*\[RESUME\]\s*(.+)\s*/.exec(info2))
 		{
 			this.webhook.warn(`Resume [${id}]`, id, exec[1]);
 		}
 
 		// discord.js fetched new session limit informations
-		if (exec = /^Session Limit Information *\n *Total: *(.+) *\n *Remaining: *(.+)/.exec(info2))
+		if (exec = /^Session Limit Information\s*\n\s*Total:\s*(.+)\s*\n\s*Remaining:\s*(.+)/.exec(info2))
 		{
 			this.webhook.info(`Session Limit Information [${id}]`, id, 'Identifies:', exec[2], '/', exec[1]);
 
@@ -371,7 +371,7 @@ export class Client extends DJSClient
 		}
 
 		// The websocket closed for some reason
-		if (exec = /^\[CLOSE\] *\n *Event Code *: *(.+) *\n *Clean *: (.+) *\n *Reason *: *(.+)/.exec(info2))
+		if (exec = /^\[CLOSE\]\s*\n\s*Event Code\s*:\s*(.+)\s*\n\s*Clean\s*:\s*(.+)\s*\n\s*Reason\s*:\s*(.+)/.exec(info2))
 		{
 			this.webhook.info(`WebSocket was closed [${id}]`, id, 'Code:', exec[1], ' Clean:', exec[2], ' Reason:', exec[2]);
 
