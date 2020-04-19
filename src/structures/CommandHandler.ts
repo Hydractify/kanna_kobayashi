@@ -219,7 +219,7 @@ export class CommandHandler
 		{
 			this.client.channels.cache.delete(message.channel.id);
 			await message.channel.delete().catch(() => null);
-			message.channel.messages.delete(message.id);
+			message.channel.messages.cache.delete(message.id);
 
 			return;
 		}
@@ -227,7 +227,7 @@ export class CommandHandler
 		// Ignore system messages
 		if (message.system)
 		{
-			message.channel.messages.delete(message.id);
+			message.channel.messages.cache.delete(message.id);
 
 			return;
 		}
@@ -365,7 +365,7 @@ export class CommandHandler
 		}
 		finally
 		{
-			message.channel.messages.delete(message.id);
+			message.channel.messages.cache.delete(message.id);
 		}
 	}
 

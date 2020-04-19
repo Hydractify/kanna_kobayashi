@@ -263,7 +263,7 @@ export class Client extends DJSClient
 			|| !reaction.message.embeds[0].footer
 		)
 		{
-			reaction.message.channel.messages.delete(reaction.message.id);
+			reaction.message.channel.messages.cache.delete(reaction.message.id);
 
 			return;
 		}
@@ -278,7 +278,7 @@ export class Client extends DJSClient
 			.exec(reaction.message.embeds[0].footer.text!) ?? [];
 		if (!tag || !name)
 		{
-			reaction.message.channel.messages.delete(reaction.message.id);
+			reaction.message.channel.messages.cache.delete(reaction.message.id);
 
 			return;
 		}
@@ -286,7 +286,7 @@ export class Client extends DJSClient
 		const command: IResponsiveEmbedController = this.commandHandler.resolveCommand(name.toLowerCase()) as any;
 		if (!command)
 		{
-			reaction.message.channel.messages.delete(reaction.message.id);
+			reaction.message.channel.messages.cache.delete(reaction.message.id);
 
 			return;
 		}
@@ -294,7 +294,7 @@ export class Client extends DJSClient
 		if (user.tag !== tag || !command.emojis || !command.onCollect
 			|| !command.emojis.includes(reaction.emoji.name))
 		{
-			reaction.message.channel.messages.delete(reaction.message.id);
+			reaction.message.channel.messages.cache.delete(reaction.message.id);
 
 			return;
 		}
