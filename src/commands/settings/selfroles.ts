@@ -80,7 +80,7 @@ class SelfRolesCommand extends Command
 				const selfRole: Role | undefined = message.guild.roles.cache.get(roleId);
 				// TODO: Remove from database.
 				if (!selfRole) continue;
-				roles.push(`\`@${selfRole.name}\``);
+				roles.push(selfRole.toString());
 
 			}
 
@@ -91,7 +91,7 @@ class SelfRolesCommand extends Command
 
 			roles.unshift('self assignable roles are: ');
 
-			return message.reply(`${mapIterable(roles).slice(0, -1)}\``);
+			return message.reply(mapIterable(roles));
 		}
 
 		if (type === 'add')
@@ -99,7 +99,7 @@ class SelfRolesCommand extends Command
 			const roles: string[] = message.guild.model.selfRoleIds;
 			if (roles.includes(role.id))
 			{
-				return message.reply(`the \`@${role.name}\` role is already self assignable.`);
+				return message.reply(`the ${role} role is already self assignable.`);
 			}
 
 			if (message.member.roles.highest.position <= role.position)
@@ -114,12 +114,12 @@ class SelfRolesCommand extends Command
 			if ((message.guild.me?.roles.highest.position ?? -1) <= role.position)
 			{
 				return message.reply([
-					`added the \`@${role.name}\` role to the self assignable roles!`,
+					`added the ${role} role to the self assignable roles!`,
 					'Note: The role is not below my highest role, I can not assign or remove it!',
 				].join('\n'));
 			}
 
-			return message.reply(`added the \`@${role.name}\` role to the self assignable roles!`);
+			return message.reply(`added the ${role} role to the self assignable roles!`);
 		}
 
 		if (type === 'remove')
@@ -128,7 +128,7 @@ class SelfRolesCommand extends Command
 			const index: number = roles.indexOf(role.id);
 			if (index === -1)
 			{
-				return message.reply(`the \`@${role.name}\` role is not a self assignable.`);
+				return message.reply(`the ${role} role is not a self assignable.`);
 			}
 
 			roles.splice(index, 1);
@@ -137,32 +137,32 @@ class SelfRolesCommand extends Command
 			message.guild.model.selfRoleIds = roles;
 			await message.guild.model.save();
 
-			return message.reply(`removed the \`@${role.name}\` role from the self assignable roles!`);
+			return message.reply(`removed the ${role} role from the self assignable roles!`);
 		}
 
 		if (type === 'toggle')
 		{
 			if (!message.guild.model.selfRoleIds.includes(role.id))
 			{
-				return message.reply(`the \`@${role.name}\` role is not self assignable!`);
+				return message.reply(`the ${role} role is not self assignable!`);
 			}
 
 			if ((message.guild.me?.roles.highest.position ?? -1) <= role.position)
 			{
-				return message.reply(`the \`@${role.name}\` role is self assigneable, but it is not lower than my highest role!`);
+				return message.reply(`the ${role} role is self assigneable, but it is not lower than my highest role!`);
 			}
 
 			if (message.member.roles.cache.has(role.id))
 			{
 				await message.member.roles.remove(role, 'Requested removal of selfrole');
 
-				return message.reply(`you no longer have the \`@${role.name}\` role!`);
+				return message.reply(`you no longer have the ${role} role!`);
 			}
 			else
 			{
 				await message.member.roles.add(role, 'Requestesd selfrole');
 
-				return message.reply(`you now have the \`@${role.name}\` role!`);
+				return message.reply(`you now have the ${role} role!`);
 			}
 		}
 	}
