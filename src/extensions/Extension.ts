@@ -22,6 +22,8 @@ export async function extendAll(): Promise<void>
 		} = require(`./${file}`);
 		/* eslint-enable */
 
+		if (!Extension || !Target) continue;
+
 		Object.defineProperties(
 			Target.prototype,
 			Object.getOwnPropertyDescriptors(Extension.prototype),
@@ -31,17 +33,20 @@ export async function extendAll(): Promise<void>
 
 declare module 'discord.js' {
 	/* eslint-disable @typescript-eslint/interface-name-prefix */
-	interface Guild {
+	interface Guild
+	{
 		model: GuildModel;
 
 		fetchModel(): Promise<GuildModel>;
 	}
 
-	interface User {
+	interface User
+	{
 		fetchModel(): Promise<UserModel>;
 	}
 
-	interface ShardClientUtil {
+	interface ShardClientUtil
+	{
 		broadcastEval<T, U extends Client>(fn: (client: U) => T,
 		): T extends Promise<any>
 			? T extends Promise<infer U> ? U : any

@@ -1,18 +1,22 @@
-import { Guild } from 'discord.js';
+import { Structures } from 'discord.js';
 
 import { Guild as GuildModel } from '../models/Guild';
 
-class GuildExtension
-{
-	public async fetchModel(this: Guild): Promise<GuildModel>
+
+const GuildExtensionClass = Structures.extend('Guild', Guild =>
+	class GuildExtension extends Guild
 	{
-		if (this.model) return this.model;
+		public model!: GuildModel;
 
-		[this.model] = await GuildModel.findCreateFind<GuildModel>({ where: { id: this.id } });
+		public async fetchModel(): Promise<GuildModel>
+		{
+			if (this.model) return this.model;
 
-		return this.model;
+			[this.model] = await GuildModel.findCreateFind<GuildModel>({ where: { id: this.id } });
+
+			return this.model;
+		}
 	}
-}
+);
 
-export { GuildExtension as Extension };
-export { Guild as Target };
+export { GuildExtensionClass as Guild };

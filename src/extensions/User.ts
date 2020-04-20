@@ -1,21 +1,16 @@
-import { Message, User } from 'discord.js';
+import { Structures } from 'discord.js';
 
 import { User as UserModel } from '../models/User';
 
-class UserExtension
-{
-	public fetchModel(this: User): Promise<UserModel>
+
+const UserExtensionClass = Structures.extend('User', User =>
+	class UserExtension extends User
 	{
-		return UserModel.fetch(this.id);
+		public fetchModel(): Promise<UserModel>
+		{
+			return UserModel.fetch(this.id);
+		}
 	}
+);
 
-	/* eslint-disable @typescript-eslint/no-empty-function */
-	set lastMessage(value: Message)
-	{ }
-	set lastMessageID(value: string)
-	{ }
-	/* eslint-enable @typescript-eslint/no-empty-function */
-}
-
-export { UserExtension as Extension };
-export { User as Target };
+export { UserExtensionClass as User };
