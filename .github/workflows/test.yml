@@ -1,0 +1,48 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+
+    - name: Install Dependencies
+      run: yarn
+
+    - name: Register Problem Matcher
+      run: echo "##[add-matcher].github/tsc.json"
+
+    - name: Lint
+      run: yarn test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Install Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+
+    - name: Install Dependencies
+      run: yarn
+
+    - name: Register Problem Matcher
+      run: echo "##[add-matcher].github/tsc.json"
+
+    - name: Build
+      run: yarn build
