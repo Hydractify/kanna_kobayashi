@@ -1,8 +1,8 @@
 {
 	"name": "kanna-kobayashi",
-	"version": "4.6.1",
-	"description": "A robot made for Discord.",
-	"main": "bin/shard.js",
+	"version": "4.6.2",
+	"description": "A community driven open-source application bot for Discord.",
+	"main": "bin/Shard.js",
 	"dependencies": {
 		"discord.js": "12.2.0",
 		"moment": "^2.24.0",

@@ -12,9 +12,9 @@ about: Report a bug found on Kanna Kobayashi.
 
 #### Kanna Kobayashi
 
-<!-- Paste here the text in between parenthesis of the command k!stats -->
-
-<!-- If possible, paste a screenshot URL in between the following parenthesis -->
+<!--
+	Inside the parenthesis below, paste a screenshot of what Kanna sents after you execute the command k!stats
+-->
 
 [Guild Info]()
 
@@ -24,9 +24,13 @@ about: Report a bug found on Kanna Kobayashi.
 
 I was trying to pat a friend with `k!pat person` but then an error was thrown back at me.
 
+> Remember to delete the line above and this one before opening the issue.
+
 ## Reproducing the bug
 
 <!-- Write a list of what you did below. -->
 
 1. I did this.
 2. Then in sequence I have done that and this happened.
+
+> Remember to delete the lines above and this one before opening the issue.

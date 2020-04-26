@@ -6,7 +6,7 @@
 	</p>
 	<p align="center">
 		<a href="https://github.com/Hydractify/kanna_kobayashi/blob/stable/package.json#L3">
-			<img src="https://img.shields.io/badge/kanna_kobayashi-v4.6.1-fcbbd5.svg?style=flat-square" />
+			<img src="https://img.shields.io/badge/kanna_kobayashi-v4.6.2-fcbbd5.svg?style=flat-square" />
 		</a>
 		<a href="https://www.hydractify.org/discord">
 			<img src="https://img.shields.io/discord/298969150133370880.svg?style=flat-square&logo=discord">
@@ -38,15 +38,22 @@
 
 ## Introduction
 
-Kanna Kobayashi is a community oriented open source bot for Discord, based on the character [Kanna Kamui] from the [anime] known as [Kobayashi-san Chi no Maid Dragon] by [KyoAni] (Kyoto Animation Studios). This bot is made with the intent of improving the experience of the end users with one another and also to improve our skills.
+[Kanna Kobayashi] is a community driven open-source application bot for Discord, based on the character [Kanna Kamui] from the [anime] known as [Kobayashi-san Chi no Maid Dragon] by [KyoAni] (Kyoto Animation Studios). This application is made with the intent of enriching the experience, as well as interactions, between our end users; It also serves as a project to improve our own skills.
 
 ## Getting started
 
-The first thing you will need [NodeJS] which we highly recommend to get the current instead of [LTS] as we work with it. We use [Yarn] for dependecy management, so you also will need that. The last thing you need installed is [PostgreSQL]. After you are over installing everything, [clone] our repository into wherever you want, open a terminal in that directory and run `yarn install` in a terminal.
+These are the tools you will need to have installed to get the project up and running:
+
+1. [NodeJS];
+    - > It is highly recommend to always install the current version instead of [LTS], as we are constantly updating the project to it's latest installment.
+1. [Yarn];
+1. [PostgreSQL].
+
+After you are over installing everything, [clone] our repository into wherever you want. Then open a terminal in that directory and run `yarn install` in a terminal to install all it's dependencies.
 
 ### Setting up
 
-Make a copy of the [`data.example.json`] file as `data.json` and fill the blanks.
+Make a copy of the [`data.example.json`] file as `data.json` in the root directory of the project, and fill it's blanks.
 
 ```js
 {
@@ -63,14 +70,16 @@ Make a copy of the [`data.example.json`] file as `data.json` and fill the blanks
 }
 ```
 
-After filling, go in your [PostgreSQL] and create a user `kanna` with the password `kannapw` and a database called `kanna`. Once done, do `yarn build` to transpile the `*.ts` files. Right after, execute `node ./bin/scripts/buildItems.js && node ./bin/scripts/createTriggers.js`. That should be it!
+After filling, go in your [PostgreSQL] and create a user with the name `kanna` and the following password: `kannapw`. Then create a database called `kanna`. Once finished, do `yarn build` to transpile the `*.ts` files. Right after, execute `node ./bin/scripts/buildItems.js && node ./bin/scripts/createTriggers.js`.
+
+Congratulations! You have everything set-up now, all that is left is to run the application with `yarn run`!
 
 ## Disclaimers
 
 All licenses to [Kobayashi-san Chi no Maid Dragon] and [Kanna Kamui] are reserved to [KyoAni] and [coolkyou]. We are not responsible for any modified versions of [Kanna Kobayashi] that may be made. If you would like to claim authorship in any of our code or content, feel free to e-mail us at support@hydractify.org without any hesitation.
 
-> Kanna Kobayashi, the Discord robot.
-> Copyright (C) 2017-2019 Hydractify
+> [Kanna Kobayashi], the Discord application bot.
+> Copyright (C) 2017-2020 Hydractify
 
 <!-- Introduction -->
 
