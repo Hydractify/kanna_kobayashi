@@ -44,8 +44,12 @@ class StatsCommand extends Command
 		let totalGuilds: number = 0;
 		let totalUsers: number = 0;
 		let totalRam: number = 0;
-		for (const { guilds, users, ram } of data)
+		for (const { guilds, users, ram, ids } of data)
 		{
+			if (ids.includes(message.guild.shardID))
+			{
+				ids[ids.length - 1] = `${ids[ids.length - 1]}*`;
+			}
 			totalGuilds += guilds;
 			totalUsers += users;
 			totalRam += ram;
@@ -86,7 +90,7 @@ class StatsCommand extends Command
 		{
 			let tmp: number;
 
-			tmp = ids.map((id: number) => id.toLocaleString()).join(', ').length;
+			tmp = ids.map(id => id.toLocaleString()).join(', ').length;
 			if (tmp > longestId) longestId = tmp;
 
 			tmp = guilds.toLocaleString().length;
@@ -125,7 +129,7 @@ class StatsCommand extends Command
 		for (const { guilds, ids, ram, users } of data)
 		{
 			shardInfo += [
-				'║', this._pad(ids.map((id: number) => id.toLocaleString()).join(', '), longestId),
+				'║', this._pad(ids.map(id => id.toLocaleString()).join(', '), longestId),
 				'|', this._pad(`${ram.toFixed(2)} MB`, longestRam),
 				'|', this._pad(guilds.toLocaleString(), longestGuild),
 				'|', this._pad(users.toLocaleString(), longestUser),
