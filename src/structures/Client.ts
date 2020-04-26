@@ -15,6 +15,7 @@ import { join } from 'path';
 import { Counter, Gauge, register } from 'prom-client';
 import { captureBreadcrumb } from 'raven';
 
+import { Command as SetGameCommand } from '../commands/unique/setgame';
 import { ListenerUtil } from '../decorators/ListenerUtil';
 import { RavenContext } from '../decorators/RavenContext';
 import { Guild as GuildModel } from '../models/Guild';
@@ -120,13 +121,18 @@ export class Client extends DJSClient
 
 	@on('ready')
 	@RavenContext
-	protected _onReady(): void
+	protected async _onReady(): Promise<void>
 	{
 		const id = this.shard!.ids[0]!;
 
 		this._guildCount.set(this.guilds.cache.size);
 
 		this.webhook.info(`ClientReady [${id}]`, id, 'Logged in and processing events!');
+
+		// Set the activity on startup
+		const setGameCommand: SetGameCommand = this.commandHandler.resolveCommand('setgame') as SetGameCommand;
+		await setGameCommand.cleanup();
+		await setGameCommand.publishActivity();
 	}
 
 	@once('ready')
