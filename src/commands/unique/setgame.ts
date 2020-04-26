@@ -52,6 +52,8 @@ class SetGameCommand extends Command
 			this.activity = { type: 'PLAYING', name: args.join(' ') };
 		}
 
+		await this.publishActivity();
+
 		return message.channel.send('Updated presence activity successfully on all shards!');
 	}
 

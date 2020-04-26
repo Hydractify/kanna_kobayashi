@@ -129,10 +129,13 @@ export class Client extends DJSClient
 
 		this.webhook.info(`ClientReady [${id}]`, id, 'Logged in and processing events!');
 
-		// Set the activity on startup
-		const setGameCommand: SetGameCommand = this.commandHandler.resolveCommand('setgame') as SetGameCommand;
-		await setGameCommand.cleanup();
-		await setGameCommand.publishActivity();
+		if (id + 1 === this.options.shardCount)
+		{
+			// Set the activity on startup
+			const setGameCommand: SetGameCommand = this.commandHandler.resolveCommand('setgame') as SetGameCommand;
+			await setGameCommand.cleanup();
+			await setGameCommand.publishActivity();
+		}
 	}
 
 	@once('ready')
