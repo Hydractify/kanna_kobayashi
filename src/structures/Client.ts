@@ -373,7 +373,7 @@ export class Client extends DJSClient
 		// The websocket closed for some reason
 		if (exec = /^\[CLOSE\]\s*\n\s*Event Code\s*:\s*(.+)\s*\n\s*Clean\s*:\s*(.+)\s*\n\s*Reason\s*:\s*(.+)/.exec(info2))
 		{
-			this.webhook.info(`WebSocket was closed [${id}]`, id, 'Code:', exec[1], ' Clean:', exec[2], ' Reason:', exec[2]);
+			this.webhook.info(`WebSocket was closed [${id}]`, id, 'Code:', exec[1], ' Clean:', exec[2], ' Reason:', exec[3]);
 
 			return;
 		}
