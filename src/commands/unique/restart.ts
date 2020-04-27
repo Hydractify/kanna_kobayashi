@@ -4,35 +4,36 @@ import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { GuildMessage } from '../../types/GuildMessage';
 import { PermLevels } from '../../types/PermLevels';
+import { IPCMessageType } from '../../types/IPCMessageType';
 
 class RestartCommand extends Command
 {
 	public constructor(handler: CommandHandler)
 	{
 		super(handler, {
-			description: 'Restarts Kanna!',
+			description: 'Restarts Kanna!\nEither a single shard or all of them.',
 			examples: ['restart', 'restart 1'],
 			exp: 0,
 			guarded: true,
 			permLevel: PermLevels.TRUSTED,
-			usage: 'restart [Number]',
+			usage: 'restart [ShardID]',
 		});
 	}
 
-	public async run(message: GuildMessage, [shardNumber]: string[]): Promise<Message | Message[]>
+	public async run(message: GuildMessage, [shardString]: string[]): Promise<void | Message>
 	{
-		if (!shardNumber)
+		if (!shardString)
 		{
 			await message.reply('Restarting!');
-			return this.client.shard!.broadcastEval('process.exit(0)');
+			return this.client.shard?.send({ __kanna__: true, type: IPCMessageType.RESTART_ALL });
 		}
 
-		const shard: number = parseInt(shardNumber);
-		if (isNaN(shard)) return message.reply('you must provide me a number!');
-		else if (shard > (this.client.shard!.count - 1)) return message.reply('that is not a valid shard!');
+		const shardID: number = parseInt(shardString);
+		if (isNaN(shardID)) return message.reply('you must provide me a number!');
+		else if (shardID > (this.client.shard!.count - 1)) return message.reply('that is not a valid shard id!');
 
-		await message.reply(`restarting shard ${shardNumber}!`);
-		return this.client.shard!.broadcastEval(`if (this.shard.ids.includes[${shardNumber}]) process.exit(0)`);
+		await message.reply(`restarting shard ${shardID}!`);
+		return this.client.shard?.send({ __kanna__: true, type: IPCMessageType.RESTART, target: shardID });
 	}
 }
 
