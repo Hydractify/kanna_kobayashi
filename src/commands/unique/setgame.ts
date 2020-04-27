@@ -93,7 +93,7 @@ class SetGameCommand extends Command
 
 	private async guildCount(): Promise<ActivityOptions>
 	{
-		const totalGuilds: number = await this.client.shard!.fetchClientValues('guilds.cache.size')
+		const totalGuilds: number = await this.client.shard!.broadcastEval(client => client.guilds.cache.size)
 			.then((result: number[]) => result.reduce((acc: number, current: number) => acc + current));
 
 		return { type: 'PLAYING', name: `k!help | on ${totalGuilds} guilds` };
