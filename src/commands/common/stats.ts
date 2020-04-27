@@ -150,10 +150,18 @@ class StatsCommand extends Command
 
 	private _pad(value: string, length: number): string
 	{
+		// If the value ends with an asterisk (i.e. current shard marker) do not take it into account
+		if (value.endsWith('*')) --length;
+
 		if (value.length >= length) return value;
 		length -= value.length;
 
-		return `${' '.repeat(length / 2)}${value}${' '.repeat(length / 2 + (length % 2))}`;
+		let padded = `${' '.repeat(length / 2)}${value}${' '.repeat(length / 2 + (length % 2))}`;
+
+		// If the value ends with an asterisk, we are one space short. Prepend it
+		if (value.endsWith('*')) padded = ` ${padded}`;
+
+		return padded;
 	}
 }
 
