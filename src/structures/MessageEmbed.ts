@@ -56,8 +56,8 @@ export class MessageEmbed extends DJSMessageEmbed
 }
 
 // Messing with original prototype instead of the extended one because d.js internally uses their own embed class
-const { _apiTransform }: { _apiTransform: () => object } = DJSMessageEmbed.prototype as any;
-Object.defineProperty(DJSMessageEmbed.prototype, '_apiTransform', {
+const { toJSON }: { toJSON: () => object } = DJSMessageEmbed.prototype;
+Object.defineProperty(DJSMessageEmbed.prototype, 'toJSON', {
 	value(this: MessageEmbed)
 	{
 		// It's not possible to exceed the limit without fields
@@ -95,6 +95,6 @@ Object.defineProperty(DJSMessageEmbed.prototype, '_apiTransform', {
 			}
 		}
 
-		return _apiTransform.call(this);
+		return toJSON.call(this);
 	},
 });
