@@ -257,15 +257,15 @@ export class Client extends DJSClient
 		// Ensure own member is cached in the current guild
 		if (!reaction.message.guild.me) await reaction.message.guild.members.fetch(this.user);
 
-		if (reaction.message.partial)
+		if (reaction.partial || reaction.message.partial)
 		{
 			// Only attempt to fetch if we can actually fetch
 			if (!(reaction.message.channel.permissionsFor(this.user)?.has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY']) ?? false)) return;
 
 			try
 			{
-				// If the message gets uncached, discord.js won't find a reference to it and creates a new instance
-				reaction.message = await reaction.message.fetch();
+				if (reaction.partial) reaction = await reaction.fetch();
+				if (reaction.message.partial) reaction.message = await reaction.message.fetch();
 			}
 			catch (e)
 			{

@@ -46,7 +46,7 @@ Prometheus.instance.start();
 client = new Client({
 	allowedMentions: { parse: ['users'] },
 	messageCacheMaxSize: 5,
-	partials: ['MESSAGE'],
+	partials: ['MESSAGE', 'REACTION'],
 });
 
 client
