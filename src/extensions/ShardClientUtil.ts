@@ -1,13 +1,13 @@
 import { Client, ShardClientUtil, Util } from 'discord.js';
 import { inspect } from 'util';
-import { Loggable, Logger } from '../structures/Logger';
+import { Loggable, AttachedLogger } from '../structures/Logger';
 
 const broadcastEval: (script: string) => Promise<any[]> = ShardClientUtil.prototype.broadcastEval;
 
 @Loggable('BROADCASTEVAL')
 class ShardClientUtilExtension
 {
-	private logger!: Logger;
+	private logger!: AttachedLogger;
 
 	public async _handleMessage(
 		this: { _respond: (type: string, val: object) => void; client: any },

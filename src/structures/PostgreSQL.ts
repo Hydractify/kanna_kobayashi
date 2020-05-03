@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { Sequelize } from 'sequelize-typescript';
 
-import { Loggable, Logger } from './Logger';
+import { Loggable, AttachedLogger } from './Logger';
 
 /**
  * Singleton PostgreSQL connection
@@ -30,7 +30,7 @@ export class PostgreSQL
 	/**
 	 * Reference to the Logger instance
 	 */
-	private readonly logger!: Logger;
+	private readonly logger!: AttachedLogger;
 
 	/**
 	 * Instantiate the PostgreSQL singleton.

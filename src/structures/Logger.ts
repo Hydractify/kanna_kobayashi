@@ -8,6 +8,12 @@ import { colors, LogLevel } from '../types/LogLevel';
 
 export { Loggable } from '../decorators/LoggerDecorator';
 
+type LevelFunctions = 'silly' | 'debug' | 'verbose' | 'info' | 'warn' | 'error'
+/**
+ * A logger, except that the logging functions do not accept a tag anymore.
+ */
+export type AttachedLogger = Omit<Logger, LevelFunctions> & Record<LevelFunctions, (...input: any[]) => Promise<void>>;
+
 /**
  * Singleton Logger
  */
@@ -57,7 +63,7 @@ export class Logger
 	/**
 	 * Write a messages with the `silly` level to the log if applicable.
 	 */
-	public async silly(tag: any, ...input: any[]): Promise<void>
+	public async silly(tag: string, ...input: any[]): Promise<void>
 	{
 		this._write(LogLevel.SILLY, tag, input);
 	}
@@ -65,7 +71,7 @@ export class Logger
 	/**
 	 * Write a messages with the `debug` level to the log if applicable.
 	 */
-	public async debug(tag: any, ...input: any[]): Promise<void>
+	public async debug(tag: string, ...input: any[]): Promise<void>
 	{
 		this._write(LogLevel.DEBUG, tag, input);
 	}
@@ -73,7 +79,7 @@ export class Logger
 	/**
 	 * Write a messages with the `verbose` level to the log if applicable.
 	 */
-	public async verbose(tag: any, ...input: any[]): Promise<void>
+	public async verbose(tag: string, ...input: any[]): Promise<void>
 	{
 		this._write(LogLevel.VERBOSE, tag, input);
 	}
@@ -81,7 +87,7 @@ export class Logger
 	/**
 	 * Write a messages with the `info` level to the log if applicable.
 	 */
-	public async info(tag: any, ...input: any[]): Promise<void>
+	public async info(tag: string, ...input: any[]): Promise<void>
 	{
 		this._write(LogLevel.INFO, tag, input);
 	}
@@ -89,7 +95,7 @@ export class Logger
 	/**
 	 * Write a messages with the `warn` level to the log if applicable.
 	 */
-	public async warn(tag: any, ...input: any[]): Promise<void>
+	public async warn(tag: string, ...input: any[]): Promise<void>
 	{
 		this._write(LogLevel.WARN, tag, input);
 	}
@@ -97,9 +103,23 @@ export class Logger
 	/**
 	 * Write a messages with the `error` level to the log if applicable.
 	 */
-	public async error(tag: any, ...input: any[]): Promise<void>
+	public async error(tag: string, ...input: any[]): Promise<void>
 	{
 		this._write(LogLevel.ERROR, tag, input);
+	}
+
+	/**
+	 * The tag used for the current process.
+	 *
+	 * - If this is a shard process `SHARD $SHARD_ID`
+	 * - If this is a sharding manager process `MANAGER`
+	 * - Otherwise (read: scripts) `GLOBAL`
+	 */
+	protected get _processTag(): string
+	{
+		if (process.env.SHARDS) return `SHARD ${process.env.SHARDS}`;
+		if (process.env.SHARDING_MANAGER) return 'MANAGER';
+		return 'GLOBAL';
 	}
 
 	/**
@@ -153,13 +173,6 @@ export class Logger
 	 */
 	protected _write(level: LogLevel, tag: string, data: any[]): void
 	{
-		let shardId: string | null = null;
-		[data, shardId] = typeof data[0] === 'number'
-			? [data.slice(1), `SHARD ${data[0].toString().padStart(2, ' ')}`]
-			: data[0] === 'Manager'
-				? [data.slice(1), 'MANAGER ']
-				: [data, 'GLOBAL  '];
-
 		const cleaned: string = this._prepareText(data);
 		this._capture(level, tag, cleaned);
 
@@ -171,7 +184,7 @@ export class Logger
 		out.write(
 			[
 				'\n',
-				`\x1b[32m[${shardId}]\x1b[0m`,
+				`\x1b[32m[${this._processTag}]\x1b[0m`,
 				`[${moment().format('YYYY.MM.DD-HH:mm:ss')}]`,
 				// Background
 				`\x1b[${colors[level][0]}m`,

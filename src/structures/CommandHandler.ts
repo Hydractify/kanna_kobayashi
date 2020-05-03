@@ -24,7 +24,7 @@ import { isGuildMessage } from '../types/GuildMessage';
 import { UserTypes } from '../types/UserTypes';
 import { Client } from './Client';
 import { Command } from './Command';
-import { Logger } from './Logger';
+import { AttachedLogger } from './Logger';
 import { MessageEmbed } from './MessageEmbed';
 import { Resolver } from './Resolver';
 
@@ -71,7 +71,7 @@ export class CommandHandler
 	/**
 	 * Reference to the logger
 	 */
-	private readonly logger!: Logger;
+	private readonly logger!: AttachedLogger;
 
 	/**
 	 * Instantiate a new command handler
@@ -357,7 +357,7 @@ export class CommandHandler
 					},
 				});
 
-				this.client.webhook.error('CommandError', message.guild.shardID, error);
+				this.client.webhook.error('CommandError', error);
 				message.reply(
 					'**an error occured, but rest assured! It has already been reported and will be fixed in no time!**',
 				).catch(() => null);

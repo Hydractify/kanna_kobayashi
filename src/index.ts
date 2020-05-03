@@ -2,8 +2,7 @@ import 'source-map-support/register';
 
 // Hack to ensure that the WebhookLogger is instantiated first
 import { WebhookLogger } from './structures/WebhookLogger';
-const shardID = parseInt(process.env.SHARDS!);
-WebhookLogger.instance.warn(`Process spawn [${shardID}]`, shardID, 'Process spawned');
+WebhookLogger.instance.warn(`Process spawn [${parseInt(process.env.SHARDS!)}]`, 'Process spawned');
 
 import { config } from 'raven';
 /* eslint-disable @typescript-eslint/no-var-requires */

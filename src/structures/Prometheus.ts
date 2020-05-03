@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import { Gauge } from 'prom-client';
 
-import { Loggable, Logger } from './Logger';
+import { Loggable, AttachedLogger } from './Logger';
 
 const TIMEOUT = 10000;
 
@@ -27,7 +27,7 @@ export class Prometheus
 	/**
 	 * Reference to the Logger instance
 	 */
-	private readonly logger!: Logger;
+	private readonly logger!: AttachedLogger;
 
 	/**
 	 * Timers currently running;

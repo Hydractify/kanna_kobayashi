@@ -12,7 +12,7 @@ PostgreSQL.instance.start().then(async () =>
 			Logger.instance.error('ERROR', error);
 			process.exit(1);
 		});
-	Logger.instance.info('SUCESS', 'Created the badges.');
+	Logger.instance.info('SUCESS', 'Created all badges.');
 
 	return process.exit(0);
 });

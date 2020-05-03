@@ -2,7 +2,7 @@
 import { Logger } from '../structures/Logger';
 import { LogLevel } from '../types/LogLevel';
 
-function getHandler(prefix: string | undefined): ProxyHandler<Logger>
+function getHandler(prefix: string): ProxyHandler<Logger>
 {
 	return {
 		get: (target: Logger, prop: keyof Logger): (...data: any[]) => Promise<void> | void =>
