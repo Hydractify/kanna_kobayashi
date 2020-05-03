@@ -44,7 +44,7 @@ class CryCommand extends WeebCommand
 		const embed: MessageEmbed = await this.fetchEmbed(message, authorModel, members, {
 			bot: 'W-what did I do?!',
 			dev: `What did you do **${members ? members.first()!.name : undefined}**!?`,
-			trusted: `Why **${members ? members.first()!.name : undefined}?`,
+			trusted: `Why **${members ? members.first()!.name : undefined}**?`,
 		});
 
 		if (!members)
