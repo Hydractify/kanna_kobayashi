@@ -25,19 +25,12 @@ export class WebhookLogger extends Logger
 		super._write(level, `Webhook][${tag}`, data);
 		if (this._webhookLevel < level) return;
 
-		let shardId: string | null = null;
-		[data, shardId] = typeof data[0] === 'number'
-			? [data.slice(1), `Shard ${data[0]}`]
-			: data[0] === 'Manager'
-				? [data.slice(1), data[0]]
-				: [data, 'Global'];
-
 		const cleaned: string = this._prepareText(data);
 
 		const embed: MessageEmbed = new MessageEmbed()
 			.setTimestamp()
 			.setColor(colors[level][2])
-			.setFooter(shardId);
+			.setFooter(this._processTag);
 		const options: WebhookMessageOptions = {
 			avatarURL: 'https://cdn.discordapp.com/attachments/250372608284033025/494249449862725632/avatar.png',
 			embeds: [embed],

@@ -11,9 +11,9 @@ import { WebhookLogger } from './structures/WebhookLogger';
 import { IPCMessageType } from './types/IPCMessageType';
 
 const webhook: WebhookLogger = WebhookLogger.instance;
-webhook.info('Manager Spawn', 'Manager', 'Manager spawned.');
+webhook.info('Manager Spawn', 'Manager spawned.');
 
-process.on('unhandledRejection', (error: {} | null | undefined) => webhook.error('REJECTION', 'Manager', error));
+process.on('unhandledRejection', (error: {} | null | undefined) => webhook.error('REJECTION', error));
 
 /* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { clientToken: token, httpPort }: { clientToken: string; httpPort: number } = require('../data');
@@ -26,7 +26,8 @@ manager.spawn(manager.totalShards, 5500, Infinity);
 
 manager.on('shardCreate', (shard: Shard) =>
 {
-	webhook.info('Shard Create', shard.id, 'Shard created.');
+	const shardID: number = shard.id;
+	webhook.info(`Shard Create [${shardID}]`, 'Shard created.');
 	shard
 		.on('message', message =>
 		{
@@ -41,7 +42,7 @@ manager.on('shardCreate', (shard: Shard) =>
 					}
 					else
 					{
-						webhook.warn('IPCMESSAGE', 'Manager', `Received a restart request for an unknown shard: ${message.target}`);
+						webhook.warn(`IPCMESSAGE [${shardID}]`, `Received a restart request for an unknown shard: ${message.target}`);
 					}
 					break;
 				}
@@ -51,13 +52,13 @@ manager.on('shardCreate', (shard: Shard) =>
 					break;
 
 				default:
-					webhook.warn('IPCMESSAGE', 'Manager', `Received an unexpected message type: ${message.type}`);
+					webhook.warn(`IPCMESSAGE [${shardID}]`, `Received an unexpected message type: ${message.type}`);
 					break;
 			}
 		})
-		.on('death', () => webhook.warn('Shard Death', shard.id, 'Shard died.'))
-		.on('error', (error: Error) => webhook.error('Shard Error', shard.id, 'Shard errored:', error))
-		.on('spawn', () => webhook.warn('Shard Spawn', shard.id, 'Shard spawned.'));
+		.on('death', () => webhook.warn(`Shard Death [${shardID}]`, 'Shard died.'))
+		.on('error', (error: Error) => webhook.error(`Shard Error [${shardID}]`, 'Shard errored:', error))
+		.on('spawn', () => webhook.warn(`Shard Spawn [${shardID}]`, 'Shard spawned.'));
 });
 
 createServer(async (req: IncomingMessage, res: ServerResponse): Promise<void> =>
@@ -78,10 +79,10 @@ createServer(async (req: IncomingMessage, res: ServerResponse): Promise<void> =>
 	}
 	catch (e)
 	{
-		webhook.error('Prometheus', 'Manager', e);
+		webhook.error('Prometheus', e);
 
 		res.writeHead(500, { 'content-type': register.contentType });
 		res.write('Internal Server Error');
 	}
 	res.end();
-}).listen(httpPort, () => webhook.info('Prometheus', 'Manager', 'Listening for requests...'));
+}).listen(httpPort, () => webhook.info('Prometheus', 'Listening for requests...'));

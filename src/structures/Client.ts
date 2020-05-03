@@ -116,7 +116,7 @@ export class Client extends DJSClient
 			logMessage += `\nThere were ${unavailableGuilds.size} unavailable guilds.`;
 		}
 
-		this.webhook.info(`ShardReady [${id}]`, id, logMessage);
+		this.webhook.info(`ShardReady [${id}]`, logMessage);
 	}
 
 	@on('ready')
@@ -127,7 +127,7 @@ export class Client extends DJSClient
 
 		this._guildCount.set(this.guilds.cache.size);
 
-		this.webhook.info(`ClientReady [${id}]`, id, 'Logged in and processing events!');
+		this.webhook.info(`ClientReady [${id}]`, 'Logged in and processing events!');
 
 		if (id + 1 === this.options.shardCount)
 		{
@@ -153,7 +153,7 @@ export class Client extends DJSClient
 	protected _onDisconnect({ code, reason }: { code: number; reason: string }, id: number): void
 	{
 		// Only for fatal disconnects, should never happen.
-		this.webhook.error(`shardDisconnect [${id}]`, id, `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
+		this.webhook.error(`shardDisconnect [${id}]`, `Code: \`${code}\`\nReason: \`${reason || 'No reason available'}\``);
 	}
 
 	@on('shardError')
@@ -162,7 +162,7 @@ export class Client extends DJSClient
 	{
 		this.errorCount.inc({ type: 'WebSocket' });
 
-		this.webhook.error(`ShardError [${id}]`, id, error);
+		this.webhook.error(`ShardError [${id}]`, error);
 	}
 
 	@on('guildCreate', false)
@@ -272,8 +272,7 @@ export class Client extends DJSClient
 				// Ignore Unknown Message errors
 				if (e.code === 10008) return;
 				this.errorCount.inc({ type: 'Reaction' });
-				const shardID = reaction.message.guild!.shardID;
-				this.webhook.error(`ReactionError [${shardID}]`, shardID, e);
+				this.webhook.error(`ReactionError [${reaction.message.guild!.shardID}]`, e);
 
 				return;
 			}
@@ -326,7 +325,7 @@ export class Client extends DJSClient
 	@RavenContext
 	protected _onReconnecting(id: number): void
 	{
-		this.webhook.info(`Reconnecting [${id}]`, id, 'Shard is reconnecting...');
+		this.webhook.info(`Reconnecting [${id}]`, 'Shard is reconnecting...');
 	}
 
 	@on('warn')
@@ -334,7 +333,7 @@ export class Client extends DJSClient
 	protected _onWarn(warning: string): void
 	{
 		const id = this.shard!.ids[0]!;
-		this.webhook.warn(`Client Warn [${id}]`, id, warning);
+		this.webhook.warn(`Client Warn [${id}]`, warning);
 	}
 
 	@on('debug')
@@ -350,31 +349,31 @@ export class Client extends DJSClient
 		// Discord requested a reconnect
 		if (exec = /\s*\[RECONNECT\]\s*(.+)\s*/.exec(info2))
 		{
-			this.webhook.info(`Reconnect [${id}]`, id, exec[1]);
+			this.webhook.info(`Reconnect [${id}]`, exec[1]);
 		}
 
 		// Discord invalidated our session somehow
 		if (exec = /\s*\[INVALID SESSION\]\s*(.+)\s*/.exec(info2))
 		{
-			this.webhook.warn(`Invalid Session [${id}]`, id, exec[1]);
+			this.webhook.warn(`Invalid Session [${id}]`, exec[1]);
 		}
 
 		// Identifying as a new session
 		if (exec = /\s*\[IDENTIFY\]\s*(.+)\s*/.exec(info2))
 		{
-			this.webhook.warn(`Identify [${id}]`, id, exec[1]);
+			this.webhook.warn(`Identify [${id}]`, exec[1]);
 		}
 
 		// Resuming an existing session after reconnecting
 		if (exec = /\s*\[RESUME\]\s*(.+)\s*/.exec(info2))
 		{
-			this.webhook.warn(`Resume [${id}]`, id, exec[1]);
+			this.webhook.warn(`Resume [${id}]`, exec[1]);
 		}
 
 		// discord.js fetched new session limit informations
 		if (exec = /^Session Limit Information\s*\n\s*Total:\s*(.+)\s*\n\s*Remaining:\s*(.+)/.exec(info2))
 		{
-			this.webhook.info(`Session Limit Information [${id}]`, id, 'Identifies:', exec[2], '/', exec[1]);
+			this.webhook.info(`Session Limit Information [${id}]`, 'Identifies:', exec[2], '/', exec[1]);
 
 			return;
 		}
@@ -382,7 +381,7 @@ export class Client extends DJSClient
 		// The websocket closed for some reason
 		if (exec = /^\[CLOSE\]\s*\n\s*Event Code\s*:\s*(.+)\s*\n\s*Clean\s*:\s*(.+)\s*\n\s*Reason\s*:\s*(.+)/.exec(info2))
 		{
-			this.webhook.info(`WebSocket was closed [${id}]`, id, 'Code:', exec[1], ' Clean:', exec[2], ' Reason:', exec[3]);
+			this.webhook.info(`WebSocket was closed [${id}]`, 'Code:', exec[1], ' Clean:', exec[2], ' Reason:', exec[3]);
 
 			return;
 		}
