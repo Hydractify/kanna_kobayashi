@@ -7,8 +7,8 @@ import { Logger } from '../structures/Logger';
 /* eslint-disable-next-line @typescript-eslint/no-var-requires */
 const { dbotsorg }: { [key: string]: string } = require('../../data.json');
 
-const DBotsOrg: () => APIRouter = buildRouter({
-	baseURL: 'https://discordbots.org',
+const TopGG: () => APIRouter = buildRouter({
+	baseURL: 'https://top.gg',
 	defaultHeaders: {
 		accept: 'application/json',
 		authorization: dbotsorg,
@@ -29,7 +29,7 @@ export async function updateBotLists(this: Client): Promise<void>
 
 	try
 	{
-		await DBotsOrg().api.bots(this.user!.id).stats.post({ data });
+		await TopGG().api.bots(this.user!.id).stats.post({ data });
 	}
 	catch (error)
 	{
