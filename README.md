@@ -58,7 +58,7 @@ Make a copy of the [`data.example.json`] file as `data.json` in the root directo
 ```js
 {
 	"clientToken": "",      // discord application token -> https://discordapp.com/developers/applications/
-	"dbots": "",            // token for https://discordbots.org/
+	"dbots": "",            // token for https://top.gg/
 	"osuToken": "",         // osu! api token -> https://osu.ppy.sh/help/wiki/osu!api
 	"ravenToken": "",       // sentry.io token -> https://docs.sentry.io/error-reporting/quickstart/
 	"webhook": {
