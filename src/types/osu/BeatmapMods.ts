@@ -13,7 +13,7 @@ export enum BeatmapModsFlags {
 	FL = 1 << 10,
 	AP = 1 << 11,
 	SO = 1 << 12,
-	// Whatever Relax 2 is...
+	// RX2 = Autopilot
 	RX2 = 1 << 13,
 	PF = 1 << 14,
 	KEY4 = 1 << 15,

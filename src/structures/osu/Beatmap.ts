@@ -190,7 +190,7 @@ export class Beatmap
 	 */
 	public get languageString(): string
 	{
-		return titleCase(BeatmapLanguage[this.language]);
+		return titleCase(BeatmapLanguage[this.language] ?? `Unknown Language: ${this.language}`);
 	}
 
 	/**
@@ -198,7 +198,7 @@ export class Beatmap
 	 */
 	public get genreString(): string
 	{
-		return titleCase(BeatmapGenre[this.genre]);
+		return titleCase(BeatmapGenre[this.genre] ?? `Unknown Genre: ${this.genre}`);
 	}
 
 	/**
@@ -206,7 +206,7 @@ export class Beatmap
 	 */
 	public get stateString(): string
 	{
-		return titleCase(BeatmapState[this.approved]);
+		return titleCase(BeatmapState[this.approved] ?? `Unknown State: ${this.approved}`);
 	}
 
 	/**

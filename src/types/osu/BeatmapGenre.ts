@@ -10,4 +10,8 @@ export enum BeatmapGenre {
 	// No 8
 	HIP_HOP = 9,
 	ELECTRONIC,
+	METAL,
+	CLASSICAL,
+	FOLK,
+	JAZZ
 }
