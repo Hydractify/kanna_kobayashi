@@ -1,4 +1,4 @@
-import { Activity, Guild, GuildMember, Message, Role, Snowflake, User } from 'discord.js';
+import { Guild, GuildMember, Message, Role, Snowflake, User } from 'discord.js';
 import * as moment from 'moment';
 
 import { Command } from '../../structures/Command';
@@ -6,7 +6,7 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { mapIterable, titleCase } from '../../util/Util';
+import { mapIterable } from '../../util/Util';
 
 class UserInfoCommand extends Command
 {
@@ -54,8 +54,6 @@ class UserInfoCommand extends Command
 
 		embed
 			.addField('Discriminator', user.discriminator, true)
-			.addField('Status', titleCase((member || user).presence.status), true)
-			.addField('Game', this._findGame((member || user).presence.activities) ?? 'Nothing', true)
 			.addField(
 				'Shared guilds on this shard',
 				this.client.guilds.cache.filter((guild: Guild) => guild.members.cache.has(user.id)).size,
@@ -78,11 +76,6 @@ class UserInfoCommand extends Command
 			.setImage(user.displayAvatarURL());
 
 		return message.channel.send(embed);
-	}
-
-	private _findGame(activities: Activity[]): string | null
-	{
-		return activities.find(activity => ['PLAYING', 'STREAMING'].includes(activity.type))?.name || null;
 	}
 
 	private _formatTimespan(from: number): string
