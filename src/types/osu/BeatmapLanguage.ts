@@ -1,6 +1,6 @@
 export enum BeatmapLanguage {
 	ANY,
-	OTHER,
+	UNSPECIFIED,
 	ENGLISH,
 	JAPANESE,
 	CHINESE,
@@ -11,4 +11,7 @@ export enum BeatmapLanguage {
 	SWEDISCH,
 	SPANISH,
 	ITALIAN,
+	RUSSIAN,
+	POLISH,
+	OTHER,
 }
