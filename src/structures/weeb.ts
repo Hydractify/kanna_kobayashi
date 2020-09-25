@@ -32,7 +32,7 @@ export async function fetchTags(showHidden: boolean = false): Promise<string[]>
 	}
 	catch (error)
 	{
-		throw Object.assign(new WeebError(error.message), error);
+		throw new WeebError(error);
 	}
 }
 
@@ -45,7 +45,7 @@ export async function fetchTypes(showHidden: boolean = false): Promise<string[]>
 	}
 	catch (error)
 	{
-		throw Object.assign(new WeebError(error.message), error);
+		throw new WeebError(error);
 	}
 }
 
@@ -59,6 +59,6 @@ export async function fetchRandom(options: IFetchRandomOptions): Promise<RandomI
 	}
 	catch (error)
 	{
-		throw Object.assign(new WeebError(error.message), error);
+		throw new WeebError(error);
 	}
 }
