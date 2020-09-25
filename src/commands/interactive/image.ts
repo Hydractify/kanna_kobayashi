@@ -89,6 +89,8 @@ class ImageCommand extends Command
 			embed.setImage(image.url);
 		}
 
+		embed.footer!.text += ' | Powered by weeb.sh';
+
 		return message.reply(embed);
 	}
 }
