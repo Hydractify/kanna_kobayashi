@@ -362,7 +362,7 @@ export class CommandHandler
 				if (error instanceof WeebError)
 				{
 					message.reply(
-						`weeb.sh reported an error, try again (later)\n\`${error.message}\``,
+						'`weeb.sh` reported an error. The service might be unavailable right now.',
 					).catch(() => null);
 				}
 				else
