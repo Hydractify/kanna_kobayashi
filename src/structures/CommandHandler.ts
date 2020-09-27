@@ -27,6 +27,7 @@ import { Command } from './Command';
 import { AttachedLogger } from './Logger';
 import { MessageEmbed } from './MessageEmbed';
 import { Resolver } from './Resolver';
+import { WeebError } from './WeebError';
 
 const { on, registerListeners }: typeof ListenerUtil = ListenerUtil;
 // tslint:disable-next-line:typedef
@@ -358,9 +359,18 @@ export class CommandHandler
 				});
 
 				this.client.webhook.error('CommandError', error);
-				message.reply(
-					'**an error occured, but rest assured! It has already been reported and will be fixed in no time!**',
-				).catch(() => null);
+				if (error instanceof WeebError)
+				{
+					message.reply(
+						'`weeb.sh` reported an error. The service might be unavailable right now.',
+					).catch(() => null);
+				}
+				else
+				{
+					message.reply(
+						'**an error occured, but rest assured! It has already been reported and will be fixed in no time!**',
+					).catch(() => null);
+				}
 			}
 		}
 		finally
