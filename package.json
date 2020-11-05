@@ -1,6 +1,6 @@
 {
 	"name": "kanna-kobayashi",
-	"version": "4.7.0",
+	"version": "4.7.1",
 	"private": true,
 	"description": "A community driven open-source application bot for Discord.",
 	"main": "bin/Shard.js",
