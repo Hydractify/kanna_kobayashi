@@ -1,5 +1,3 @@
-import { Moment, utc } from 'moment';
-
 import { BeatmapGenre } from '../../types/osu/BeatmapGenre';
 import { BeatmapLanguage } from '../../types/osu/BeatmapLanguage';
 import { BeatmapState } from '../../types/osu/BeatmapState';
@@ -57,7 +55,7 @@ export class Beatmap
 	/**
 	 * When the map was approved
 	 */
-	public readonly approvedAt: Moment | undefined;
+	public readonly approvedAt: Date | null;
 	/**
 	 * Artist of the song used in the beatmap
 	 */
@@ -131,6 +129,10 @@ export class Beatmap
 	 */
 	public readonly setId: string;
 	/**
+	 * When this beatmap was submitted.
+	 */
+	public readonly submitedAt: Date;
+	/**
 	 * Tags of the beatmap
 	 */
 	public readonly tags: string;
@@ -141,7 +143,7 @@ export class Beatmap
 	/**
 	 * Whenever this beatmap was updated last
 	 */
-	public readonly updatedAt: Moment;
+	public readonly updatedAt: Date;
 	/**
 	 * Name of the `difficulty`
 	 */
@@ -153,8 +155,9 @@ export class Beatmap
 	public constructor(data: { [key: string]: string })
 	{
 		this.approved = Number(data.approved);
-		this.approvedAt = data.approved_date ? utc(`${data.approved_date}+08:00`) : undefined;
-		this.updatedAt = utc(`${data.last_update}+80:00`);
+		this.approvedAt = data.approved_date ? new Date(`${data.approved_date}Z`) : null;
+		this.updatedAt = new Date(`${data.last_update}Z`);
+		this.submitedAt = new Date(`${data.submit_date}Z`);
 		this.artist = data.artist;
 		this.id = data.beatmap_id;
 		this.setId = data.beatmapset_id;

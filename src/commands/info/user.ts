@@ -1,12 +1,11 @@
 import { Guild, GuildMember, Message, Role, Snowflake, User } from 'discord.js';
-import * as moment from 'moment';
 
 import { Command } from '../../structures/Command';
 import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { mapIterable } from '../../util/Util';
+import { mapIterable, TimestampFlag, timestampMarkdown } from '../../util/Util';
 
 class UserInfoCommand extends Command
 {
@@ -59,7 +58,7 @@ class UserInfoCommand extends Command
 				this.client.guilds.cache.filter((guild: Guild) => guild.members.cache.has(user.id)).size,
 				true,
 			)
-			.addField('Registered account', this._formatTimespan(user.createdTimestamp));
+			.addField('Registered account', timestampMarkdown(user.createdTimestamp, TimestampFlag.RelativeTime));
 
 		if (member)
 		{
@@ -68,7 +67,7 @@ class UserInfoCommand extends Command
 			const rolesString: string = mapIterable(roles.values());
 
 			embed
-				.addField('Joined this guild', this._formatTimespan(member.joinedTimestamp ?? 0), true)
+				.addField('Joined this guild', timestampMarkdown(member.joinedTimestamp ?? 0, TimestampFlag.RelativeTime), true)
 				.addField('Roles', rolesString || 'None');
 		}
 
@@ -76,11 +75,6 @@ class UserInfoCommand extends Command
 			.setImage(user.displayAvatarURL());
 
 		return message.channel.send(embed);
-	}
-
-	private _formatTimespan(from: number): string
-	{
-		return `${moment(from).format('MM/DD/YYYY (HH:mm)')} [${moment.duration(from - Date.now()).humanize()}]`;
 	}
 }
 

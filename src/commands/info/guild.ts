@@ -1,5 +1,4 @@
 import { User, Guild, Message, Role, Snowflake } from 'discord.js';
-import * as moment from 'moment';
 
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
@@ -7,7 +6,7 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { mapIterable, titleCase } from '../../util/Util';
+import { mapIterable, TimestampFlag, timestampMarkdown, titleCase } from '../../util/Util';
 
 class GuildInfoCommand extends Command
 {
@@ -79,7 +78,7 @@ class GuildInfoCommand extends Command
 
 			.addField(
 				'Guild creation',
-				moment(guild.createdTimestamp).format('MM/DD/YYYY [(]HH:mm[)]'),
+				timestampMarkdown(guild.createdTimestamp, TimestampFlag.RelativeTime),
 				true,
 			)
 			.addField('Owner', `Tag: ${ownerUser.tag}\nID: ${ownerUser.id}`, true)
