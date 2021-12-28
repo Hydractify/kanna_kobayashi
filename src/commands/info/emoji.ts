@@ -1,5 +1,4 @@
 import { Emoji, Message } from 'discord.js';
-import * as moment from 'moment';
 
 import { Client } from '../../structures/Client';
 import { Command } from '../../structures/Command';
@@ -9,6 +8,7 @@ import { EmojiMatchType } from '../../types/EmojiMatchType';
 import { Emojis } from '../../types/Emojis';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { TimestampFlag, timestampMarkdown } from '../../util/Util';
 
 class EmojiInfoCommand extends Command
 {
@@ -64,13 +64,10 @@ class EmojiInfoCommand extends Command
 		{ authorModel }: ICommandRunInfo,
 	): Promise<Message | Message[]>
 	{
-		const createdAtString: string = moment(emoji.createdTimestamp ?? 0).format('MM/DD/YYYY (HH:mm)');
-		const createdBeforeString: string = moment(emoji.createdTimestamp ?? 0).fromNow();
 		const embed: MessageEmbed = MessageEmbed.common(message, authorModel)
 			.addField('Name', emoji.name, true)
 			.addField('ID', emoji.id, true)
-			.addField('Created', createdAtString, true)
-			.addField('Relative', createdBeforeString, true)
+			.addField('Created', timestampMarkdown(emoji.createdTimestamp ?? 0, TimestampFlag.RelativeTime), true)
 			.addField('Link', `[Link](${emoji.url})`, true)
 			.setThumbnail(emoji.url);
 

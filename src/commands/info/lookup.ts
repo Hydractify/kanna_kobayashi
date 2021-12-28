@@ -1,5 +1,4 @@
 import { Guild, Invite, Message } from 'discord.js';
-import * as moment from 'moment';
 
 import { User as UserModel } from '../../models/User';
 import { Command } from '../../structures/Command';
@@ -7,6 +6,7 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { TimestampFlag, timestampMarkdown } from '../../util/Util';
 import { Command as GuildInfoCommand } from './guild';
 
 class LookupCommand extends Command
@@ -70,8 +70,6 @@ class LookupCommand extends Command
 	{
 		const iconURL: string | null = guild!.iconURL();
 
-		const createdAt: moment.Moment = moment(guild!.createdAt);
-
 		return MessageEmbed.common(message, authorModel)
 			.setTitle(`Info about ${guild!.name}`)
 			.setThumbnail(iconURL)
@@ -83,7 +81,7 @@ class LookupCommand extends Command
 
 			.addField(
 				'Guild creation',
-				createdAt.utc().format('MM/DD/YYYY [(]HH:mm[)]'),
+				timestampMarkdown(guild!.createdTimestamp, TimestampFlag.RelativeTime),
 				true,
 			)
 

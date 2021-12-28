@@ -239,3 +239,50 @@ export function catchErrors(...errors: ObjectValueType<typeof Constants['APIErro
 		throw reason;
 	};
 }
+
+/**
+ * How the timestamp should be formatted.
+ * Note that the locale of the Discord client of the viewing user will be used.
+ * The examples use `en_US`, the actual values will differ for other locales.
+ */
+export enum TimestampFlag {
+	/**
+	 * Example: `16:20`
+	 */
+	ShortTime = 't',
+	/**
+	 * Example: `16:20:30`
+	 */
+	LongTime = 'T',
+	/**
+	 * Example: `20/04/2021`
+	 */
+	ShortDate = 'd',
+	/**
+	 * Example: `20 April 2021`
+	 */
+	LongDate = 'D',
+	/**
+	 * Example: `20 April 2021 16:20`
+	 */
+	ShortDateTime = 'f',
+	/**
+	 * Example: `Tuesday, 20 April 2021 16:20`
+	 */
+	LongDateTime = 'F',
+	/**
+	 * Example: `2 months ago`
+	 */
+	RelativeTime = 'R',
+}
+
+/**
+ * Converts the given timestamp to Discord markdown for a timestamp.
+ * @param ts The timestamp to format
+ * @param flag How to format the timestamp
+ * @returns The resulting markdown
+ */
+export function timestampMarkdown(ts: Date | number, flag?: TimestampFlag): string
+{
+	return `<t:${Math.trunc((+ts) / 1000)}${flag ? `:${flag}` : ''}>`;
+}

@@ -9,7 +9,7 @@ import { Beatmap, Score } from '../../structures/osu';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { OsuMode } from '../../types/osu/OsuMode';
-import { titleCase } from '../../util/Util';
+import { timestampMarkdown, titleCase } from '../../util/Util';
 
 class OsuBeatmapCommand extends Command
 {
@@ -149,8 +149,9 @@ class OsuBeatmapCommand extends Command
 			.addField(
 				'State',
 				[
+					`Submitted:\n  ${timestampMarkdown(beatmap.submitedAt)}\n`,
 					`${beatmap.stateString}`,
-					beatmap.approvedAt ? `, as of:\n${beatmap.approvedAt.format('DD/MM/YYYY (hh:mm)')}` : '',
+					beatmap.approvedAt ? `:\n  ${timestampMarkdown(beatmap.approvedAt)}` : '',
 				].join(''),
 				true)
 			.addField('ID | Set ID', `${beatmap.id} | ${beatmap.setId}`, true);
@@ -174,8 +175,9 @@ class OsuBeatmapCommand extends Command
 			.addField(
 				'State',
 				[
+					`Submitted:\n  ${timestampMarkdown(first.submitedAt)}\n`,
 					`${first.stateString}`,
-					first.approvedAt ? `, as of:\n${first.approvedAt.format('DD/MM/YYYY (hh:mm)')}` : '',
+					first.approvedAt ? `:\n  ${timestampMarkdown(first.approvedAt)}` : '',
 				].join(''),
 				true)
 			.addField('BPM', first.bpm, true)

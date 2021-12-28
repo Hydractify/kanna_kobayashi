@@ -9,7 +9,7 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { MessageEmbed } from '../../structures/MessageEmbed';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
-import { titleCase } from '../../util/Util';
+import { TimestampFlag, timestampMarkdown, titleCase } from '../../util/Util';
 
 class ProfileCommand extends Command
 {
@@ -109,19 +109,12 @@ class ProfileCommand extends Command
 			.addField('Level', `${userModel.level} (${(userModel.exp || 0).toLocaleString()} exp)`, true)
 			.addField('Reputation', (reputation || 0).toLocaleString(), true)
 			.addField('Badges', this.mapItems(userModel.badges), true)
-			.addField('Time', userTime, true)
+			.addField('Local Time', userTime, true)
 			.addField('Relationship', partnerString, true);
 
 		if (!userModel.partnerHidden && user === author && userModel.partnerId)
 		{
-			const offset: number = authorModel.timezone || 0;
-			const anniversary: string = moment(userModel.partnerSince ?? 0)
-				// .utc() because we .add() the utc offset to display the correct date
-				.utc()
-				.add(offset, 'hours')
-				.format('YYYY-MM-DD');
-
-			embed.addField('Relationship Anniversary', `${anniversary} (UTC ${offset >= 0 ? '+' : ''}${offset})`, true);
+			embed.addField('Relationship Anniversary', timestampMarkdown(userModel.partnerSince ?? 0, TimestampFlag.LongDate), true);
 		}
 
 		return embed;

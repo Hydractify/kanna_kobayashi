@@ -1,5 +1,3 @@
-import { Moment, utc } from 'moment';
-
 import { Emojis } from '../../types/Emojis';
 import { BeatmapMods } from '../../types/osu/BeatmapMods';
 import { OsuMode } from '../../types/osu/OsuMode';
@@ -46,7 +44,7 @@ export class Score
 	/**
 	 * Date the score was achieved
 	 */
-	public readonly date: Moment;
+	public readonly date: Date;
 	/**
 	 * Highest combo reached in the score
 	 */
@@ -118,7 +116,7 @@ export class Score
 		this.perfect = data.perfect === '1';
 		this._enabledMods = Number(data.enabled_mods);
 		this.userId = data.user_id;
-		this.date = utc(`${data.date}+08:00`);
+		this.date = new Date(`${data.date}Z`);
 		this.rank = data.rank;
 		this.pp = data.pp ? Number(data.pp) : undefined;
 

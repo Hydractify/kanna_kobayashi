@@ -11,6 +11,7 @@ import { Emojis } from '../../types/Emojis';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
 import { OsuMode } from '../../types/osu/OsuMode';
+import { TimestampFlag, timestampMarkdown } from '../../util/Util';
 
 class OsuUserCommand extends Command
 {
@@ -112,7 +113,7 @@ class OsuUserCommand extends Command
 			const pp: string = score.pp ? ` -- **${score.pp.toFixed(2)}**` : '';
 			embed.addField(
 				`${beatmap.artist} - ${beatmap.title} [${beatmap.version}]${mods ? ` +${mods}` : ''}`,
-				`${score.rankEmoji} -- [URL](${beatmap.versionURL()}) -- ${score.date.fromNow() + pp}`,
+				`${score.rankEmoji} -- [URL](${beatmap.versionURL()}) -- ${timestampMarkdown(score.date, TimestampFlag.RelativeTime)}${pp}`,
 			);
 		}
 

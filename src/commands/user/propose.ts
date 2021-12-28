@@ -1,5 +1,4 @@
 import { Collection, CollectorFilter, GuildMember, Message, Snowflake, User } from 'discord.js';
-import * as moment from 'moment';
 import { Transaction } from 'sequelize';
 
 import { User as UserModel } from '../../models/User';
@@ -8,6 +7,7 @@ import { CommandHandler } from '../../structures/CommandHandler';
 import { Emojis } from '../../types/Emojis';
 import { GuildMessage } from '../../types/GuildMessage';
 import { ICommandRunInfo } from '../../types/ICommandRunInfo';
+import { TimestampFlag, timestampMarkdown } from '../../util/Util';
 
 class ProposeCommand extends Command
 {
@@ -81,7 +81,7 @@ class ProposeCommand extends Command
 		{
 			await message.reply([
 				`sorry but not enough time has passed since you two got together! ${Emojis.KannaShy}`,
-				`Try again ${moment(until).fromNow()}.`,
+				`Try again ${timestampMarkdown(until, TimestampFlag.RelativeTime)}.`,
 			].join('\n'));
 
 			return false;
