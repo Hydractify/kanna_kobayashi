@@ -99,11 +99,11 @@ class SetGameCommand extends Command
 		return { type: 'PLAYING', name: `k!help | on ${totalGuilds} guilds` };
 	}
 
-	private setActivity(client: Client, [activity]: ActivityOptions[]): Promise<Presence[]>
+	private setActivity(client: Client, [activity]: ActivityOptions[]): Promise<(undefined | Presence)[]>
 	{
 		return Promise.all(
 			client.ws.shards.map((shard: WebSocketShard, shardId: number) =>
-				client.user!.setActivity({
+				client.user?.setActivity({
 					...activity,
 					name: `${activity.name} [${shardId}]`,
 					shardID: shardId,
