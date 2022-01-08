@@ -170,6 +170,8 @@ export class Client extends DJSClient
 	@RavenContext
 	protected async _onGuild(guild: Guild, left: boolean): Promise<void>
 	{
+		if (!guild.available) return;
+
 		this._guildCount.set(this.guilds.cache.size);
 		captureBreadcrumb({ category: left ? 'guildDelete' : 'guildCreate', level: 'debug' });
 
