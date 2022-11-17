@@ -1,0 +1,14 @@
+export * as bite from './bite.js';
+export * as blush from './blush.js';
+export * as cry from './cry.js';
+export * as dance from './dance.js';
+export * as highfive from './highfive.js';
+export * as hug from './hug.js';
+export * as kiss from './kiss.js';
+export * as pat from './pat.js';
+export * as poke from './poke.js';
+export * as punch from './punch.js';
+export * as shoot from './shoot.js';
+export * as slap from './slap.js';
+export * as stare from './stare.js';
+export * as tickle from './tickle.js';

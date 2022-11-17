@@ -1,0 +1,32 @@
+{
+	"name": "@hydractify/interactions",
+	"main": "dist/main.js",
+	"version": "0.1.0",
+	"type": "module",
+	"scripts": {
+		"lint": "eslint src --ext ts",
+		"build": "rimraf ./dist && tsc --project ./tsconfig.json",
+		"watch": "yarn build --watch",
+		"start": "node --enable-source-maps --require dotenv/config ./dist/main.js",
+		"debug": "node --inspect=9229 --enable-source-maps --require dotenv/config ./dist/main.js",
+		"register": "node -r dotenv/config ./dist/scripts/register.js",
+		"list": "node -r dotenv/config ./dist/scripts/list.js"
+	},
+	"dependencies": {
+		"@discordjs/rest": "^1.3.0",
+		"@sentry/node": "^7.20.0",
+		"@sentry/tracing": "^7.20.0",
+		"discord-api-types": "^0.37.18",
+		"timezonecomplete": "^5.12.4",
+		"tslib": "^2.4.1",
+		"tweetnacl": "^1.0.3",
+		"undici": "^5.12.0"
+	},
+	"devDependencies": {
+		"@types/node": "^18.11.9",
+		"dotenv": "^16.0.3",
+		"eslint": "^8.27.0",
+		"rimraf": "^3.0.2",
+		"typescript": "^4.9.3"
+	}
+}

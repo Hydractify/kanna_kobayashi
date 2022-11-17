@@ -1,0 +1,12 @@
+/.yarn/
+!/.yarn/patches
+!/.yarn/versions
+
+/.pnp*
+
+/.vscode/
+
+/packages/**/dist/
+/packages/**/.env
+
+*.log

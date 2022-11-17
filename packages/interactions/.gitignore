@@ -1,0 +1,4 @@
+/.access_token.json
+
+# temporary file with command definitions
+src/__commands.ts
