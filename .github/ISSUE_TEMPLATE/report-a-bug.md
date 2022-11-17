@@ -10,19 +10,11 @@ about: Report a bug found on Kanna Kobayashi.
 
 ## Information
 
-#### Kanna Kobayashi
-
-<!--
-	Inside the parenthesis below, paste a screenshot of what Kanna sents after you execute the command k!stats
--->
-
-[Guild Info]()
-
 ## What went wrong
 
 <!-- Describe here what went wrong. Try to be specific -->
 
-I was trying to pat a friend with `k!pat person` but then an error was thrown back at me.
+I was trying to pat a friend with `/pat person` but then an error was thrown back at me.
 
 > Remember to delete the line above and this one before opening the issue.
 

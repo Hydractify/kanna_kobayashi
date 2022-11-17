@@ -15,6 +15,6 @@ _You do not have to be a master on the following, but at least have a general kn
 2. Check if your code works.
 3. Follow Discord's ToS and the repo's Code Of Conduct.
 
-[discord.js]: https://github.com/hydrabolt/discord.js
+[discord.js]: https://github.com/discordjs/discord.js
 [javascript]: https://en.wikipedia.org/wiki/JavaScript
 [typescript]: https://www.typescriptlang.org/
