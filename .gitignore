@@ -49,3 +49,7 @@ pids
 packages/**/dist/
 # Ignore env files
 packages/**/.env
+packages/**/.env.development.local
+packages/**/.env.test.local
+packages/**/.env.production.local
+packages/**/.env.local
