@@ -1,9 +1,6 @@
 {
 	"root": true,
-	"extends": ["neon/common", "neon/node", "neon/typescript", "neon/prettier"],
-	"parserOptions": {
-		"project": "./tsconfig.eslint.json"
-	},
+	"extends": ["neon/common", "neon/node", "neon/typescript"],
 	"rules": {
 		"jsdoc/multiline-blocks": ["error", { "noSingleLineBlocks": false }]
 	},
