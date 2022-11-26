@@ -387,7 +387,6 @@ __metadata:
     "@sentry/node": ^7.20.0
     "@sentry/tracing": ^7.20.0
     "@types/node": ^18.11.9
-    "@types/prettier": ^2
     discord-api-types: ^0.37.18
     dotenv: ^16.0.3
     eslint: ^8.27.0
@@ -623,13 +622,6 @@ __metadata:
   version: 2.4.1
   resolution: "@types/normalize-package-data@npm:2.4.1"
   checksum: e87bccbf11f95035c89a132b52b79ce69a1e3652fe55962363063c9c0dae0fe2477ebc585e03a9652adc6f381d24ba5589cc5e51849df4ced3d3e004a7d40ed5
-  languageName: node
-  linkType: hard
-
-"@types/prettier@npm:^2":
-  version: 2.7.1
-  resolution: "@types/prettier@npm:2.7.1"
-  checksum: 5e3f58e229d6c73b5f5cae2e8f96c1c4a5b5805f83459e17a045ba8e96152b1d38e86b63e3172fb159dac923388699660862b75b2d37e54220805f0e691e26f1
   languageName: node
   linkType: hard
 
