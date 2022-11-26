@@ -1,6 +1,6 @@
 {
 	"root": true,
-	"extends": ["neon/common", "neon/node", "neon/typescript"],
+	"extends": ["neon/common", "neon/node", "neon/typescript", "neon/prettier"],
 	"rules": {
 		"jsdoc/multiline-blocks": ["error", { "noSingleLineBlocks": false }]
 	},
