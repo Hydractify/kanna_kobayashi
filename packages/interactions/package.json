@@ -20,7 +20,7 @@
 		"timezonecomplete": "^5.12.4",
 		"tslib": "^2.4.1",
 		"tweetnacl": "^1.0.3",
-		"undici": "^5.12.0"
+		"undici": "^5.13.0"
 	},
 	"devDependencies": {
 		"@types/node": "^18.11.9",
