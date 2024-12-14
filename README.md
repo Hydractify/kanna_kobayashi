@@ -1,40 +1,7 @@
-<div>
-	<p>
-		<a href="https://www.hydractify.org">
-			<img src="https://cdn.discordapp.com/attachments/430532424280178688/580901034327670836/banner.png" />
-		</a>
-	</p>
-	<p align="center">
-		<a href="https://github.com/Hydractify/kanna_kobayashi/blob/stable/package.json#L3">
-			<img src="https://img.shields.io/badge/kanna_kobayashi-v4.7.1-fcbbd5.svg?style=flat-square" />
-		</a>
-		<a href="https://www.hydractify.org/discord">
-			<img src="https://img.shields.io/discord/298969150133370880.svg?style=flat-square&logo=discord">
-		</a>
-		<a href="https://www.hydractify.org/patreon">
-			<img src="https://img.shields.io/badge/Patreon-support!-fa6956.svg?style=flat-square&logo=patreon" />
-		</a>
-		<a href="https://twitter.com/hydractify">
-			<img src="https://img.shields.io/twitter/follow/hydractify.svg?style=social&logo=twitter">
-		</a>
-		<br />
-		<a href="https://travis-ci.org/hydractify/kanna_kobayashi">
-			<img src="https://travis-ci.org/hydractify/kanna_kobayashi.svg" />
-		</a>
-		<a href="https://github.com/Hydractify/kanna_kobayashi/issues">
-			<img src="https://img.shields.io/github/issues/Hydractify/kanna_kobayashi.svg?style=flat-square">
-		</a>
-		<a href="https://github.com/Hydractify/kanna_kobayashi/graphs/contributors">
-			<img src="https://img.shields.io/github/contributors/Hydractify/kanna_kobayashi.svg?style=flat-square">
-		</a>
-		<a href="https://github.com/Hydractify/kanna_kobayashi/blob/stable/LICENSE">
-			<img src="https://img.shields.io/github/license/Hydractify/kanna_kobayashi.svg?style=flat-square">
-		</a>
-		<a href="https://graphs.hydractify.org/d/G0kS04WWz/kanna-kobayashi?orgId=1">
-			<img src="https://img.shields.io/badge/Grafana-kanna_kobayashi-orange.svg?style=flat-square&logo=grafana">
-		</a>
-	</p>
-</div>
+## ⚠️⚠️ ARCHIVAL NOTICE ⚠️⚠️
+
+This repository is being archived as the project is now unmaintained, it may run as-is at it's current state as long as
+the "Setting up" section is followed.
 
 ## Introduction
 
